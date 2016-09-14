@@ -1,7 +1,7 @@
 {
-  "name": "react-sandbox",
+  "name": "caterchimp",
   "version": "1.0.0",
-  "description": "A sandbox. For React.",
+  "description": "A catering app for caterers to cater.",
   "main": "server.js",
   "scripts": {
     "start": "nodemon server/server.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/francistoto/react-sandbox.git"
+    "url": "git+https://github.com/five-square/caterchimp.git"
   },
-  "author": "Francis Toto",
+  "author": "Francis Toto, Walter Ayala, Abel Costilla, Vinod Thimmapuram",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/francistoto/react-sandbox/issues"
+    "url": "https://github.com/five-square/caterchimp/issues"
   },
-  "homepage": "https://github.com/francistoto/react-sandbox#readme",
+  "homepage": "https://github.com/five-square/caterchimp#readme",
   "dependencies": {
     "babel-core": "^6.14.0",
     "babel-preset-es2015": "^6.14.0",
