@@ -1,0 +1,7 @@
+h1, h2, .user-input {
+  text-align: center;
+}
+
+.user-input input{
+  margin: 10px;
+}
