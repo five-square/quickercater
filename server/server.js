@@ -25,8 +25,26 @@ routes.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/public/index.html'));
 });
 
-routes.get('/:owner', (req, res) => {
-  res.send(req.params.owner);
+routes.get('/api/owner/:owner', (req, res) => {
+  db.findOwner(req.params.owner)
+  .then(dbData => {
+    console.log(dbData);
+    res.status(200).send(dbData);
+  });
+});
+
+routes.post('/api/owner/create', (req, res) => {
+  db.createOwner(req.body)
+  .then((dbData) => {
+    res.status(201).send(dbData);
+  });
+});
+
+routes.delete('/api/owner/:owner', (req, res) => {
+  db.deleteOwner(req.params.owner)
+  .then(() => {
+    res.status(202).send();
+  });
 });
 
 if (process.env.NODE_ENV !== 'test') {
@@ -50,7 +68,6 @@ if (process.env.NODE_ENV !== 'test') {
 
   // Mount our main router
   app.use('/', routes);
-
 
   // Start the server!
   app.listen(serverUrl);
