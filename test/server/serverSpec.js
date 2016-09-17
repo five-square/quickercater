@@ -15,10 +15,10 @@ describe('The Server', () => {
     // See test/test-helper.js for details of why this works.
     //
     yield request(app)
-      .get('/api/tags-example')
-      .expect(200)
-      .expect((response) => {
-        global.expect(response.body).to.include('node');
-      });
+    .get('/api/tags-example')
+    .expect(200)
+    .expect((response) => {
+      global.expect(response.body).to.include('node');
+    });
   });
 });
