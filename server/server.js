@@ -3,6 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const browserify = require('browserify-middleware');
 const babelify = require('babelify');
+const db = require('./db');
 
 const serverUrl = process.env.PORT || 3000;
 
@@ -26,6 +27,13 @@ routes.get('/', (req, res) => {
 
 routes.get('/:owner', (req, res) => {
   res.send(req.params.owner);
+});
+
+routes.post('/dbtest', (req, res) => {
+  db.createOwner(req.body).then((dbData) => {
+    console.log('Data response from DB for post', dbData);
+    res.status(201).send(dbData);
+  });
 });
 
 if (process.env.NODE_ENV !== 'test') {
