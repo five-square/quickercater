@@ -29,13 +29,6 @@ routes.get('/:owner', (req, res) => {
   res.send(req.params.owner);
 });
 
-routes.post('/dbtest', (req, res) => {
-  db.createOwner(req.body).then((dbData) => {
-    console.log('Data response from DB for post', dbData);
-    res.status(201).send(dbData);
-  });
-});
-
 if (process.env.NODE_ENV !== 'test') {
   //
   // The Catch-all Route
@@ -57,6 +50,7 @@ if (process.env.NODE_ENV !== 'test') {
 
   // Mount our main router
   app.use('/', routes);
+
 
   // Start the server!
   app.listen(serverUrl);
