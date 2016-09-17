@@ -4,22 +4,56 @@ const bodyParser = require('body-parser');
 const browserify = require('browserify-middleware');
 const babelify = require('babelify');
 
-const serverUrl = 3000;
+const serverUrl = process.env.PORT || 3000;
 
-const app = express();
+const routes = express.Router();
 
+const assetFolder = path.join(__dirname, '../client/public');
+routes.use(express.static(assetFolder));
 
-app.use(bodyParser.json());
-
-app.use(express.static(path.join(__dirname, '../client/public')));
-
-app.get('/bundle.js', browserify(path.join(__dirname, '../client/main.js'), {
+routes.get('/bundle.js', browserify(path.join(__dirname, '../client/main.js'), {
   transform: [[babelify, { presets: ['es2015', 'react'] }]],
 }));
 
-app.get('/', (req, res) => {
+
+routes.get('/api/tags-example', (req, res) => {
+  res.send(['node', 'express', 'browserify', 'mithril']);
+});
+
+routes.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/public/index.html'));
 });
 
-app.listen(serverUrl);
-console.log(`Listening on port ${serverUrl}`);
+routes.get('/:owner', (req, res) => {
+  res.send(req.params.owner);
+});
+
+if (process.env.NODE_ENV !== 'test') {
+  //
+  // The Catch-all Route
+  // This is for supporting browser history pushstate.
+  // NOTE: Make sure this route is always LAST.
+  //
+  routes.get('/*', (req, res) => {
+    res.sendFile(`${assetFolder}/index.html`);
+  });
+
+  //
+  // We're in development or production mode;
+  // create and run a real server.
+  //
+  const app = express();
+
+  // Parse incoming request bodies as JSON
+  app.use(bodyParser.json());
+
+  // Mount our main router
+  app.use('/', routes);
+
+  // Start the server!
+  app.listen(serverUrl);
+  console.log(`Listening on port ${serverUrl}`);
+} else {
+  // We're in test mode; make this file importable instead.
+  module.exports = routes;
+}
