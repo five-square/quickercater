@@ -20,14 +20,14 @@ db.createOwner = (owner => Node.cypherAsync({
 }));
 
 db.findOwner = (ownerName => Node.cypherAsync({
-  query: `MATCH (profile:Profile { name: {name} }) RETURN profile`,
+  query: 'MATCH (profile:Profile { name: {name} }) RETURN profile',
   params: {
     name: ownerName,
   },
 }));
 
 db.deleteOwner = (ownerName => Node.cypherAsync({
-  query: `MATCH (profile:Profile { name: {name} }) DELETE profile`,
+  query: 'MATCH (profile:Profile { name: {name} }) DELETE profile',
   params: {
     name: ownerName,
   },
