@@ -21,14 +21,31 @@ routes.get('/api/tags-example', (req, res) => {
   res.send(['node', 'express', 'browserify', 'mithril']);
 });
 
+/*
+  **********************************************************************************************
+
+  ROUTING STARTS HERE
+
+  **********************************************************************************************
+*/
+
 routes.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/public/index.html'));
 });
 
+/*
+  **********************************************************************************************
+
+  Handles endpoints for Owner data. Methods served are GET, POST, PUT, DELETE.
+
+  Make sure you are running the Neo4j server first!
+
+  **********************************************************************************************
+*/
+
 routes.get('/api/owner/:owner', (req, res) => {
   db.findOwner(req.params.owner)
   .then(dbData => {
-    console.log(dbData);
     res.status(200).send(dbData);
   });
 });
@@ -46,6 +63,35 @@ routes.delete('/api/owner/:owner', (req, res) => {
     res.status(202).send();
   });
 });
+
+routes.put('/api/owner/:owner/relationship', (req, res) => {
+  const owner = req.params.owner;
+  const node = req.body.node;
+  const nodeLabel = req.body.nodeLabel;
+  const rel = req.body.rel;
+  const relLabel = req.body.relLabel;
+  db.createOwnerRelationship(owner, node, nodeLabel, rel, relLabel)
+  .then(dbData => {
+    res.status(201).send(dbData);
+  });
+});
+
+routes.get('/db_init', (req, res) => {
+  db.init()
+  .then(() => {
+    res.status(201).send('Database Initialized!');
+  })
+  .catch((err) => {
+    res.status(500).send(err);
+  });
+});
+/*
+  **********************************************************************************************
+
+  Starts the routing decisions for testing and deployment.
+
+  **********************************************************************************************
+*/
 
 if (process.env.NODE_ENV !== 'test') {
   //
