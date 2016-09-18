@@ -6,38 +6,55 @@ const routes = require(`${global.__server}/server.js`);
 
 const db = require(`${global.__server}/db.js`);
 
-describe('The Server', () => {
+/*
+  **********************************************************************************************
+
+  Server Tests!
+
+  **********************************************************************************************
+*/
+
+global.describe('The Server', () => {
   const app = global.TestHelper.createApp();
   app.use('/', routes);
   app.testReady();
 
-  global.it_('serves an example endpoint', function* () {
-    //
-    // Notice how we're in a generator function (indicated by the the *)
-    // See test/test-helper.js for details of why this works.
-    //
+  global.it_('serves HTML to the root endpoint', function* () {
     yield request(app)
-    .get('/api/tags-example')
+    .get('/')
     .expect(200)
-    .expect((response) => {
-      global.expect(response.body).to.include('node');
+    .expect(response => {
+      global.expect(response.res.headers['content-type']).to.equal('text/html; charset=UTF-8');
     });
   });
-  global.it_('serves an db testing endpoint', function* () {
-    //
-    // Notice how we're in a generator function (indicated by the the *)
-    // See test/test-helper.js for details of why this works.
-    //
-    const owner = {
-      name: "Test food Truck"
-    };
-    yield request(app) // db should be empty
-      .get('/dbtest')  // db should respond with null if node does not exist.
-      .send(owner.name)
-      .expect(200)
-      .expect((response) => {
-        console.log('response body db endpoint test: ', response.body);
-        global.expect(response.body).to.equal(null);
-      });
+
+  global.it_('can fetch an Owner from the database', function* () {
+    yield request(app)
+    .get('/api/owner/Alice')
+    .expect(200)
+    .expect(response => {
+      global.expect(response.body[0].owner.properties.name).to.equal('Alice');
+    });
+  });
+});
+
+/*
+  **********************************************************************************************
+
+  Database Tests!
+
+  **********************************************************************************************
+*/
+
+global.describe('The Database', () => {
+  const app = global.TestHelper.createApp();
+  app.use('/', routes);
+  app.testReady();
+
+  global.it_('finds an Owner from the database by name', function* () {
+    yield db.findOwner('Alice')
+    .then(response => {
+      global.expect(response[0].owner.properties.name).to.equal('Alice');
+    });
   });
 });
