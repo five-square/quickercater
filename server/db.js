@@ -22,12 +22,14 @@ db.init = () => Node.cypherAsync({
       name: 'Alice',
       phone: '555-444-3333',
       email: 'alice@window.com',
+      description: 'I love American food',
       auth_key: true
     })
     CREATE (bob:Owner {
       name: 'Bob',
       phone: '555-444-5555',
       email: 'bob@window.com',
+      description: 'I love Mexican food',
       auth_key: true
     })
     CREATE (carly:Customer {
@@ -289,21 +291,31 @@ db.createOwner = (owner) => Node.cypherAsync({
     description: owner.description,
     auth_key: owner.auth_key,
   },
-});
+})
+.then(response => response[0].owner);
 
 db.findOwner = (ownerName) => Node.cypherAsync({
   query: 'MATCH (owner:Owner { name: {name} }) RETURN owner',
   params: {
     name: ownerName,
   },
-});
+})
+.then(response => {
+  if (response.length === 0) {
+    const errMessage = 'Owner does not exist';
+    throw errMessage;
+  }
+  return response[0].owner;
+})
+.catch(err => err);
 
 db.deleteOwner = (ownerName) => Node.cypherAsync({
   query: 'MATCH (owner:Owner { name: {name} }) DELETE owner',
   params: {
     name: ownerName,
   },
-});
+})
+.then(response => response);
 
 db.createOwnerRelationship = (owner, node, nodeLabel, rel, relLabel) => Node.cypherAsync({
   query: `
