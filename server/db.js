@@ -82,6 +82,39 @@ db.init = () => Node.cypherAsync({
       description: 'The whole tamale'
     })
 
+    CREATE (aliceMenu1:Menu {
+      name: 'Drinks',
+      description: 'Tasty beverages'
+    })
+    CREATE (aliceMenu2:Menu {
+      name: 'Appetizers',
+      description: 'Side dishes'
+    })
+    CREATE (aliceMenu3:Menu {
+      name: 'Main',
+      description: 'Main entrees'
+    })
+    CREATE (aliceMenu4:Menu {
+      name: 'Desserts',
+      description: 'Tasty treats'
+    })
+    CREATE (bobMenu1:Menu {
+      name: 'Drinks',
+      description: 'Tasty beverages'
+    })
+    CREATE (bobMenu2:Menu {
+      name: 'Sides',
+      description: 'Side orders'
+    })
+    CREATE (bobMenu3:Menu {
+      name: 'Main',
+      description: 'Burgers for your hole'
+    })
+    CREATE (bobMenu4:Menu {
+      name: 'Desserts',
+      description: 'Tasty treats'
+    })
+
     CREATE (bobDrink1:Item {
       name: 'Tea',
       description: 'Fresh brew',
@@ -214,7 +247,7 @@ db.init = () => Node.cypherAsync({
       address: '123 YourMom Blvd.'
     })
 
-    CREATE (carlyOrder1:Order {
+    CREATE (carlyOrder1:CustomerOrder {
       name: 'Burger Delivery',
       created_on: 'yesterday',
       request_date: 'tomorrow',
@@ -222,7 +255,7 @@ db.init = () => Node.cypherAsync({
       total_price: 0,
       address: '321 RightBehindYou Ln.'
     })
-    CREATE (carlyOrder2:Order {
+    CREATE (carlyOrder2:CustomerOrder {
       name: 'Mexican Delivery',
       created_on: 'yesterday',
       request_date: 'tomorrow after tomorrow',
@@ -237,26 +270,34 @@ db.init = () => Node.cypherAsync({
     CREATE (bob)-[:CAN_EDIT]->(bobDelivery)
     CREATE (bob)-[:CAN_EDIT]->(bobTruck)
     CREATE (bob)-[:CAN_EDIT]->(bobOnSite)
-    CREATE (alice)-[:CAN_EDIT {sub_menu: 'Drinks', order: 0}]->(aliceDrink1)
-    CREATE (alice)-[:CAN_EDIT {sub_menu: 'Drinks', order: 1}]->(aliceDrink2)
-    CREATE (alice)-[:CAN_EDIT {sub_menu: 'Drinks', order: 2}]->(aliceDrink3)
-    CREATE (bob)-[:CAN_EDIT {sub_menu: 'Drinks', order: 0}]->(bobDrink1)
-    CREATE (bob)-[:CAN_EDIT {sub_menu: 'Drinks', order: 1}]->(bobDrink2)
-    CREATE (bob)-[:CAN_EDIT {sub_menu: 'Drinks', order: 2}]->(bobDrink3)
-    CREATE (alice)-[:CAN_EDIT {sub_menu: 'Sides', order: 0}]->(aliceSide1)
-    CREATE (alice)-[:CAN_EDIT {sub_menu: 'Sides', order: 1}]->(aliceSide2)
-    CREATE (alice)-[:CAN_EDIT {sub_menu: 'Sides', order: 2}]->(aliceSide3)
-    CREATE (bob)-[:CAN_EDIT {sub_menu: 'Sides', order: 0}]->(bobSide1)
-    CREATE (bob)-[:CAN_EDIT {sub_menu: 'Sides', order: 1}]->(bobSide2)
-    CREATE (bob)-[:CAN_EDIT {sub_menu: 'Sides', order: 2}]->(bobSide3)
-    CREATE (alice)-[:CAN_EDIT {sub_menu: 'Main', order: 0}]->(aliceMain1)
-    CREATE (alice)-[:CAN_EDIT {sub_menu: 'Main', order: 1}]->(aliceMain2)
-    CREATE (alice)-[:CAN_EDIT {sub_menu: 'Main', order: 2}]->(aliceMain3)
-    CREATE (bob)-[:CAN_EDIT {sub_menu: 'Main', order: 0}]->(bobMain1)
-    CREATE (bob)-[:CAN_EDIT {sub_menu: 'Main', order: 1}]->(bobMain2)
-    CREATE (bob)-[:CAN_EDIT {sub_menu: 'Main', order: 2}]->(bobMain3)
-    CREATE (alice)-[:CAN_EDIT {sub_menu: 'Dessert', order: 0}]->(aliceDessert1)
-    CREATE (bob)-[:CAN_EDIT {sub_menu: 'Dessert', order: 0}]->(bobDessert1)
+    CREATE (alice)-[:CAN_EDIT]->(aliceMenu1)
+    CREATE (alice)-[:CAN_EDIT]->(aliceMenu2)
+    CREATE (alice)-[:CAN_EDIT]->(aliceMenu3)
+    CREATE (alice)-[:CAN_EDIT]->(aliceMenu4)
+    CREATE (bob)-[:CAN_EDIT]->(bobMenu1)
+    CREATE (bob)-[:CAN_EDIT]->(bobMenu2)
+    CREATE (bob)-[:CAN_EDIT]->(bobMenu3)
+    CREATE (bob)-[:CAN_EDIT]->(bobMenu4)
+    CREATE (aliceMenu1)-[:CAN_EDIT {order: 0}]->(aliceDrink1)
+    CREATE (aliceMenu1)-[:CAN_EDIT {order: 1}]->(aliceDrink2)
+    CREATE (aliceMenu1)-[:CAN_EDIT {order: 2}]->(aliceDrink3)
+    CREATE (bobMenu1)-[:CAN_EDIT {order: 0}]->(bobDrink1)
+    CREATE (bobMenu1)-[:CAN_EDIT {order: 1}]->(bobDrink2)
+    CREATE (bobMenu1)-[:CAN_EDIT {order: 2}]->(bobDrink3)
+    CREATE (aliceMenu2)-[:CAN_EDIT {order: 0}]->(aliceSide1)
+    CREATE (aliceMenu2)-[:CAN_EDIT {order: 1}]->(aliceSide2)
+    CREATE (aliceMenu2)-[:CAN_EDIT {order: 2}]->(aliceSide3)
+    CREATE (bobMenu2)-[:CAN_EDIT {order: 0}]->(bobSide1)
+    CREATE (bobMenu2)-[:CAN_EDIT {order: 1}]->(bobSide2)
+    CREATE (bobMenu2)-[:CAN_EDIT {order: 2}]->(bobSide3)
+    CREATE (aliceMenu3)-[:CAN_EDIT {order: 0}]->(aliceMain1)
+    CREATE (aliceMenu3)-[:CAN_EDIT {order: 1}]->(aliceMain2)
+    CREATE (aliceMenu3)-[:CAN_EDIT {order: 2}]->(aliceMain3)
+    CREATE (bobMenu3)-[:CAN_EDIT {order: 0}]->(bobMain1)
+    CREATE (bobMenu3)-[:CAN_EDIT {order: 1}]->(bobMain2)
+    CREATE (bobMenu3)-[:CAN_EDIT {order: 2}]->(bobMain3)
+    CREATE (aliceMenu4)-[:CAN_EDIT {order: 0}]->(aliceDessert1)
+    CREATE (bobMenu4)-[:CAN_EDIT {order: 0}]->(bobDessert1)
     CREATE (alice)-[:CAN_EDIT]->(aliceStore)
     CREATE (bob)-[:CAN_EDIT]->(bobStore)
     CREATE (carly)-[:CREATED {created_on: 'yesterday', expires: 'today'}]->(carlyOrder1)
