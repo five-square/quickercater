@@ -259,7 +259,6 @@ global.describe('The Database', () => {
   global.it_('adds items to an order', function* anon() {
     yield db.addItemsToOrder(orderId, items, owner)
     .then(response => {
-      console.log('response: ', response[0])
       global.expect(response[0].rel.type).to.equal('REQ');
       global.expect(response[0].rel.properties.quantity).to.equal(10);
     });
