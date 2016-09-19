@@ -394,3 +394,83 @@ db.deleteOwnerRelationship = (owner, node, nodeLabel, rel, relLabel) => Node.cyp
     rel,
   },
 });
+
+  **********************************************************************************************
+
+  These functions will service the GET, POST, UPDATE, and DELETE endpoints for Orders.
+
+
+  **********************************************************************************************
+*/
+// After the submit button is clicked, order is created using the following method
+db.createOrder = (order) => Node.cypherAsync({
+  query: `
+    MERGE (order:Order {
+      order_id: 25,
+      created_on: {created_on},
+      request_date: {request_date},
+      fulfilled: {fulfilled},
+      total_price: {total_price}
+    }) 
+    SET order.order_id = ID(order)
+    RETURN order`,
+  params: {
+    created_on: order.created_on,
+    request_date: order.request_date,
+    fulfilled: order.fulfilled,
+    total_price: order.total_price,
+  },
+})
+.then(response => response[0].order);
+
+
+/* Should we use customer ID?? two customers can have same ID
+   After the order is created and an ID is assigned to the order
+   create the customer-> order and owner->order relationship
+   */
+db.createCustOrderOwnerRelationship =
+  (orderId, customer, owner, createdOn, expires) => Node.cypherAsync({
+    query: `
+      MATCH (customer:Customer{name: {customerName}}) 
+      MATCH (order:Order) WHERE order.order_id = {orderId} 
+      MATCH (owner:Owner{name: {ownerName}})
+      CREATE (customer)-[relA:CREATED {created_on: {createdOn}, expires: {expires}}]->(order)
+      CREATE (order)-[relB:VIEW]->(customer)
+      CREATE (owner)-[relC:CAN_EDIT]->(order)
+      RETURN {rel:[relA, relB, relC], orderId: {orderId}}`,
+    params: {
+      customerName: customer.name,
+      ownerName: owner.name,
+      orderId,
+      createdOn,
+      expires,
+    },
+  });
+
+/* Assumption here is that an array of item objects [{name: , quantity: }..]
+is passed in to add to the order*/
+db.addItemsToOrder = (orderId, items, owner) => Node.cypherAsync({
+  query: `
+    WITH {items} AS itemArray
+    UNWIND itemArray AS menuitem
+    MATCH (item:Item{name: menuitem.name})<-[:CAN_EDIT]-(owner:Owner{name: {ownerName}})
+    MATCH (order:Order) WHERE order.order_id = {orderId}
+    MERGE (order)-[rel:REQ {quantity: menuitem.quantity}]->(item)
+    RETURN rel`,
+  params: {
+    orderId,
+    items,
+    ownerName: owner.name,
+  },
+})
+.then(response => response);
+
+db.createOrderRelationships = (order, cust, owner, expires, items) => {
+  db.createOrder(order)
+    .then((ord) => {
+      db.createCustOrderOwnerRelationship(ord.order_id, cust, owner, order.createdOn, expires);
+    })
+    .then((rel) => {
+      db.addItemsToOrder(rel.orderId, items, owner);
+    });
+};

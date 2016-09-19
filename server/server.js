@@ -80,6 +80,17 @@ routes.put('/api/owner/:owner/relationship', (req, res) => {
   });
 });
 
+routes.post('/api/order/create', (req, res) => {
+  const order = req.body.order;
+  const customer = req.body.customer;
+  const owner = req.body.owner;
+  const expires = req.body.expires;
+  const items = req.body.items;
+  db.createOrderRelationships(order, customer, owner, expires, items)
+  .then((dbData) => {
+    res.status(201).send(dbData);
+  });
+});
 /*
   **********************************************************************************************
 

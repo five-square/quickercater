@@ -217,3 +217,51 @@ global.describe('The Database', () => {
     });
   });
 });
+
+
+global.describe('The Database', () => {
+  var orderId = '';
+  const app = global.TestHelper.createApp();
+  app.use('/', routes);
+  app.testReady();
+
+  // Testing the Owner database functions
+  const newOrder = {
+    order_id: null,
+    created_on: '18sep2016',
+    request_date: '24sep2016',
+    fulfilled: false,
+    total_price: 20,
+    address: '456 Righthere Ln.',
+  };
+
+  const items = [{
+    name: 'Chips',
+    quantity: 10,
+  }, {
+    name: 'Nachos',
+    quantity: 4,
+  }, {
+    name: 'Quesadillas',
+    quantity: 4,
+  }];
+
+  const owner = { name: 'Alice' };
+  global.it_('can add an Order to the database', function* anon() {
+    yield db.createOrder(newOrder)
+    .then(response => {
+      orderId = response.properties.order_id;
+      global.expect(response.labels[0]).to.equal('Order');
+      global.expect(response.properties.created_on).to.equal('18sep2016');
+    });
+  });
+
+  global.it_('adds items to an order', function* anon() {
+    yield db.addItemsToOrder(orderId, items, owner)
+    .then(response => {
+      console.log('response: ', response[0])
+      global.expect(response[0].rel.type).to.equal('REQ');
+      global.expect(response[0].rel.properties.quantity).to.equal(10);
+    });
+  });
+});
