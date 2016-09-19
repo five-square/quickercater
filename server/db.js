@@ -340,6 +340,35 @@ db.reset = () => db.clearRelationships()
 /*
   **********************************************************************************************
 
+  These functions will handle relationships.
+
+  Make sure you are running the Neo4j server first!
+
+  **********************************************************************************************
+*/
+
+// !!! STILL NEEDS TO IMPLEMENT VALIDATION TO AVOID DUPLICATING DATA !!!
+db.createRelationship = (parentLabel, parentProps, relLabel, relProps, destLabel, destPropsArray) =>
+  Node.cypherAsync({
+    query: `
+      WITH destPropsArray AS destProps
+      UNWIND destProps AS destProp
+      MATCH (parent:{parentLabel} {parentProps}), (dest:{destLabel} {destProp})
+      CREATE (parent)-[rel:{relLabel} {relProps}]->(dest)
+      RETURN parent, rel, dest`,
+    params: {
+      parentLabel,
+      parentProps,
+      relLabel,
+      relProps,
+      destLabel,
+      destPropsArray,
+    },
+  });
+
+/*
+  **********************************************************************************************
+
   These functions will service the GET, POST, UPDATE, and DELETE endpoints for Owner.
 
   Make sure you are running the Neo4j server first!
