@@ -156,10 +156,11 @@ global.describe('The Database', () => {
   global.xit_('can add a CAN_EDIT relationship between an Owner and an Order', function* anon() {
     yield db.createOrder(newOrder)
     .then(response => {
-      global.expect(response.labels[0]).to.equal('Order');
+      global.expect(response.labels[0]).to.equal('CustomerOrder');
       console.log('need to implement this', response);
 
-      return db.createOwnerToNodeRelationship(newOwner.name, newOrder, 'Order', {}, 'CAN_EDIT');
+      return db.createOwnerToNodeRelationship(newOwner.name, newOrder, 'CustomerOrder',
+                                              {}, 'CAN_EDIT');
     })
     .then(response => {
       console.log('need to implement this', response);
@@ -167,7 +168,7 @@ global.describe('The Database', () => {
   });
 
   global.xit_('can delete a CAN_EDIT relationship between an Owner and an Order', function* anon() {
-    yield db.deleteOwnerRelationship(newOwner.name, newOrder, 'Order', {}, 'CAN_EDIT')
+    yield db.deleteOwnerRelationship(newOwner.name, newOrder, 'CustomerOrder', {}, 'CAN_EDIT')
     .then(response => {
       console.log('need to implement this', response);
 
@@ -181,10 +182,10 @@ global.describe('The Database', () => {
   global.xit_('can add a VIEW relationship between an Owner and an Order', function* anon() {
     yield db.createOrder(newOrder)
     .then(response => {
-      global.expect(response.labels[0]).to.equal('Order');
+      global.expect(response.labels[0]).to.equal('CustomerOrder');
       console.log('need to implement this', response);
 
-      return db.createNodeToOwnerRelationship(newOwner.name, newOrder, 'Order', {}, 'VIEW');
+      return db.createNodeToOwnerRelationship(newOwner.name, newOrder, 'CustomerOrder', {}, 'VIEW');
     })
     .then(response => {
       console.log('need to implement this', response);
@@ -192,7 +193,7 @@ global.describe('The Database', () => {
   });
 
   global.xit_('can delete a VIEW relationship between an Owner and an Order', function* anon() {
-    yield db.deleteOwnerRelationship(newOwner.name, newOrder, 'Order', {}, 'VIEW')
+    yield db.deleteOwnerRelationship(newOwner.name, newOrder, 'CustomerOrder', {}, 'VIEW')
     .then(response => {
       console.log('need to implement this', response);
 
