@@ -22,14 +22,14 @@ db.init = () => Node.cypherAsync({
       name: 'Alice',
       phone: '555-444-3333',
       email: 'alice@window.com',
-      description: 'I love American food',
+      description: 'I love Mexican food',
       auth_key: true
     })
     CREATE (bob:Owner {
       name: 'Bob',
       phone: '555-444-5555',
       email: 'bob@window.com',
-      description: 'I love Mexican food',
+      description: 'I love American food',
       auth_key: true
     })
     CREATE (carly:Customer {
@@ -300,25 +300,25 @@ db.init = () => Node.cypherAsync({
     CREATE (bobMenu4)-[:CAN_EDIT {order: 0}]->(bobDessert1)
     CREATE (alice)-[:CAN_EDIT]->(aliceStore)
     CREATE (bob)-[:CAN_EDIT]->(bobStore)
-    CREATE (carly)-[:CREATED {created_on: 'yesterday', expires: 'today'}]->(carlyOrder1)
-    CREATE (carlyOrder1)-[:VIEW]->(carly)
-    CREATE (carlyOrder1)-[:REQUEST {quantity: 25}]->(aliceDrink1)
-    CREATE (carlyOrder1)-[:REQUEST {quantity: 25}]->(aliceDrink3)
-    CREATE (carlyOrder1)-[:REQUEST {quantity: 50}]->(aliceSide1)
-    CREATE (carlyOrder1)-[:REQUEST {quantity: 50}]->(aliceMain1)
-    CREATE (carlyOrder1)-[:REQUEST {quantity: 50}]->(aliceDessert1)
-    CREATE (carlyOrder1)-[:REQUEST]->(aliceDelivery)
-    CREATE (carlyOrder1)-[:VIEW]->(alice)
-    CREATE (alice)-[:CAN_EDIT]->(carlyOrder1)
-    CREATE (carly)-[:CREATED {created_on: 'yesterday', expires: 'tomorrow'}]->(carlyOrder2)
+    CREATE (carly)-[:CREATED {created_on: 'yesterday', expires: 'today'}]->(carlyOrder2)
     CREATE (carlyOrder2)-[:VIEW]->(carly)
-    CREATE (carlyOrder2)-[:VIEW]->(bob)
-    CREATE (carlyOrder2)-[:REQUEST {quantity: 100}]->(bobDrink3)
-    CREATE (carlyOrder2)-[:REQUEST {quantity: 100}]->(bobSide1)
-    CREATE (carlyOrder2)-[:REQUEST {quantity: 100}]->(bobMain3)
-    CREATE (carlyOrder2)-[:REQUEST {quantity: 100}]->(bobDessert1)
-    CREATE (carlyOrder2)-[:REQUEST]->(bobTruck)
-    CREATE (bob)-[:CAN_EDIT]->(carlyOrder2)`,
+    CREATE (carlyOrder2)-[:REQUEST {quantity: 25}]->(aliceDrink1)
+    CREATE (carlyOrder2)-[:REQUEST {quantity: 25}]->(aliceDrink3)
+    CREATE (carlyOrder2)-[:REQUEST {quantity: 50}]->(aliceSide1)
+    CREATE (carlyOrder2)-[:REQUEST {quantity: 50}]->(aliceMain1)
+    CREATE (carlyOrder2)-[:REQUEST {quantity: 50}]->(aliceDessert1)
+    CREATE (carlyOrder2)-[:REQUEST]->(aliceDelivery)
+    CREATE (carlyOrder2)-[:VIEW]->(alice)
+    CREATE (alice)-[:CAN_EDIT]->(carlyOrder2)
+    CREATE (carly)-[:CREATED {created_on: 'yesterday', expires: 'tomorrow'}]->(carlyOrder1)
+    CREATE (carlyOrder1)-[:VIEW]->(carly)
+    CREATE (carlyOrder1)-[:VIEW]->(bob)
+    CREATE (carlyOrder1)-[:REQUEST {quantity: 100}]->(bobDrink3)
+    CREATE (carlyOrder1)-[:REQUEST {quantity: 100}]->(bobSide1)
+    CREATE (carlyOrder1)-[:REQUEST {quantity: 100}]->(bobMain3)
+    CREATE (carlyOrder1)-[:REQUEST {quantity: 100}]->(bobDessert1)
+    CREATE (carlyOrder1)-[:REQUEST]->(bobTruck)
+    CREATE (bob)-[:CAN_EDIT]->(carlyOrder1)`,
 });
 
 db.clearRelationships = () => Node.cypherAsync({
@@ -340,7 +340,7 @@ db.reset = () => db.clearRelationships()
 /*
   **********************************************************************************************
 
-  These functions will handle relationships.
+  These functions will handle generic nodes and relationships.
 
   Make sure you are running the Neo4j server first!
 
@@ -348,23 +348,74 @@ db.reset = () => db.clearRelationships()
 */
 
 // !!! STILL NEEDS TO IMPLEMENT VALIDATION TO AVOID DUPLICATING DATA !!!
-db.createRelationship = (parentLabel, parentProps, relLabel, relProps, destLabel, destPropsArray) =>
+db.createRelationship = (parentLabel, parentId, relLabel, relProps, destLabel, destIdArray) =>
   Node.cypherAsync({
     query: `
-      WITH destPropsArray AS destProps
-      UNWIND destProps AS destProp
-      MATCH (parent:{parentLabel} {parentProps}), (dest:{destLabel} {destProp})
-      CREATE (parent)-[rel:{relLabel} {relProps}]->(dest)
+      WITH {destIdArray} AS destIds
+      UNWIND destIds AS destId
+      MATCH (parent:${parentLabel}) WHERE ID(parent) = {parentId}
+      MATCH (dest:${destLabel}) WHERE ID(dest) = destId
+      MERGE (parent)-[rel:${relLabel} {relProps}]->(dest)
       RETURN parent, rel, dest`,
     params: {
-      parentLabel,
-      parentProps,
-      relLabel,
+      parentId,
       relProps,
-      destLabel,
-      destPropsArray,
+      destIdArray,
     },
   });
+
+db.findRelationship = (parentLabel, parentId, relLabel, destLabel, destId) =>
+  Node.cypherAsync({
+    query: `
+      MATCH (parent:${parentLabel}) WHERE ID(parent) = {parentId}
+      MATCH (dest:${destLabel}) WHERE ID(dest) = {destId}
+      MATCH (parent)-[rel:${relLabel}]-(dest)
+      RETURN rel`,
+    params: {
+      parentId,
+      destId,
+    },
+  });
+
+db.deleteRelationship = (parentLabel, parentId, relLabel, destLabel, destId) =>
+  Node.cypherAsync({
+    query: `
+      MATCH (parent:${parentLabel}) WHERE ID(parent) = {parentId}
+      MATCH (dest:${destLabel}) WHERE ID(dest) = {destId}
+      MATCH (parent)-[rel:${relLabel}]-(dest)
+      DELETE rel`,
+    params: {
+      parentId,
+      destId,
+    },
+  });
+
+db.findNode = (nodeLabel, nodeId) => Node.cypherAsync({
+  query: `
+    MATCH (node:${nodeLabel}) WHERE ID(node) = {nodeId}
+    RETURN node`,
+  params: {
+    nodeId,
+  },
+})
+.then(response => {
+  if (response.length === 0) {
+    const errMessage = 'Node does not exist';
+    throw errMessage;
+  }
+  return response[0].node;
+})
+.catch(err => err);
+
+db.deleteNode = (nodeLabel, nodeId) => Node.cypherAsync({
+  query: `
+    MATCH (node:${nodeLabel}) WHERE ID(node) = {nodeId}
+    DELETE node`,
+  params: {
+    nodeId,
+  },
+})
+.then(response => response);
 
 /*
   **********************************************************************************************
@@ -397,73 +448,10 @@ db.createOwner = (owner) => Node.cypherAsync({
 })
 .then(response => response[0].owner);
 
-db.findOwner = (ownerName) => Node.cypherAsync({
-  query: 'MATCH (owner:Owner { name: {name} }) RETURN owner',
-  params: {
-    name: ownerName,
-  },
+db.findAllOwners = () => Node.cypherAsync({
+  query: 'MATCH (owner:Owner) RETURN owner',
 })
-.then(response => {
-  if (response.length === 0) {
-    const errMessage = 'Owner does not exist';
-    throw errMessage;
-  }
-  return response[0].owner;
-})
-.catch(err => err);
-
-db.deleteOwner = (ownerName) => Node.cypherAsync({
-  query: 'MATCH (owner:Owner { name: {name} }) DELETE owner',
-  params: {
-    name: ownerName,
-  },
-})
-.then(response => response);
-
-// !!! STILL NEEDS TO IMPLEMENT VALIDATION TO AVOID DUPLICATING DATA !!!
-db.createOwnerToNodeRelationship = (owner, node, nodeLabel, rel, relLabel) => Node.cypherAsync({
-  query: `
-    MATCH (owner:Owner {name: {name} })
-    MATCH (node:{nodeLabel} {node})
-    CREATE (owner)-[rel:{relLabel} {rel}]->(node)
-    RETURN owner, rel, node`,
-  params: {
-    name: owner,
-    nodeLabel,
-    node,
-    relLabel,
-    rel,
-  },
-});
-
-// !!! STILL NEEDS TO IMPLEMENT VALIDATION TO AVOID DUPLICATING DATA !!!
-db.createNodeToOwnerRelationship = (owner, node, nodeLabel, rel, relLabel) => Node.cypherAsync({
-  query: `
-    MATCH (owner:Owner {name: {name} })
-    MATCH (node:{nodeLabel} {node})
-    CREATE (node)-[rel:{relLabel} {rel}]->(owner)
-    RETURN owner, rel, node`,
-  params: {
-    name: owner,
-    nodeLabel,
-    node,
-    relLabel,
-    rel,
-  },
-});
-
-db.deleteOwnerRelationship = (owner, node, nodeLabel, rel, relLabel) => Node.cypherAsync({
-  query: `
-    MATCH (owner:Owner {name: {name}})-[rel:{relLabel} {rel}]-(node:{nodeLabel} {node})
-    DELETE rel`,
-  params: {
-    name: owner,
-    nodeLabel,
-    node,
-    relLabel,
-    rel,
-  },
-});
+.then(response => response.map(e => e.owner));
 
 /*
   **********************************************************************************************
@@ -473,10 +461,11 @@ db.deleteOwnerRelationship = (owner, node, nodeLabel, rel, relLabel) => Node.cyp
 
   **********************************************************************************************
 */
+
 // After the submit button is clicked, order is created using the following method
 db.createOrder = (order) => Node.cypherAsync({
   query: `
-    MERGE (order:Order {
+    MERGE (order:CustomerOrder {
       order_id: 25,
       created_on: {created_on},
       request_date: {request_date},
@@ -525,8 +514,8 @@ db.addItemsToOrder = (orderId, items, owner) => Node.cypherAsync({
     WITH {items} AS itemArray
     UNWIND itemArray AS menuitem
     MATCH (item:Item{name: menuitem.name})<-[:CAN_EDIT]-(owner:Owner{name: {ownerName}})
-    MATCH (order:Order) WHERE order.order_id = {orderId}
-    MERGE (order)-[rel:REQ {quantity: menuitem.quantity}]->(item)
+    MATCH (order:CustomerOrder) WHERE order.order_id = {orderId}
+    MERGE (order)-[rel:REQUEST {quantity: menuitem.quantity}]->(item)
     RETURN rel`,
   params: {
     orderId,

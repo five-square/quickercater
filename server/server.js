@@ -43,6 +43,13 @@ routes.get('/', (req, res) => {
   **********************************************************************************************
 */
 
+routes.get('/api/owner/all', (req, res) => {
+  db.findAllOwners()
+  .then(dbData => {
+    res.status(200).send(dbData);
+  });
+});
+
 routes.get('/api/owner/:owner', (req, res) => {
   db.findOwner(req.params.owner)
   .then(dbData => {
