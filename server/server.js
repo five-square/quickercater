@@ -85,20 +85,21 @@ routes.put('/api/owner/:owner/relationship', (req, res) => {
 
   Serves an endpoint that initializes the database with dummy data for development.
 
-  !!! DOES NOT DELETE DATA THAT ALREADY EXISTS. BEWARE OF DUPLICATING DATA. !!!
+  !!! DELETES ALL DATA THAT ALREADY EXISTS !!!
 
   **********************************************************************************************
 */
 
-routes.get('/db_init', (req, res) => {
-  db.init()
+routes.get('/db_reset', (req, res) => {
+  db.reset()
   .then(() => {
-    res.status(201).send('Database Initialized!');
+    res.status(201).send('Database Reset!');
   })
   .catch((err) => {
     res.status(500).send(err);
   });
 });
+
 /*
   **********************************************************************************************
 
