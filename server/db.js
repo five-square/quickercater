@@ -215,6 +215,7 @@ db.init = () => Node.cypherAsync({
     })
 
     CREATE (carlyOrder1:Order {
+      name: 'Burger Delivery',
       created_on: 'yesterday',
       request_date: 'tomorrow',
       fulfilled: false,
@@ -222,12 +223,14 @@ db.init = () => Node.cypherAsync({
       address: '321 RightBehindYou Ln.'
     })
     CREATE (carlyOrder2:Order {
+      name: 'Mexican Delivery',
       created_on: 'yesterday',
       request_date: 'tomorrow after tomorrow',
       fulfilled: false,
       total_price: 0,
       address: '321 RightBehindYou Ln.'
     })
+
     CREATE (alice)-[:CAN_EDIT]->(aliceDelivery)
     CREATE (alice)-[:CAN_EDIT]->(aliceTruck)
     CREATE (alice)-[:CAN_EDIT]->(aliceOnSite)
@@ -258,11 +261,40 @@ db.init = () => Node.cypherAsync({
     CREATE (bob)-[:CAN_EDIT]->(bobStore)
     CREATE (carly)-[:CREATED {created_on: 'yesterday', expires: 'today'}]->(carlyOrder1)
     CREATE (carlyOrder1)-[:VIEW]->(carly)
+    CREATE (carlyOrder1)-[:REQUEST {quantity: 25}]->(aliceDrink1)
+    CREATE (carlyOrder1)-[:REQUEST {quantity: 25}]->(aliceDrink3)
+    CREATE (carlyOrder1)-[:REQUEST {quantity: 50}]->(aliceSide1)
+    CREATE (carlyOrder1)-[:REQUEST {quantity: 50}]->(aliceMain1)
+    CREATE (carlyOrder1)-[:REQUEST {quantity: 50}]->(aliceDessert1)
+    CREATE (carlyOrder1)-[:REQUEST]->(aliceDelivery)
+    CREATE (carlyOrder1)-[:VIEW]->(alice)
     CREATE (alice)-[:CAN_EDIT]->(carlyOrder1)
     CREATE (carly)-[:CREATED {created_on: 'yesterday', expires: 'tomorrow'}]->(carlyOrder2)
     CREATE (carlyOrder2)-[:VIEW]->(carly)
+    CREATE (carlyOrder2)-[:VIEW]->(bob)
+    CREATE (carlyOrder2)-[:REQUEST {quantity: 100}]->(bobDrink3)
+    CREATE (carlyOrder2)-[:REQUEST {quantity: 100}]->(bobSide1)
+    CREATE (carlyOrder2)-[:REQUEST {quantity: 100}]->(bobMain3)
+    CREATE (carlyOrder2)-[:REQUEST {quantity: 100}]->(bobDessert1)
+    CREATE (carlyOrder2)-[:REQUEST]->(bobTruck)
     CREATE (bob)-[:CAN_EDIT]->(carlyOrder2)`,
 });
+
+db.clearRelationships = () => Node.cypherAsync({
+  query: `
+    MATCH ()-[r]-()
+    DELETE r`,
+});
+
+db.clearNodes = () => Node.cypherAsync({
+  query: `
+    MATCH (n)
+    DELETE n`,
+});
+
+db.reset = () => db.clearRelationships()
+  .then(() => db.clearNodes())
+  .then(() => db.init());
 
 /*
   **********************************************************************************************
@@ -274,6 +306,7 @@ db.init = () => Node.cypherAsync({
   **********************************************************************************************
 */
 
+// !!! STILL NEEDS TO IMPLEMENT VALIDATION TO AVOID DUPLICATING DATA !!!
 db.createOwner = (owner) => Node.cypherAsync({
   query: `
     MERGE (owner:Owner {
@@ -317,12 +350,42 @@ db.deleteOwner = (ownerName) => Node.cypherAsync({
 })
 .then(response => response);
 
-db.createOwnerRelationship = (owner, node, nodeLabel, rel, relLabel) => Node.cypherAsync({
+// !!! STILL NEEDS TO IMPLEMENT VALIDATION TO AVOID DUPLICATING DATA !!!
+db.createOwnerToNodeRelationship = (owner, node, nodeLabel, rel, relLabel) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner {name: {name} })
     MATCH (node:{nodeLabel} {node})
     CREATE (owner)-[rel:{relLabel} {rel}]->(node)
     RETURN owner, rel, node`,
+  params: {
+    name: owner,
+    nodeLabel,
+    node,
+    relLabel,
+    rel,
+  },
+});
+
+// !!! STILL NEEDS TO IMPLEMENT VALIDATION TO AVOID DUPLICATING DATA !!!
+db.createNodeToOwnerRelationship = (owner, node, nodeLabel, rel, relLabel) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner {name: {name} })
+    MATCH (node:{nodeLabel} {node})
+    CREATE (node)-[rel:{relLabel} {rel}]->(owner)
+    RETURN owner, rel, node`,
+  params: {
+    name: owner,
+    nodeLabel,
+    node,
+    relLabel,
+    rel,
+  },
+});
+
+db.deleteOwnerRelationship = (owner, node, nodeLabel, rel, relLabel) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner {name: {name}})-[rel:{relLabel} {rel}]-(node:{nodeLabel} {node})
+    DELETE rel`,
   params: {
     name: owner,
     nodeLabel,

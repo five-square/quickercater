@@ -57,6 +57,33 @@ global.describe('The Server', () => {
       global.expect(response.body.labels[0]).to.equal('Owner');
     });
   });
+/*
+  **********************************************************************************************
+  These tests are pending until completion of Order creation endpoints
+  **********************************************************************************************
+*/
+  global.xit_('can add a CAN_EDIT relationship between an Owner and an Order', function* anon() {
+    yield request(app);
+    // Blah blah blah, implement me!
+  });
+
+  global.xit_('can delete a CAN_EDIT relationship between an Owner and an Order', function* anon() {
+    yield request(app);
+    // Blah blah blah, implement me!
+  });
+
+  global.xit_('can add a VIEW relationship between an Owner and an Order', function* anon() {
+    yield request(app);
+    // Blah blah blah, implement me!
+  });
+
+  global.xit_('can delete a VIEW relationship between an Owner and an Order', function* anon() {
+    yield request(app);
+    // Blah blah blah, implement me!
+  });
+/*
+  **********************************************************************************************
+*/
 
   global.it_('can delete an Owner', function* anon() {
     yield request(app)
@@ -97,23 +124,89 @@ global.describe('The Database', () => {
     auth_key: true,
   };
 
+  const newOrder = {
+    name: 'New Order',
+    created_on: 'today',
+    request_date: 'tomorrow',
+    fulfilled: false,
+    total_price: 0,
+    address: '987 Right Here Rd',
+  };
+
   global.it_('can add an Owner to the database', function* anon() {
     yield db.createOwner(newOwner)
     .then(response => {
       global.expect(response.labels[0]).to.equal('Owner');
-      global.expect(response.properties.name).to.equal('Frank');
+      global.expect(response.properties.name).to.equal(newOwner.name);
     });
   });
 
-  global.it_('finds an Owner from the database by name', function* anon() {
-    yield db.findOwner('Alice')
+  global.it_('can fetch an existing Owner', function* anon() {
+    yield db.findOwner(newOwner.name)
     .then(response => {
       global.expect(response.labels[0]).to.equal('Owner');
-      global.expect(response.properties.name).to.equal('Alice');
+      global.expect(response.properties.name).to.equal(newOwner.name);
+    });
+  });
+/*
+  **********************************************************************************************
+  These tests are pending until completion of Order creation functions
+  **********************************************************************************************
+*/
+  global.xit_('can add a CAN_EDIT relationship between an Owner and an Order', function* anon() {
+    yield db.createOrder(newOrder)
+    .then(response => {
+      global.expect(response.labels[0]).to.equal('Order');
+      console.log('need to implement this', response);
+
+      return db.createOwnerToNodeRelationship(newOwner.name, newOrder, 'Order', {}, 'CAN_EDIT');
+    })
+    .then(response => {
+      console.log('need to implement this', response);
     });
   });
 
-  global.it_('deletes an Owner from the database by name', function* anon() {
+  global.xit_('can delete a CAN_EDIT relationship between an Owner and an Order', function* anon() {
+    yield db.deleteOwnerRelationship(newOwner.name, newOrder, 'Order', {}, 'CAN_EDIT')
+    .then(response => {
+      console.log('need to implement this', response);
+
+      return db.deleteOrder(newOrder);
+    })
+    .then(response => {
+      console.log('need to implement this', response);
+    });
+  });
+
+  global.xit_('can add a VIEW relationship between an Owner and an Order', function* anon() {
+    yield db.createOrder(newOrder)
+    .then(response => {
+      global.expect(response.labels[0]).to.equal('Order');
+      console.log('need to implement this', response);
+
+      return db.createNodeToOwnerRelationship(newOwner.name, newOrder, 'Order', {}, 'VIEW');
+    })
+    .then(response => {
+      console.log('need to implement this', response);
+    });
+  });
+
+  global.xit_('can delete a VIEW relationship between an Owner and an Order', function* anon() {
+    yield db.deleteOwnerRelationship(newOwner.name, newOrder, 'Order', {}, 'VIEW')
+    .then(response => {
+      console.log('need to implement this', response);
+
+      return db.deleteOrder(newOrder);
+    })
+    .then(response => {
+      console.log('need to implement this', response);
+    });
+  });
+/*
+  **********************************************************************************************
+*/
+
+  global.it_('can delete an Owner from the database', function* anon() {
     yield db.deleteOwner(newOwner.name)
     .then(response => {
       global.expect(response).to.deep.equal([]);
