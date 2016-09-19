@@ -476,7 +476,7 @@ db.deleteOwnerRelationship = (owner, node, nodeLabel, rel, relLabel) => Node.cyp
 // After the submit button is clicked, order is created using the following method
 db.createOrder = (order) => Node.cypherAsync({
   query: `
-    CREATE (order:Order {
+    CREATE (order:CustomerOrder {
       order_id: 25,
       created_on: {created_on},
       request_date: {request_date},
@@ -503,7 +503,7 @@ db.createCustOrderOwnerRelationship =
   (orderId, customer, owner, createdOn, expires) => Node.cypherAsync({
     query: `
       MATCH (customer:Customer{name: {customerName}}) 
-      MATCH (order:Order) WHERE order.order_id = {orderId} 
+      MATCH (order:CustomerOrder) WHERE order.order_id = {orderId} 
       MATCH (owner:Owner{name: {ownerName}})
       CREATE (customer)-[relA:CREATED {created_on: {createdOn}, expires: {expires}}]->(order)
       CREATE (order)-[relB:VIEW]->(customer)
@@ -525,7 +525,7 @@ db.addItemsToOrder = (orderId, items, owner) => Node.cypherAsync({
     WITH {items} AS itemArray
     UNWIND itemArray AS menuitem
     MATCH (item:Item{name: menuitem.name})<-[:CAN_EDIT]-(owner:Owner{name: {ownerName}})
-    MATCH (order:Order) WHERE order.order_id = {orderId}
+    MATCH (order:CustomerOrder) WHERE order.order_id = {orderId}
     MERGE (order)-[rel:REQ {quantity: menuitem.quantity}]->(item)
     RETURN rel`,
   params: {

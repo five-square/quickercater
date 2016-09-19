@@ -238,7 +238,7 @@ global.describe('The Database', () => {
 
   const items = [{
     name: 'Chips',
-    quantity: 10,
+    quantity: 11,
   }, {
     name: 'Nachos',
     quantity: 4,
@@ -251,8 +251,9 @@ global.describe('The Database', () => {
   global.it_('can add an Order to the database', function* anon() {
     yield db.createOrder(newOrder)
     .then(response => {
+      console.log('response: ', response)
       orderId = response.properties.order_id;
-      global.expect(response.labels[0]).to.equal('Order');
+      global.expect(response.labels[0]).to.equal('CustomerOrder');
       global.expect(response.properties.created_on).to.equal('18sep2016');
     });
   });
@@ -261,7 +262,7 @@ global.describe('The Database', () => {
     yield db.addItemsToOrder(orderId, items, owner)
     .then(response => {
       global.expect(response[0].rel.type).to.equal('REQ');
-      global.expect(response[0].rel.properties.quantity).to.equal(10);
+      global.expect(response[0].rel.properties.quantity).to.equal(11);
     });
   });
 });
