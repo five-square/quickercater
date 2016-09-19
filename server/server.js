@@ -46,7 +46,11 @@ routes.get('/', (req, res) => {
 routes.get('/api/owner/:owner', (req, res) => {
   db.findOwner(req.params.owner)
   .then(dbData => {
-    res.status(200).send(dbData);
+    if (dbData === 'Owner does not exist') {
+      res.status(404).send(dbData);
+    } else {
+      res.status(200).send(dbData);
+    }
   });
 });
 
@@ -59,8 +63,8 @@ routes.post('/api/owner/create', (req, res) => {
 
 routes.delete('/api/owner/:owner', (req, res) => {
   db.deleteOwner(req.params.owner)
-  .then(() => {
-    res.status(202).send();
+  .then((response) => {
+    res.status(202).send(response);
   });
 });
 
@@ -75,6 +79,16 @@ routes.put('/api/owner/:owner/relationship', (req, res) => {
     res.status(201).send(dbData);
   });
 });
+
+/*
+  **********************************************************************************************
+
+  Serves an endpoint that initializes the database with dummy data for development.
+
+  !!! DOES NOT DELETE DATA THAT ALREADY EXISTS. BEWARE OF DUPLICATING DATA. !!!
+
+  **********************************************************************************************
+*/
 
 routes.get('/db_init', (req, res) => {
   db.init()
