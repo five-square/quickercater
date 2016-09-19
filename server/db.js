@@ -545,3 +545,52 @@ db.createOrderRelationships = (order, cust, owner, expires, items) => {
       db.addItemsToOrder(rel.orderId, items, owner);
     });
 };
+
+
+/*
+ **********************************************************************************************
+  This functions will create, update, get and delete packages.
+
+ **********************************************************************************************
+*/
+
+db.createPackage = (pack) => Node.cypherAsync({
+  query: `
+    MERGE(pack:Package {
+      name: {name},
+      type: {type},
+      cost: {cost},
+      description: {description}
+    })
+    RETURN package`,
+  params: {
+    name: pack.name,
+    type: pack.type,
+    cost: pack.cost,
+    description: pack.description,
+  },
+})
+.then(response => response[0].pack);
+
+db.findPackage = (packType) => Node.cypherAsync({
+  query: 'MATCH (pack:Package {type: {type}}) RETURN pack',
+  params: {
+    type: packType,
+  },
+})
+.then(response => {
+  if (response.length === 0) {
+    const errMessage = 'No package available';
+    throw errMessage;
+  }
+  return response[0].pack;
+})
+.catch(err => err);
+
+db.deletePackage = (packType) => Node.cypherAsync({
+  query: 'MATCH (pack:Package { type: {type} }) DELETE pack',
+  params: {
+    type: packType,
+  },
+})
+.then(response => response);
