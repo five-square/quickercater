@@ -476,7 +476,7 @@ db.deleteOwnerRelationship = (owner, node, nodeLabel, rel, relLabel) => Node.cyp
 // After the submit button is clicked, order is created using the following method
 db.createOrder = (order) => Node.cypherAsync({
   query: `
-    MERGE (order:Order {
+    CREATE (order:Order {
       order_id: 25,
       created_on: {created_on},
       request_date: {request_date},
