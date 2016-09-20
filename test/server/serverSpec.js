@@ -27,7 +27,7 @@ global.describe('The Server', () => {
       global.expect(response.res.headers['content-type']).to.equal('text/html; charset=UTF-8');
     });
   });
-
+  var __itemId;
   // Testing the Owner server endpoints
   const newOwner = {
     name: 'Frank',
@@ -315,6 +315,48 @@ global.describe('The Database', () => {
       global.expect(response.properties.created_on).to.equal('18sep2016');
     });
   });
+
+    global.it_('can create a new menu item and verify created node', function* anon(){
+     yield db.createItem({name: 'Feijoada', description: 'Brazilian stew', price: 150, picture: 'picture URL'}).then(response => {
+       __itemId = response._id;
+       //console.log("res ======",response._id);
+       //db.getItemById(44).then(resp=>console.log("=_=",resp));
+       db.getItemById(response._id).then(resp => {
+           global.expect(resp.properties).to.deep.equal({ name: 'Feijoada', description: 'Brazilian stew', price: 150, picture: 'picture URL' });
+       });
+     });
+  });
+
+  global.it_('can get item by picture url', function* anon(){
+    var testObj = {name: 'Feijoada', description: 'Brazilian stew', price: 150, picture: 'picture URL'};
+    yield db.getItemByPicture('picture URL').then(resp=>{
+      global.expect(resp.properties).to.deep.equal(testObj);
+    });
+  });
+
+      global.it_('can update an existing menu item', function* anon(){
+        var itemObj = {name: 'Super Steak Fingers', description: 'super weird food', price: 0, picture: 'SF pic', _id:__itemId};
+          //itemObj._id = temp;
+          //itemObj.name = "Faige Juada";
+         yield db.updateItem(itemObj).then(resp => {
+            //global.expect(resp.properties).to.deep.equal({name: 'Faige Juada', description: 'Brazilian stew', price: 150, picture: 'picture URL' });
+          db.getItemById(resp._id).then(resp1 => {
+              global.expect(resp1.properties).to.deep.equal(itemObj);
+          });
+        });  
+      });
+
+      global.it_('can delete an existing menu item', function* anon(){
+        
+        yield db.removeItemById(__itemId).then(resp=>{
+          db.getItemById(__itemId).then(resp1=>{
+            //console.log("================== ",__itemId);
+            global.expect(resp1).to.equal(undefined);
+          });
+        });
+      });
+
+
 
 /*
   **********************************************************************************************

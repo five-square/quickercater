@@ -568,3 +568,74 @@ db.findAllStores = () => Node.cypherAsync({
   query: 'MATCH (stores:Store) RETURN stores',
 })
 .then(response => response.map(e => e.stores));
+
+db.createItem = (itemObj) => Node.cypherAsync({
+  query: `
+    MERGE (item:Item {
+      name: {name},
+      description: {description},
+      price: {price},
+      picture: {picture}
+    }) 
+    RETURN item`,
+  params: {
+    name: itemObj.name,
+    description: itemObj.description,
+    price: itemObj.price,
+    picture: itemObj.picture,
+  },
+})
+.then(response => response[0].item);
+
+db.getItemById = (itemId) => {
+  if(itemId === undefined) throw error;
+  return Node.cypherAsync({
+   query: `MATCH (item:Item) 
+          WHERE ID(item) = ${itemId}
+          RETURN item`,
+}).then(response => {
+  if(response[0])
+    return response[0].item;
+  else
+    return;
+  }); }
+
+db.getItemByPicture = (picture) => Node.cypherAsync({
+  query: `MATCH (item:Item)
+          WHERE item.picture = {picture}
+          RETURN item`,
+  params: {
+    picture: picture,
+  }
+}).then(resp => resp[0].item);
+
+db.updateItem = (itemObj) => {
+  var id1 = itemObj._id;
+  delete itemObj._id;  //don't want to create an '_id' prop (doesn't go both ways)
+  return Node.cypherAsync({
+   
+    query: `MATCH (item:Item)
+            WHERE ID(item) = {id}
+            SET item = {itemObj}
+            RETURN item`,
+    params: {
+      id: id1,
+      name: itemObj.name,
+      description: itemObj.description,
+      price: itemObj.price,
+      picure: itemObj.picure,
+      itemObj: itemObj,
+    },
+  }).then(response => response[0].item); 
+}
+
+db.removeItemById = (itemId) => Node.cypherAsync({
+  query: `MATCH (i:Item)
+          WHERE ID(i) = {id}  
+          OPTIONAL MATCH () -[rel]-(i)
+          DELETE rel
+          DELETE i`,
+  params: {
+    id: itemId,
+  },
+}).then(response=> response );
