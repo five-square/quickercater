@@ -655,7 +655,7 @@ db.createPackage = (pack) => Node.cypherAsync({
       cost: {cost},
       description: {description}
     })
-    RETURN package`,
+    RETURN pack`,
   params: {
     name: pack.name,
     type: pack.type,
