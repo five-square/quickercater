@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import UserList from '../containers/user-list';
 import UserDetail from '../containers/user-detail';
 import NewUserDisplay from '../containers/newUser-display';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Lobby from './Lobby';
 import Server from '../models/serverAPI';
 
 export default class App extends Component {
@@ -44,6 +46,18 @@ export default class App extends Component {
         <h2>New user:</h2>
         <NewUserDisplay />
       </div>
+      <MuiThemeProvider>
+        <div>
+          <Lobby />
+          <h2>User List:</h2>
+          <UserList />
+          <hr />
+          <h2>User Details:</h2>
+          <UserDetail />
+          <h2>New user:</h2>
+          <NewUserDisplay />
+        </div>
+      </MuiThemeProvider>
   );
   }
 }
