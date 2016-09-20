@@ -85,7 +85,20 @@ routes.delete('/api/owner/:id', (req, res) => {
   **********************************************************************************************
 */
 
-routes.post('/api/relationships/create', (req, res) => {
+routes.post('/api/relationship/', (req, res) => {
+  const parentLabel = req.body.parent_label;
+  const parentId = req.body.parent_id;
+  const relLabel = req.body.rel_label;
+  const nodeLabel = req.body.node_label;
+  const nodeId = [req.body.node_id];
+  db.findRelationship(parentLabel, parentId, relLabel, nodeLabel, nodeId)
+  .then(dbData => {
+    console.log(dbData);
+    res.status(200).send(dbData[0]);
+  });
+});
+
+routes.post('/api/relationship/create', (req, res) => {
   const parentLabel = req.body.parent_label;
   const parentId = req.body.parent_id;
   const relLabel = req.body.rel_label;
@@ -93,11 +106,11 @@ routes.post('/api/relationships/create', (req, res) => {
   const nodeId = [req.body.node_id];
   db.createRelationship(parentLabel, parentId, relLabel, nodeLabel, nodeId)
   .then(dbData => {
-    res.status(201).send(dbData);
+    res.status(201).send(dbData[0]);
   });
 });
 
-routes.post('/api/relationships/delete', (req, res) => {
+routes.post('/api/relationship/delete', (req, res) => {
   const parentLabel = req.body.parent_label;
   const parentId = req.body.parent_id;
   const relLabel = req.body.rel_label;
