@@ -277,7 +277,7 @@ global.describe('The Database', () => {
     created_on: '20sep2016',
     request_date: '24sep2016',
     fulfilled: false,
-    total_price: 20,
+    total_price: 25,
     address: '456 Righthere Ln.',
   };
 
@@ -328,7 +328,7 @@ global.describe('The Database', () => {
     .then(response => {
       newOrder._id = response._id;
       global.expect(response.labels[0]).to.equal('CustomerOrder');
-      global.expect(response.properties.created_on).to.equal('18sep2016');
+      global.expect(response.properties.created_on).to.equal('20sep2016');
     });
   });
 
@@ -397,11 +397,12 @@ global.describe('The Database', () => {
     });
   });
 
-  // global.it_('creates order and order relationships', function* anon() {
-  //   yield db.createOrderRelationships(newOrder, customer, owner, 'yesterday', items)
-  //   .then(response => {
-  //     global.expect(response[0].item.labels[0]).to.equal('Item');
-  //     global.expect(response[0].order.properties.total_price).to.equal(20);
-  //   });
-  // });
+  global.xit_('creates order and order relationships', function* anon() {
+    yield db.createOrderRelationships(newOrder, customer, owner, 'yesterday', items)
+    .then(response => {
+      global.expect(response.order.labels[0]).to.equal('CustomerOrder');
+      global.expect(response.relationships[0][0].rel.type).to.equal('REQ');
+      global.expect(response.relationships[1][0].rel.type).to.equal('CREATED');
+    });
+  });
 });
