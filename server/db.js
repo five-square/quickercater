@@ -494,7 +494,7 @@ db.addItemsToOrder = (orderId, items, ownerId) => Node.cypherAsync({
     WITH {items} AS itemArray
     UNWIND itemArray AS menuitem
     MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
-    MATCH (item:Item)<-[:CAN_EDIT]-(owner) WHERE ID(item) = menuitem._id
+    MATCH (item:Item)<-[:CAN_EDIT]-(menu:Menu)<-[:CAN_EDIT]-(owner) WHERE ID(item) = menuitem._id
     MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
     MERGE (order)-[rel:REQ {quantity: menuitem.quantity}]->(item)
     RETURN rel`,
@@ -504,22 +504,26 @@ db.addItemsToOrder = (orderId, items, ownerId) => Node.cypherAsync({
     ownerId,
   },
 })
-.then(response => response);
+.then(response => {
+  return response;
+});
 
 db.createOrderRelationships = (order, customer, owner, expiresOn, items) => {
   // const relCreated = { created_on: order.createdOn, expires: expiresOn };
-  db.createOrder(order)
+  var saveOrder = {};
+  return db.createOrder(order)
     .then((orderCreated) => {
-      Promise.all([db.addItemsToOrder(orderCreated, items, owner),
+      saveOrder = Object.assign({}, orderCreated);
+      return Promise.all([db.addItemsToOrder(orderCreated._id, items, owner._id),
         db.createRelationship(
-          'Customer', customer, 'CREATED', 'CustomerOrder', [orderCreated]),
+          'Customer', customer._id, 'CREATED', 'CustomerOrder', [orderCreated._id]),
         db.createRelationship(
-          'CustomerOrder', order, 'VIEW', 'Customer', [customer]),
+          'CustomerOrder', orderCreated._id, 'VIEW', 'Customer', [customer._id]),
         db.createRelationship(
-          'Owner', owner, 'VIEW', 'CustomerOrder', [orderCreated]),
+          'Owner', owner._id, 'VIEW', 'CustomerOrder', [orderCreated._id]),
         ]);
     })
-    .then(response => response);
+    .then(response => ({ order: saveOrder, relationships: response }));
 };
 
 // MATCH (item:Item)<-[rel:REQ]-(order)<-[:CAN_EDIT]-(owner)
