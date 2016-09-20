@@ -427,22 +427,23 @@ global.describe('The Database', () => {
     yield db.removeItemById(__itemId).then(resp => {
       db.getItemById(__itemId).then(resp1 => {
         // console.log("================== ",__itemId);
-        global.expect(resp1).to.equal(undefined);
+        global.expect(resp1).to.equal('Item does not exist');
       });
     });
   });
+});
 
 global.describe('The Database', () => {
   const app = global.TestHelper.createApp();
   app.use('/', routes);
   app.testReady();
 
-  const newPackage = {
-    name: 'Fast Delivery',
-    type: 'delivery',
-    cost: 25,
-    description: 'Fast and easy',
-  };
+    const newPackage = {
+      name: 'Fast Delivery',
+      type: 'delivery',
+      cost: 25,
+      description: 'Fast and easy',
+    };
 
   global.it_('can add a Package to the database', function* anon() {
     yield db.createPackage(newPackage)
