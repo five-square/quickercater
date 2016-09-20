@@ -22,6 +22,7 @@ export default class StoreCardExpandable extends React.Component {
     super(props);
     this.state = {
       hover: 2,
+      style: this.props.style,
       name: this.props.stores.name,
       slogan: this.props.stores.slogan,
       description: this.props.stores.description,
@@ -37,8 +38,9 @@ export default class StoreCardExpandable extends React.Component {
   }
 
   render() {
+
     return (
-      <div>
+      <div style={this.state.style}>
         <Paper zDepth={this.state.hover}>
           <Card onMouseEnter={e => this.handleOnMouseEnter(e)} onMouseLeave={e => this.handleOnMouseLeave(e)}>
             <CardHeader
