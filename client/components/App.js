@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import UserList from '../containers/user-list';
 import UserDetail from '../containers/user-detail';
 import NewUserDisplay from '../containers/newUser-display';
+import Lobby from './Lobby';
 import Server from '../models/serverAPI';
 
 export default class App extends Component {
@@ -27,6 +29,9 @@ export default class App extends Component {
   render() {
     return (
       <div>
+        <MuiThemeProvider>
+          <Lobby />
+        </MuiThemeProvider>
         <h2>User List:</h2>
         <ul>
           {
