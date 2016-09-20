@@ -316,34 +316,13 @@ global.describe('The Item Database', () => {
     created_on: '20sep2016',
     request_date: '24sep2016',
     fulfilled: false,
-    total_price: 25,
+    total_price: 30,
     address: '456 Righthere Ln.',
   };
 
-  const items = [{
-    name: 'Chips',
-    description: 'Freshly made',
-    price: 1.99,
-    picture: false,
-    quantity: 11,
-    _id: 461,
-  },
-    {
-      name: 'Nachos',
-      description: 'Fresh melted',
-      price: 3.99,
-      picture: false,
-      quantity: 11,
-      _id: 462,
-    },
-    {
-      name: 'Quesadillas',
-      description: 'Fresh grilled',
-      price: 6.99,
-      picture: false,
-      quantity: 11,
-      _id: 463,
-    }];
+  const itemsInfo = [{ itemId: 461, quantity: 11 },
+    { itemId: 462, quantity: 11 },
+    { itemId: 463, quantity: 11 }];
 
   const customer = {
     name: 'Carly',
@@ -360,6 +339,13 @@ global.describe('The Item Database', () => {
     description: 'I love Mexican food',
     auth_key: true,
     _id: 430,
+  };
+
+  const orderInfo = { order: newOrder,
+    items: itemsInfo,
+    ownerId: 430,
+    customerId: 432,
+    package: { packageId: 437, expires: '10/10/2016' },
   };
 
   global.it_('can add an Order to the database', function* anon() {
@@ -456,11 +442,11 @@ global.describe('The Item Database', () => {
   });
 
   global.xit_('creates order and order relationships', function* anon() {
-    yield db.createOrderRelationships(newOrder, customer, owner, 'yesterday', items)
+    yield db.createOrderAndRelationships(orderInfo)
     .then(response => {
       global.expect(response.order.labels[0]).to.equal('CustomerOrder');
       global.expect(response.relationships[0][0].rel.type).to.equal('REQ');
-      global.expect(response.relationships[1][0].rel.type).to.equal('CREATED');
+      global.expect(response.relationships[1][0].relA.type).to.equal('CREATED');
     });
   });
 });
