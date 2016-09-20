@@ -548,14 +548,38 @@ db.createOrderAndRelationships = (orderInfo) => {
     .then(response => ({ order: saveOrder, relationships: response }));
 };
 
-db.fetchOrder = (orderId, ownerId) => Node.cypherAsync({
+db.fetchOrder = (orderId) => Node.cypherAsync({
   query: `
     MATCH (order:CustomerOrder) WHERE ID(order) = {orderId}
-    MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
-    MATCH (item:Item)<-[rel:REQ]-(order)
-    RETURN order, item`,
+    MATCH (item:Item)<-[relA:REQ]-(order)
+    MATCH (pkg:Package)<-[relB:REQ]-(order)
+    MATCH (customer:Customer)<-[relC:VIEW]-(order)
+    RETURN order, item, relA, pkg, customer`,
   params: {
     orderId,
+  },
+})
+.then(response => response);
+
+db.fetchAllPendingOrders = (ownerId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
+    MATCH (order:Order)<-[rel:CAN_EDIT]-(owner)
+    WHERE order.fulfilled = false
+    RETURN order`,
+  params: {
+    ownerId,
+  },
+})
+.then(response => response);
+
+db.fetchAllCompletedOrders = (ownerId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
+    MATCH (order:Order)-[rel:VIEW]->(owner)
+    WHERE order.fulfilled = true
+    RETURN order`,
+  params: {
     ownerId,
   },
 })
