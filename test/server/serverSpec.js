@@ -37,21 +37,37 @@ global.describe('The Server', () => {
     auth_key: true,
   };
 
+  const newOrder = {
+    name: 'New Order',
+    created_on: 'today',
+    request_date: 'tomorrow',
+    fulfilled: false,
+    total_price: 0,
+    address: '987 Right Here Rd',
+  };
+
+  const relPostObj = {
+    parent_label: 'Owner',
+    parent_id: null,
+    rel_label: 'CAN_EDIT',
+    node_label: 'CustomerOrder',
+    node_id: null,
+  };
+
   global.it_('can create an Owner', function* anon() {
     yield request(app)
     .post('/api/owner/create')
     .send(newOwner)
     .expect(201)
     .expect(response => {
-      console.log('in test: ', response.body._id);
       global.expect(response.body.properties).to.deep.equal(newOwner);
       global.expect(response.body.labels[0]).to.equal('Owner');
       newOwner._id = response.body._id;
+      relPostObj.parent_id = response.body._id;
     });
   });
 
   global.it_('can fetch an Owner from the database', function* anon() {
-    console.log('in test fetching: ', newOwner._id);
     yield request(app)
     .get(`/api/owner/${newOwner._id}`)
     .expect(200)
@@ -60,13 +76,29 @@ global.describe('The Server', () => {
       global.expect(response.body.labels[0]).to.equal('Owner');
     });
   });
+
+  global.xit_('can create an Order', function* anon() {
+    yield request(app)
+    .post('/api/order/create')
+    .send(newOrder)
+    .expect(201)
+    .expect(response => {
+      console.log(response);
+    });
+  });
 /*
   **********************************************************************************************
   These tests are pending until completion of Order creation endpoints
   **********************************************************************************************
 */
   global.xit_('can add a CAN_EDIT relationship between an Owner and an Order', function* anon() {
-    yield request(app);
+    yield request(app)
+    .post('/api/relationships')
+    .send(relPostObj)
+    .expect(201)
+    .expect(response => {
+      console.log(response);
+    });
     // Blah blah blah, implement me!
   });
 
@@ -87,6 +119,15 @@ global.describe('The Server', () => {
 /*
   **********************************************************************************************
 */
+  global.xit_('can delete an Order', function* anon() {
+    yield request(app)
+    .post('/api/order/delete')
+    .send(newOrder)
+    .expect(202)
+    .expect(response => {
+      console.log(response);
+    });
+  });
 
   global.it_('can delete an Owner', function* anon() {
     yield request(app)
@@ -127,13 +168,21 @@ global.describe('The Database', () => {
     auth_key: true,
   };
   const newOrder1 = {
+    name: 'New Order',
     created_on: 'today',
     request_date: 'tomorrow',
     fulfilled: false,
     total_price: 0,
+    address: '987 Right Here Rd',
   };
-    // name: 'New Order',
-    // address: '987 Right Here Rd',
+  const newOrder2 = {
+    name: 'New Order',
+    created_on: 'today',
+    request_date: 'tomorrow',
+    fulfilled: false,
+    total_price: 0,
+    address: '987 Right There Rd',
+  };
 
   global.it_('can add an Owner to the database', function* anon() {
     yield db.createOwner(newOwner)
@@ -151,74 +200,62 @@ global.describe('The Database', () => {
       global.expect(response.properties.name).to.equal(newOwner.name);
     });
   });
-/*
-  **********************************************************************************************
-  These tests are pending until completion of Order creation functions
-  **********************************************************************************************
-*/
-  global.xit_('can add a CAN_EDIT relationship between an Owner and an Order', function* anon() {
+
+  global.it_('can add a CAN_EDIT relationship between an Owner and an Order', function* anon() {
     yield db.createOrder(newOrder1)
     .then(response => {
-      console.log('after order creation', response);
       global.expect(response.labels[0]).to.equal('CustomerOrder');
-      global.expect(response.properties.created_on).to.equal(newOrder1.created_on);
+      global.expect(response.properties).to.deep.equal(newOrder1);
 
-      return db.createRelationship('Owner', newOwner, 'CAN_EDIT', {}, 'CustomerOrder', [newOrder1]);
+      newOrder1._id = response._id;
+
+      return db.createRelationship(
+        'Owner', newOwner._id, 'CAN_EDIT', 'CustomerOrder', [newOrder1._id]);
     })
+    .then(() => db.findRelationship(
+        'Owner', newOwner._id, 'CAN_EDIT', 'CustomerOrder', newOrder1._id))
     .then(response => {
-      console.log('after relationship creation', response);
-      return db.findRelationship(
-        'Owner', newOwner, 'CAN_EDIT', {}, 'CustomerOrder', [newOrder1]);
-    })
-    .then(response => {
-      console.log('checking the new relationship', response);
-      global.expect(response.labels[0].to.equal('CAN_EDIT'));
+      global.expect(response[0].rel.type).to.equal('CAN_EDIT');
     });
   });
 
-  global.xit_('can delete a CAN_EDIT relationship between an Owner and an Order', function* anon() {
-    yield db.deleteRelationship('Owner', newOwner, 'CAN_EDIT', {}, 'CustomerOrder', newOrder1)
+  global.it_('can delete a CAN_EDIT relationship between an Owner and an Order', function* anon() {
+    yield db.deleteRelationship(
+      'Owner', newOwner._id, 'CAN_EDIT', 'CustomerOrder', newOrder1._id)
     .then(response => {
-      console.log('need to implement this', response);
       global.expect(response).to.deep.equal([]);
     });
-    //   return db.deleteOrder(newOrder1);
-    // })
-    // .then(response => {
-    //   console.log('need to implement this', response);
-    // });
   });
 
-  global.xit_('can add a VIEW relationship between an Owner and an Order', function* anon() {
-    yield db.createOrder(newOrder1)
+  global.it_('can add a VIEW relationship between an Order and an Owner', function* anon() {
+    yield db.createOrder(newOrder2)
     .then(response => {
       global.expect(response.labels[0]).to.equal('CustomerOrder');
-      console.log('need to implement this', response);
+      global.expect(response.properties).to.deep.equal(newOrder2);
 
-      return db.createNodeToOwnerRelationship(newOwner.name, newOrder1, 'CustomerOrder', {}, 'VIEW');
+      newOrder2._id = response._id;
+
+      return db.createRelationship(
+        'CustomerOrder', newOrder2._id, 'VIEW', 'Owner', newOwner._id);
     })
+    .then(() => db.findRelationship(
+        'CustomerOrder', newOrder2._id, 'VIEW', 'Owner', newOwner._id))
     .then(response => {
-      console.log('need to implement this', response);
+      global.expect(response[0].rel.type).to.equal('VIEW');
     });
   });
 
-  global.xit_('can delete a VIEW relationship between an Owner and an Order', function* anon() {
-    yield db.deleteOwnerRelationship(newOwner.name, newOrder1, 'CustomerOrder', {}, 'VIEW')
+  global.it_('can delete a VIEW relationship between an Order and an Owner', function* anon() {
+    yield db.deleteRelationship(
+      'CustomerOrder', newOrder2._id, 'VIEW', 'Owner', newOwner._id)
     .then(response => {
-      console.log('need to implement this', response);
-
-      return db.deleteOrder(newOrder1);
-    })
-    .then(response => {
-      console.log('need to implement this', response);
+      global.expect(response).to.deep.equal([]);
     });
   });
-/*
-  **********************************************************************************************
-*/
 
   global.it_('can delete an Owner from the database', function* anon() {
-    yield db.deleteNode('Owner', newOwner._id)
+    yield db.deleteRelationship('Owner', newOwner._id, 'CAN_EDIT', 'CustomerOrder', newOrder1._id)
+    .then(() => db.deleteNode('Owner', newOwner._id))
     .then(response => {
       global.expect(response).to.deep.equal([]);
       return db.findNode('Owner', newOwner._id);
@@ -229,14 +266,14 @@ global.describe('The Database', () => {
   });
 });
 
-
 global.describe('The Database', () => {
   const app = global.TestHelper.createApp();
   app.use('/', routes);
   app.testReady();
 
-  // Testing the Owner database functions
+  // Testing the Order database functions
   const newOrder = {
+    name: 'New Order',
     created_on: '18sep2016',
     request_date: '24sep2016',
     fulfilled: false,
@@ -279,15 +316,22 @@ global.describe('The Database', () => {
     });
   });
 
-  global.it_('adds items to an order', function* anon() {
+/*
+  **********************************************************************************************
+  These tests are pending until completion of Item creation functions
+  **********************************************************************************************
+*/
+
+  global.xit_('adds items to an order', function* anon() {
     yield db.addItemsToOrder(newOrder._id, items, owner._id)
     .then(response => {
+      console.log('adding items: ', response);
       global.expect(response[0].rel.type).to.equal('REQ');
       global.expect(response[0].rel.properties.quantity).to.equal(11);
     });
   });
 
-  global.it_('fetches items from an order', function* anon() {
+  global.xit_('fetches items from an order', function* anon() {
     yield db.fetchOrder(newOrder._id, owner._id)
     .then(response => {
       global.expect(response[0].item.labels[0]).to.equal('Item');
