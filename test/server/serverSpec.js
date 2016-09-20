@@ -27,7 +27,7 @@ global.describe('The Server', () => {
       global.expect(response.res.headers['content-type']).to.equal('text/html; charset=UTF-8');
     });
   });
-
+  var __itemId;
   // Testing the Owner server endpoints
   const newOwner = {
     name: 'Frank',
