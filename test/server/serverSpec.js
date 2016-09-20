@@ -191,7 +191,7 @@ global.describe('The Server', () => {
   **********************************************************************************************
 */
 
-global.describe('The Database', () => {
+global.describe('The Owner/Order Database', () => {
   const app = global.TestHelper.createApp();
   app.use('/', routes);
   app.testReady();
@@ -303,7 +303,7 @@ global.describe('The Database', () => {
   });
 });
 
-global.describe('The Database', () => {
+global.describe('The Item Database', () => {
   const app = global.TestHelper.createApp();
   app.use('/', routes);
   app.testReady();
@@ -431,28 +431,6 @@ global.describe('The Database', () => {
       });
     });
   });
-});
-
-global.describe('The Database', () => {
-  const app = global.TestHelper.createApp();
-  app.use('/', routes);
-  app.testReady();
-
-    const newPackage = {
-      name: 'Fast Delivery',
-      type: 'delivery',
-      cost: 25,
-      description: 'Fast and easy',
-    };
-
-  global.it_('can add a Package to the database', function* anon() {
-    yield db.createPackage(newPackage)
-      .then(response => {
-        global.expect(response.labels[0]).to.equal('Package');
-        global.expect(response.properties).to.deep.equal(newPackage);
-      });
-  });
-});
 
 /*
   **********************************************************************************************
@@ -484,5 +462,26 @@ global.describe('The Database', () => {
       global.expect(response.relationships[0][0].rel.type).to.equal('REQ');
       global.expect(response.relationships[1][0].rel.type).to.equal('CREATED');
     });
+  });
+});
+
+global.describe('The Package Database', () => {
+  const app = global.TestHelper.createApp();
+  app.use('/', routes);
+  app.testReady();
+
+  const newPackage = {
+    name: 'Fast Delivery',
+    type: 'delivery',
+    cost: 25,
+    description: 'Fast and easy',
+  };
+
+  global.it_('can add a Package to the database', function* anon() {
+    yield db.createPackage(newPackage)
+      .then(response => {
+        global.expect(response.labels[0]).to.equal('Package');
+        global.expect(response.properties).to.deep.equal(newPackage);
+      });
   });
 });
