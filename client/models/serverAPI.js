@@ -7,4 +7,6 @@ ServerAPI.getOwner = (id) => db.findOwner(id);
 
 ServerAPI.getAllOwners = () => db.findAllOwners();
 
+ServerAPI.getAllStores = () => db.findAllStores();
+
 export default ServerAPI;

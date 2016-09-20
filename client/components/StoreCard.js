@@ -21,10 +21,10 @@ export default class StoreCardExpandable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hover: 3,
-      name: this.props.owners.name,
-      slogan: this.props.owners.slogan,
-      description: this.props.owners.description,
+      hover: 2,
+      name: this.props.stores.name,
+      slogan: this.props.stores.slogan,
+      description: this.props.stores.description,
     };
   }
 
@@ -33,28 +33,31 @@ export default class StoreCardExpandable extends React.Component {
   }
 
   handleOnMouseLeave() {
-    this.setState({ hover: 3 });
+    this.setState({ hover: 2 });
   }
 
   render() {
     return (
-      <Paper zDepth={this.state.hover}>
-        <Card onMouseEnter={e => this.handleOnMouseEnter(e)} onMouseLeave={e => this.handleOnMouseLeave(e)}>
-          <CardHeader
-            title={this.state.name}
-            subtitle={this.state.slogan}
-            avatar="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
-            actAsExpander={true}
-            showExpandableButton={true}
-          />
-        <CardText expandable={true}>
-          {this.state.description}
-        </CardText>
-          <CardActions>
-            <FlatButton label="Take Me There" />
-          </CardActions>
-        </Card>
-      </Paper>
+      <div>
+        <Paper zDepth={this.state.hover}>
+          <Card onMouseEnter={e => this.handleOnMouseEnter(e)} onMouseLeave={e => this.handleOnMouseLeave(e)}>
+            <CardHeader
+              title={this.state.name}
+              subtitle={this.state.slogan}
+              avatar="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+              actAsExpander={true}
+              showExpandableButton={true}
+            />
+            <CardText expandable={true}>
+              {this.state.description}
+            </CardText>
+            <CardActions>
+              <FlatButton label="Take Me There" />
+            </CardActions>
+          </Card>
+        </Paper>
+        <br />
+      </div>
     );
   }
 }

@@ -8,21 +8,22 @@ export default class Lobby extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      owners: [],
+      stores: [],
     };
   }
   componentWillMount() {
-    Server.getAllOwners()
-    .then(owners => {
-      this.setState({ owners });
+    Server.getAllStores()
+    .then(stores => {
+      console.log('Stores in CWM: ', stores);
+      this.setState({ stores });
     });
   }
   render() {
     return (
       <div className="Lobby" >
         <h1>Welcome!</h1>
-        { this.state.owners.map((e) =>
-          <StoreCard key={e._id} owners={e.properties} />
+        { this.state.stores.map((e) =>
+          <StoreCard key={e._id} stores={e.properties} />
         )}
       </div>
   );

@@ -543,3 +543,28 @@ db.deleteOrder = (order) => Node.cypherAsync({
   },
 })
 .then(response => response);
+
+db.createStore = (store) => Node.cypherAsync({
+  query: `
+    MERGE (store:Store {
+      name: {name},
+      picture: {picture},
+      address: {address},
+      slogan: {slogan},
+      description: {description}
+    }) 
+    RETURN store`,
+  params: {
+    name: store.name,
+    picture: store.picture,
+    address: store.address,
+    slogan: store.slogan,
+    description: store.description,
+  },
+})
+.then(response => response[0].order);
+
+db.findAllStores = () => Node.cypherAsync({
+  query: 'MATCH (stores:Store) RETURN stores',
+})
+.then(response => response.map(e => e.stores));
