@@ -21,6 +21,9 @@ export default class StoreCardExpandable extends React.Component {
     this.state = {
       expandable: true,
       expanded: false,
+      name: this.props.owners.name,
+      slogan: this.props.owners.slogan,
+      description: this.props.owners.description,
     };
   }
 
@@ -36,14 +39,14 @@ export default class StoreCardExpandable extends React.Component {
     return (
       <Card>
         <CardHeader
-          title="My Store"
-          subtitle="Best Mexico food in Town"
+          title={this.state.name}
+          subtitle={this.state.slogan}
           avatar="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
           actAsExpander={true}
           showExpandableButton={true}
         />
         <CardText expandable={this.state.expandable} onTouchTap={this.handleExpanded} >
-          This is where I would talk about how cool and good my food is.
+          {this.state.description}
         </CardText>
         <CardActions>
           <FlatButton label="Take Me There" />
