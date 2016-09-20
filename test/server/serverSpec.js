@@ -274,7 +274,7 @@ global.describe('The Database', () => {
   // Testing the Order database functions
   const newOrder = {
     name: 'New Order',
-    created_on: '18sep2016',
+    created_on: '20sep2016',
     request_date: '24sep2016',
     fulfilled: false,
     total_price: 20,
@@ -306,7 +306,23 @@ global.describe('The Database', () => {
       _id: 463,
     }];
 
-  const owner = { name: 'Alice', _id: 430 };
+  const customer = {
+    name: 'Carly',
+    phone: '555-333-5555',
+    email: 'carly@window.com',
+    auth_key: true,
+    _id: 432,
+  };
+
+  const owner = {
+    name: 'Alice',
+    phone: '555-444-3333',
+    email: 'alice@window.com',
+    description: 'I love Mexican food',
+    auth_key: true,
+    _id: 430,
+  };
+
   global.it_('can add an Order to the database', function* anon() {
     yield db.createOrder(newOrder)
     .then(response => {
@@ -380,4 +396,12 @@ global.describe('The Database', () => {
       global.expect(response[0].order.properties.total_price).to.equal(20);
     });
   });
+
+  // global.it_('creates order and order relationships', function* anon() {
+  //   yield db.createOrderRelationships(newOrder, customer, owner, 'yesterday', items)
+  //   .then(response => {
+  //     global.expect(response[0].item.labels[0]).to.equal('Item');
+  //     global.expect(response[0].order.properties.total_price).to.equal(20);
+  //   });
+  // });
 });
