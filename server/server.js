@@ -50,10 +50,11 @@ routes.get('/api/owner/all', (req, res) => {
   });
 });
 
-routes.get('/api/owner/:owner', (req, res) => {
-  db.findOwner(req.params.owner)
+routes.get('/api/owner/:id', (req, res) => {
+  console.log('in server endpoint: ', +req.params.id);
+  db.findNode('Owner', req.params.id)
   .then(dbData => {
-    if (dbData === 'Owner does not exist') {
+    if (dbData === 'Node does not exist') {
       res.status(404).send(dbData);
     } else {
       res.status(200).send(dbData);
@@ -64,12 +65,13 @@ routes.get('/api/owner/:owner', (req, res) => {
 routes.post('/api/owner/create', (req, res) => {
   db.createOwner(req.body)
   .then((dbData) => {
+    console.log('server creating owner: ', dbData);
     res.status(201).send(dbData);
   });
 });
 
-routes.delete('/api/owner/:owner', (req, res) => {
-  db.deleteOwner(req.params.owner)
+routes.delete('/api/owner/:id', (req, res) => {
+  db.deleteNode('Owner', req.params.id)
   .then((response) => {
     res.status(202).send(response);
   });

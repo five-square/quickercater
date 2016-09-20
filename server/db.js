@@ -237,14 +237,18 @@ db.init = () => Node.cypherAsync({
     })
 
     CREATE (aliceStore:Store {
-      name: "Casa de Alice",
+      name: 'Casa de Alice',
       picture: false,
-      address: '123 YourMom Rd.'
+      address: '123 YourMom Rd.',
+      slogan: "I'll make all your wildest dreams come true",
+      description: 'Not a house of prostitution, but we have nice chicharrones.'
     })
     CREATE (bobStore:Store {
       name: "Bob's Burger Hole",
       picture: false,
-      address: '123 YourMom Blvd.'
+      address: '123 YourMom Blvd.',
+      slogan: 'Fill up those buns and put a burger in your hole!',
+      description: 'Also, not a house of prostitution, but our buns are soft'
     })
 
     CREATE (carlyOrder1:CustomerOrder {
@@ -347,7 +351,6 @@ db.reset = () => db.clearRelationships()
   **********************************************************************************************
 */
 
-// !!! STILL NEEDS TO IMPLEMENT VALIDATION TO AVOID DUPLICATING DATA !!!
 db.createRelationship = (parentLabel, parentId, relLabel, relProps, destLabel, destIdArray) =>
   Node.cypherAsync({
     query: `
@@ -392,13 +395,14 @@ db.deleteRelationship = (parentLabel, parentId, relLabel, destLabel, destId) =>
 
 db.findNode = (nodeLabel, nodeId) => Node.cypherAsync({
   query: `
-    MATCH (node:${nodeLabel}) WHERE ID(node) = {nodeId}
+    MATCH (node:${nodeLabel}) WHERE ID(node) = ${nodeId}
     RETURN node`,
   params: {
-    nodeId,
+    id: nodeId,
   },
 })
 .then(response => {
+  console.log('in findNode: ', response);
   if (response.length === 0) {
     const errMessage = 'Node does not exist';
     throw errMessage;
@@ -409,7 +413,7 @@ db.findNode = (nodeLabel, nodeId) => Node.cypherAsync({
 
 db.deleteNode = (nodeLabel, nodeId) => Node.cypherAsync({
   query: `
-    MATCH (node:${nodeLabel}) WHERE ID(node) = {nodeId}
+    MATCH (node:${nodeLabel}) WHERE ID(node) = ${nodeId}
     DELETE node`,
   params: {
     nodeId,
