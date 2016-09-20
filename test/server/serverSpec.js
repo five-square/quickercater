@@ -77,20 +77,33 @@ global.describe('The Server', () => {
     });
   });
 
-  global.xit_('can create an Order', function* anon() {
-    yield request(app)
-    .post('/api/order/create')
-    .send(newOrder)
-    .expect(201)
-    .expect(response => {
-      console.log(response);
-    });
-  });
 /*
   **********************************************************************************************
   These tests are pending until completion of Order creation endpoints
   **********************************************************************************************
 */
+  global.it_('can create an Order', function* anon() {
+    yield request(app)
+    .post('/api/order/create')
+    .send(newOrder)
+    .expect(201)
+    .expect(response => {
+      global.expect(response.body.properties).to.deep.equal(newOrder);
+      global.expect(response.body.labels[0]).to.equal('CustomerOrder');
+      newOrder._id = response.body._id;
+    });
+  });
+
+  global.it_('can fetch an Order', function* anon() {
+    yield request(app)
+    .get(`/api/order/${newOrder._id}`)
+    .expect(200)
+    .expect(response => {
+      global.expect(response.body._id).to.deep.equal(newOrder._id);
+      global.expect(response.body.labels[0]).to.equal('CustomerOrder');
+    });
+  });
+
   global.xit_('can add a CAN_EDIT relationship between an Owner and an Order', function* anon() {
     yield request(app)
     .post('/api/relationships')
@@ -116,18 +129,26 @@ global.describe('The Server', () => {
     yield request(app);
     // Blah blah blah, implement me!
   });
+
+  global.it_('can delete an Order', function* anon() {
+    yield request(app)
+    .post('/api/order/delete')
+    .send({ order_id: newOrder._id })
+    .expect(202)
+    .expect(response => {
+      global.expect(response.text).to.equal('Order deleted');
+    });
+
+    yield request(app)
+    .get(`/api/order/${newOrder._id}`)
+    .expect(404)
+    .expect(response => {
+      global.expect(response.text).to.equal('Order does not exist');
+    });
+  });
 /*
   **********************************************************************************************
 */
-  global.xit_('can delete an Order', function* anon() {
-    yield request(app)
-    .post('/api/order/delete')
-    .send(newOrder)
-    .expect(202)
-    .expect(response => {
-      console.log(response);
-    });
-  });
 
   global.it_('can delete an Owner', function* anon() {
     yield request(app)

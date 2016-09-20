@@ -119,11 +119,26 @@ routes.post('/api/relationships/delete', (req, res) => {
   **********************************************************************************************
 */
 
+routes.get('/api/order/:id', (req, res) => {
+  db.findNode('CustomerOrder', req.params.id)
+  .then(dbData => {
+    if (dbData === 'Node does not exist') {
+      const message = 'Order does not exist';
+      throw message;
+    }
+    res.status(200).send(dbData);
+  })
+  .catch(message => {
+    res.status(404).send(message);
+  });
+});
+
 routes.post('/api/order/create', (req, res) => {
   db.createOrder(req.body)
   .then((dbData) => {
     res.status(201).send(dbData);
-  });
+  })
+  .catch(err => res.status(500).send(err));
 });
 
 routes.post('/api/order/delete', (req, res) => {
