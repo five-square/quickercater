@@ -160,6 +160,78 @@ routes.post('/api/order/delete', (req, res) => {
     res.status(202).send('Order deleted');
   });
 });
+
+/*
+  **********************************************************************************************
+
+  Handles endpoints for Item data. Methods served are GET, POST, PUT, and DELETE(POST).
+
+  Make sure you are running the Neo4j server first!
+
+  **********************************************************************************************
+*/
+
+routes.post('/api/item/create', (req, res) => {
+  if (req.body && req.body.itemObj) {
+    db.createItem(req.body.itemObj).then(item => {
+      res.end(JSON.stringify(item._id));
+    });
+  } else {
+    res.end('Body malformed in POST Request: req.body.itemObj must be defined.');
+  }
+});
+
+routes.get('/api/item/:id', (req, res) => {
+  const id = req.params.id;
+  if (id) {
+    db.getItemById(id).then(resp => {
+      if (resp) {
+        res.send(resp);
+        res.end();
+      } else {
+        res.end(`Could not get itemId: ${id}`);
+      }
+    });
+  }
+});
+
+routes.post('/api/item/update/:id', (req, res) => {
+  const id = req.params.id;
+  const reqBody = req.body;
+  if (reqBody && reqBody.itemObj) {
+    if (!reqBody.itemObj._id) {
+      reqBody.itemObj._id = parseInt(id, 10);
+    }
+    db.getItemById(id).then(x => {
+      if (x) {
+        db.updateItem(reqBody.itemObj).then(() => {
+          res.end('Item likely updated.');
+        });
+      } else {
+        res.end('Item ID not found.');
+      }
+    });
+  } else {
+    res.end('Malformed update request. Req.body.itemObj must exist.');
+  }
+});
+
+routes.delete('/api/item/delete/:id', (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  db.getItemById(id).then(resp => {
+    if (resp) {
+      db.removeItemById(id).then(x => {
+        if (Array.isArray(x) && x.length === 0) {
+          res.end(`Probably deleted itemId: ${id}`);
+        } else {
+          res.end('Something maybe went wrong.');
+        }
+      });
+    } else {
+      res.end('Item not found.');
+    }
+  });
+});
 /*
   **********************************************************************************************
 
