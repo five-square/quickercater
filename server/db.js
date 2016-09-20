@@ -569,6 +569,24 @@ db.findAllStores = () => Node.cypherAsync({
 })
 .then(response => response.map(e => e.stores));
 
+db.createItem = (itemObj) => Node.cypherAsync({
+  query: `
+    MERGE (item:Item {
+      name: {name},
+      description: {description},
+      price: {price},
+      picture: {picture}
+    }) 
+    RETURN item`,
+  params: {
+    name: itemObj.name,
+    description: itemObj.description,
+    price: itemObj.price,
+    picture: itemObj.picture,
+  },
+})
+.then(response => response[0].item);
+
 db.getItemById = (itemId) => {
   if(itemId === undefined) throw error;
   return Node.cypherAsync({
