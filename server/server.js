@@ -51,7 +51,6 @@ routes.get('/api/owner/all', (req, res) => {
 });
 
 routes.get('/api/owner/:id', (req, res) => {
-  console.log('in server endpoint: ', +req.params.id);
   db.findNode('Owner', req.params.id)
   .then(dbData => {
     if (dbData === 'Node does not exist') {
@@ -65,7 +64,6 @@ routes.get('/api/owner/:id', (req, res) => {
 routes.post('/api/owner/create', (req, res) => {
   db.createOwner(req.body)
   .then((dbData) => {
-    console.log('server creating owner: ', dbData);
     res.status(201).send(dbData);
   });
 });
@@ -77,27 +75,61 @@ routes.delete('/api/owner/:id', (req, res) => {
   });
 });
 
-routes.put('/api/owner/:owner/relationship', (req, res) => {
-  const owner = req.params.owner;
-  const node = req.body.node;
-  const nodeLabel = req.body.nodeLabel;
-  const rel = req.body.rel;
-  const relLabel = req.body.relLabel;
-  db.createOwnerRelationship(owner, node, nodeLabel, rel, relLabel)
+/*
+  **********************************************************************************************
+
+  Handles endpoints for Relationship data. Methods served are GET, POST, and DELETE(POST).
+
+  Make sure you are running the Neo4j server first!
+
+  **********************************************************************************************
+*/
+
+routes.post('/api/relationships/create', (req, res) => {
+  const parentLabel = req.body.parent_label;
+  const parentId = req.body.parent_id;
+  const relLabel = req.body.rel_label;
+  const nodeLabel = req.body.node_label;
+  const nodeId = [req.body.node_id];
+  db.createRelationship(parentLabel, parentId, relLabel, nodeLabel, nodeId)
   .then(dbData => {
     res.status(201).send(dbData);
   });
 });
 
+routes.post('/api/relationships/delete', (req, res) => {
+  const parentLabel = req.body.parent_label;
+  const parentId = req.body.parent_id;
+  const relLabel = req.body.rel_label;
+  const nodeLabel = req.body.node_label;
+  const nodeId = [req.body.node_id];
+  db.deleteRelationship(parentLabel, parentId, relLabel, nodeLabel, nodeId)
+  .then(dbData => {
+    res.status(202).send(dbData);
+  });
+});
+
+/*
+  **********************************************************************************************
+
+  Handles endpoints for Order data. Methods served are GET, POST, PUT, and DELETE(POST).
+
+  Make sure you are running the Neo4j server first!
+
+  **********************************************************************************************
+*/
+
 routes.post('/api/order/create', (req, res) => {
-  const order = req.body.order;
-  const customer = req.body.customer;
-  const owner = req.body.owner;
-  const expires = req.body.expires;
-  const items = req.body.items;
-  db.createOrderRelationships(order, customer, owner, expires, items)
+  db.createOrder(req.body)
   .then((dbData) => {
     res.status(201).send(dbData);
+  });
+});
+
+routes.post('/api/order/delete', (req, res) => {
+  db.deleteNode('CustomerOrder', req.body.order_id)
+  .then(() => {
+    res.status(202).send('Order deleted');
   });
 });
 /*
