@@ -351,7 +351,7 @@ db.reset = () => db.clearRelationships()
   **********************************************************************************************
 */
 
-db.createRelationship = (parentLabel, parentId, relLabel, relProps, destLabel, destIdArray) =>
+db.createRelationship = (parentLabel, parentId, relLabel, destLabel, destIdArray) =>
   Node.cypherAsync({
     query: `
       WITH {destIdArray} AS destIds
