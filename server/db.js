@@ -492,7 +492,7 @@ db.addItemsToOrder = (orderId, items, ownerId) => Node.cypherAsync({
     WITH {items} AS itemArray
     UNWIND itemArray AS menuitem
     MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
-    MATCH (item:Item)<-[:CAN_EDIT]-(owner) WHERE ID(item) = menuitem._id
+    MATCH (item:Item)<-[CAN_EDIT]-(menu:Menu)<-[:CAN_EDIT]-(owner) WHERE ID(item) = menuitem._id
     MATCH (order:CustomerOrder) WHERE ID(order) = {orderId}
     MERGE (order)-[rel:REQ {quantity: menuitem.quantity}]->(item)
     RETURN rel`,
