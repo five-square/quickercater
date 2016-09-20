@@ -231,14 +231,12 @@ global.describe('The Database', () => {
 
 
 global.describe('The Database', () => {
-  let orderId = '';
   const app = global.TestHelper.createApp();
   app.use('/', routes);
   app.testReady();
 
   // Testing the Owner database functions
   const newOrder = {
-    order_id: null,
     created_on: '18sep2016',
     request_date: '24sep2016',
     fulfilled: false,
@@ -248,32 +246,41 @@ global.describe('The Database', () => {
 
   const items = [{
     name: 'Chips',
-    quantity: 10,
+    quantity: 4,
+    _id: 194,
   }, {
     name: 'Nachos',
     quantity: 4,
+    _id: 195,
   }, {
     name: 'Quesadillas',
     quantity: 4,
+    _id: 196,
   }];
 
-  const owner = { name: 'Alice' };
+  const owner = { name: 'Alice', _id: 171 };
   global.it_('can add an Order to the database', function* anon() {
     yield db.createOrder(newOrder)
     .then(response => {
-      console.log('after order creation: ', response);
-      orderId = response.properties.order_id;
+      newOrder._id = response._id;
       global.expect(response.labels[0]).to.equal('CustomerOrder');
       global.expect(response.properties.created_on).to.equal('18sep2016');
     });
   });
 
   global.it_('adds items to an order', function* anon() {
-    yield db.addItemsToOrder(orderId, items, owner)
+    yield db.addItemsToOrder(newOrder._id, items, owner._id)
     .then(response => {
-      console.log('adding items: ', response);
-      global.expect(response[0].rel.type).to.equal('REQUEST');
-      global.expect(response[0].rel.properties.quantity).to.equal(10);
+      global.expect(response[0].rel.type).to.equal('REQ');
+      global.expect(response[0].rel.properties.quantity).to.equal(4);
+    });
+  });
+
+  global.it_('fetches items from an order', function* anon() {
+    yield db.fetchOrder(newOrder._id, owner._id)
+    .then(response => {
+      global.expect(response[0].item.labels[0]).to.equal('Item');
+      global.expect(response[0].order.properties.total_price).to.equal(20);
     });
   });
 });
