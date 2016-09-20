@@ -377,7 +377,26 @@ global.describe('The Database', () => {
         });
       });
 
+global.describe('The Database', () => {
+  const app = global.TestHelper.createApp();
+  app.use('/', routes);
+  app.testReady();
 
+  const newPackage = {
+    name: 'Fast Delivery',
+    type: 'delivery',
+    cost: 25,
+    description: 'Fast and easy',
+  };
+
+  global.it_('can add a Package to the database', function* anon() {
+    yield db.createPackage(newPackage)
+      .then(response => {
+        global.expect(response.labels[0]).to.equal('Package');
+        global.expect(response.properties).to.deep.equal(newPackage);
+      });
+  });
+});
 
 /*
   **********************************************************************************************
