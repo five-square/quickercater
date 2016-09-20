@@ -379,6 +379,16 @@ db.findRelationship = (parentLabel, parentId, relLabel, destLabel, destId) =>
     },
   });
 
+db.findRelationshipById = (relId) =>
+  Node.cypherAsync({
+    query: `
+      MATCH (rel) WHERE ID(rel) = {id}
+      RETURN rel`,
+    params: {
+      id: relId,
+    },
+  });
+
 db.deleteRelationship = (parentLabel, parentId, relLabel, destLabel, destId) =>
   Node.cypherAsync({
     query: `
@@ -592,46 +602,54 @@ db.createItem = (itemObj) => Node.cypherAsync({
 .then(response => response[0].item);
 
 db.getItemById = (itemId) => {
-  if(itemId === undefined) throw error;
-  return Node.cypherAsync({
-   query: `MATCH (item:Item) 
-          WHERE ID(item) = ${itemId}
-          RETURN item`,
-}).then(response => {
-  if(response[0])
-    return response[0].item;
-  else
-    return;
-  }); }
+  if (itemId === undefined) {
+    throw new Error('Id is undefined');
+  } else {
+    return Node.cypherAsync({
+      query: `
+        MATCH (item:Item) 
+        WHERE ID(item) = ${itemId}
+        RETURN item`,
+    })
+    .then(response => {
+      if (response[0]) {
+        return response[0].item;
+      } else {
+        return 'Item does not exist';
+      }
+    });
+  }
+};
 
 db.getItemByPicture = (picture) => Node.cypherAsync({
-  query: `MATCH (item:Item)
-          WHERE item.picture = {picture}
-          RETURN item`,
+  query: `
+    MATCH (item:Item)
+    WHERE item.picture = {picture}
+    RETURN item`,
   params: {
-    picture: picture,
-  }
+    picture,
+  },
 }).then(resp => resp[0].item);
 
 db.updateItem = (itemObj) => {
-  var id1 = itemObj._id;
+  const id1 = itemObj._id;
   delete itemObj._id;  //don't want to create an '_id' prop (doesn't go both ways)
   return Node.cypherAsync({
-   
-    query: `MATCH (item:Item)
-            WHERE ID(item) = {id}
-            SET item = {itemObj}
-            RETURN item`,
+    query: `
+      MATCH (item:Item)
+      WHERE ID(item) = {id}
+      SET item = {itemObj}
+      RETURN item`,
     params: {
       id: id1,
       name: itemObj.name,
       description: itemObj.description,
       price: itemObj.price,
       picure: itemObj.picure,
-      itemObj: itemObj,
+      itemObj,
     },
-  }).then(response => response[0].item); 
-}
+  }).then(response => response[0].item);
+};
 
 db.removeItemById = (itemId) => Node.cypherAsync({
   query: `MATCH (i:Item)

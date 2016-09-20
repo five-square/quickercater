@@ -27,7 +27,7 @@ global.describe('The Server', () => {
       global.expect(response.res.headers['content-type']).to.equal('text/html; charset=UTF-8');
     });
   });
-  var __itemId;
+
   // Testing the Owner server endpoints
   const newOwner = {
     name: 'Frank',
@@ -91,6 +91,7 @@ global.describe('The Server', () => {
       global.expect(response.body.properties).to.deep.equal(newOrder);
       global.expect(response.body.labels[0]).to.equal('CustomerOrder');
       newOrder._id = response.body._id;
+      relPostObj.node_id = response.body._id;
     });
   });
 
@@ -104,23 +105,36 @@ global.describe('The Server', () => {
     });
   });
 
-  global.xit_('can add a CAN_EDIT relationship between an Owner and an Order', function* anon() {
+  global.it_('can add a CAN_EDIT relationship between an Owner and an Order', function* anon() {
     yield request(app)
-    .post('/api/relationships')
+    .post('/api/relationship/create')
     .send(relPostObj)
     .expect(201)
     .expect(response => {
-      console.log(response);
+      global.expect(response.body.parent._id).to.equal(newOwner._id);
+      global.expect(response.body.dest._id).to.equal(newOrder._id);
+      global.expect(response.body.rel.type).to.equal('CAN_EDIT');
+      relPostObj._id = response.body.rel._id;
     });
-    // Blah blah blah, implement me!
   });
 
-  global.xit_('can delete a CAN_EDIT relationship between an Owner and an Order', function* anon() {
-    yield request(app);
-    // Blah blah blah, implement me!
+  global.it_('can delete a CAN_EDIT relationship between an Owner and an Order', function* anon() {
+    yield request(app)
+    .post('/api/relationship/delete')
+    .send(relPostObj)
+    .expect(202)
+    .expect(response => {
+      global.expect(response.body.length).to.equal(0);
+    });
   });
 
   global.xit_('can add a VIEW relationship between an Owner and an Order', function* anon() {
+    const tempLabel = relPostObj.parent_label;
+    relPostObj.parent_label = relPostObj.node_label;
+    relPostObj.node_label = tempLabel;
+    relPostObj.parent_id = newOrder._id;
+    relPostObj.node_id = newOwner._id;
+    relPostObj.label = 'VIEW';
     yield request(app);
     // Blah blah blah, implement me!
   });
@@ -137,6 +151,7 @@ global.describe('The Server', () => {
     .expect(202)
     .expect(response => {
       global.expect(response.text).to.equal('Order deleted');
+      global.expect(response.body).to.deep.equal({});
     });
 
     yield request(app)
@@ -144,6 +159,7 @@ global.describe('The Server', () => {
     .expect(404)
     .expect(response => {
       global.expect(response.text).to.equal('Order does not exist');
+      global.expect(response.body).to.deep.equal({});
     });
   });
 /*
@@ -292,6 +308,8 @@ global.describe('The Database', () => {
   app.use('/', routes);
   app.testReady();
 
+  let __itemId;
+
   // Testing the Order database functions
   const newOrder = {
     name: 'New Order',
@@ -353,45 +371,66 @@ global.describe('The Database', () => {
     });
   });
 
-    global.it_('can create a new menu item and verify created node', function* anon(){
-     yield db.createItem({name: 'Feijoada', description: 'Brazilian stew', price: 150, picture: 'picture URL'}).then(response => {
-       __itemId = response._id;
-       //console.log("res ======",response._id);
-       //db.getItemById(44).then(resp=>console.log("=_=",resp));
-       db.getItemById(response._id).then(resp => {
-           global.expect(resp.properties).to.deep.equal({ name: 'Feijoada', description: 'Brazilian stew', price: 150, picture: 'picture URL' });
-       });
-     });
+  global.it_('can create a new menu item and verify created node', function* anon() {
+    yield db.createItem({
+      name: 'Feijoada',
+      description: 'Brazilian stew',
+      price: 150,
+      picture: 'picture URL',
+    })
+    .then(response => {
+      __itemId = response._id;
+      // console.log("res ======",response._id);
+      // db.getItemById(44).then(resp=>console.log("=_=",resp));
+      db.getItemById(response._id).then(resp => {
+        global.expect(resp.properties).to.deep.equal({
+          name: 'Feijoada',
+          description: 'Brazilian stew',
+          price: 150,
+          picture: 'picture URL',
+        });
+      });
+    });
   });
 
   global.it_('can get item by picture url', function* anon(){
-    var testObj = {name: 'Feijoada', description: 'Brazilian stew', price: 150, picture: 'picture URL'};
-    yield db.getItemByPicture('picture URL').then(resp=>{
+    const testObj = {
+      name: 'Feijoada',
+      description: 'Brazilian stew',
+      price: 150,
+      picture: 'picture URL',
+    };
+    yield db.getItemByPicture('picture URL').then(resp => {
       global.expect(resp.properties).to.deep.equal(testObj);
     });
   });
 
-      global.it_('can update an existing menu item', function* anon(){
-        var itemObj = {name: 'Super Steak Fingers', description: 'super weird food', price: 0, picture: 'SF pic', _id:__itemId};
-          //itemObj._id = temp;
-          //itemObj.name = "Faige Juada";
-         yield db.updateItem(itemObj).then(resp => {
-            //global.expect(resp.properties).to.deep.equal({name: 'Faige Juada', description: 'Brazilian stew', price: 150, picture: 'picture URL' });
-          db.getItemById(resp._id).then(resp1 => {
-              global.expect(resp1.properties).to.deep.equal(itemObj);
-          });
-        });  
+  global.it_('can update an existing menu item', function* anon() {
+    const itemObj = {
+      name: 'Super Steak Fingers',
+      description: 'super weird food',
+      price: 0,
+      picture: 'SF pic',
+      _id: __itemId,
+    };
+      // itemObj._id = temp;
+      // itemObj.name = "Faige Juada";
+    yield db.updateItem(itemObj).then(resp => {
+      // global.expect(resp.properties).to.deep.equal({name: 'Faige Juada', description: 'Brazilian stew', price: 150, picture: 'picture URL' });
+      db.getItemById(resp._id).then(resp1 => {
+        global.expect(resp1.properties).to.deep.equal(itemObj);
       });
+    });
+  });
 
-      global.it_('can delete an existing menu item', function* anon(){
-        
-        yield db.removeItemById(__itemId).then(resp=>{
-          db.getItemById(__itemId).then(resp1=>{
-            //console.log("================== ",__itemId);
-            global.expect(resp1).to.equal(undefined);
-          });
-        });
+  global.it_('can delete an existing menu item', function* anon() {
+    yield db.removeItemById(__itemId).then(resp => {
+      db.getItemById(__itemId).then(resp1 => {
+        // console.log("================== ",__itemId);
+        global.expect(resp1).to.equal(undefined);
       });
+    });
+  });
 
 global.describe('The Database', () => {
   const app = global.TestHelper.createApp();
