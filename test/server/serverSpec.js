@@ -128,20 +128,34 @@ global.describe('The Server', () => {
     });
   });
 
-  global.xit_('can add a VIEW relationship between an Owner and an Order', function* anon() {
+  global.it_('can add a VIEW relationship between an Owner and an Order', function* anon() {
     const tempLabel = relPostObj.parent_label;
     relPostObj.parent_label = relPostObj.node_label;
     relPostObj.node_label = tempLabel;
     relPostObj.parent_id = newOrder._id;
     relPostObj.node_id = newOwner._id;
-    relPostObj.label = 'VIEW';
-    yield request(app);
+    relPostObj.rel_label = 'VIEW';
+    yield request(app)
+    .post('/api/relationship/create')
+    .send(relPostObj)
+    .expect(201)
+    .expect(response => {
+      global.expect(response.body.parent._id).to.equal(newOrder._id);
+      global.expect(response.body.dest._id).to.equal(newOwner._id);
+      global.expect(response.body.rel.type).to.equal('VIEW');
+      relPostObj._id = response.body.rel._id;
+    });
     // Blah blah blah, implement me!
   });
 
-  global.xit_('can delete a VIEW relationship between an Owner and an Order', function* anon() {
-    yield request(app);
-    // Blah blah blah, implement me!
+  global.it_('can delete a VIEW relationship between an Owner and an Order', function* anon() {
+    yield request(app)
+    .post('/api/relationship/delete')
+    .send(relPostObj)
+    .expect(202)
+    .expect(response => {
+      global.expect(response.body.length).to.equal(0);
+    });
   });
 
   global.it_('can delete an Order', function* anon() {
@@ -366,8 +380,6 @@ global.describe('The Item Database', () => {
     })
     .then(response => {
       __itemId = response._id;
-      // console.log("res ======",response._id);
-      // db.getItemById(44).then(resp=>console.log("=_=",resp));
       db.getItemById(response._id).then(resp => {
         global.expect(resp.properties).to.deep.equal({
           name: 'Feijoada',
@@ -379,7 +391,7 @@ global.describe('The Item Database', () => {
     });
   });
 
-  global.it_('can get item by picture url', function* anon(){
+  global.it_('can get item by picture url', function* anon() {
     const testObj = {
       name: 'Feijoada',
       description: 'Brazilian stew',
@@ -399,10 +411,7 @@ global.describe('The Item Database', () => {
       picture: 'SF pic',
       _id: __itemId,
     };
-      // itemObj._id = temp;
-      // itemObj.name = "Faige Juada";
     yield db.updateItem(itemObj).then(resp => {
-      // global.expect(resp.properties).to.deep.equal({name: 'Faige Juada', description: 'Brazilian stew', price: 150, picture: 'picture URL' });
       db.getItemById(resp._id).then(resp1 => {
         global.expect(resp1.properties).to.deep.equal(itemObj);
       });
@@ -410,9 +419,8 @@ global.describe('The Item Database', () => {
   });
 
   global.it_('can delete an existing menu item', function* anon() {
-    yield db.removeItemById(__itemId).then(resp => {
+    yield db.removeItemById(__itemId).then(() => {
       db.getItemById(__itemId).then(resp1 => {
-        // console.log("================== ",__itemId);
         global.expect(resp1).to.equal('Item does not exist');
       });
     });
