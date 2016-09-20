@@ -18,7 +18,7 @@ module.exports = {
     },
     "rules": {
         "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"] }],
-        "no-underscore-dangle": ["error", {"allow": ["__server", "__client", "before_", "beforeEach_", "it_", "xit_"]}],
+        "no-underscore-dangle": ["error", {"allow": ["__server", "__client", "before_", "beforeEach_", "it_", "xit_", "_id"]}],
         "react/prop-types": 0,
         "new-cap": ["error", {"capIsNew": false}],
     }
