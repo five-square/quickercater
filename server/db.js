@@ -351,18 +351,17 @@ db.reset = () => db.clearRelationships()
   **********************************************************************************************
 */
 
-db.createRelationship = (parentLabel, parentId, relLabel, relProps, destLabel, destIdArray) =>
+db.createRelationship = (parentLabel, parentId, relLabel, destLabel, destIdArray) =>
   Node.cypherAsync({
     query: `
       WITH {destIdArray} AS destIds
       UNWIND destIds AS destId
       MATCH (parent:${parentLabel}) WHERE ID(parent) = {parentId}
       MATCH (dest:${destLabel}) WHERE ID(dest) = destId
-      MERGE (parent)-[rel:${relLabel} {relProps}]->(dest)
+      MERGE (parent)-[rel:${relLabel}]->(dest)
       RETURN parent, rel, dest`,
     params: {
       parentId,
-      relProps,
       destIdArray,
     },
   });
@@ -402,7 +401,6 @@ db.findNode = (nodeLabel, nodeId) => Node.cypherAsync({
   },
 })
 .then(response => {
-  console.log('in findNode: ', response);
   if (response.length === 0) {
     const errMessage = 'Node does not exist';
     throw errMessage;
@@ -470,17 +468,21 @@ db.findAllOwners = () => Node.cypherAsync({
 db.createOrder = (order) => Node.cypherAsync({
   query: `
     MERGE (order:CustomerOrder {
+      name: {name},
       created_on: {created_on},
       request_date: {request_date},
       fulfilled: {fulfilled},
-      total_price: {total_price}
+      total_price: {total_price},
+      address: {address}
     }) 
     RETURN order`,
   params: {
+    name: order.name,
     created_on: order.created_on,
     request_date: order.request_date,
     fulfilled: order.fulfilled,
     total_price: order.total_price,
+    address: order.address,
   },
 })
 .then(response => response[0].order);
@@ -491,9 +493,9 @@ db.addItemsToOrder = (orderId, items, ownerId) => Node.cypherAsync({
   query: `
     WITH {items} AS itemArray
     UNWIND itemArray AS menuitem
-    MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
-    MATCH (item:Item)<-[CAN_EDIT]-(menu:Menu)<-[:CAN_EDIT]-(owner) WHERE ID(item) = menuitem._id
-    MATCH (order:CustomerOrder) WHERE ID(order) = {orderId}
+    MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
+    MATCH (item:Item)<-[:CAN_EDIT]-(owner) WHERE ID(item) = menuitem._id
+    MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
     MERGE (order)-[rel:REQ {quantity: menuitem.quantity}]->(item)
     RETURN rel`,
   params: {
@@ -505,16 +507,16 @@ db.addItemsToOrder = (orderId, items, ownerId) => Node.cypherAsync({
 .then(response => response);
 
 db.createOrderRelationships = (order, customer, owner, expiresOn, items) => {
-  const relCreated = { created_on: order.createdOn, expires: expiresOn };
+  // const relCreated = { created_on: order.createdOn, expires: expiresOn };
   db.createOrder(order)
     .then((orderCreated) => {
       Promise.all([db.addItemsToOrder(orderCreated, items, owner),
         db.createRelationship(
-          'Customer', customer, 'CREATED', relCreated, 'CustomerOrder', [orderCreated]),
+          'Customer', customer, 'CREATED', 'CustomerOrder', [orderCreated]),
         db.createRelationship(
-          'CustomerOrder', order, 'VIEW', {}, 'Customer', [customer]),
+          'CustomerOrder', order, 'VIEW', 'Customer', [customer]),
         db.createRelationship(
-          'Owner', owner, 'VIEW', {}, 'CustomerOrder', [orderCreated]),
+          'Owner', owner, 'VIEW', 'CustomerOrder', [orderCreated]),
         ]);
     })
     .then(response => response);
