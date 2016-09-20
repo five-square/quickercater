@@ -497,14 +497,14 @@ db.createOrder = (order) => Node.cypherAsync({
 })
 .then(response => response[0].order);
 
-/* Assumption here is that an array of item objects [{name: , quantity: }..]
+/* Assumption here is that an array of item objects [{itemId: , quantity: },..]
 is passed in to add to the order*/
 db.addItemsToOrder = (orderId, items, ownerId) => Node.cypherAsync({
   query: `
     WITH {items} AS itemArray
     UNWIND itemArray AS menuitem
     MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
-    MATCH (item:Item)<-[:CAN_EDIT]-(menu:Menu)<-[:CAN_EDIT]-(owner) WHERE ID(item) = menuitem._id
+    MATCH (item:Item)<-[:CAN_EDIT]-(menu:Menu)<-[:CAN_EDIT]-(owner) WHERE ID(item) = menuitem.itemId
     MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
     MERGE (order)-[rel:REQ {quantity: menuitem.quantity}]->(item)
     RETURN rel`,
@@ -514,29 +514,40 @@ db.addItemsToOrder = (orderId, items, ownerId) => Node.cypherAsync({
     ownerId,
   },
 })
-.then(response => {
-  return response;
-});
+.then(response => response);
 
-db.createOrderRelationships = (order, customer, owner, expiresOn, items) => {
-  // const relCreated = { created_on: order.createdOn, expires: expiresOn };
+db.createOrderCustomerRelationship = (orderId, customerId, orderExpiry) => Node.cypherAsync({
+  query: `
+    MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
+    MATCH (customer:Customer) WHERE ID(customer) = ${customerId}
+    MERGE (order)<-[relA:CREATED {expires: {orderExpiry}}]-(customer)
+    MERGE (order)-[relB:VIEW]->(customer)
+    RETURN relA, relB`,
+  params: {
+    orderId,
+    orderExpiry,
+    customerId,
+  },
+})
+.then(response => response);
+
+db.createOrderAndRelationships = (orderInfo) => {
   var saveOrder = {};
-  return db.createOrder(order)
+  return db.createOrder(orderInfo.order)
     .then((orderCreated) => {
       saveOrder = Object.assign({}, orderCreated);
-      return Promise.all([db.addItemsToOrder(orderCreated._id, items, owner._id),
+      return Promise.all([db.addItemsToOrder(orderCreated._id, orderInfo.items, orderInfo.ownerId),
+        db.createOrderCustomerRelationship(
+          orderCreated._id, orderInfo.customerId, orderInfo.package.expires),
         db.createRelationship(
-          'Customer', customer._id, 'CREATED', 'CustomerOrder', [orderCreated._id]),
+          'CustomerOrder', orderCreated._id, 'REQ', 'Package', [orderInfo.package.id]),
         db.createRelationship(
-          'CustomerOrder', orderCreated._id, 'VIEW', 'Customer', [customer._id]),
-        db.createRelationship(
-          'Owner', owner._id, 'VIEW', 'CustomerOrder', [orderCreated._id]),
+          'Owner', orderInfo.ownerId, 'VIEW', 'CustomerOrder', [orderCreated._id]),
         ]);
     })
     .then(response => ({ order: saveOrder, relationships: response }));
 };
 
-// MATCH (item:Item)<-[rel:REQ]-(order)<-[:CAN_EDIT]-(owner)
 db.fetchOrder = (orderId, ownerId) => Node.cypherAsync({
   query: `
     MATCH (order:CustomerOrder) WHERE ID(order) = {orderId}
