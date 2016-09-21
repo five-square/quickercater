@@ -83,6 +83,7 @@ global.it_('can create an Item from POST /api/item/create', function* anon() {
       .send({itemObj: testObj})
       .expect(201)
       .expect(response => {
+        //console.log('===========' + JSON.stringify(response.body));
         newOwner.__id = response.body._id;
         global.expect(response.body.properties).to.deep.equal(testObj);
         //global.expect(response.body).to.deep.equal(testObj);
@@ -91,6 +92,7 @@ global.it_('can create an Item from POST /api/item/create', function* anon() {
 
   global.it_('can fetch an Item from GET /api/item/:id', function* anon() {
     const testItem = { name: 'DogMeat', description: 'meatball dog', price: 6, picture: 'you are L' };
+    //console.log(newOwner.__id + '================');
     yield request(app).get(`/api/item/${newOwner.__id}`)
       .expect(200)
       .expect(resp1 => {

@@ -191,7 +191,7 @@ routes.post('/api/order/delete', (req, res) => {
 routes.post('/api/item/create', (req, res) => {
   if (req.body && req.body.itemObj) {
     db.createItem(req.body.itemObj).then(item => {
-      res.status(201).send(`Item created: ${req.body.itemObj.name} (${item._id}) created.`);
+      res.status(201).send(item);
     });
   } else {
     res.status(404).end('Body malformed in POST Request: req.body.itemObj must be defined.');
