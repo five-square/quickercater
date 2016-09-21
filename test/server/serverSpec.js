@@ -77,6 +77,31 @@ global.describe('The Server', () => {
     });
   });
 
+global.it_('can create an Item from POST /api/item/create', function* anon() {
+    const testObj = { name: 'DogMeat', description: 'meatball dog', price: 6, picture: 'you are L' };
+    yield request(app).post('/api/item/create')
+      .send({itemObj: testObj})
+      .expect(201)
+      .expect(response => {
+        newOwner.__id = response.body._id;
+        global.expect(response.body.properties).to.deep.equal(testObj);
+        //global.expect(response.body).to.deep.equal(testObj);
+      });
+  });
+
+  global.it_('can fetch an Item from GET /api/item/:id', function* anon() {
+    const testItem = { name: 'DogMeat', description: 'meatball dog', price: 6, picture: 'you are L' };
+    yield request(app).get(`/api/item/${newOwner.__id}`)
+      .expect(200)
+      .expect(resp1 => {
+        global.expect(resp1.body.properties).to.deep.equal(testItem);
+      });
+  });
+
+    global.it_('can delete an item from the endpoint', function* anon() {
+    
+  });
+
 /*
   **********************************************************************************************
   These tests are pending until completion of Order creation endpoints
@@ -427,7 +452,6 @@ global.describe('The Item Database', () => {
       });
     });
   });
-
 /*
   **********************************************************************************************
   These tests are pending until completion of Item creation functions
