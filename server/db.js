@@ -646,10 +646,20 @@ db.updateItemQtyOnOrder = (orderId, itemId, quantity) => Node.cypherAsync({
 db.getMenuByOwnerId = (ownerId) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
-    MATCH (owner)-[rel1:CAN_EDIT]->(menu:Menu)-[rel2:CAN_EDIT]->(item:Item)
-    RETURN menu, item ORDER BY rel1.order, rel2.order`,
+    MATCH (owner)-[rel:CAN_EDIT]->(menu:Menu)
+    RETURN menu ORDER BY rel.order`,
   params: {
     ownerId,
+  },
+});
+
+db.getItemsByMenuId = (menuId) => Node.cypherAsync({
+  query: `
+    MATCH (menu:Menu) WHERE ID(menu) = ${menuId}
+    MATCH (menu)-[rel:CAN_EDIT]->(item:Item)
+    RETURN item ORDER BY rel.order`,
+  params: {
+    menuId,
   },
 });
 

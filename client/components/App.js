@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Lobby from './Lobby';
-import ProfileEditor from './ProfileEditor';
+import StoreFront from './StoreFront';
 import Server from '../models/serverAPI';
 
 export default class App extends Component {
@@ -25,7 +25,7 @@ export default class App extends Component {
         <MuiThemeProvider>
           <div>
             <Lobby />
-            <ProfileEditor />
+            <StoreFront />
           </div>
         </MuiThemeProvider>
       </div>
