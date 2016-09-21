@@ -14,7 +14,7 @@ export default class MenuCard extends Component {
       hover: 2,
       style: this.props.style,
       name: this.props.menu.name,
-      items: this.props.menu.item,
+      items: this.props.menu.items,
       description: this.props.menu.description,
     };
   }
@@ -43,9 +43,13 @@ export default class MenuCard extends Component {
               showExpandableButton
             />
             <CardText expandable>
-              <h4>{this.state.items.name}</h4>
-              <p>{this.state.items.description}</p>
-              <p>{`$${this.state.items.price}`}</p>
+              <div>{this.state.items.map(item =>
+                <div>
+                  <h4>{item.name}</h4>
+                  <p>{item.description}</p>
+                  <p>{`Price: ${item.price}`}</p>
+                </div>
+              )}</div>
             </CardText>
             <CardActions>
               <FlatButton label="Add Me To Order" />
@@ -57,4 +61,3 @@ export default class MenuCard extends Component {
     );
   }
 }
-

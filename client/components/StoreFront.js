@@ -13,7 +13,7 @@ export default class StoreFront extends Component {
     };
   }
   componentWillMount() {
-    Server.getMenuByOwner(this.state.ownerId)
+    Server.getMenusByOwner(this.state.ownerId)
     .then(menus => {
       console.log(menus);
       this.setState({ menus });

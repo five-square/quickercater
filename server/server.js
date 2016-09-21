@@ -92,6 +92,13 @@ routes.get('/api/menu/:ownerId', (req, res) => {
   });
 });
 
+routes.get('/api/menu/items/:menuId', (req, res) => {
+  db.getItemsByMenuId(req.params.menuId)
+  .then(dbData => {
+    res.status(200).send(dbData);
+  });
+});
+
 /*
   **********************************************************************************************
 
