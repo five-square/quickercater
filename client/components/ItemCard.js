@@ -6,7 +6,7 @@ import CardText from 'material-ui/Card/CardText';
 import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 
-export default class MenuCard extends Component {
+export default class ItemCard extends Component {
 
   constructor(props) {
     super(props);
@@ -57,4 +57,3 @@ export default class MenuCard extends Component {
     );
   }
 }
-
