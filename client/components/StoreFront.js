@@ -4,7 +4,7 @@ import MenuCard from './MenuCard';
 
 import Server from '../models/serverAPI';
 
-export default class ProfileEditor extends Component {
+export default class StoreFront extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,7 +30,7 @@ export default class ProfileEditor extends Component {
       justifyContent: 'center',
     };
     return (
-      <div className="Lobby" >
+      <div className="StoreFront" >
         <h1>Edit Yo Menu</h1>
         { this.state.menus.map((e, i) =>
           <MenuCard key={i} style={style} menu={e} />
