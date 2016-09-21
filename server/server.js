@@ -78,6 +78,23 @@ routes.delete('/api/owner/:id', (req, res) => {
 /*
   **********************************************************************************************
 
+  Handles endpoints for Menu data. Methods served are GET, POST, and DELETE(POST).
+
+  Make sure you are running the Neo4j server first!
+
+  **********************************************************************************************
+*/
+
+routes.get('/api/menu/:ownerId', (req, res) => {
+  db.getMenuByOwnerId(req.params.ownerId)
+  .then(dbData => {
+    res.status(200).send(dbData);
+  });
+});
+
+/*
+  **********************************************************************************************
+
   Handles endpoints for Relationship data. Methods served are GET, POST, and DELETE(POST).
 
   Make sure you are running the Neo4j server first!
