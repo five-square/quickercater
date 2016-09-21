@@ -308,7 +308,7 @@ global.describe('The Item Database', () => {
   app.use('/', routes);
   app.testReady();
 
-  let __itemId;
+  var __itemId;
 
   // Testing the Order database functions
   const newOrder = {

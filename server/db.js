@@ -473,8 +473,6 @@ db.findAllOwners = () => Node.cypherAsync({
 
   **********************************************************************************************
 */
-
-// After the submit button is clicked, order is created using the following method
 db.createOrder = (order) => Node.cypherAsync({
   query: `
     MERGE (order:CustomerOrder {
@@ -506,7 +504,7 @@ db.addItemsToOrder = (orderId, items, ownerId) => Node.cypherAsync({
     MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
     MATCH (item:Item)<-[:CAN_EDIT]-(menu:Menu)<-[:CAN_EDIT]-(owner) WHERE ID(item) = menuitem.itemId
     MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
-    MERGE (order)-[rel:REQ {quantity: menuitem.quantity}]->(item)
+    MERGE (order)-[rel:REQUEST {quantity: menuitem.quantity}]->(item)
     RETURN rel`,
   params: {
     orderId,
@@ -531,6 +529,20 @@ db.createOrderCustomerRelationship = (orderId, customerId, orderExpiry) => Node.
 })
 .then(response => response);
 
+db.createOrderPackageRelationship = (orderId, packageId, quantity) => Node.cypherAsync({
+  query: `
+    MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
+    MATCH (pkg:Package) WHERE ID(pkg) = ${packageId}
+    MERGE (order)-[rel:REQUEST {quantity: {quantity}}]->(pkg)
+    RETURN rel`,
+  params: {
+    orderId,
+    packageId,
+    quantity,
+  },
+})
+.then(response => response);
+
 db.createOrderAndRelationships = (orderInfo) => {
   var saveOrder = {};
   return db.createOrder(orderInfo.order)
@@ -539,8 +551,8 @@ db.createOrderAndRelationships = (orderInfo) => {
       return Promise.all([db.addItemsToOrder(orderCreated._id, orderInfo.items, orderInfo.ownerId),
         db.createOrderCustomerRelationship(
           orderCreated._id, orderInfo.customerId, orderInfo.package.expires),
-        db.createRelationship(
-          'CustomerOrder', orderCreated._id, 'REQ', 'Package', [orderInfo.package.id]),
+        db.createOrderPackageRelationship(
+          orderCreated._id, orderInfo.package.id, 1),
         db.createRelationship(
           'Owner', orderInfo.ownerId, 'VIEW', 'CustomerOrder', [orderCreated._id]),
         ]);
@@ -548,23 +560,73 @@ db.createOrderAndRelationships = (orderInfo) => {
     .then(response => ({ order: saveOrder, relationships: response }));
 };
 
-db.fetchOrder = (orderId, ownerId) => Node.cypherAsync({
+db.fetchOrder = (orderId) => Node.cypherAsync({
   query: `
     MATCH (order:CustomerOrder) WHERE ID(order) = {orderId}
-    MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
-    MATCH (item:Item)<-[rel:REQ]-(order)
-    RETURN order, item`,
+    MATCH (item:Item)<-[relA:REQ]-(order)
+    MATCH (pkg:Package)<-[relB:REQ]-(order)
+    MATCH (customer:Customer)<-[relC:VIEW]-(order)
+    RETURN order, item, relA, pkg, customer`,
   params: {
     orderId,
+  },
+})
+.then(response => {
+  if (response.length === 0) {
+    const errMessage = 'Order does not exist';
+    throw errMessage;
+  }
+  return response;
+})
+.catch(err => err);
+
+db.fetchAllPendingOrders = (ownerId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
+    MATCH (order:Order)<-[rel:CAN_EDIT]-(owner)
+    WHERE order.fulfilled = false
+    RETURN order`,
+  params: {
     ownerId,
   },
 })
 .then(response => response);
 
-db.deleteOrder = (order) => Node.cypherAsync({
-  query: 'MATCH (order:CustomerOrder) WHERE ID(order) = {orderId} DELETE order',
+db.fetchAllCompletedOrders = (ownerId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
+    MATCH (order:Order)-[rel:VIEW]->(owner)
+    WHERE order.fulfilled = true
+    RETURN order`,
   params: {
-    orderId: order._id,
+    ownerId,
+  },
+})
+.then(response => response);
+
+db.updateOrderStatus = (orderId, status) => Node.cypherAsync({
+  query: `
+    MATCH (order:CustomerOrder) WHERE ID(order) = {orderId}
+    SET order.fulfilled: {status}
+    RETURN order`,
+  params: {
+    orderId,
+    status,
+  },
+})
+.then(response => response);
+
+db.updateItemQtyOnOrder = (orderId, itemId, quantity) => Node.cypherAsync({
+  query: `
+    MATCH (order:CustomerOrder) WHERE ID(order) = {orderId}
+    MATCH (item:Item) WHERE ID(item) = {itemId}
+    MATCH (item)-[rel:REQUEST]->(order)
+    SET rel.quantity: {quantity}
+    RETURN order`,
+  params: {
+    orderId,
+    itemId,
+    quantity,
   },
 })
 .then(response => response);
