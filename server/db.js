@@ -751,11 +751,12 @@ db.removeItemById = (itemId) => Node.cypherAsync({
           WHERE ID(i) = {id}  
           OPTIONAL MATCH () -[rel]-(i)
           DELETE rel
-          DELETE i`,
+          DELETE i
+          return count(i) as success`,
   params: {
     id: itemId,
   },
-}).then(response => response);
+}).then(response=> response[0].success == 1 );
 
 /*
  **********************************************************************************************

@@ -445,6 +445,10 @@ global.describe('The Item Database', () => {
     });
   });
 
+<<<<<<< HEAD
+  global.it_('adds items to an order', function* anon() {
+    yield db.addItemsToOrder(newOrder._id, orderInfo.items, owner._id)
+=======
   global.it_('can delete an existing menu item', function* anon() {
     yield db.removeItemById(__itemId).then(() => {
       db.getItemById(__itemId).then(resp1 => {
@@ -460,6 +464,7 @@ global.describe('The Item Database', () => {
 
   global.xit_('adds items to an order', function* anon() {
     yield db.addItemsToOrder(newOrder._id, items, owner._id)
+>>>>>>> gh_item
     .then(response => {
       global.expect(response[0].rel.type).to.equal('REQUEST');
       global.expect(response[0].rel.properties.quantity).to.equal(11);

@@ -191,10 +191,10 @@ routes.post('/api/order/delete', (req, res) => {
 routes.post('/api/item/create', (req, res) => {
   if (req.body && req.body.itemObj) {
     db.createItem(req.body.itemObj).then(item => {
-      res.end(JSON.stringify(item._id));
+      res.status(201).send(`Item created: ${req.body.itemObj.name} (${item._id}) created.`);
     });
   } else {
-    res.end('Body malformed in POST Request: req.body.itemObj must be defined.');
+    res.status(404).end('Body malformed in POST Request: req.body.itemObj must be defined.');
   }
 });
 
@@ -204,9 +204,8 @@ routes.get('/api/item/:id', (req, res) => {
     db.getItemById(id).then(resp => {
       if (resp) {
         res.send(resp);
-        res.end();
       } else {
-        res.end(`Could not get itemId: ${id}`);
+        res.status(404).end(`Could not get itemId: ${id}`);
       }
     });
   }
@@ -225,11 +224,11 @@ routes.post('/api/item/update/:id', (req, res) => {
           res.end('Item likely updated.');
         });
       } else {
-        res.end('Item ID not found.');
+        res.status(404).end('Item ID not found.');
       }
     });
   } else {
-    res.end('Malformed update request. Req.body.itemObj must exist.');
+    res.status(404).end('Malformed update request. Req.body.itemObj must exist.');
   }
 });
 
@@ -238,10 +237,10 @@ routes.delete('/api/item/delete/:id', (req, res) => {
   db.getItemById(id).then(resp => {
     if (resp) {
       db.removeItemById(id).then(x => {
-        if (Array.isArray(x) && x.length === 0) {
-          res.end(`Probably deleted itemId: ${id}`);
+         if (x) {
+ +          res.end(`Deleted itemId: ${id}`);
         } else {
-          res.end('Something maybe went wrong.');
+           res.status(404).end(`Item (${id}) not deleted. Curious error.`);
         }
       });
     } else {
