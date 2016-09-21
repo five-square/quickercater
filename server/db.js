@@ -587,7 +587,7 @@ db.fetchOrder = (orderId) => Node.cypherAsync({
 db.fetchAllPendingOrders = (ownerId) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
-    MATCH (order:Order)<-[rel:CAN_EDIT]-(owner)
+    MATCH (order:CustomerOrder)<-[rel:CAN_EDIT]-(owner)
     WHERE order.fulfilled = false
     RETURN order`,
   params: {
@@ -599,7 +599,7 @@ db.fetchAllPendingOrders = (ownerId) => Node.cypherAsync({
 db.fetchAllCompletedOrders = (ownerId) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
-    MATCH (order:Order)-[rel:VIEW]->(owner)
+    MATCH (order:CustomerOrder)-[rel:VIEW]->(owner)
     WHERE order.fulfilled = true
     RETURN order`,
   params: {
@@ -611,7 +611,7 @@ db.fetchAllCompletedOrders = (ownerId) => Node.cypherAsync({
 db.updateOrderStatus = (orderId, status) => Node.cypherAsync({
   query: `
     MATCH (order:CustomerOrder) WHERE ID(order) = {orderId}
-    SET order.fulfilled: {status}
+    SET order.fulfilled = {status}
     RETURN order`,
   params: {
     orderId,
@@ -624,9 +624,9 @@ db.updateItemQtyOnOrder = (orderId, itemId, quantity) => Node.cypherAsync({
   query: `
     MATCH (order:CustomerOrder) WHERE ID(order) = {orderId}
     MATCH (item:Item) WHERE ID(item) = {itemId}
-    MATCH (item)-[rel:REQUEST]->(order)
-    SET rel.quantity: {quantity}
-    RETURN order`,
+    MATCH (order)-[rel:REQUEST]->(item)
+    SET rel.quantity = {quantity}
+    RETURN order, rel`,
   params: {
     orderId,
     itemId,

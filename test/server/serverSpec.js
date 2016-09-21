@@ -332,7 +332,7 @@ global.describe('The Item Database', () => {
     created_on: '20sep2016',
     request_date: '24sep2016',
     fulfilled: false,
-    total_price: 30,
+    total_price: 35,
     address: '456 Righthere Ln.',
   };
 
@@ -361,7 +361,7 @@ global.describe('The Item Database', () => {
     items: itemsInfo,
     ownerId: 430,
     customerId: 432,
-    package: { packageId: 437, expires: '10/10/2016' },
+    package: { id: 437, expires: '10/10/2016' },
   };
 
   global.it_('can add an Order to the database', function* anon() {
@@ -420,25 +420,10 @@ global.describe('The Item Database', () => {
     });
   });
 
-  global.it_('can delete an existing menu item', function* anon() {
-    yield db.removeItemById(__itemId).then(() => {
-      db.getItemById(__itemId).then(resp1 => {
-        global.expect(resp1).to.equal('Item does not exist');
-      });
-    });
-  });
-
-/*
-  **********************************************************************************************
-  These tests are pending until completion of Item creation functions
-  **********************************************************************************************
-*/
-
-  global.xit_('adds items to an order', function* anon() {
-    yield db.addItemsToOrder(newOrder._id, items, owner._id)
+  global.it_('adds items to an order', function* anon() {
+    yield db.addItemsToOrder(newOrder._id, orderInfo.items, owner._id)
     .then(response => {
-      console.log('adding items: ', response);
-      global.expect(response[0].rel.type).to.equal('REQ');
+      global.expect(response[0].rel.type).to.equal('REQUEST');
       global.expect(response[0].rel.properties.quantity).to.equal(11);
     });
   });
@@ -455,8 +440,49 @@ global.describe('The Item Database', () => {
     yield db.createOrderAndRelationships(orderInfo)
     .then(response => {
       global.expect(response.order.labels[0]).to.equal('CustomerOrder');
-      global.expect(response.relationships[0][0].rel.type).to.equal('REQ');
+      global.expect(response.relationships[0][0].rel.type).to.equal('REQUEST');
       global.expect(response.relationships[1][0].relA.type).to.equal('CREATED');
+    });
+  });
+
+  global.xit_('fetches all pending orders', function* anon() {
+    yield db.fetchAllPendingOrders(orderInfo.ownerId)
+    .then(response => {
+      global.expect(response[0].order.labels[0]).to.equal('CustomerOrder');
+      global.expect(response[0].order.properties.fulfilled).to.equal(false);
+    });
+  });
+
+  global.xit_('fetches all completed orders', function* anon() {
+    yield db.fetchAllCompletedOrders(orderInfo.ownerId)
+    .then(response => {
+      global.expect(response[0].order.labels[0]).to.equal('CustomerOrder');
+      global.expect(response[0].order.properties.fulfilled).to.equal(true);
+    });
+  });
+
+  global.xit_('updates orders status', function* anon() {
+    yield db.updateOrderStatus(newOrder._id, true)
+    .then(response => {
+      global.expect(response[0].order.labels[0]).to.equal('CustomerOrder');
+      global.expect(response[0].order.properties.fulfilled).to.equal(true);
+    });
+  });
+
+  global.xit_('updates item quantity on a order', function* anon() {
+    yield db.updateItemQtyOnOrder(470, 457, 145)
+    .then(response => {
+      global.expect(response[0].rel.type).to.equal('REQUEST');
+      global.expect(response[0].rel.properties.quantity).to.equal(145);
+    });
+  });
+
+  global.xit_('can delete an existing menu item', function* anon() {
+    yield db.removeItemById(__itemId).then(resp => {
+      db.getItemById(__itemId).then(resp1 => {
+        // console.log("================== ",__itemId);
+        global.expect(resp1).to.equal('Item does not exist');
+      });
     });
   });
 });
