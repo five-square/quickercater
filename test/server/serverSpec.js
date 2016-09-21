@@ -88,6 +88,7 @@ global.describe('The Server', () => {
     .send(newOrder)
     .expect(201)
     .expect(response => {
+      // global.expect(false).to.equal(true);
       global.expect(response.body.properties).to.deep.equal(newOrder);
       global.expect(response.body.labels[0]).to.equal('CustomerOrder');
       newOrder._id = response.body._id;
@@ -305,8 +306,7 @@ global.describe('The Owner/Order Database', () => {
   });
 
   global.it_('can delete an Owner from the database', function* anon() {
-    yield db.deleteRelationship('Owner', newOwner._id, 'CAN_EDIT', 'CustomerOrder', newOrder1._id)
-    .then(() => db.deleteNode('Owner', newOwner._id))
+    yield db.deleteNode('Owner', newOwner._id)
     .then(response => {
       global.expect(response).to.deep.equal([]);
       return db.findNode('Owner', newOwner._id);
@@ -316,6 +316,8 @@ global.describe('The Owner/Order Database', () => {
     });
   });
 });
+
+// Item Tests
 
 global.describe('The Item Database', () => {
   const app = global.TestHelper.createApp();

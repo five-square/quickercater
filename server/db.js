@@ -274,14 +274,16 @@ db.init = () => Node.cypherAsync({
     CREATE (bob)-[:CAN_EDIT]->(bobDelivery)
     CREATE (bob)-[:CAN_EDIT]->(bobTruck)
     CREATE (bob)-[:CAN_EDIT]->(bobOnSite)
-    CREATE (alice)-[:CAN_EDIT]->(aliceMenu1)
-    CREATE (alice)-[:CAN_EDIT]->(aliceMenu2)
-    CREATE (alice)-[:CAN_EDIT]->(aliceMenu3)
-    CREATE (alice)-[:CAN_EDIT]->(aliceMenu4)
-    CREATE (bob)-[:CAN_EDIT]->(bobMenu1)
-    CREATE (bob)-[:CAN_EDIT]->(bobMenu2)
-    CREATE (bob)-[:CAN_EDIT]->(bobMenu3)
-    CREATE (bob)-[:CAN_EDIT]->(bobMenu4)
+
+    CREATE (alice)-[:CAN_EDIT {order: 0}]->(aliceMenu1)
+    CREATE (alice)-[:CAN_EDIT {order: 1}]->(aliceMenu2)
+    CREATE (alice)-[:CAN_EDIT {order: 2}]->(aliceMenu3)
+    CREATE (alice)-[:CAN_EDIT {order: 3}]->(aliceMenu4)
+    CREATE (bob)-[:CAN_EDIT {order: 0}]->(bobMenu1)
+    CREATE (bob)-[:CAN_EDIT {order: 1}]->(bobMenu2)
+    CREATE (bob)-[:CAN_EDIT {order: 2}]->(bobMenu3)
+    CREATE (bob)-[:CAN_EDIT {order: 3}]->(bobMenu4)
+
     CREATE (aliceMenu1)-[:CAN_EDIT {order: 0}]->(aliceDrink1)
     CREATE (aliceMenu1)-[:CAN_EDIT {order: 1}]->(aliceDrink2)
     CREATE (aliceMenu1)-[:CAN_EDIT {order: 2}]->(aliceDrink3)
@@ -302,8 +304,10 @@ db.init = () => Node.cypherAsync({
     CREATE (bobMenu3)-[:CAN_EDIT {order: 2}]->(bobMain3)
     CREATE (aliceMenu4)-[:CAN_EDIT {order: 0}]->(aliceDessert1)
     CREATE (bobMenu4)-[:CAN_EDIT {order: 0}]->(bobDessert1)
+
     CREATE (alice)-[:CAN_EDIT]->(aliceStore)
     CREATE (bob)-[:CAN_EDIT]->(bobStore)
+
     CREATE (carly)-[:CREATED {created_on: 'yesterday', expires: 'today'}]->(carlyOrder2)
     CREATE (carlyOrder2)-[:VIEW]->(carly)
     CREATE (carlyOrder2)-[:REQUEST {quantity: 25}]->(aliceDrink1)
@@ -422,7 +426,8 @@ db.findNode = (nodeLabel, nodeId) => Node.cypherAsync({
 db.deleteNode = (nodeLabel, nodeId) => Node.cypherAsync({
   query: `
     MATCH (node:${nodeLabel}) WHERE ID(node) = ${nodeId}
-    DELETE node`,
+    OPTIONAL MATCH (node)-[rel]-()
+    DELETE node, rel`,
   params: {
     nodeId,
   },
@@ -469,7 +474,6 @@ db.findAllOwners = () => Node.cypherAsync({
   **********************************************************************************************
 
   These functions will service the GET, POST, UPDATE, and DELETE endpoints for Orders.
-
 
   **********************************************************************************************
 */
@@ -631,6 +635,24 @@ db.updateItemQtyOnOrder = (orderId, itemId, quantity) => Node.cypherAsync({
 })
 .then(response => response);
 
+/*
+  **********************************************************************************************
+
+  These functions will service the GET, POST, UPDATE, and DELETE endpoints for Menus.
+
+  **********************************************************************************************
+*/
+
+db.getMenuByOwnerId = (ownerId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
+    MATCH (owner)-[rel1:CAN_EDIT]->(menu:Menu)-[rel2:CAN_EDIT]->(item:Item)
+    RETURN menu, item ORDER BY rel1.order, rel2.order`,
+  params: {
+    ownerId,
+  },
+});
+
 db.createStore = (store) => Node.cypherAsync({
   query: `
     MERGE (store:Store {
@@ -706,7 +728,7 @@ db.getItemByPicture = (picture) => Node.cypherAsync({
 
 db.updateItem = (itemObj) => {
   const id1 = itemObj._id;
-  delete itemObj._id;  //don't want to create an '_id' prop (doesn't go both ways)
+  delete itemObj._id;  // don't want to create an '_id' prop (doesn't go both ways)
   return Node.cypherAsync({
     query: `
       MATCH (item:Item)
@@ -733,7 +755,7 @@ db.removeItemById = (itemId) => Node.cypherAsync({
   params: {
     id: itemId,
   },
-}).then(response=> response );
+}).then(response => response);
 
 /*
  **********************************************************************************************
