@@ -46,8 +46,8 @@ export default class MenuCard extends Component {
     });
   }
 
-  handleAddItem(itemObj) {
-    this.props.addItem(itemObj);
+  handleAddItemToOrder(itemObj) {
+    this.props.addItemToOrder(itemObj);
   }
 
   render() {
@@ -74,7 +74,7 @@ export default class MenuCard extends Component {
                   description={item.description}
                   price={item.price}
                   picture={item.picture}
-                  addItem={e => this.handleAddItem(e)}
+                  addItemToOrder={this.props.addItemToOrder}
                 />
               )}
             </CardText>
