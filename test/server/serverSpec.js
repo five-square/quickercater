@@ -9,6 +9,24 @@ const db = require(`${global.__server}/db.js`);
 /*
   **********************************************************************************************
 
+  Function Name Tests!
+
+  **********************************************************************************************
+*/
+
+global.describe('The Function', () => {
+  const app = global.TestHelper.createApp();
+  app.use('/', routes);
+  app.testReady();
+
+  global.it_('db.getMenuByOwnerId exists and is a function', function* anon() {
+    return db.getMenuByOwnerId.should.be.a('function');
+  });
+});
+
+/*
+  **********************************************************************************************
+
   Server Tests!
 
   **********************************************************************************************
@@ -77,31 +95,43 @@ global.describe('The Server', () => {
     });
   });
 
-global.it_('can create an Item from POST /api/item/create', function* anon() {
-    const testObj = { name: 'DogMeat', description: 'meatball dog', price: 6, picture: 'you are L' };
+  global.it_('can create an Item from POST /api/item/create', function* anon() {
+    const testObj = {
+      name: 'DogMeat',
+      description: 'meatball dog',
+      price: 6,
+      picture: 'you are L',
+    };
     yield request(app).post('/api/item/create')
-      .send({itemObj: testObj})
+      .send({ itemObj: testObj })
       .expect(201)
       .expect(response => {
-        //console.log('===========' + JSON.stringify(response.body));
-        newOwner.__id = response.body._id;
+        // console.log('===========' + JSON.stringify(response.body));
+        newOwner._id = response.body._id;
         global.expect(response.body.properties).to.deep.equal(testObj);
-        //global.expect(response.body).to.deep.equal(testObj);
+        // global.expect(response.body).to.deep.equal(testObj);
       });
   });
 
   global.it_('can fetch an Item from GET /api/item/:id', function* anon() {
-    const testItem = { name: 'DogMeat', description: 'meatball dog', price: 6, picture: 'you are L' };
-    //console.log(newOwner.__id + '================');
-    yield request(app).get(`/api/item/${newOwner.__id}`)
+    const testItem = {
+      name: 'DogMeat',
+      description: 'meatball dog',
+      price: 6,
+      picture: 'you are L',
+    };
+    // console.log(newOwner.__id + '================');
+    yield request(app).get(`/api/item/${newOwner._id}`)
       .expect(200)
       .expect(resp1 => {
         global.expect(resp1.body.properties).to.deep.equal(testItem);
       });
   });
 
-    global.it_('can delete an item from the endpoint', function* anon() {
-    
+  global.xit_('can delete an item from the endpoint', function* anon() {
+    yield request(app)
+    .get('/')
+    .expect(200);
   });
 
 /*

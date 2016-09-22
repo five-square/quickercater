@@ -13,6 +13,7 @@ export default class Lobby extends Component {
   componentWillMount() {
     Server.getAllStores()
     .then(stores => {
+      console.log('stores: ', stores);
       this.setState({ stores });
     });
   }
@@ -30,11 +31,15 @@ export default class Lobby extends Component {
       <div className="Lobby" >
         <Login />
         <h1>Welcome!</h1>
-        { this.state.stores.map((e) =>
-          <StoreCard key={e._id} style={style} stores={e.properties} />
+        { this.state.stores.map(e =>
+          <StoreCard
+            key={e._id}
+            style={style}
+            stores={e.properties}
+          />
         )}
       </div>
-  );
+    );
   }
 }
 

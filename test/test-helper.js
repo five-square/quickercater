@@ -17,7 +17,7 @@ global.__client = `${__dirname}/../client`;
 // Option 1: Make the `expect` function available in every test file
 global.expect = chai.expect;
 // Option 2: Make everything should-able
-// global.should = chai.should()
+global.should = chai.should();
 
 
 //

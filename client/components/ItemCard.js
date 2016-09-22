@@ -11,47 +11,56 @@ export default class ItemCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hover: 2,
+      hover: 0,
+      id: this.props.id,
       style: this.props.style,
-      name: this.props.menu.name,
-      items: this.props.menu.item,
-      description: this.props.menu.description,
+      name: this.props.name,
+      price: this.props.price,
+      description: this.props.description,
+      picture: this.props.picture,
     };
   }
 
-  handleOnMouseEnter() {
-    this.setState({ hover: 5 });
+  handleAddItem() {
+    this.props.addItem({
+      id: this.state.id,
+      name: this.state.name,
+      price: this.state.price,
+      description: this.state.description,
+      picture: this.state.picture,
+    });
   }
 
-  handleOnMouseLeave() {
-    this.setState({ hover: 2 });
-  }
+  // handleOnMouseEnter() {
+  //   this.setState({ hover: 2 });
+  // }
+
+  // handleOnMouseLeave() {
+  //   this.setState({ hover: 1 });
+  // }
+            // onMouseEnter={e => this.handleOnMouseEnter(e)}
+            // onMouseLeave={e => this.handleOnMouseLeave(e)}
+        // <Paper zDepth={this.state.hover}>
+        // </Paper>
 
   render() {
     return (
       <div style={this.state.style}>
-        <Paper zDepth={this.state.hover}>
-          <Card
-            onMouseEnter={e => this.handleOnMouseEnter(e)}
-            onMouseLeave={e => this.handleOnMouseLeave(e)}
-          >
-            <CardHeader
-              title={this.state.name}
-              subtitle={this.state.description}
-              avatar="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
-              actAsExpander
-              showExpandableButton
-            />
-            <CardText expandable>
-              <h4>{this.state.items.name}</h4>
-              <p>{this.state.items.description}</p>
-              <p>{`$${this.state.items.price}`}</p>
-            </CardText>
-            <CardActions>
-              <FlatButton label="Add Me To Order" />
-            </CardActions>
-          </Card>
-        </Paper>
+        <Card>
+          <CardHeader
+            title={this.state.name}
+            subtitle={this.state.description}
+            avatar={"https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"}
+            actAsExpander
+            showExpandableButton
+          />
+          <CardText expandable>
+            <h4>{`Price: ${this.state.price}`}</h4>
+          </CardText>
+          <CardActions>
+            <FlatButton label="Add Me To Order" onClick={e => this.handleAddItem(e)} />
+          </CardActions>
+        </Card>
         <br />
       </div>
     );
