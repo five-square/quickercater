@@ -5,6 +5,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import App from './components/App';
 import allReducers from './reducers';
+import clientTest from '../test/client/clientSpec';
 
 const store = createStore(allReducers);
 
