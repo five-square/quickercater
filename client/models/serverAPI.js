@@ -39,4 +39,17 @@ ServerAPI.getItemsByMenu = (menuId) =>
     picture: itemElement.item.properties.picture,
   })));
 
+ServerAPI.getOwnerByStoreId = (storeId) =>
+  fetch(`/api/owner/store/${storeId}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(data => data.json())
+  .then(owner => ({
+    id: owner[0].owner._id,
+    name: owner[0].owner.properties.name,
+  }));
+
 export default ServerAPI;

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import StoreCard from './StoreCard';
 import Server from '../models/serverAPI';
-import Login from './Login.js';
 
 export default class Lobby extends Component {
   constructor(props) {
@@ -17,6 +16,7 @@ export default class Lobby extends Component {
       this.setState({ stores });
     });
   }
+
   render() {
     const style = {
       width: '60%',
@@ -29,13 +29,13 @@ export default class Lobby extends Component {
     };
     return (
       <div className="Lobby" >
-        <Login />
-        <h1>Welcome!</h1>
-        { this.state.stores.map(e =>
+        { this.state.stores.map((e, i) =>
           <StoreCard
-            key={e._id}
+            key={i}
+            id={e._id}
             style={style}
             stores={e.properties}
+            selectStore={this.props.selectStore}
           />
         )}
       </div>

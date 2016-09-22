@@ -50,6 +50,13 @@ routes.get('/api/owner/all', (req, res) => {
   });
 });
 
+routes.get('/api/owner/store/:id', (req, res) => {
+  db.findOwnerByStoreId(req.params.id)
+  .then(owner => {
+    res.status(200).send(owner);
+  });
+});
+
 routes.get('/api/owner/:id', (req, res) => {
   db.findNode('Owner', req.params.id)
   .then(dbData => {
