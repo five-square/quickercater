@@ -19,6 +19,10 @@ export default class ToolbarExamplesSimple extends React.Component {
     this.props.goBack();
   }
 
+  signInWithGoogle() {
+    window.location.href = '/api/auth/google';
+  }
+
   render() {
     return (
       <div id="Toolbar">
@@ -28,7 +32,7 @@ export default class ToolbarExamplesSimple extends React.Component {
           </ToolbarGroup>
           <ToolbarGroup>
             <RaisedButton label="Back to Lobby" primary onClick={e => this.handleBackClick(e)} />
-            <RaisedButton label="Login" primary />
+            <RaisedButton label="Login" primary onClick={e => this.signInWithGoogle(e)} />
           </ToolbarGroup>
         </Toolbar>
         <br />
