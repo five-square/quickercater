@@ -1,18 +1,12 @@
 import React from 'react';
-
 import Card from 'material-ui/Card';
-
 import CardActions from 'material-ui/Card/CardActions';
-
 import CardHeader from 'material-ui/Card/CardHeader';
-
 import CardText from 'material-ui/Card/CardText';
-
 import FlatButton from 'material-ui/FlatButton';
-
 import Paper from 'material-ui/Paper';
 
-export default class StoreCardExpandable extends React.Component {
+export default class StoreCard extends React.Component {
 
   constructor(props) {
     super(props);
@@ -34,11 +28,13 @@ export default class StoreCardExpandable extends React.Component {
   }
 
   render() {
-
     return (
       <div style={this.state.style}>
         <Paper zDepth={this.state.hover}>
-          <Card onMouseEnter={e => this.handleOnMouseEnter(e)} onMouseLeave={e => this.handleOnMouseLeave(e)}>
+          <Card
+            onMouseEnter={e => this.handleOnMouseEnter(e)}
+            onMouseLeave={e => this.handleOnMouseLeave(e)}
+          >
             <CardHeader
               title={this.state.name}
               subtitle={this.state.slogan}

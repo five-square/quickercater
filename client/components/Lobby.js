@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-
 import StoreCard from './StoreCard';
-
 import Server from '../models/serverAPI';
+import Login from './Login.js';
 
 export default class Lobby extends Component {
   constructor(props) {
@@ -19,8 +18,8 @@ export default class Lobby extends Component {
   }
   render() {
     const style = {
-      width: 60 + '%',
-      flex: 50 + '%',
+      width: '60%',
+      flex: '50%',
       marginLeft: 'auto',
       marginRight: 'auto',
       flexDirection: 'column',
@@ -29,6 +28,7 @@ export default class Lobby extends Component {
     };
     return (
       <div className="Lobby" >
+        <Login />
         <h1>Welcome!</h1>
         { this.state.stores.map((e) =>
           <StoreCard key={e._id} style={style} stores={e.properties} />

@@ -4,7 +4,7 @@
   "description": "A catering app for caterers to cater.",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server/server.js",
+    "start": "nodemon server/server.js --ignore client/",
     "build": "browserify -t [ babelify --presets [ react ] ] client/main.js -o build/bundle.js",
     "test": "./test/run.sh"
   },
