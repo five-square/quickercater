@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const browserify = require('browserify-middleware');
-// const b = require('browserify');
 const babelify = require('babelify');
 const db = require('./db');
 const passport = require('passport');
@@ -19,25 +18,30 @@ const routes = express.Router();
 const assetFolder = path.join(__dirname, '../client/public');
 routes.use(express.static(assetFolder));
 routes.use(passport.initialize());
+routes.use(passport.session());
+
 routes.use(session({ secret: 'keyboard cat',
   name: 'vinod',
   cookie: { secure: false, maxAge: (4 * 60 * 60 * 1000) },
   resave: true,
-  saveUninitialized: true }));
+  saveUninitialized: true })
+);
+
 passport.serializeUser((user, done) => {
   console.log('serializeUser: ', user);
   done(null, user);
 });
-routes.use(passport.session());
-passport.deserializeUser((user, done) => {
-  console.log('deserializeUser id: ', user);
-  db.findNode('Owner', user._id)
-    .then(userDb => {
-      console.log('deserializeUser: ', user);
-      done(null, user);
-    });
+
+passport.deserializeUser((id, done) => {
+  console.log('deserializeUser id: ', id);
+  // db.findNode('Owner', user._id)
+  //   .then(userDb => {
+  //     console.log('deserializeUser: ', user);
+  //   });
+  done(null, id);
 });
-passport.use(new GoogleStrategy({
+
+passport.use('google', new GoogleStrategy({
   clientID: configAuth.clientID,
   clientSecret: configAuth.clientSecret,
   callbackURL: configAuth.callbackURL,
@@ -72,12 +76,6 @@ routes.use((req, res, next) => {
 routes.get('/bundle.js', browserify(path.join(__dirname, '../client/main.js'), {
   transform: [[babelify, { presets: ['es2015', 'react'] }]],
 }));
-
-// make sure to mark these as external!
-// b.external('react/addons');
-// b.external('react/lib/ReactContext');
-// b.external('react/lib/ExecutionEnvironment');
-
 
 routes.get('/api/tags-example', (req, res) => {
   res.send(['node', 'express', 'browserify', 'mithril']);
@@ -365,10 +363,12 @@ routes.get('/api/auth/ownerData',
     res.send('undefined');
   });
 
-routes.get('api/auth/logout', (req, res) => {
+routes.get('/api/auth/logout', (req, res) => {
+  console.log('In LogOut: ', req.session.passport);
   req.session.passport = undefined;
   req.session.destroy(() => {
     req.logout();
+    res.clearCookie('vinod');
     res.redirect('/');
   });
 });

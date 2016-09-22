@@ -1,6 +1,7 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
+import Server from '../models/serverAPI';
 
 export default class ToolbarExamplesSimple extends React.Component {
 
@@ -21,6 +22,13 @@ export default class ToolbarExamplesSimple extends React.Component {
 
   signInWithGoogle() {
     window.location.href = '/api/auth/google';
+  }
+
+  signOut() {
+    Server.signOut()
+    .then(() => {
+      console.log('Logged out');
+    });
   }
 
   handleViewCart() {
@@ -44,6 +52,7 @@ export default class ToolbarExamplesSimple extends React.Component {
             }
             <RaisedButton label="View Cart" primary onClick={e => this.handleViewCart(e)} />
             <RaisedButton label="Login" primary onClick={e => this.signInWithGoogle(e)} />
+            <RaisedButton label="Logout" primary onClick={e => this.signOut(e)} />
           </ToolbarGroup>
         </Toolbar>
         <br />
