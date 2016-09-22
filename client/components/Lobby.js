@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import StoreCard from './StoreCard';
 import Server from '../models/serverAPI';
-import CaterOptions from './CaterOptions';
 import Login from './Login.js';
 
 export default class Lobby extends Component {
@@ -32,14 +31,7 @@ export default class Lobby extends Component {
         <Login />
         <h1>Welcome!</h1>
         { this.state.stores.map((e) =>
-          <div>
-            <div>
-              <StoreCard key={e._id} style={style} stores={e.properties} />
-            </div>
-            <div>
-              <CaterOptions key={e._id} stores={e.properties} />
-            </div>
-          </div>
+          <StoreCard key={e._id} style={style} stores={e.properties} />
         )}
       </div>
   );
