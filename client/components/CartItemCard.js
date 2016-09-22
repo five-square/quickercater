@@ -59,12 +59,14 @@ export default class CartItemCard extends Component {
           //   style={style.chip}
           // >{this.state.name}
           // </Chip>
+        // <Paper zDepth={this.state.hover}>
+        // </Paper>
 
   render() {
     const style = {
       chip: {
         margin: 1,
-        width: '80%',
+        width: '90%',
         // textAlign: 'right',
         marginLeft: 'auto',
         marginRight: 'auto',
@@ -80,19 +82,17 @@ export default class CartItemCard extends Component {
     };
     return (
       <div>
-        <Paper zDepth={this.state.hover}>
-          <Card style={style.chip}>
-            <CardHeader
-              title={this.state.name}
-              subtitle={this.state.description}
-              actAsExpander
-              showExpandableButton={false}
-            />
-            <CardText expandable={false}>
-              <h4>{`Price: ${this.state.price}`}</h4>
-            </CardText>
-          </Card>
-        </Paper>
+        <Card style={style.chip}>
+          <CardHeader
+            title={this.state.name}
+            subtitle={this.state.description}
+            actAsExpander
+            showExpandableButton
+          />
+          <CardText expandable>
+            <h4>{`Price: ${this.state.price}`}</h4>
+          </CardText>
+        </Card>
         <br />
       </div>
     );

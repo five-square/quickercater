@@ -21,8 +21,8 @@ export default class ItemCard extends Component {
     };
   }
 
-  handleAddItem() {
-    this.props.addItem({
+  handleAddItemToOrder() {
+    this.props.addItemToOrder({
       id: this.state.id,
       name: this.state.name,
       price: this.state.price,
@@ -58,7 +58,7 @@ export default class ItemCard extends Component {
             <h4>{`Price: ${this.state.price}`}</h4>
           </CardText>
           <CardActions>
-            <FlatButton label="Add Me To Order" onClick={e => this.handleAddItem(e)} />
+            <FlatButton label="Add Me To Order" onClick={e => this.handleAddItemToOrder(e)} />
           </CardActions>
         </Card>
         <br />
