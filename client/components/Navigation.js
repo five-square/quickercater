@@ -23,6 +23,10 @@ export default class ToolbarExamplesSimple extends React.Component {
     window.location.href = '/api/auth/google';
   }
 
+  handleViewCart() {
+    this.props.viewCart();
+  }
+
   render() {
     return (
       <div id="Toolbar">
@@ -31,7 +35,14 @@ export default class ToolbarExamplesSimple extends React.Component {
             <ToolbarTitle text={this.props.title} />
           </ToolbarGroup>
           <ToolbarGroup>
-            <RaisedButton label="Back to Lobby" primary onClick={e => this.handleBackClick(e)} />
+            {this.props.inStore
+              ? <RaisedButton
+                label="Back to Lobby"
+                primary onClick={e => this.handleBackClick(e)}
+              />
+              : null
+            }
+            <RaisedButton label="View Cart" primary onClick={e => this.handleViewCart(e)} />
             <RaisedButton label="Login" primary onClick={e => this.signInWithGoogle(e)} />
           </ToolbarGroup>
         </Toolbar>

@@ -6,6 +6,7 @@ import Lobby from './Lobby';
 import StoreFront from './StoreFront';
 import Server from '../models/serverAPI';
 import Navigation from './Navigation';
+import Cart from './Cart';
 
 export default class App extends Component {
   constructor(props) {
@@ -15,6 +16,8 @@ export default class App extends Component {
       currentOwnerId: false,
       currentStoreName: 'Welcome to QuickerCater',
       showStore: false,
+      order: [],
+      openCart: false,
     };
   }
 
@@ -36,6 +39,23 @@ export default class App extends Component {
     });
   }
 
+  handleAddItemToOrder(itemObj) {
+    const items = this.state.order;
+    items.push(itemObj);
+    console.log('item added', itemObj);
+    this.setState({
+      order: items,
+      openCart: true,
+    });
+  }
+
+  viewCart() {
+    console.log('trying to view cart');
+    this.setState({
+      openCart: !this.state.openCart,
+    });
+  }
+
   handleBackClick() {
     this.setState({
       showStore: false,
@@ -49,9 +69,24 @@ export default class App extends Component {
       <div>
         <MuiThemeProvider>
           <div>
-            <Navigation title={this.state.currentStoreName} goBack={e => this.handleBackClick(e)} />
+            <Navigation
+              title={this.state.currentStoreName}
+              inStore={this.state.showStore}
+              goBack={e => this.handleBackClick(e)}
+              viewCart={e => this.viewCart(e)}
+            />
+            <div>
+              <Cart
+                open={this.state.openCart}
+                order={this.state.order}
+                viewCart={e => this.viewCart(e)}
+              />
+            </div>
             { this.state.showStore
-              ? <StoreFront ownerId={this.state.currentOwnerId} />
+              ? <StoreFront
+                ownerId={this.state.currentOwnerId}
+                addItemToOrder={e => this.handleAddItemToOrder(e)}
+              />
               : <Lobby selectStore={(id, name) => this.selectStore(id, name)} />
             }
           </div>
