@@ -9,41 +9,19 @@ ServerAPI.getAllOwners = () => db.findAllOwners();
 
 ServerAPI.getAllStores = () => db.findAllStores();
 
-ServerAPI.getMenusByOwner = (ownerId) => {
-  let menu = [];
-  return fetch(`/api/menu/${ownerId}`, {
+ServerAPI.getMenusByOwner = (ownerId) =>
+  fetch(`/api/menu/${ownerId}`, {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
     },
   })
   .then(data => data.json())
-  .then(menus =>
-    Promise.all(menus.map(element => ({
-      id: element.menu._id,
-      name: element.menu.properties.name,
-      description: element.menu.properties.description,
-      items: [],
-    })))
-  )
-  .then(menuArray => {
-    menu = menuArray;
-    return Promise.all(menuArray.map(element => ServerAPI.getItemsByMenu(element.id)));
-  })
-  .then(itemArray => {
-    console.log(itemArray);
-    menu.forEach((mapElement, index) => {
-      mapElement.items = itemArray[index].map(itemElement => ({
-        id: itemElement.item._id,
-        name: itemElement.item.properties.name,
-        price: itemElement.item.properties.price,
-        description: itemElement.item.properties.description,
-        picture: itemElement.item.properties.picture,
-      }));
-    });
-    return menu;
-  });
-};
+  .then(menus => menus.map(element => ({
+    id: element.menu._id,
+    name: element.menu.properties.name,
+    description: element.menu.properties.description,
+  })));
 
 ServerAPI.getItemsByMenu = (menuId) =>
   fetch(`/api/menu/items/${menuId}`, {
@@ -52,6 +30,13 @@ ServerAPI.getItemsByMenu = (menuId) =>
       'Content-Type': 'application/json',
     },
   })
-  .then(data => data.json());
+  .then(data => data.json())
+  .then(items => items.map(itemElement => ({
+    id: itemElement.item._id,
+    name: itemElement.item.properties.name,
+    price: itemElement.item.properties.price,
+    description: itemElement.item.properties.description,
+    picture: itemElement.item.properties.picture,
+  })));
 
 export default ServerAPI;
