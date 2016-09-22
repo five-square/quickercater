@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const browserify = require('browserify-middleware');
+// const b = require('browserify');
 const babelify = require('babelify');
 const db = require('./db');
 const passport = require('passport');
@@ -67,9 +68,15 @@ routes.use((req, res, next) => {
   console.log('Route: ', req.url);
   next();
 });
+
 routes.get('/bundle.js', browserify(path.join(__dirname, '../client/main.js'), {
   transform: [[babelify, { presets: ['es2015', 'react'] }]],
 }));
+
+// make sure to mark these as external!
+// b.external('react/addons');
+// b.external('react/lib/ReactContext');
+// b.external('react/lib/ExecutionEnvironment');
 
 
 routes.get('/api/tags-example', (req, res) => {
