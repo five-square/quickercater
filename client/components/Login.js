@@ -48,7 +48,7 @@ export default class Login extends React.Component {
     return (
       <div>
         <div>
-          <RaisedButton label="Login" onTouchTap={(e) => this.handleOpen(e)} />
+          <RaisedButton primary label="Login" onTouchTap={(e) => this.handleOpen(e)} />
           <Dialog
             title="Login"
             actions={actions}

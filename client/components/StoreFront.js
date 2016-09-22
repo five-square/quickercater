@@ -9,7 +9,7 @@ export default class StoreFront extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ownerId: 1090,
+      ownerId: this.props.ownerId,
       menus: [],
       order: [],
       openCart: false,
@@ -28,15 +28,6 @@ export default class StoreFront extends Component {
         openCart: true,
       });
     }
-  }
-
-  componentWillUpdate() {
-    console.log('firing');
-    // if (this.state.order.length) {
-    //   this.setState({
-    //     openCart: true,
-    //   });
-    // }
   }
 
   handleAddItem(itemObj) {

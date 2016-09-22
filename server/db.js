@@ -470,6 +470,16 @@ db.findAllOwners = () => Node.cypherAsync({
 })
 .then(response => response.map(e => e.owner));
 
+db.findOwnerByStoreId = (storeId) => Node.cypherAsync({
+  query: `
+    MATCH (store:Store) WHERE ID(store) = ${storeId}
+    MATCH (owner:Owner)-[:CAN_EDIT]->(store)
+    RETURN owner`,
+  params: {
+    storeId,
+  },
+});
+
 /*
   **********************************************************************************************
 

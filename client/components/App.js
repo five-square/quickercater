@@ -5,12 +5,16 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Lobby from './Lobby';
 import StoreFront from './StoreFront';
 import Server from '../models/serverAPI';
+import Navigation from './Navigation';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       owners: [],
+      currentOwnerId: false,
+      currentStoreName: 'Welcome to QuickerCater',
+      showStore: false,
     };
   }
 
@@ -20,6 +24,24 @@ export default class App extends Component {
       this.setState({ owners });
     });
   }
+
+  selectStore(storeId, storeName) {
+    Server.getOwnerByStoreId(storeId)
+    .then(owner => {
+      this.setState({
+        currentOwnerId: owner.id,
+        currentStoreName: `Welcome to ${storeName}`,
+        showStore: true,
+      });
+    });
+  }
+
+  handleBackClick() {
+    this.setState({
+      showStore: false,
+      currentStoreName: 'Welcome to QuickerCater',
+    });
+  }
         // muiTheme={getMuiTheme(darkBaseTheme)}>
 
   render() {
@@ -27,8 +49,11 @@ export default class App extends Component {
       <div>
         <MuiThemeProvider>
           <div>
-            <Lobby />
-            <StoreFront />
+            <Navigation title={this.state.currentStoreName} goBack={e => this.handleBackClick(e)} />
+            { this.state.showStore
+              ? <StoreFront ownerId={this.state.currentOwnerId} />
+              : <Lobby selectStore={(id, name) => this.selectStore(id, name)} />
+            }
           </div>
         </MuiThemeProvider>
       </div>
