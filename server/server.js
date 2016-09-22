@@ -4,6 +4,12 @@ const bodyParser = require('body-parser');
 const browserify = require('browserify-middleware');
 const babelify = require('babelify');
 const db = require('./db');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+
+const configAuth = require('./config/googleCredentials');
 
 const serverUrl = process.env.PORT || 3000;
 
@@ -11,7 +17,56 @@ const routes = express.Router();
 
 const assetFolder = path.join(__dirname, '../client/public');
 routes.use(express.static(assetFolder));
+routes.use(passport.initialize());
+routes.use(session({ secret: 'keyboard cat',
+  name: 'vinod',
+  cookie: { secure: false, maxAge: (4 * 60 * 60 * 1000) },
+  resave: true,
+  saveUninitialized: true }));
+passport.serializeUser((user, done) => {
+  console.log('serializeUser: ', user);
+  done(null, user);
+});
+routes.use(passport.session());
+passport.deserializeUser((user, done) => {
+  console.log('deserializeUser id: ', user);
+  db.findNode('Owner', user._id)
+    .then(userDb => {
+      console.log('deserializeUser: ', user);
+      done(null, user);
+    });
+});
+passport.use(new GoogleStrategy({
+  clientID: configAuth.clientID,
+  clientSecret: configAuth.clientSecret,
+  callbackURL: configAuth.callbackURL,
+},
+  (accessToken, refreshToken, profile, done) => {
+    console.log('profile: ', profile);
+    db.findOwnerByEmail(profile.emails[0].value)
+      .then(user => {
+        console.log('findOwnerByEmail: ', user);
+        if (user.length === 0) {
+          const newOwner = {
+            name: profile.displayName,
+            phone: '',
+            email: profile.emails[0].value,
+            description: '',
+            auth_key: true,
+          };
+          return db.createOwner(newOwner)
+            .then(owner => done(null, owner));
+        } else {
+          return done(null, user[0].owner);
+        }
+      });
+  }
+));
 
+routes.use((req, res, next) => {
+  console.log('Route: ', req.url);
+  next();
+});
 routes.get('/bundle.js', browserify(path.join(__dirname, '../client/main.js'), {
   transform: [[babelify, { presets: ['es2015', 'react'] }]],
 }));
@@ -282,6 +337,42 @@ routes.get('/db_reset', (req, res) => {
   });
 });
 
+routes.get('/api/auth/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
+
+
+routes.use('/api/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    console.log('req.user: ', req.user);
+    console.log('req.session.passport: ', req.session.passport);
+    console.log('req.isAuthenticated(): ', req.isAuthenticated());
+    res.redirect('/');
+  });
+
+routes.get('/api/auth/ownerData',
+  (req, res) => {
+    console.log('After req.user: ', req.user);
+    console.log('req.session.passport: ', req.session.passport);
+    console.log('After req.isAuthenticated(): ', req.isAuthenticated());
+    if (req.user) res.send('req.user');
+    res.send('undefined');
+  });
+
+routes.get('api/auth/logout', (req, res) => {
+  req.session.passport = undefined;
+  req.session.destroy(() => {
+    req.logout();
+    res.redirect('/');
+  });
+});
+
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+}
 /*
   **********************************************************************************************
 
@@ -308,6 +399,7 @@ if (process.env.NODE_ENV !== 'test') {
 
   // Parse incoming request bodies as JSON
   app.use(bodyParser.json());
+  app.use(cookieParser());    // Parse 'Cookie' request header
 
   // Mount our main router
   app.use('/', routes);
