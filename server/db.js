@@ -827,3 +827,12 @@ db.deletePackage = (packType) => Node.cypherAsync({
   },
 })
 .then(response => response);
+
+db.findOwnerByEmail = (email) => Node.cypherAsync({
+  query: `MATCH (owner:Owner) WHERE owner.email = {email}
+  RETURN owner`,
+  params: {
+    email,
+  },
+})
+.then(response => response);
