@@ -12,7 +12,7 @@ export default class CateringOptions extends React.Component {
 // a box. Boxes will be displayed next to each other
   render() {
     const style = {
-      height: 500,
+      height: 600,
       width: 460,
       margin: 20,
       textAlign: 'center',
@@ -30,7 +30,7 @@ export default class CateringOptions extends React.Component {
           <CardMedia
             overlay={<CardTitle title="Truck Service" />}
           >
-            <img role="presentation" src="https://arlingtonva.s3.amazonaws.com/wp-content/uploads/sites/25/2013/12/foodtruck.jpeg" />
+            <img role="presentation" src="https://scontent-dft4-2.cdninstagram.com/t51.2885-15/e35/13721040_194815244266288_87997643_n.jpg" />
           </CardMedia>
           <CardText style={{ wordWarp: 'break-word' }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -44,7 +44,7 @@ export default class CateringOptions extends React.Component {
           <CardMedia
             overlay={<CardTitle title="On-Site Service" />}
           >
-            <img role="presentation" src="http://blog.flushingfood.com/wp-content/uploads/2014/06/HomeFoodDeliveryFlushingNYC.jpg" />
+            <img role="presentation" src="https://scontent-dft4-2.cdninstagram.com/t51.2885-15/e35/13597549_899896270133307_1054019507_n.jpg" />
           </CardMedia>
           <CardText style={{ wordWarp: 'break-word' }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -58,7 +58,7 @@ export default class CateringOptions extends React.Component {
           <CardMedia
             overlay={<CardTitle title="Delivery" />}
           >
-            <img role="presentation" src="http://blog.gessato.com/wp-content/uploads/2015/04/lukes-local-fresh-food-delivery-6.jpg" />
+            <img role="presentation" src="http://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c131.0.817.817/14350609_1070096696419135_1950347763_n.jpg" />
           </CardMedia>
           <CardText style={{ wordWarp: 'break-word' }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.

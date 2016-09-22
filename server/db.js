@@ -18,6 +18,13 @@ const db = module.exports;
 
 db.init = () => Node.cypherAsync({
   query: `
+    CREATE (churroco:Owner {
+      name: 'Walter',
+      phone: '512-456-789',
+      email: 'walter@churrocoaustin.com',
+      description: 'I love Mexican food',
+      auth_key: true
+    })
     CREATE (alice:Owner {
       name: 'Alice',
       phone: '555-444-3333',
@@ -32,6 +39,7 @@ db.init = () => Node.cypherAsync({
       description: 'I love American food',
       auth_key: true
     })
+   
     CREATE (carly:Customer {
       name: 'Carly',
       phone: '555-333-5555',
@@ -45,6 +53,43 @@ db.init = () => Node.cypherAsync({
       auth_key: false
     })
 
+    CREATE (churrocoDelivery:Package {
+      name: 'Delivery',
+      type: 'Delivery',
+      cost: 25,
+      description: 'Where we deliver the churros in aluminum catering 
+      casseroles with large squeezable dipping sauce containers so that 
+      guests can serve themselves.  All disposable plates, utensils and 
+      napkins are included.  Our order minimum for self-serve catering 
+      is 40 orders.  This is a more cost effective option and is perfect 
+      for an informal setting. Delivery service is available with this 
+      option ($30 delivery fee) or pick-up at our 1620 E. Riverside 
+      location.'
+      picture: 'http://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c131.0.817.817/14350609_1070096696419135_1950347763_n.jpg'
+    })
+    CREATE (churrocoTruck:Package {
+      name: 'Truck Service',
+      type: 'truck',
+      cost: 175,
+      description: 'Where we bring the Churro Co. 
+      truck on-site and serve your guests fresh and 
+      made-to-order.  All disposable plates, utensils,
+      and napkins are included.  Our food order minimum 
+      for on-site catering is $400.'
+      picture: 'https://scontent-dft4-2.cdninstagram.com/t51.2885-15/e35/13721040_194815244266288_87997643_n.jpg'
+    })
+    CREATE (churrocoOnSite:Package {
+      name: 'Pop-up',
+      type: 'onSite',
+      cost: 250,
+      description: 'Where we setup tables indoor or tent & 
+      tables when outdoors. All disposable plates, utensils 
+      and napkins are included.  Our order minimum for catering 
+      events is 75 orders and a $250 service charge.  This setup 
+      is ideal for small events with limited parking space or in 
+      indoor settings'
+      picture: 'https://scontent-dft4-2.cdninstagram.com/t51.2885-15/e35/13597549_899896270133307_1054019507_n.jpg'
+    })
     CREATE (aliceDelivery:Package {
       name: 'Delivery',
       type: 'delivery',
@@ -82,6 +127,22 @@ db.init = () => Node.cypherAsync({
       description: 'The whole tamale'
     })
 
+    CREATE (churrocoMenu1:Menu {
+      name: 'Dessert',
+      description: 'Churros'
+    })
+    CREATE (churrocoMenu2:Menu {
+      name: 'Drinks',
+      description: 'Beverages'
+    })
+    CREATE (aliceMenu1:Menu {
+      name: 'Dessert',
+      description: 'Churros'
+    })
+    CREATE (aliceMenu2:Menu {
+      name: 'Drinks',
+      description: 'Beverages'
+    })
     CREATE (aliceMenu1:Menu {
       name: 'Drinks',
       description: 'Tasty beverages'
@@ -115,6 +176,50 @@ db.init = () => Node.cypherAsync({
       description: 'Tasty treats'
     })
 
+     CREATE (churrocoDessert1:Item {
+      name: 'Traditional',
+      description: 'Two perfectly crisp Churros tossed in 
+      cinnamon sugar with chocolate, cajeta (Mexican caramel), 
+      or Nutella pudding dipping sauce.',
+      price: 3.50,
+      picture: 'https://scontent-dft4-2.cdninstagram.com/t51.2885-15/e35/13715040_326040884452556_457676957_n.jpg'
+    })
+     CREATE (churrocoDessert2:Item {
+      name: 'CampFire',
+      description: 'Churros tossed in graham cracker sugar, 
+      topped with Mexican chocolate sauce, whipped cream and 
+      torched marshmallows.',
+      price: 4.50,
+      picture: 'https://scontent-dft4-2.cdninstagram.com/t51.2885-15/e35/13525481_1234141436618615_1351678132_n.jpg'
+    })
+     CREATE (churrocoDessert3:Item {
+      name: 'Rico Suave',
+      description: 'Churros tossed in cacao sugar, 
+      topped with Nutella pudding sauce, strawberry 
+      jam and coconut shavings.',
+      price: 4.50,
+      picture: 'https://scontent-dft4-2.cdninstagram.com/t51.2885-15/s750x750/sh0.08/e35/13269377_1544291182541276_95242449_n.jpg'
+    })
+    CREATE (churrocoDrink1:Item {
+      name: 'Mexican Hot Coffee',
+      description: 'Fresh brew',
+      price: 2.50,
+      picture: 'https://scontent-dft4-2.cdninstagram.com/t51.2885-15/e35/12224233_778543398941501_1584959805_n.jpg'
+    })
+    CREATE (churrocoDrink2:Item {
+      name: 'Orange Float',
+      description: 'Orange Float – Vanilla Ice Cream, 
+      Whipped Cream, Orange Crystals.',
+      price: 4.00,
+      picture: 'https://scontent-dft4-2.cdninstagram.com/t51.2885-15/e35/13385733_1720230928243599_1915712816_n.jpg'
+    })
+    CREATE (churrocoDrink3:Item {
+      name: 'Coke Float',
+      description: 'Coke Float – Vanilla Ice Ceam, Whipped Cream, 
+      Cherry Dust.',
+      price: 4.00,
+      picture: 'https://scontent-dft4-2.cdninstagram.com/t51.2885-15/e35/13277506_699763656831565_527664650_n.jpg'
+    })
     CREATE (bobDrink1:Item {
       name: 'Tea',
       description: 'Fresh brew',
@@ -236,6 +341,13 @@ db.init = () => Node.cypherAsync({
       picture: false
     })
 
+    CREATE (churrocoStore:Store {
+      name: 'Churro Co.',
+      picture: 'http://churrocoaustin.com/wp-content/uploads/2014/12/ChurrCoLogoSalmon144x144.png',
+      address: '1620 E. Riverside Dr.',
+      slogan: "Smile, it's Churro time!",
+      description: 'Sweet stuff'
+    })
     CREATE (aliceStore:Store {
       name: 'Casa de Alice',
       picture: false,
@@ -251,6 +363,14 @@ db.init = () => Node.cypherAsync({
       description: 'Also, not a house of prostitution, but our buns are soft'
     })
 
+    CREATE (danOrder1:CustomerOrder {
+      name: 'Churro Delivery',
+      created_on: 'yesterday',
+      request_date: 'tomorrow',
+      fulfilled: false,
+      total_price: 0,
+      address: '321 RightBehindYou Ln.'
+    })
     CREATE (carlyOrder1:CustomerOrder {
       name: 'Burger Delivery',
       created_on: 'yesterday',
@@ -268,6 +388,9 @@ db.init = () => Node.cypherAsync({
       address: '321 RightBehindYou Ln.'
     })
 
+    CREATE (churroco)-[:CAN_EDIT]->(churrocoDelivery)
+    CREATE (churroco)-[:CAN_EDIT]->(churrocoTruck)
+    CREATE (churroco)-[:CAN_EDIT]->(churrocoOnSite)
     CREATE (alice)-[:CAN_EDIT]->(aliceDelivery)
     CREATE (alice)-[:CAN_EDIT]->(aliceTruck)
     CREATE (alice)-[:CAN_EDIT]->(aliceOnSite)
@@ -275,6 +398,8 @@ db.init = () => Node.cypherAsync({
     CREATE (bob)-[:CAN_EDIT]->(bobTruck)
     CREATE (bob)-[:CAN_EDIT]->(bobOnSite)
 
+    CREATE (churroco)-[:CAN_EDIT {order: 0}]->(churrocoMenu1)
+    CREATE (churroco)-[:CAN_EDIT {order: 1}]->(churrocoMenu2)
     CREATE (alice)-[:CAN_EDIT {order: 0}]->(aliceMenu1)
     CREATE (alice)-[:CAN_EDIT {order: 1}]->(aliceMenu2)
     CREATE (alice)-[:CAN_EDIT {order: 2}]->(aliceMenu3)
@@ -284,6 +409,12 @@ db.init = () => Node.cypherAsync({
     CREATE (bob)-[:CAN_EDIT {order: 2}]->(bobMenu3)
     CREATE (bob)-[:CAN_EDIT {order: 3}]->(bobMenu4)
 
+    CREATE (churrocoMenu1)-[:CAN_EDIT {order: 0}]->(churrocoDessert1)
+    CREATE (churrocoMenu1)-[:CAN_EDIT {order: 1}]->(churrocoDessert2)
+    CREATE (churrocoMenu1)-[:CAN_EDIT {order: 2}]->(churrocoDessert3)
+    CREATE (churrocoMenu2)-[:CAN_EDIT {order: 0}]->(churrocoDrink1)
+    CREATE (churrocoMenu2)-[:CAN_EDIT {order: 1}]->(churrocoDrink2)
+    CREATE (churrocoMenu2)-[:CAN_EDIT {order: 2}]->(churrocoDrink3)
     CREATE (aliceMenu1)-[:CAN_EDIT {order: 0}]->(aliceDrink1)
     CREATE (aliceMenu1)-[:CAN_EDIT {order: 1}]->(aliceDrink2)
     CREATE (aliceMenu1)-[:CAN_EDIT {order: 2}]->(aliceDrink3)
@@ -305,9 +436,20 @@ db.init = () => Node.cypherAsync({
     CREATE (aliceMenu4)-[:CAN_EDIT {order: 0}]->(aliceDessert1)
     CREATE (bobMenu4)-[:CAN_EDIT {order: 0}]->(bobDessert1)
 
+    CREATE (churroco)-[:CAN_EDIT]->(churrocoStore)
     CREATE (alice)-[:CAN_EDIT]->(aliceStore)
     CREATE (bob)-[:CAN_EDIT]->(bobStore)
 
+    CREATE (dan)-[:CREATED {created_on: 'yesterday', expires: 'today'}]->(danOrder1)
+    CREATE (danOrder1)-[:VIEW]->(dan)
+    CREATE (danOrder1)-[:REQUEST {quantity: 25}]->(churrocoDrink1)
+    CREATE (danOrder1)-[:REQUEST {quantity: 25}]->(churrocoDrink3)
+    CREATE (danOrder1)-[:REQUEST {quantity: 50}]->(churrocoDessert1)
+    CREATE (danOrder1)-[:REQUEST {quantity: 50}]->(churrocoDessert2)
+    CREATE (danOrder1)-[:REQUEST {quantity: 50}]->(churrocoDessert3)
+    CREATE (danOrder1)-[:REQUEST]->(churrocoTruck)
+    CREATE (danOrder1)-[:VIEW]->(churroco)
+    CREATE (churroco)-[:CAN_EDIT]->(danOrder1)
     CREATE (carly)-[:CREATED {created_on: 'yesterday', expires: 'today'}]->(carlyOrder2)
     CREATE (carlyOrder2)-[:VIEW]->(carly)
     CREATE (carlyOrder2)-[:REQUEST {quantity: 25}]->(aliceDrink1)
@@ -792,6 +934,7 @@ db.createPackage = (pack) => Node.cypherAsync({
       type: {type},
       cost: {cost},
       description: {description}
+      picture: {picture}
     })
     RETURN pack`,
   params: {
@@ -799,6 +942,7 @@ db.createPackage = (pack) => Node.cypherAsync({
     type: pack.type,
     cost: pack.cost,
     description: pack.description,
+    picture: pack.picture,
   },
 })
 .then(response => response[0].pack);

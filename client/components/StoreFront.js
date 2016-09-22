@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 
 import MenuCard from './MenuCard';
 import Cart from './Cart';
-
+import CateringOptions from './Cateringoptions';
+import CompanyDescription from './CompanyDescription';
 import Server from '../models/serverAPI';
 
 export default class StoreFront extends Component {
@@ -52,6 +53,8 @@ export default class StoreFront extends Component {
     };
     return (
       <div className="StoreFront" >
+        <CompanyDescription />
+        <CateringOptions />
         <div>
           <h1>Edit Yo Menu</h1>
           {
