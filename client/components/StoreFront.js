@@ -55,6 +55,7 @@ export default class StoreFront extends Component {
   //   // 1. Call OrderAPI.completeAcceptedOrder?
   //   // OA.cAO needs to remove the -[rel:EDIT]->(owner) relationship
   //   // discuss this with team
+
   // }
 
   // fetchPendingOrders() {
