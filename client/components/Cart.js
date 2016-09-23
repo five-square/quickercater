@@ -3,6 +3,7 @@ import Drawer from 'material-ui/Drawer';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import RaisedButton from 'material-ui/RaisedButton';
 import CartItemCard from './CartItemCard';
+import OrderCard from './OrderCard';
 
 export default class Cart extends Component {
 
@@ -11,6 +12,7 @@ export default class Cart extends Component {
     this.state = {
       style: this.props.style,
       order: this.props.order,
+      currentOwnerId: this.props.ownerId,
     };
   }
 
@@ -42,6 +44,10 @@ export default class Cart extends Component {
               item={item}
             />
           )}
+          <OrderCard
+            items={this.state.order}
+            OwnerId={this.state.currentOwnerId}
+          />
         </Drawer>
       </div>
     );

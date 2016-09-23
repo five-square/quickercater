@@ -308,6 +308,16 @@ routes.post('/api/order/delete', (req, res) => {
   });
 });
 
+/* Create customer end point*/
+routes.post('/api/customer/create', (req, res) => {
+  db.createNewCustomer(req.body)
+  .then((dbData) => {
+    res.status(201).send(dbData);
+  })
+  .catch(err => res.status(500).send(err));
+});
+
+
 /*
   **********************************************************************************************
 
