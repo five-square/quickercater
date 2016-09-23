@@ -55,8 +55,8 @@ ServerAPI.getOwnerByStoreId = (storeId) =>
   })
   .then(data => data.json())
   .then(owner => ({
-    id: owner[0].owner._id,
-    name: owner[0].owner.properties.name,
+    id: owner.owner._id,
+    name: owner.owner.properties.name,
   }));
 
 ServerAPI.signOut = () =>

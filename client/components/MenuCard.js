@@ -5,6 +5,7 @@ import CardText from 'material-ui/Card/CardText';
 import Paper from 'material-ui/Paper';
 import ItemCard from './ItemCard';
 import Server from '../models/serverAPI';
+import Menu from '../models/menuAPI';
 
 // import CardActions from 'material-ui/Card/CardActions';
 // import CardHeader from 'material-ui/Card/CardHeader';
@@ -26,7 +27,7 @@ export default class MenuCard extends Component {
   }
 
   componentWillMount() {
-    Server.getItemsByMenu(this.state.id)
+    Menu.getItems(this.state.id)
     .then(items => {
       this.setState({
         items,
