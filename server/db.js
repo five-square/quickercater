@@ -612,7 +612,8 @@ db.findOwnerByStoreId = (storeId) => Node.cypherAsync({
   params: {
     storeId,
   },
-});
+})
+.then(store => store[0]);
 
 db.findOwnerByAuthKey = (authKey) => Node.cypherAsync({
   query: `
@@ -815,6 +816,36 @@ db.getItemsByMenuId = (menuId) => Node.cypherAsync({
     menuId,
   },
 });
+
+db.addItemToMenu = (obj) => Node.cypherAsync({
+  query: `
+    MATCH (menu:Menu) WHERE ID(menu) = ${obj.menuId}
+    MATCH (item:Item) WHERE ID(item) = ${obj.itemId}
+    CREATE (menu)-[:CAN_EDIT {order: {order}}]->(item)
+    RETURN item`,
+  params: {
+    order: obj.order,
+  },
+})
+.then(item => item[0]);
+
+db.createMenu = (menuObj) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner) WHERE ID(owner) = ${menuObj.ownerId}
+    CREATE (owner)
+    -[:CAN_EDIT {order: {order}}]->
+    (menu:Menu {
+      name: {name},
+      description: {description}
+    })
+    RETURN menu`,
+  params: {
+    order: menuObj.order,
+    name: menuObj.name,
+    description: menuObj.description,
+  },
+})
+.then(menu => menu[0]);
 
 db.createStore = (store) => Node.cypherAsync({
   query: `

@@ -92,7 +92,7 @@ routes.get('/api/tags-example', (req, res) => {
   **********************************************************************************************
 */
 
-routes.get('/', isLoggedIn, (req, res) => {
+routes.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/public/index.html'));
 });
 
@@ -183,6 +183,36 @@ routes.get('/api/menu/items/:menuId', (req, res) => {
   db.getItemsByMenuId(req.params.menuId)
   .then(dbData => {
     res.status(200).send(dbData);
+  });
+});
+
+routes.post('/api/menu/create', (req, res) => {
+  console.log(req.body);
+  db.createMenu(req.body)
+  .then(newMenu => {
+    console.log('after DB call: ', newMenu);
+    res.status(201).send(newMenu);
+  });
+});
+
+routes.post('/api/menu/item/add', (req, res) => {
+  db.addItemToMenu(req.body)
+  .then(item => {
+    res.status(201).send(item);
+  });
+});
+
+// routes.post('/api/menu/item/remove', (req, res) => {
+//   db.removeitemFromMenu();
+// });
+
+routes.delete('/api/menu/:menuId', (req, res) => {
+  db.deleteMenu(req.params.menuId)
+  .then(() => {
+    res.status(202).send('Menu deleted sucessfully');
+  })
+  .catch(() => {
+    res.status(404).send('Menu not deleted');
   });
 });
 
