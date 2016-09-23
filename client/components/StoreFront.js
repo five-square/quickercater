@@ -8,6 +8,8 @@ import CompanyDescription from './CompanyDescription';
 
 import Menu from '../models/menuAPI';
 import Server from '../models/serverAPI';
+import OrderAPI from '../models/orderAPI';
+import Dashboard from './Dashboard';
 
 export default class StoreFront extends Component {
   constructor(props) {
@@ -40,6 +42,21 @@ export default class StoreFront extends Component {
     });
   }
 
+  fetchPendingOrders() {
+    return OrderAPI.fetchPendingOrders(this.state.ownerId);
+  }
+
+  // acceptPendingOrder(orderId) {
+  //   // need to make call to OrderAPI to change pending order --> accepted
+  //   // this means the (Order) -[rel:EDIT]->(owner)
+  // }
+
+  // completeAcceptedOrder(orderId) {
+  //   // 1. Call OrderAPI.completeAcceptedOrder?
+  //   // OA.cAO needs to remove the -[rel:EDIT]->(owner) relationship
+  //   // discuss this with team
+  // }
+
   render() {
     const style = {
       width: '60%',
@@ -52,12 +69,9 @@ export default class StoreFront extends Component {
     };
     return (
       <div className="StoreFront" >
-        {this.state.ownerId === 903
-          ? <div>
-            <CompanyDescription style={style} />
-            <CateringOptions />
-          </div>
-          : null }
+        <CompanyDescription style={style} />
+        <CateringOptions />
+        <Dashboard pendingOrders={this.fetchPendingOrders()} />
         <div>
           <h1>Edit Yo Menu</h1>
           {
@@ -83,6 +97,14 @@ export default class StoreFront extends Component {
               style={style}
             />
           )}
+        { this.state.menus.map((menu, index) =>
+          <MenuCard
+            key={index}
+            style={style}
+            menu={menu}
+            addItemToOrder={this.props.addItemToOrder}
+          />
+        )}
       </div>
   );
   }

@@ -70,11 +70,19 @@ const isLoggedIn = (req, res, next) => {
   }
 };
 
+<<<<<<< a0dd81f61fe714bbe39542b5cd0121786129f044
 routes.use((req, res, next) => {
   console.log('Route: ', req.url);
   // console.log('In middleware: passport: ', req.session.passport, ' req.user: ', req.user);
   next();
 });
+=======
+// routes.use((req, res, next) => {
+//   console.log('Route: ', req.url);
+//   console.log('In middleware: passport: ', req.session.passport, ' req.user: ', req.user);
+//   next();
+// });
+>>>>>>> Starting work on OrderAPI. Continuing work on Dashboard
 
 routes.get('/bundle.js', browserify(path.join(__dirname, '../client/main.js'), {
   transform: [[babelify, { presets: ['es2015', 'react'] }]],
@@ -284,6 +292,12 @@ routes.get('/api/order/:id', (req, res) => {
   })
   .catch(message => {
     res.status(404).send(message);
+  });
+});
+
+routes.get('/api/order/getAllPending/:ownerId', (req,res) => {
+  db.fetchAllPendingOrders(req.params.ownerId).then(pendingOrders => {
+    res.send(pendingOrders);
   });
 });
 
