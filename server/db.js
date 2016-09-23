@@ -64,7 +64,7 @@ db.init = () => Node.cypherAsync({
       is 40 orders.  This is a more cost effective option and is perfect 
       for an informal setting. Delivery service is available with this 
       option ($30 delivery fee) or pick-up at our 1620 E. Riverside 
-      location.'
+      location.',
       picture: 'http://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c131.0.817.817/14350609_1070096696419135_1950347763_n.jpg'
     })
     CREATE (churrocoTruck:Package {
@@ -75,7 +75,7 @@ db.init = () => Node.cypherAsync({
       truck on-site and serve your guests fresh and 
       made-to-order.  All disposable plates, utensils,
       and napkins are included.  Our food order minimum 
-      for on-site catering is $400.'
+      for on-site catering is $400.',
       picture: 'https://scontent-dft4-2.cdninstagram.com/t51.2885-15/e35/13721040_194815244266288_87997643_n.jpg'
     })
     CREATE (churrocoOnSite:Package {
@@ -87,7 +87,7 @@ db.init = () => Node.cypherAsync({
       and napkins are included.  Our order minimum for catering 
       events is 75 orders and a $250 service charge.  This setup 
       is ideal for small events with limited parking space or in 
-      indoor settings'
+      indoor settings',
       picture: 'https://scontent-dft4-2.cdninstagram.com/t51.2885-15/e35/13597549_899896270133307_1054019507_n.jpg'
     })
     CREATE (aliceDelivery:Package {
@@ -132,14 +132,6 @@ db.init = () => Node.cypherAsync({
       description: 'Churros'
     })
     CREATE (churrocoMenu2:Menu {
-      name: 'Drinks',
-      description: 'Beverages'
-    })
-    CREATE (aliceMenu1:Menu {
-      name: 'Dessert',
-      description: 'Churros'
-    })
-    CREATE (aliceMenu2:Menu {
       name: 'Drinks',
       description: 'Beverages'
     })
