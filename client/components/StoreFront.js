@@ -9,7 +9,8 @@ import CompanyDescription from './CompanyDescription';
 
 import Menu from '../models/menuAPI';
 import Server from '../models/serverAPI';
-import orderAPI from '../models/orderAPI';
+//import orderAPI from '../models/orderAPI';
+import Dashboard from './Dashboard';
 // import Cart from './Cart';
 
 export default class StoreFront extends Component {
@@ -95,8 +96,9 @@ export default class StoreFront extends Component {
     return (
       <div className="StoreFront" >
         <CompanyDescription />
+        <Dashboard  />
         <CateringOptions />
-        <div>
+
           <h1>Edit Yo Menu</h1>
           {
             this.state.openCart
