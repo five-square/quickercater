@@ -37,7 +37,7 @@ export default class Dashboard extends Component {
       showExpandableButton={true}
     />
             <CardText expandable={true}>
-             <OrderTable handleRowSelection={(row) => this.handleRowSelection(row)}/>
+             <OrderTable handleRowSelection={(row) => this.handleRowSelection(row)} orders={this.props.pendingOrders} />
              <CardActions>
               <FlatButton label="Approve" onClick={(e) => console.log('Approve order: ',this.state.rowSelected)} />
              

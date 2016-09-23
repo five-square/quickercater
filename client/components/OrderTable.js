@@ -23,6 +23,12 @@ export default class OrderTable extends Component {
     this.setState({ hover: 2 });
   }
 
+
+
+// major problems here in order of importance
+// 1. OrderTable is generalized between pending and accepted. Need to figure out min props to make it work as one or the other
+// 2. Need to map over orders and display them in the table.
+
   render() {
     return (
       <div className="OrderTable">
@@ -36,6 +42,7 @@ export default class OrderTable extends Component {
     </TableHeader>
 
     <TableBody displayRowCheckbox={false} >
+      
       <TableRow>
         <TableRowColumn>1</TableRowColumn>
         <TableRowColumn>John Smith</TableRowColumn>
