@@ -9,7 +9,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
-const configAuth = require('./config/googleCredentials');
+const configAuth = require('./config/googleCredentials_example');
 
 const serverUrl = process.env.PORT || 3000;
 
