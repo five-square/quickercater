@@ -45,21 +45,22 @@ export default class StoreFront extends Component {
         this.setState({ menus });
       });
     });
+  }
 
   fetchPendingOrders() {
     return OrderAPI.fetchPendingOrders(this.state.ownerId);
   }
 
-  acceptPendingOrder(orderId) {
-    // need to make call to OrderAPI to change pending order --> accepted
-    // this means the (Order) -[rel:EDIT]->(owner)
-  }
+  // acceptPendingOrder(orderId) {
+  //   // need to make call to OrderAPI to change pending order --> accepted
+  //   // this means the (Order) -[rel:EDIT]->(owner)
+  // }
 
-  completeAcceptedOrder(orderId) {
-    // 1. Call OrderAPI.completeAcceptedOrder?
-    //.             -- OA.cAO needs to remove the -[rel:EDIT]->(owner) relationship
-    //                -- discuss this with team
-  }
+  // completeAcceptedOrder(orderId) {
+  //   // 1. Call OrderAPI.completeAcceptedOrder?
+  //   //.             -- OA.cAO needs to remove the -[rel:EDIT]->(owner) relationship
+  //   //                -- discuss this with team
+  // }
 
   // handleAddItemToOrder(itemObj) {
   //   const items = this.state.order;
@@ -98,7 +99,7 @@ export default class StoreFront extends Component {
         <CompanyDescription />
         <Dashboard  />
         <CateringOptions />
-
+        <div>
           <h1>Edit Yo Menu</h1>
           {
             this.state.openCart
