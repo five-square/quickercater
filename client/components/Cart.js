@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Drawer from 'material-ui/Drawer';
-import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
+import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import RaisedButton from 'material-ui/RaisedButton';
 import CartItemCard from './CartItemCard';
 
@@ -10,22 +10,13 @@ export default class Cart extends Component {
     super(props);
     this.state = {
       style: this.props.style,
-      // open: this.props.open,
       order: this.props.order,
     };
   }
 
-  // componentWillReceiveProps(open) {
-  //   this.setState({
-  //     open,
-  //   });
-  // }
-
   handleToggle() {
     this.props.viewCart();
   }
-              // zDepth={0} containerStyle={{ marginTop: 64, marginRight: 8, borderLeft: '1px solid #e8e8e8' }}
-              // <ToolbarSeparator />
 
   render() {
     return (

@@ -48,6 +48,7 @@
     "neo4j": "^2.0.0-RC2",
     "nodemon": "^1.10.2",
     "passport": "^0.3.2",
+    "passport-google-oauth": "^1.0.0",
     "passport-google-oauth20": "^1.0.0",
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.3.2",

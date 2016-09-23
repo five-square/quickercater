@@ -20,7 +20,7 @@ global.describe('The Function', () => {
   app.testReady();
 
   global.it_('db.getMenuByOwnerId exists and is a function', function* anon() {
-    return db.getMenuByOwnerId.should.be.a('function');
+    yield db.getMenuByOwnerId.should.be.a('function');
   });
 });
 
@@ -381,7 +381,7 @@ global.describe('The Item Database', () => {
   app.use('/', routes);
   app.testReady();
 
-  var __itemId;
+  let __itemId;
 
   // Testing the Order database functions
   const newOrder = {
@@ -397,13 +397,13 @@ global.describe('The Item Database', () => {
     { itemId: 462, quantity: 11 },
     { itemId: 463, quantity: 11 }];
 
-  const customer = {
-    name: 'Carly',
-    phone: '555-333-5555',
-    email: 'carly@window.com',
-    auth_key: true,
-    _id: 432,
-  };
+  // const customer = {
+  //   name: 'Carly',
+  //   phone: '555-333-5555',
+  //   email: 'carly@window.com',
+  //   auth_key: true,
+  //   _id: 432,
+  // };
 
   const owner = {
     name: 'Alice',
@@ -548,9 +548,8 @@ global.describe('The Item Database', () => {
   });
 
   global.xit_('can delete an existing menu item', function* anon() {
-    yield db.removeItemById(__itemId).then(resp => {
+    yield db.removeItemById(__itemId).then(() => {
       db.getItemById(__itemId).then(resp1 => {
-        // console.log("================== ",__itemId);
         global.expect(resp1).to.equal('Item does not exist');
       });
     });
