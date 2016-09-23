@@ -8,6 +8,7 @@ const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const db = require('./db');
+const dbInit = require('./dbInit');
 
 const configAuth = require('./config/googleCredentials');
 
@@ -413,7 +414,7 @@ routes.delete('/api/item/delete/:id', (req, res) => {
 */
 
 routes.get('/db_reset', (req, res) => {
-  db.reset()
+  dbInit.reset()
   .then(() => {
     res.status(201).send('Database Reset!');
   })
