@@ -701,7 +701,7 @@ db.createOrderPackageRelationship = (orderId, packageId, quantity) => Node.cyphe
 .then(response => response);
 
 db.createOrderAndRelationships = (orderInfo) => {
-  let saveOrder = {};
+  //let saveOrder = {};
   return db.createOrder(orderInfo.order)
     .then((orderCreated) => {
       saveOrder = Object.assign({}, orderCreated);
@@ -739,15 +739,27 @@ db.fetchOrder = (orderId) => Node.cypherAsync({
 
 db.fetchAllPendingOrders = (ownerId) => Node.cypherAsync({
   query: `
-    MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
-    MATCH (order:CustomerOrder)<-[rel:CAN_EDIT]-(owner)
-    WHERE order.fulfilled = false
+    MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
+    MATCH (order:CustomerOrder)-[rel:VIEW]->(owner)
     RETURN order`,
   params: {
     ownerId,
   },
 })
-.then(response => response);
+.then(response => {return response});
+
+db.fetchAllAcceptedOrders = (ownerId) => {
+  Node.cypherAsync({
+    query: `
+    MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
+    MATCH (order:CustomerOrder)-[rel:EDIT]->(owner)
+    RETURN order`,
+    params: {
+      ownerId,
+    },
+  }).then(response => response);
+};
+
 
 db.fetchAllCompletedOrders = (ownerId) => Node.cypherAsync({
   query: `
