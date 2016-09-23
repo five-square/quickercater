@@ -70,6 +70,7 @@ const isLoggedIn = (req, res, next) => {
   }
 };
 
+<<<<<<< 375e2b176203eb0312676052808b5c0a59d4b921
 <<<<<<< a0dd81f61fe714bbe39542b5cd0121786129f044
 routes.use((req, res, next) => {
   console.log('Route: ', req.url);
@@ -77,11 +78,16 @@ routes.use((req, res, next) => {
   next();
 });
 =======
+=======
+>>>>>>> Starting work on OrderAPI. Continuing work on Dashboard
 // routes.use((req, res, next) => {
 //   console.log('Route: ', req.url);
 //   console.log('In middleware: passport: ', req.session.passport, ' req.user: ', req.user);
 //   next();
 // });
+<<<<<<< 375e2b176203eb0312676052808b5c0a59d4b921
+>>>>>>> Starting work on OrderAPI. Continuing work on Dashboard
+=======
 >>>>>>> Starting work on OrderAPI. Continuing work on Dashboard
 
 routes.get('/bundle.js', browserify(path.join(__dirname, '../client/main.js'), {
