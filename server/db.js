@@ -614,6 +614,15 @@ db.findOwnerByStoreId = (storeId) => Node.cypherAsync({
   },
 });
 
+db.findOwnerByAuthKey = (authKey) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner) WHERE owner.auth_key = ${authKey}
+    RETURN owner`,
+  params: {
+    authKey,
+  },
+});
+
 /*
   **********************************************************************************************
 
@@ -692,7 +701,7 @@ db.createOrderPackageRelationship = (orderId, packageId, quantity) => Node.cyphe
 .then(response => response);
 
 db.createOrderAndRelationships = (orderInfo) => {
-  var saveOrder = {};
+  let saveOrder = {};
   return db.createOrder(orderInfo.order)
     .then((orderCreated) => {
       saveOrder = Object.assign({}, orderCreated);
@@ -863,9 +872,8 @@ db.getItemById = (itemId) => {
     .then(response => {
       if (response[0]) {
         return response[0].item;
-      } else {
-        return 'Item does not exist';
       }
+      return 'Item does not exist';
     });
   }
 };
@@ -882,20 +890,21 @@ db.getItemByPicture = (picture) => Node.cypherAsync({
 
 db.updateItem = (itemObj) => {
   const id1 = itemObj._id;
-  delete itemObj._id;  // don't want to create an '_id' prop (doesn't go both ways)
+  const itemCopy = Object.assign({}, itemObj);
+  delete itemCopy._id;  // don't want to create an '_id' prop (doesn't go both ways)
   return Node.cypherAsync({
     query: `
       MATCH (item:Item)
       WHERE ID(item) = {id}
-      SET item = {itemObj}
+      SET item = {itemCopy}
       RETURN item`,
     params: {
       id: id1,
-      name: itemObj.name,
-      description: itemObj.description,
-      price: itemObj.price,
-      picure: itemObj.picure,
-      itemObj,
+      name: itemCopy.name,
+      description: itemCopy.description,
+      price: itemCopy.price,
+      picure: itemCopy.picure,
+      itemCopy,
     },
   }).then(response => response[0].item);
 };
@@ -910,7 +919,7 @@ db.removeItemById = (itemId) => Node.cypherAsync({
   params: {
     id: itemId,
   },
-}).then(response=> response[0].success == 1 );
+}).then(response => response[0].success === 1);
 
 /*
  **********************************************************************************************

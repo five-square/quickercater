@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import Card from 'material-ui/Card';
-import CardActions from 'material-ui/Card/CardActions';
 import CardTitle from 'material-ui/Card/CardTitle';
-import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
-import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 import ItemCard from './ItemCard';
-import Cart from './Cart';
 import Server from '../models/serverAPI';
+
+// import CardActions from 'material-ui/Card/CardActions';
+// import CardHeader from 'material-ui/Card/CardHeader';
+// import FlatButton from 'material-ui/FlatButton';
 
 export default class MenuCard extends Component {
 

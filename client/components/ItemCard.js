@@ -4,7 +4,6 @@ import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
 import FlatButton from 'material-ui/FlatButton';
-import Paper from 'material-ui/Paper';
 
 export default class ItemCard extends Component {
 
@@ -30,18 +29,6 @@ export default class ItemCard extends Component {
       picture: this.state.picture,
     });
   }
-
-  // handleOnMouseEnter() {
-  //   this.setState({ hover: 2 });
-  // }
-
-  // handleOnMouseLeave() {
-  //   this.setState({ hover: 1 });
-  // }
-            // onMouseEnter={e => this.handleOnMouseEnter(e)}
-            // onMouseLeave={e => this.handleOnMouseLeave(e)}
-        // <Paper zDepth={this.state.hover}>
-        // </Paper>
 
   render() {
     return (

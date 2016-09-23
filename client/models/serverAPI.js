@@ -7,7 +7,14 @@ ServerAPI.getOwner = (id) => db.findOwner(id);
 
 ServerAPI.getAllOwners = () => db.findAllOwners();
 
-ServerAPI.getAllStores = () => db.findAllStores();
+ServerAPI.getAllStores = () =>
+  fetch('/api/stores/all', {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(data => data.json());
 
 ServerAPI.getMenusByOwner = (ownerId) =>
   fetch(`/api/menu/${ownerId}`, {
