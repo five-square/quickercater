@@ -22,7 +22,7 @@ module.exports = {
         "react/prop-types": 0,
         "new-cap": ["error", {"capIsNew": false}],
         "react/no-string-refs": 1,
-        "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
         "react/no-string-refs": 1
     }
 };
