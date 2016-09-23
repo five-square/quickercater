@@ -80,6 +80,7 @@ export default class App extends Component {
                 open={this.state.openCart}
                 order={this.state.order}
                 viewCart={e => this.viewCart(e)}
+                ownerId={this.state.currentOwnerId}
               />
             </div>
             { this.state.showStore
