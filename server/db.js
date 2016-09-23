@@ -653,6 +653,24 @@ db.createOrder = (order) => Node.cypherAsync({
 })
 .then(response => response[0].order);
 
+db.createNewCustomer = (customerInfo) => Node.cypherAsync({
+  query: `
+    MERGE (customer:Customer {
+      name: {name},
+      phone: {phone},
+      email: {email},
+      auth_key: {auth_key}
+    }) 
+    RETURN customer`,
+  params: {
+    name: customerInfo.name,
+    phone: customerInfo.phone,
+    email: customerInfo.email,
+    auth_key: customerInfo.auth_key,
+  },
+})
+.then(response => response[0].customer);
+
 /* Assumption here is that an array of item objects [{itemId: , quantity: },..]
 is passed in to add to the order*/
 db.addItemsToOrder = (orderId, items, ownerId) => Node.cypherAsync({
@@ -702,7 +720,7 @@ db.createOrderPackageRelationship = (orderId, packageId, quantity) => Node.cyphe
 .then(response => response);
 
 db.createOrderAndRelationships = (orderInfo) => {
-  //let saveOrder = {};
+  var saveOrder = {};
   return db.createOrder(orderInfo.order)
     .then((orderCreated) => {
       saveOrder = Object.assign({}, orderCreated);
