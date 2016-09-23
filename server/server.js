@@ -71,7 +71,6 @@ routes.get('/bundle.js', browserify(path.join(__dirname, '../client/main.js'), {
   transform: [[babelify, { presets: ['es2015', 'react'] }]],
 }));
 
-
 routes.get('/api/tags-example', (req, res) => {
   res.send(['node', 'express', 'browserify', 'mithril']);
 });
@@ -358,10 +357,12 @@ routes.get('/api/auth/ownerData',
     res.send('undefined');
   });
 
-routes.get('api/auth/logout', (req, res) => {
+routes.get('/api/auth/logout', (req, res) => {
+  console.log('In LogOut: ', req.session.passport);
   req.session.passport = undefined;
   req.session.destroy(() => {
     req.logout();
+    res.clearCookie('vinod');
     res.redirect('/');
   });
 });

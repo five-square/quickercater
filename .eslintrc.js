@@ -21,6 +21,8 @@ module.exports = {
         "no-underscore-dangle": ["error", {"allow": ["__server", "__client", "before_", "beforeEach_", "it_", "xit_", "_id", "__itemId"]}],
         "react/prop-types": 0,
         "new-cap": ["error", {"capIsNew": false}],
+        "react/no-string-refs": 1,
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
         "react/no-string-refs": 1
     }
 };

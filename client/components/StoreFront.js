@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import MenuCard from './MenuCard';
 
 import Cart from './Cart';
@@ -8,14 +7,14 @@ import CompanyDescription from './CompanyDescription';
 
 import Server from '../models/serverAPI';
 
+// import Cart from './Cart';
+
 export default class StoreFront extends Component {
   constructor(props) {
     super(props);
     this.state = {
       ownerId: this.props.ownerId,
       menus: [],
-      order: [],
-      openCart: false,
     };
   }
 
@@ -25,23 +24,27 @@ export default class StoreFront extends Component {
       console.log(menus);
       this.setState({ menus });
     });
-
-    if (this.state.order.length) {
-      this.setState({
-        openCart: true,
-      });
-    }
   }
 
-  handleAddItem(itemObj) {
-    const items = this.state.order;
-    items.push(itemObj);
-    console.log('item added', itemObj);
-    this.setState({
-      order: items,
-      openCart: true,
-    });
-  }
+  // handleAddItemToOrder(itemObj) {
+  //   const items = this.state.order;
+  //   items.push(itemObj);
+  //   console.log('item added', itemObj);
+  //   this.openCart();
+  //   this.setState({
+  //     order: items,
+  //   });
+  // }
+        // <div>
+        //   {
+        //     this.state.openCart
+        //     ? <Cart
+        //       open={this.state.openCart}
+        //       order={this.state.order}
+        //     />
+        //     : null
+        //   }
+        // </div>
 
   render() {
     const style = {
@@ -55,7 +58,6 @@ export default class StoreFront extends Component {
     };
     return (
       <div className="StoreFront" >
-
         <CompanyDescription />
         <CateringOptions />
         <div>
@@ -69,13 +71,12 @@ export default class StoreFront extends Component {
             : null
           }
         </div>
-
         { this.state.menus.map((menu, index) =>
           <MenuCard
             key={index}
             style={style}
             menu={menu}
-            addItem={element => this.handleAddItem(element)}
+            addItemToOrder={this.props.addItemToOrder}
           />
         )}
       </div>
