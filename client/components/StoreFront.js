@@ -40,25 +40,26 @@ export default class StoreFront extends Component {
         this.setState({ menus });
       });
     });
-
-  fetchPendingOrders() {
-    return OrderAPI.fetchPendingOrders(this.state.ownerId);
-  }
-
-  acceptPendingOrder(orderId) {
-    // need to make call to OrderAPI to change pending order --> accepted
-    // this means the (Order) -[rel:EDIT]->(owner)
-  }
-
-  completeAcceptedOrder(orderId) {
-    // 1. Call OrderAPI.completeAcceptedOrder?
-    //.             -- OA.cAO needs to remove the -[rel:EDIT]->(owner) relationship
-    //                -- discuss this with team
   }
 
   fetchPendingOrders() {
     return OrderAPI.fetchPendingOrders(this.state.ownerId);
   }
+
+  // acceptPendingOrder(orderId) {
+  //   // need to make call to OrderAPI to change pending order --> accepted
+  //   // this means the (Order) -[rel:EDIT]->(owner)
+  // }
+
+  // completeAcceptedOrder(orderId) {
+  //   // 1. Call OrderAPI.completeAcceptedOrder?
+  //   // OA.cAO needs to remove the -[rel:EDIT]->(owner) relationship
+  //   // discuss this with team
+  // }
+
+  // fetchPendingOrders() {
+  //   return OrderAPI.fetchPendingOrders(this.state.ownerId);
+  // }
 
   // acceptPendingOrder(orderId) {
   //   // need to make call to OrderAPI to change pending order --> accepted
@@ -120,6 +121,6 @@ export default class StoreFront extends Component {
           />
         )}
       </div>
-  );
+    );
   }
 }
