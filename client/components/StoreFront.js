@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Paper from 'material-ui/Paper';
+// import Paper from 'material-ui/Paper';
 import MenuCard from './MenuCard';
 import AddMenuCard from './AddMenuCard';
 
@@ -9,7 +9,7 @@ import CompanyDescription from './CompanyDescription';
 
 import Menu from '../models/menuAPI';
 import Server from '../models/serverAPI';
-//import orderAPI from '../models/orderAPI';
+// import orderAPI from '../models/orderAPI';
 import Dashboard from './Dashboard';
 // import Cart from './Cart';
 
@@ -47,9 +47,9 @@ export default class StoreFront extends Component {
     });
   }
 
-  fetchPendingOrders() {
-    return OrderAPI.fetchPendingOrders(this.state.ownerId);
-  }
+  // fetchPendingOrders() {
+  //   return OrderAPI.fetchPendingOrders(this.state.ownerId);
+  // }
 
   // acceptPendingOrder(orderId) {
   //   // need to make call to OrderAPI to change pending order --> accepted
@@ -97,7 +97,7 @@ export default class StoreFront extends Component {
     return (
       <div className="StoreFront" >
         <CompanyDescription />
-        <Dashboard  />
+        <Dashboard />
         <CateringOptions />
         <div>
           <h1>Edit Yo Menu</h1>
@@ -110,19 +110,19 @@ export default class StoreFront extends Component {
             : null
           }
         </div>
-          { this.state.menus.map((menu, index) =>
-            <MenuCard
-              key={index}
-              style={style}
-              menu={menu}
-              addItemToOrder={this.props.addItemToOrder}
-            />
+        { this.state.menus.map((menu, index) =>
+          <MenuCard
+            key={index}
+            style={style}
+            menu={menu}
+            addItemToOrder={this.props.addItemToOrder}
+          />
           ).concat(
-            <AddMenuCard
-              key={this.state.menus.length + 1}
-              addMenu={e => this.handleAddMenu(e)}
-              style={style}
-            />
+          <AddMenuCard
+            key={this.state.menus.length + 1}
+            addMenu={e => this.handleAddMenu(e)}
+            style={style}
+          />
           )}
       </div>
   );

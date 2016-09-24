@@ -11,13 +11,12 @@ import fetch from 'isomorphic-fetch';
 
 const orderAPI = {};
 
-orderAPI.getPendingOrders = (ownerId) => {
-	return fetch('/api/order/getAllPending/:ownerId', {
-		   method: 'get',
-    	headers: {
-      		'Content-Type': 'application/json',
-    	}
-	}).then(resp => resp);
-};
+orderAPI.getPendingOrders = (ownerId) =>
+  fetch(`/api/order/getAllPending/${ownerId}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then(resp => resp);
 
 export default orderAPI;

@@ -61,15 +61,14 @@ passport.use('google', new GoogleStrategy({
       });
   }
 ));
-
-const isLoggedIn = (req, res, next) => {
-  console.log('GET SOME');
-  if (req.isAuthenticated()) {
-    next();
-  } else {
-    res.redirect('/');
-  }
-};
+// const isLoggedIn = (req, res, next) => {
+//   console.log('GET SOME');
+//   if (req.isAuthenticated()) {
+//     next();
+//   } else {
+//     res.redirect('/');
+//   }
+// };
 
 // routes.use((req, res, next) => {
 //   console.log('Route: ', req.url);
@@ -288,7 +287,7 @@ routes.get('/api/order/:id', (req, res) => {
   });
 });
 
-routes.get('/api/order/getAllPending/:ownerId', (req,res) => {
+routes.get('/api/order/getAllPending/:ownerId', (req, res) => {
   db.fetchAllPendingOrders(req.params.ownerId).then(pendingOrders => {
     res.send(pendingOrders);
   });

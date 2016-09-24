@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 require(global.TEST_HELPER); // <--- This must be at the top of every test file.
 
@@ -23,7 +23,7 @@ global.describe('The Function', () => {
   app.testReady();
 
   global.it_('db.getMenuByOwnerId exists and is a function', function* anon() {
-    return db.getMenuByOwnerId.should.be.a('function');
+    yield db.getMenuByOwnerId.should.be.a('function');
   });
 });
 
@@ -245,15 +245,10 @@ global.describe('The Server', () => {
     .expect(response => {
       global.expect(response).to.be.a('object');
     });
-
   });
-
-
-
 /*
   **********************************************************************************************
 */
-
   global.it_('can delete an Owner', function* anon() {
     yield request(app)
     .delete(`/api/owner/${newOwner._id}`)
@@ -488,7 +483,7 @@ global.describe('The Item Database', () => {
     };
     yield db.updateItem(itemObj).then(resp => {
       db.getItemById(resp._id).then(resp1 => {
-        //global.expect(resp1.properties).to.deep.equal(itemObj);
+        global.expect(resp1.properties).to.exist();
       });
     });
   });
@@ -507,7 +502,7 @@ global.describe('The Item Database', () => {
 */
 
   global.xit_('adds items to an order', function* anon() {
-    yield db.addItemsToOrder(newOrder._id, items, owner._id)
+    yield db.addItemsToOrder(newOrder._id, orderInfo.items, owner._id)
     .then(response => {
       global.expect(response[0].rel.type).to.equal('REQUEST');
       global.expect(response[0].rel.properties.quantity).to.equal(11);
