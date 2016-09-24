@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-// Create, Recieve, Update, Delete
+// Create, Read, Update, Delete
 const ItemAPI = {};
 
 ItemAPI.createItem = (itemObj) =>
@@ -8,19 +8,15 @@ ItemAPI.createItem = (itemObj) =>
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ name: itemObj.name,
-    description: itemObj.description,
-    price: itemObj.price,
-    picture: itemObj.picture }),
+    body: JSON.stringify(itemObj),
   })
   .then(data => data.json())
-  .then(items => items.map(itemElement => ({
-    id: itemElement.item._id,
-    name: itemElement.item.properties.name,
-    price: itemElement.item.properties.price,
-    description: itemElement.item.properties.description,
-    picture: itemElement.item.properties.picture,
-  })));
+  .then(item => {
+    console.log('In Item create: ', item);
+    return ({
+      id: item.item._id,
+    });
+  });
 
 ItemAPI.getItemsbyId = (itemId) =>
   fetch(`/api/item/${itemId}`, {
@@ -64,5 +60,11 @@ ItemAPI.deleteItem = (itemId) => // needs work
       'Content-Type': 'application/json',
     },
   })
-  .then(data => data.json());
+  .then(data => data.json())
+  .then(item => {
+    console.log('In Item delete: ', item);
+    return ({
+      id: item.item._id,
+    });
+  });
 export default ItemAPI;
