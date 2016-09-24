@@ -1,15 +1,17 @@
 import React from 'react';
-import Card from 'material-ui/Card';
-import CardActions from 'material-ui/Card/CardActions';
-import CardHeader from 'material-ui/Card/CardHeader';
-import CardText from 'material-ui/Card/CardText';
-import FlatButton from 'material-ui/FlatButton';
+// import Card from 'material-ui/Card';
+// import CardActions from 'material-ui/Card/CardActions';
+// import CardHeader from 'material-ui/Card/CardHeader';
+// import CardText from 'material-ui/Card/CardText';
+// import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 
 export default class CompanyDescription extends React.Component {
+
   constructor(props) {
-		super(props);
-	}
+    super(props);
+    this.setState({ place: 'holder', fixes: 'lint issues' });
+  }
 
   render() {
     const style = {

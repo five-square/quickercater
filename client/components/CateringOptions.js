@@ -1,13 +1,15 @@
 import React from 'react';
-import Paper from 'material-ui/Paper';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
+// import Paper from 'material-ui/Paper';
+// import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+// import FlatButton from 'material-ui/FlatButton';
 
 
 export default class CateringOptions extends React.Component {
-	constructor(props) {
-		super(props);
-	}
+  constructor(props) {
+    super(props);
+    this.setState({ place: 'holder', fixes: 'lint issues' });
+  }
 // Contains description on 3 different service options, text will be inside
 // a box. Boxes will be displayed next to each other
   render() {
@@ -16,7 +18,7 @@ export default class CateringOptions extends React.Component {
       width: 460,
       margin: 20,
       textAlign: 'center',
-      display: 'inline-block', 
+      display: 'inline-block',
     };
 
     const styleDiv = {

@@ -4,7 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import TextField from 'material-ui/TextField';
-import ItemAPI from '../models/itemAPI';
+// import ItemAPI from '../models/itemAPI';
 
 export default class AddItem extends React.Component {
 

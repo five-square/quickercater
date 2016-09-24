@@ -5,9 +5,10 @@ import TextField from 'material-ui/TextField';
 
 
 export default class CustomerForm extends React.Component {
-	constructor(props) {
-		super(props);
-	}
+  constructor(props) {
+    super(props);
+    this.setState({ place: 'holder', fixes: 'lint issues' });
+  }
 // Form that contains input from client requesting catering service
   render() {
     const style = {

@@ -247,7 +247,7 @@ db.createOrderPackageRelationship = (orderId, packageId, quantity) => Node.cyphe
 .then(response => response);
 
 db.createOrderAndRelationships = (orderInfo) => {
-  var saveOrder = {};
+  let saveOrder = {};
   return db.createOrder(orderInfo.order)
     .then((orderCreated) => {
       saveOrder = Object.assign({}, orderCreated);
@@ -292,7 +292,7 @@ db.fetchAllPendingOrders = (ownerId) => Node.cypherAsync({
     ownerId,
   },
 })
-.then(response => {return response});
+.then(response => response);
 
 db.fetchAllAcceptedOrders = (ownerId) => {
   Node.cypherAsync({
