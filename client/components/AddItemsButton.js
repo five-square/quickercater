@@ -78,6 +78,21 @@ export default class AddItem extends React.Component {
   }
 
   render() {
+    const style = {
+      floatingActionButton: {
+        top: 15,
+        right: 20,
+        bottom: 20,
+        position: 'absolute',
+      },
+      cardActions: {
+        position: 'relative',
+        height: 30,
+      },
+      card: {
+        marginBottom: '5%',
+      },
+    };
     // action buttons for Modal
     const actions = [
       <FlatButton
@@ -94,18 +109,24 @@ export default class AddItem extends React.Component {
     ];
     // This is the actual modal
     return (
-      <div>
-        <Paper zDepth={this.state.hover}>
+      <div style={style.card}>
+        <Paper zDepth={this.state.hover} >
           <Card
             onMouseEnter={e => this.handleOnMouseEnter(e)}
             onMouseLeave={e => this.handleOnMouseLeave(e)}
+            style={style.card}
           >
-            <CardTitle
-              title={'Add Item'}
-            />
-            <FloatingActionButton mini onTouchTap={e => this.handleOpen(e)} >
-              <ContentAdd />
-            </FloatingActionButton>
+            <CardTitle title={'Add Item'} style={style.cardActions}>
+              <FloatingActionButton
+                mini
+                secondary
+                onTouchTap={e => this.handleOpen(e)}
+                style={style.floatingActionButton}
+                zDepth={0}
+              >
+                <ContentAdd />
+              </FloatingActionButton>
+            </CardTitle>
           </Card>
         </Paper>
         <Dialog
