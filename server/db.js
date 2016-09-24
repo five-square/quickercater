@@ -247,7 +247,7 @@ db.createOrderPackageRelationship = (orderId, packageId, quantity) => Node.cyphe
 .then(response => response);
 
 db.createOrderAndRelationships = (orderInfo) => {
-  let saveOrder = {};
+  var saveOrder = {};
   return db.createOrder(orderInfo.order)
     .then((orderCreated) => {
       saveOrder = Object.assign({}, orderCreated);
