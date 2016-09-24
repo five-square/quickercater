@@ -515,51 +515,43 @@ db.removeItemById = (itemId) => Node.cypherAsync({
 
  **********************************************************************************************
 */
+db.getAllPackages = (ownerId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
+    MATCH (owner) -[:CAN_EDIT]->(pack:Package)
+    RETURN pack
+  `,
+  params: {
+    ownerId,
+  },
+})
+.then(response => response);
 
-db.createPackage = (pack) => Node.cypherAsync({
+db.createPackage = (pkg) => Node.cypherAsync({
   query: `
     MERGE(pack:Package {
       name: {name},
       type: {type},
       cost: {cost},
-      description: {description}
+      description: {description},
       picture: {picture}
     })
+    MATCH(owner:Owner) WHERE ID(owner) = {ownerId}
+    MERGE(owner) -[:CAN_EDIT]->(pack)
     RETURN pack`,
   params: {
-    name: pack.name,
-    type: pack.type,
-    cost: pack.cost,
-    description: pack.description,
-    picture: pack.picture,
+    name: pkg.pack.name,
+    type: pkg.pack.type,
+    cost: pkg.pack.cost,
+    description: pkg.pack.description,
+    picture: pkg.pack.picture,
+    ownerId: pkg.ownerId,
   },
 })
-.then(response => response[0].pack);
+.then(response => response.pack);
 
-db.findPackageByOwner = (ownerID, pack) => Node.cypherAsync({
-  query: `MATCH (owner:Owner) WHERE ID(owner)= ${ownerID}
-          MATCH (owner)-[rel:CAN_EDIT]->(pack:Package {name:{name}}) 
-          RETURN pack`,
-  params: {
-    name: pack.name,
-  },
-})
-.then(response => {
-  if (response.length === 0) {
-    const errMessage = 'No package available';
-    throw errMessage;
-  }
-  return response[0].pack;
-})
-.catch(err => err);
-
-db.deletePackage = (packType) => Node.cypherAsync({
-  query: 'MATCH (pack:Package { type: {type} }) DELETE pack',
-  params: {
-    type: packType,
-  },
-})
-.then(response => response);
+ /* ****************************************************************
+ */
 
 db.findOwnerByEmail = (email) => Node.cypherAsync({
   query: `MATCH (owner:Owner) WHERE owner.email = {email}
