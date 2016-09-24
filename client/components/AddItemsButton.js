@@ -100,12 +100,11 @@ export default class AddItem extends React.Component {
             onMouseEnter={e => this.handleOnMouseEnter(e)}
             onMouseLeave={e => this.handleOnMouseLeave(e)}
           >
-            <CardTitle
-              title={'Add Item'}
-            />
-            <FloatingActionButton mini onTouchTap={e => this.handleOpen(e)} >
-              <ContentAdd />
-            </FloatingActionButton>
+            <CardTitle title={'Add Item'}>
+              <FloatingActionButton mini onTouchTap={e => this.handleOpen(e)} >
+                <ContentAdd />
+              </FloatingActionButton>
+            </CardTitle>
           </Card>
         </Paper>
         <Dialog
