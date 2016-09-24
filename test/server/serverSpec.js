@@ -23,7 +23,7 @@ global.describe('The Function', () => {
   app.testReady();
 
   global.it_('db.getMenuByOwnerId exists and is a function', function* anon() {
-    yield db.getMenuByOwnerId.should.be.a('function');
+    return db.getMenuByOwnerId.should.be.a('function');
   });
 });
 
