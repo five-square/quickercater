@@ -8,6 +8,7 @@ import OrderAPI from '../models/orderAPI';
 import Dashboard from './Dashboard';
 import CompanyDescription from './CompanyDescription';
 import Menu from '../models/menuAPI';
+import PackageAPI from '../models/packageAPI';
 
 export default class StoreFront extends Component {
   constructor(props) {
@@ -15,6 +16,7 @@ export default class StoreFront extends Component {
     this.state = {
       ownerId: this.props.ownerId,
       menus: [],
+      packages: [],
     };
   }
 
@@ -23,6 +25,11 @@ export default class StoreFront extends Component {
     .then(menus => {
       console.log(menus);
       this.setState({ menus });
+    });
+    PackageAPI.getAllPackages(this.state.ownerId)
+    .then(packages => {
+      console.log('StoreFront packages', packages);
+      this.setState({ packages });
     });
   }
 
@@ -70,7 +77,15 @@ export default class StoreFront extends Component {
       <div className="StoreFront" >
         <CompanyDescription />
         <Dashboard />
-        <CateringOptions ownerId={this.state.ownerId} />
+        <div className="CateringOptions">
+          {this.state.packages.map((pack, index) =>
+            <CateringOptions
+              key={index}
+              ownerId={this.state.ownerId}
+              pack={pack}
+            />
+          )}
+        </div>
         <div>
           <h1>Edit Yo Menu</h1>
           {

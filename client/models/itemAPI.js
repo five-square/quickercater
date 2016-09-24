@@ -12,9 +12,9 @@ ItemAPI.createItem = (itemObj) =>
   })
   .then(data => data.json())
   .then(item => {
-    console.log('In Item create: ', item);
+    console.log('In Item create: ', item._id);
     return ({
-      id: item.item._id,
+      id: item._id,
     });
   });
 
@@ -40,10 +40,7 @@ ItemAPI.updateItem = (itemId, itemObj) =>
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ name: itemObj.name,
-    description: itemObj.description,
-    price: itemObj.price,
-    picture: itemObj.picture }),
+    body: JSON.stringify(itemObj),
   })
   .then(data => data.json())
   .then(items => items.map(itemElement => ({

@@ -4,6 +4,9 @@ import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import TextField from 'material-ui/TextField';
+import Paper from 'material-ui/Paper';
+import Card from 'material-ui/Card';
+import CardTitle from 'material-ui/Card/CardTitle';
 
 export default class AddItem extends React.Component {
 
@@ -11,13 +14,25 @@ export default class AddItem extends React.Component {
     super(props);
     this.state = {
       open: false,
+      hover: 2,
       newItemTitle: '',
       newItemDescription: '',
       newItemPrice: '',
-      newPicture: '',
+      newItemPicture: '',
     };
   }
 
+  handleOnMouseEnter() {
+    this.setState({
+      hover: 5,
+    });
+  }
+
+  handleOnMouseLeave() {
+    this.setState({
+      hover: 2,
+    });
+  }
   handleOpen() {
     this.setState({ open: true });
   }
@@ -30,6 +45,7 @@ export default class AddItem extends React.Component {
       name: this.state.newItemTitle,
       description: this.state.newItemDescription,
       price: this.state.newItemPrice,
+      picture: this.state.newItemPicture,
     });
   }
 
@@ -41,7 +57,7 @@ export default class AddItem extends React.Component {
 
   handleItemDescriptionChange(e) {
     this.setState({
-      newMenuDescription: e.currentTarget.value,
+      newItemDescription: e.currentTarget.value,
     });
   }
 
@@ -79,9 +95,19 @@ export default class AddItem extends React.Component {
     // This is the actual modal
     return (
       <div>
-        <FloatingActionButton mini onTouchTap={e => this.handleOpen(e)} >
-          <ContentAdd />
-        </FloatingActionButton>
+        <Paper zDepth={this.state.hover}>
+          <Card
+            onMouseEnter={e => this.handleOnMouseEnter(e)}
+            onMouseLeave={e => this.handleOnMouseLeave(e)}
+          >
+            <CardTitle
+              title={'Add Item'}
+            />
+            <FloatingActionButton mini onTouchTap={e => this.handleOpen(e)} >
+              <ContentAdd />
+            </FloatingActionButton>
+          </Card>
+        </Paper>
         <Dialog
           title="Add Item"
           actions={actions}
@@ -90,32 +116,27 @@ export default class AddItem extends React.Component {
           onRequestClose={(e) => this.handleClose(e)}
         >
           <TextField
-            id="ItemTitle"
             hintText="Item"
             floatingLabelText="Enter Item Title"
-            value={this.state.newMenuTitle}
+            value={this.state.newItemTitle}
             onChange={e => this.handleItemTitleChange(e)}
           /><br />
           <TextField
-            id="ItemDescription"
             hintText="Description"
             floatingLabelText="Enter Item Description"
             value={this.state.newItemDescription}
             onChange={e => this.handleItemDescriptionChange(e)}
           /><br />
           <TextField
-            id="price"
             hintText="Price"
             floatingLabelText="Enter Item Price"
             value={this.state.newItemPrice}
-            defaultValue="$"
             onChange={e => this.handleItemPriceChange(e)}
           />
           <br />
           <TextField
-            id="picture"
             floatingLabelText="Add Picture"
-            value={this.state.newPicture}
+            value={this.state.newItemPicture}
             onChange={e => this.handleItemPictureChange(e)}
           />
         </Dialog>
