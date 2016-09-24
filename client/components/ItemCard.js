@@ -4,6 +4,7 @@ import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
 import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
 
 export default class ItemCard extends Component {
 
@@ -17,6 +18,8 @@ export default class ItemCard extends Component {
       price: this.props.price,
       description: this.props.description,
       picture: this.props.picture,
+      quantity: 1,
+      itemPrice: this.props.price,
     };
   }
 
@@ -27,7 +30,18 @@ export default class ItemCard extends Component {
       price: this.state.price,
       description: this.state.description,
       picture: this.state.picture,
+      quantity: this.state.quantity,
     });
+  }
+
+  handleQuantityChange(e) {
+    if (e.currentTarget.value < 1) {
+      this.setState({ price: this.state.itemPrice });
+      this.state.quantity = 0;
+    } else {
+      this.setState({ price: this.state.itemPrice * e.currentTarget.value });
+    }
+    this.props.updateTotalPrice(this.state.price);
   }
 
   render() {
@@ -39,10 +53,18 @@ export default class ItemCard extends Component {
             subtitle={this.state.description}
             avatar={"https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"}
             actAsExpander
-            showExpandableButton
           />
-          <CardText expandable>
+          <CardText>
             <h4>{`Price: ${this.state.price}`}</h4>
+            <TextField
+              ref="quantity"
+              hintText="0"
+              type="number"
+              style={{ width: 50 }}
+              floatingLabelText="Quanity"
+              onChange={e => this.handleQuantityChange(e)}
+              floatingLabelFixed
+            />
           </CardText>
           <CardActions>
             <FlatButton label="Add Me To Order" onClick={e => this.handleAddItemToOrder(e)} />

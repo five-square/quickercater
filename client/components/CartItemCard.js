@@ -17,6 +17,7 @@ export default class CartItemCard extends Component {
       price: this.props.item.price,
       description: this.props.item.description,
       picture: this.props.item.picture,
+      quantity: this.props.item.quantity,
     };
   }
 
@@ -52,6 +53,7 @@ export default class CartItemCard extends Component {
           />
           <CardText expandable>
             <h4>{`Price: ${this.state.price}`}</h4>
+            <h4>{`Quanity: ${this.state.quantity}`}</h4>
           </CardText>
         </Card>
         <br />

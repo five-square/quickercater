@@ -88,6 +88,7 @@ export default class StoreFront extends Component {
             style={style}
             menu={menu}
             addItemToOrder={this.props.addItemToOrder}
+            updateTotalPrice={this.props.updateTotalPrice}
           />
           ).concat(
           <AddMenuCard
