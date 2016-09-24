@@ -4,7 +4,6 @@ import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import TextField from 'material-ui/TextField';
-// import ItemAPI from '../models/itemAPI';
 
 export default class AddItem extends React.Component {
 
@@ -12,6 +11,10 @@ export default class AddItem extends React.Component {
     super(props);
     this.state = {
       open: false,
+      newItemTitle: '',
+      newItemDescription: '',
+      newItemPrice: '',
+      newPicture: '',
     };
   }
 
@@ -19,15 +22,39 @@ export default class AddItem extends React.Component {
     this.setState({ open: true });
   }
 
-  handleSubmit() { // right now this consoles item obj
-    this.setState({ open: false });
-    const item = {
-      name: this.refs.name.getValue(),
-      description: this.refs.description.getValue(),
-      price: this.refs.price.getValue(),
-      picture: this.refs.picture.getValue(),
-    };
-    console.log('Attempt Item Add: ', item);
+  handleAddItem() {
+    this.setState({
+      open: false,
+    });
+    this.props.addItem({
+      name: this.state.newItemTitle,
+      description: this.state.newItemDescription,
+      price: this.state.newItemPrice,
+    });
+  }
+
+  handleItemTitleChange(e) {
+    this.setState({
+      newItemTitle: e.currentTarget.value,
+    });
+  }
+
+  handleItemDescriptionChange(e) {
+    this.setState({
+      newMenuDescription: e.currentTarget.value,
+    });
+  }
+
+  handleItemPriceChange(e) {
+    this.setState({
+      newItemPrice: e.currentTarget.value,
+    });
+  }
+
+  handleItemPictureChange(e) {
+    this.setState({
+      newItemPicture: e.currentTarget.value,
+    });
   }
 
   handleCancel() {
@@ -46,7 +73,7 @@ export default class AddItem extends React.Component {
         label="Submit"
         primary
         keyboardFocused
-        onTouchTap={e => this.handleSubmit(e)}
+        onTouchTap={e => this.handleAddItem(e)}
       />,
     ];
     // This is the actual modal
@@ -63,27 +90,33 @@ export default class AddItem extends React.Component {
           onRequestClose={(e) => this.handleClose(e)}
         >
           <TextField
-            ref="name"
+            id="ItemTitle"
             hintText="Item"
-            floatingLabelText="Item Name"
-          />
-          <br />
+            floatingLabelText="Enter Item Title"
+            value={this.state.newMenuTitle}
+            onChange={e => this.handleItemTitleChange(e)}
+          /><br />
           <TextField
-            ref="description"
+            id="ItemDescription"
             hintText="Description"
-            floatingLabelText="Item Description"
-          />
-          <br />
+            floatingLabelText="Enter Item Description"
+            value={this.state.newItemDescription}
+            onChange={e => this.handleItemDescriptionChange(e)}
+          /><br />
           <TextField
-            ref="price"
+            id="price"
             hintText="Price"
-            floatingLabelText="Item Price"
+            floatingLabelText="Enter Item Price"
+            value={this.state.newItemPrice}
             defaultValue="$"
+            onChange={e => this.handleItemPriceChange(e)}
           />
           <br />
           <TextField
-            ref="picture"
+            id="picture"
             floatingLabelText="Add Picture"
+            value={this.state.newPicture}
+            onChange={e => this.handleItemPictureChange(e)}
           />
         </Dialog>
       </div>
