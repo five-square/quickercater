@@ -206,13 +206,18 @@ routes.post('/api/menu/item/add', (req, res) => {
 //   db.removeitemFromMenu();
 // });
 
-routes.delete('/api/menu/:menuId', (req, res) => {
-  db.deleteMenu(req.params.menuId)
+routes.post('/api/menu/delete', (req, res) => {
+  console.log('in server, before db: ', req.body.id);
+  db.prepareMenuForDelete(req.body.id)
   .then(() => {
-    res.status(202).send('Menu deleted sucessfully');
-  })
-  .catch(() => {
-    res.status(404).send('Menu not deleted');
+    console.log('after db call: ', req.body);
+    db.deleteMenu(req.body.id)
+    .then(() => {
+      res.status(202).send(JSON.stringify('Menu deleted'));
+    })
+    .catch(() => {
+      res.status(404).send(JSON.stringify('Menu not deleted'));
+    });
   });
 });
 

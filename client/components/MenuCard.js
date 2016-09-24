@@ -51,6 +51,10 @@ export default class MenuCard extends Component {
     this.props.addItemToOrder(itemObj);
   }
 
+  handleMenuDelete() {
+    this.props.deleteMenu(this.state.id);
+  }
+
   handleAddItem(itemObj) {
     const newItem = Object.assign({}, itemObj, {
       menuId: this.state.id,
@@ -129,7 +133,11 @@ export default class MenuCard extends Component {
             )}
             </CardText>
             <CardActions style={style.cardActions}>
-              <FloatingActionButton style={style.floatingActionButton} mini>
+              <FloatingActionButton
+                style={style.floatingActionButton}
+                mini
+                onTouchTap={e => this.handleMenuDelete(e)}
+              >
                 <ContentRemove />
               </FloatingActionButton>
             </CardActions>

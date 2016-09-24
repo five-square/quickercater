@@ -33,6 +33,13 @@ export default class StoreFront extends Component {
     });
   }
 
+  showMenus() {
+    Server.getMenusByOwner(this.state.ownerId)
+    .then(menus => {
+      this.setState({ menus });
+    });
+  }
+
   handleAddMenu(menuObj) {
     const newMenu = Object.assign({}, menuObj, {
       order: this.state.menus.length,
@@ -40,10 +47,14 @@ export default class StoreFront extends Component {
     });
     Menu.create(newMenu)
     .then(() => {
-      Server.getMenusByOwner(this.state.ownerId)
-      .then(menus => {
-        this.setState({ menus });
-      });
+      this.showMenus();
+    });
+  }
+
+  handleDeleteMenu(menuId) {
+    Menu.delete(menuId)
+    .then(() => {
+      this.showMenus();
     });
   }
 
@@ -104,6 +115,7 @@ export default class StoreFront extends Component {
             menu={menu}
             addItemToOrder={this.props.addItemToOrder}
             updateTotalPrice={this.props.updateTotalPrice}
+            deleteMenu={e => this.handleDeleteMenu(e)}
           />
           ).concat(
           <AddMenuCard
