@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Drawer from 'material-ui/Drawer';
-import AppBar from 'material-ui/AppBar';
+import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import RaisedButton from 'material-ui/RaisedButton';
 import CartItemCard from './CartItemCard';
+import OrderCard from './OrderCard';
 
 export default class Cart extends Component {
 
@@ -10,27 +11,31 @@ export default class Cart extends Component {
     super(props);
     this.state = {
       style: this.props.style,
-      open: this.props.open,
       order: this.props.order,
+      currentOwnerId: this.props.ownerId,
     };
   }
 
   handleToggle() {
-    this.setState({
-      open: !this.state.open,
-    });
+    this.props.viewCart();
   }
 
   render() {
     return (
       <div>
-        <RaisedButton
-          style={{ textAlign: 'right' }}
-          label="View Cart"
-          onTouchTap={e => this.handleToggle(e)}
-        />
-        <Drawer width={300} openSecondary open={this.state.open} >
-          <AppBar title="Current Order" />
+        <Drawer width={300} openSecondary open={this.props.open} >
+          <Toolbar>
+            <ToolbarGroup>
+              <ToolbarTitle text="My Order" />
+            </ToolbarGroup>
+            <ToolbarGroup>
+              <RaisedButton
+                primary
+                label="Close"
+                onTouchTap={e => this.handleToggle(e)}
+              />
+            </ToolbarGroup>
+          </Toolbar>
           <br />
           {this.state.order.map((item, index) =>
             <CartItemCard
@@ -39,6 +44,10 @@ export default class Cart extends Component {
               item={item}
             />
           )}
+          <OrderCard
+            items={this.state.order}
+            OwnerId={this.state.currentOwnerId}
+          />
         </Drawer>
       </div>
     );

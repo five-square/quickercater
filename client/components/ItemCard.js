@@ -4,7 +4,6 @@ import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
 import FlatButton from 'material-ui/FlatButton';
-import Paper from 'material-ui/Paper';
 
 export default class ItemCard extends Component {
 
@@ -21,8 +20,8 @@ export default class ItemCard extends Component {
     };
   }
 
-  handleAddItem() {
-    this.props.addItem({
+  handleAddItemToOrder() {
+    this.props.addItemToOrder({
       id: this.state.id,
       name: this.state.name,
       price: this.state.price,
@@ -30,18 +29,6 @@ export default class ItemCard extends Component {
       picture: this.state.picture,
     });
   }
-
-  // handleOnMouseEnter() {
-  //   this.setState({ hover: 2 });
-  // }
-
-  // handleOnMouseLeave() {
-  //   this.setState({ hover: 1 });
-  // }
-            // onMouseEnter={e => this.handleOnMouseEnter(e)}
-            // onMouseLeave={e => this.handleOnMouseLeave(e)}
-        // <Paper zDepth={this.state.hover}>
-        // </Paper>
 
   render() {
     return (
@@ -58,7 +45,7 @@ export default class ItemCard extends Component {
             <h4>{`Price: ${this.state.price}`}</h4>
           </CardText>
           <CardActions>
-            <FlatButton label="Add Me To Order" onClick={e => this.handleAddItem(e)} />
+            <FlatButton label="Add Me To Order" onClick={e => this.handleAddItemToOrder(e)} />
           </CardActions>
         </Card>
         <br />

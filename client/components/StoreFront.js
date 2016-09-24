@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
-
+// import Paper from 'material-ui/Paper';
 import MenuCard from './MenuCard';
+import AddMenuCard from './AddMenuCard';
 import Cart from './Cart';
-
+import CateringOptions from './PackageCard';
 import Server from '../models/serverAPI';
+import OrderAPI from '../models/orderAPI';
+import Dashboard from './Dashboard';
+import CompanyDescription from './CompanyDescription';
 
 export default class StoreFront extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ownerId: 1090,
+      ownerId: this.props.ownerId,
       menus: [],
-      order: [],
-      openCart: false,
     };
   }
 
@@ -22,32 +24,41 @@ export default class StoreFront extends Component {
       console.log(menus);
       this.setState({ menus });
     });
+  }
 
-    if (this.state.order.length) {
-      this.setState({
-        openCart: true,
+  handleAddMenu(menuObj) {
+    const newMenu = Object.assign({}, menuObj, {
+      order: this.state.menus.length,
+      ownerId: this.state.ownerId,
+    });
+    Menu.create(newMenu)
+    .then(() => {
+      Server.getMenusByOwner(this.state.ownerId)
+      .then(menus => {
+        this.setState({ menus });
       });
-    }
-  }
-
-  componentWillUpdate() {
-    console.log('firing');
-    // if (this.state.order.length) {
-    //   this.setState({
-    //     openCart: true,
-    //   });
-    // }
-  }
-
-  handleAddItem(itemObj) {
-    const items = this.state.order;
-    items.push(itemObj);
-    console.log('item added', itemObj);
-    this.setState({
-      order: items,
-      openCart: true,
     });
   }
+
+  // fetchPendingOrders() {
+  //   return OrderAPI.fetchPendingOrders(this.state.ownerId);
+  // }
+
+  // acceptPendingOrder(orderId) {
+  //   // need to make call to OrderAPI to change pending order --> accepted
+  //   // this means the (Order) -[rel:EDIT]->(owner)
+  // }
+
+  // completeAcceptedOrder(orderId) {
+  //   // 1. Call OrderAPI.completeAcceptedOrder?
+  //   // OA.cAO needs to remove the -[rel:EDIT]->(owner) relationship
+  //   // discuss this with team
+
+  // }
+
+  // fetchPendingOrders() {
+  //   return OrderAPI.fetchPendingOrders(this.state.ownerId);
+  // }
 
   render() {
     const style = {
@@ -61,6 +72,9 @@ export default class StoreFront extends Component {
     };
     return (
       <div className="StoreFront" >
+        <CompanyDescription />
+        <Dashboard />
+        <CateringOptions ownerId={this.state.ownerId} />
         <div>
           <h1>Edit Yo Menu</h1>
           {
@@ -77,10 +91,24 @@ export default class StoreFront extends Component {
             key={index}
             style={style}
             menu={menu}
-            addItem={element => this.handleAddItem(element)}
+            addItemToOrder={this.props.addItemToOrder}
+          />
+          ).concat(
+          <AddMenuCard
+            key={this.state.menus.length + 1}
+            addMenu={e => this.handleAddMenu(e)}
+            style={style}
+          />
+          )}
+        { this.state.menus.map((menu, index) =>
+          <MenuCard
+            key={index}
+            style={style}
+            menu={menu}
+            addItemToOrder={this.props.addItemToOrder}
           />
         )}
       </div>
-  );
+    );
   }
 }

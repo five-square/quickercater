@@ -13,6 +13,7 @@ export default class StoreCard extends React.Component {
     this.state = {
       hover: 2,
       style: this.props.style,
+      id: this.props.id,
       name: this.props.stores.name,
       slogan: this.props.stores.slogan,
       description: this.props.stores.description,
@@ -27,6 +28,10 @@ export default class StoreCard extends React.Component {
     this.setState({ hover: 2 });
   }
 
+  handleClick() {
+    this.props.selectStore(this.state.id, this.state.name);
+  }
+
   render() {
     return (
       <div style={this.state.style}>
@@ -39,14 +44,14 @@ export default class StoreCard extends React.Component {
               title={this.state.name}
               subtitle={this.state.slogan}
               avatar="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
-              actAsExpander={true}
-              showExpandableButton={true}
+              actAsExpander
+              showExpandableButton
             />
-            <CardText expandable={true}>
+            <CardText expandable>
               {this.state.description}
             </CardText>
             <CardActions>
-              <FlatButton label="Take Me There" />
+              <FlatButton label="Take Me There" onClick={e => this.handleClick(e)} />
             </CardActions>
           </Card>
         </Paper>

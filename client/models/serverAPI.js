@@ -7,7 +7,14 @@ ServerAPI.getOwner = (id) => db.findOwner(id);
 
 ServerAPI.getAllOwners = () => db.findAllOwners();
 
-ServerAPI.getAllStores = () => db.findAllStores();
+ServerAPI.getAllStores = () =>
+  fetch('/api/stores/all', {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(data => data.json());
 
 ServerAPI.getMenusByOwner = (ownerId) =>
   fetch(`/api/menu/${ownerId}`, {
@@ -38,5 +45,29 @@ ServerAPI.getItemsByMenu = (menuId) =>
     description: itemElement.item.properties.description,
     picture: itemElement.item.properties.picture,
   })));
+
+ServerAPI.getOwnerByStoreId = (storeId) =>
+  fetch(`/api/owner/store/${storeId}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(data => data.json())
+  .then(owner => ({
+    id: owner.owner._id,
+    name: owner.owner.properties.name,
+  }));
+
+ServerAPI.signOut = () =>
+  fetch('/api/auth/logout', {
+    method: 'get',
+    headers: {
+      'Content-type': 'application/json',
+    },
+  })
+  .then(() => {
+    console.log('maybe now?');
+  });
 
 export default ServerAPI;

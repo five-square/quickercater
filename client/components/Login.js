@@ -25,7 +25,7 @@ export default class Login extends React.Component {
     console.log('Attempt PWD: ', password);
   }
 
-  handleCancel(){
+  handleCancel() {
     this.setState({ open: false });
   }
 
@@ -34,21 +34,21 @@ export default class Login extends React.Component {
     const actions = [
       <FlatButton
         label="Cancel"
-        primary={true}
-        onTouchTap={(e) => this.handleCancel(e)}
+        primary
+        onTouchTap={e => this.handleCancel(e)}
       />,
       <FlatButton
         label="Submit"
-        primary={true}
-        keyboardFocused={true}
-        onTouchTap={(e) => this.handleSubmit(e)}
+        primary
+        keyboardFocused
+        onTouchTap={e => this.handleSubmit(e)}
       />,
     ];
     // This is the actual modal
     return (
       <div>
         <div>
-          <RaisedButton label="Login" onTouchTap={(e) => this.handleOpen(e)} />
+          <RaisedButton primary label="Login" onTouchTap={e => this.handleOpen(e)} />
           <Dialog
             title="Login"
             actions={actions}
@@ -60,7 +60,7 @@ export default class Login extends React.Component {
               ref="username"
               hintText="Username"
               floatingLabelText="Please enter a username"
-              floatingLabelFixed={true}
+              floatingLabelFixed
             />
             <br />
             <TextField

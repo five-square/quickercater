@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import Card from 'material-ui/Card';
-import CardActions from 'material-ui/Card/CardActions';
 import CardTitle from 'material-ui/Card/CardTitle';
-import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
-import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
+import CardActions from 'material-ui/Card/CardActions';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentRemove from 'material-ui/svg-icons/content/remove';
 import ItemCard from './ItemCard';
-import Cart from './Cart';
-import Server from '../models/serverAPI';
+import Menu from '../models/menuAPI';
 
 export default class MenuCard extends Component {
 
@@ -26,7 +25,7 @@ export default class MenuCard extends Component {
   }
 
   componentWillMount() {
-    Server.getItemsByMenu(this.state.id)
+    Menu.getItems(this.state.id)
     .then(items => {
       this.setState({
         items,
@@ -46,11 +45,22 @@ export default class MenuCard extends Component {
     });
   }
 
-  handleAddItem(itemObj) {
-    this.props.addItem(itemObj);
+  handleAddItemToOrder(itemObj) {
+    this.props.addItemToOrder(itemObj);
   }
 
   render() {
+    const style = {
+      floatingActionButton: {
+        right: 20,
+        bottom: 20,
+        position: 'absolute',
+      },
+      cardActions: {
+        position: 'relative',
+        height: 30,
+      },
+    };
     return (
       <div style={this.state.style}>
         <Paper zDepth={this.state.hover}>
@@ -74,10 +84,15 @@ export default class MenuCard extends Component {
                   description={item.description}
                   price={item.price}
                   picture={item.picture}
-                  addItem={e => this.handleAddItem(e)}
+                  addItemToOrder={this.props.addItemToOrder}
                 />
               )}
             </CardText>
+            <CardActions style={style.cardActions}>
+              <FloatingActionButton style={style.floatingActionButton} mini>
+                <ContentRemove />
+              </FloatingActionButton>
+            </CardActions>
           </Card>
         </Paper>
         <br />

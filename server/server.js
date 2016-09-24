@@ -3,7 +3,14 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const browserify = require('browserify-middleware');
 const babelify = require('babelify');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const db = require('./db');
+const dbInit = require('./dbInit');
+
+const configAuth = require('./config/googleCredentials');
 
 const serverUrl = process.env.PORT || 3000;
 
@@ -11,11 +18,67 @@ const routes = express.Router();
 
 const assetFolder = path.join(__dirname, '../client/public');
 routes.use(express.static(assetFolder));
+routes.use(passport.initialize());
+routes.use(passport.session());
+
+passport.serializeUser((user, done) => {
+  console.log('serializeUser: ', user);
+  done(null, user._id);
+});
+
+passport.deserializeUser((key, done) => {
+  console.log('deserializeUser id: ', key);
+  db.findNode('Owner', key)
+    .then(user => {
+      console.log('deserializeUser: ', user);
+      done(null, user);
+    });
+});
+
+passport.use('google', new GoogleStrategy({
+  clientID: configAuth.clientID,
+  clientSecret: configAuth.clientSecret,
+  callbackURL: configAuth.callbackURL,
+},
+  (accessToken, refreshToken, profile, done) => {
+    console.log('profile: ', profile);
+    db.findOwnerByEmail(profile.emails[0].value)
+      .then(user => {
+        console.log('findOwnerByEmail: ', user);
+        if (user.length === 0) {
+          const newOwner = {
+            name: profile.displayName,
+            phone: '',
+            email: profile.emails[0].value,
+            description: '',
+            auth_key: profile.id,
+          };
+          db.createOwner(newOwner)
+            .then(owner => done(null, owner));
+        } else {
+          done(null, user[0].owner);
+        }
+      });
+  }
+));
+// const isLoggedIn = (req, res, next) => {
+//   console.log('GET SOME');
+//   if (req.isAuthenticated()) {
+//     next();
+//   } else {
+//     res.redirect('/');
+//   }
+// };
+
+// routes.use((req, res, next) => {
+//   console.log('Route: ', req.url);
+//   console.log('In middleware: passport: ', req.session.passport, ' req.user: ', req.user);
+//   next();
+// });
 
 routes.get('/bundle.js', browserify(path.join(__dirname, '../client/main.js'), {
   transform: [[babelify, { presets: ['es2015', 'react'] }]],
 }));
-
 
 routes.get('/api/tags-example', (req, res) => {
   res.send(['node', 'express', 'browserify', 'mithril']);
@@ -36,6 +99,23 @@ routes.get('/', (req, res) => {
 /*
   **********************************************************************************************
 
+  Handles endpoints for Store data. Methods served are GET, POST, PUT, DELETE.
+
+  Make sure you are running the Neo4j server first!
+
+  **********************************************************************************************
+*/
+
+routes.get('/api/stores/all', (req, res) => {
+  db.findAllStores()
+  .then(stores => {
+    res.status(200).send(stores);
+  });
+});
+
+/*
+  **********************************************************************************************
+
   Handles endpoints for Owner data. Methods served are GET, POST, PUT, DELETE.
 
   Make sure you are running the Neo4j server first!
@@ -47,6 +127,13 @@ routes.get('/api/owner/all', (req, res) => {
   db.findAllOwners()
   .then(dbData => {
     res.status(200).send(dbData);
+  });
+});
+
+routes.get('/api/owner/store/:id', (req, res) => {
+  db.findOwnerByStoreId(req.params.id)
+  .then(owner => {
+    res.status(200).send(owner);
   });
 });
 
@@ -96,6 +183,36 @@ routes.get('/api/menu/items/:menuId', (req, res) => {
   db.getItemsByMenuId(req.params.menuId)
   .then(dbData => {
     res.status(200).send(dbData);
+  });
+});
+
+routes.post('/api/menu/create', (req, res) => {
+  console.log(req.body);
+  db.createMenu(req.body)
+  .then(newMenu => {
+    console.log('after DB call: ', newMenu);
+    res.status(201).send(newMenu);
+  });
+});
+
+routes.post('/api/menu/item/add', (req, res) => {
+  db.addItemToMenu(req.body)
+  .then(item => {
+    res.status(201).send(item);
+  });
+});
+
+// routes.post('/api/menu/item/remove', (req, res) => {
+//   db.removeitemFromMenu();
+// });
+
+routes.delete('/api/menu/:menuId', (req, res) => {
+  db.deleteMenu(req.params.menuId)
+  .then(() => {
+    res.status(202).send('Menu deleted sucessfully');
+  })
+  .catch(() => {
+    res.status(404).send('Menu not deleted');
   });
 });
 
@@ -170,6 +287,12 @@ routes.get('/api/order/:id', (req, res) => {
   });
 });
 
+routes.get('/api/order/getAllPending/:ownerId', (req, res) => {
+  db.fetchAllPendingOrders(req.params.ownerId).then(pendingOrders => {
+    res.send(pendingOrders);
+  });
+});
+
 routes.post('/api/order/create', (req, res) => {
   db.createOrder(req.body)
   .then((dbData) => {
@@ -184,6 +307,16 @@ routes.post('/api/order/delete', (req, res) => {
     res.status(202).send('Order deleted');
   });
 });
+
+/* Create customer end point*/
+routes.post('/api/customer/create', (req, res) => {
+  db.createNewCustomer(req.body)
+  .then((dbData) => {
+    res.status(201).send(dbData);
+  })
+  .catch(err => res.status(500).send(err));
+});
+
 
 /*
   **********************************************************************************************
@@ -244,10 +377,10 @@ routes.delete('/api/item/delete/:id', (req, res) => {
   db.getItemById(id).then(resp => {
     if (resp) {
       db.removeItemById(id).then(x => {
-         if (x) {
- +          res.end(`Deleted itemId: ${id}`);
+        if (x) {
+          res.end(`Deleted itemId: ${id}`);
         } else {
-           res.status(404).end(`Item (${id}) not deleted. Curious error.`);
+          res.status(404).end(`Item (${id}) not deleted. Curious error.`);
         }
       });
     } else {
@@ -266,13 +399,71 @@ routes.delete('/api/item/delete/:id', (req, res) => {
 */
 
 routes.get('/db_reset', (req, res) => {
-  db.reset()
+  dbInit.reset()
   .then(() => {
     res.status(201).send('Database Reset!');
   })
   .catch((err) => {
     res.status(500).send(err);
   });
+});
+
+routes.get('/api/auth/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
+
+
+// routes.use('/api/auth/google/callback',
+//  passport.authenticate('google', { failureRedirect: '/' }),
+
+routes.get('/api/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/api/auth/google' }),
+  (req, res) => {
+    console.log('req.user: ', req.user);
+    console.log('req.session.passport: ', req.session.passport);
+    console.log('req.isAuthenticated(): ', req.isAuthenticated());
+    res.redirect('/');
+  });
+
+routes.get('/api/auth/ownerData',
+  (req, res) => {
+    console.log('After req.user: ', req.user);
+    console.log('req.session.passport: ', req.session.passport);
+    console.log('After req.isAuthenticated(): ', req.isAuthenticated());
+    if (req.user) res.send('req.user');
+    res.send('undefined');
+  });
+
+routes.get('/api/auth/logout', (req, res) => {
+  console.log('In LogOut: ', req.session.passport);
+  // req.session.passport = undefined;
+  req.session.destroy(() => {
+    req.logout();
+    res.clearCookie('connect.sid');
+    res.redirect('/');
+  });
+});
+
+/*
+  **********************************************************************************************
+
+  Handles endpoints for Package data. Methods served are GET, POST, and DELETE(POST).
+
+  Make sure you are running the Neo4j server first!
+
+  **********************************************************************************************
+*/
+
+routes.get('/api/package/:ownerId', (req, res) => {
+  db.getAllPackages(req.params.ownerId)
+  .then((dbData) => {
+    res.status(201).send(dbData);
+  });
+});
+
+routes.post('/api/package/create', (req, res) => {
+  db.createPackage(req.body)
+ .then((dbData) => {
+   res.status(201).send(dbData);
+ });
 });
 
 /*
@@ -301,6 +492,14 @@ if (process.env.NODE_ENV !== 'test') {
 
   // Parse incoming request bodies as JSON
   app.use(bodyParser.json());
+  app.use(cookieParser());
+
+  app.use(session({
+    secret: 'keyboard cat',
+    cookie: { secure: false, maxAge: (4 * 60 * 60 * 1000) },
+    resave: true,
+    saveUninitialized: true })
+  );    // Parse 'Cookie' request header
 
   // Mount our main router
   app.use('/', routes);
