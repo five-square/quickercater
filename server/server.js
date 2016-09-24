@@ -113,6 +113,13 @@ routes.get('/api/stores/all', (req, res) => {
   });
 });
 
+routes.get('/api/stores/:id', (req, res) => {
+  db.findStoresByOwnerId(req.params.id)
+  .then(dbData => {
+    res.status(200).send(dbData);
+  });
+});
+
 /*
   **********************************************************************************************
 
