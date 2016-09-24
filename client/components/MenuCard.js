@@ -7,6 +7,10 @@ import CardActions from 'material-ui/Card/CardActions';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 import ItemCard from './ItemCard';
+<<<<<<< HEAD
+=======
+// import Server from '../models/serverAPI';
+>>>>>>> db4071b151f8b38ea156f5fc0ade8e5c82f35c78
 import Menu from '../models/menuAPI';
 
 export default class MenuCard extends Component {
