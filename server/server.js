@@ -61,15 +61,14 @@ passport.use('google', new GoogleStrategy({
       });
   }
 ));
-
-const isLoggedIn = (req, res, next) => {
-  console.log('GET SOME');
-  if (req.isAuthenticated()) {
-    next();
-  } else {
-    res.redirect('/');
-  }
-};
+// const isLoggedIn = (req, res, next) => {
+//   console.log('GET SOME');
+//   if (req.isAuthenticated()) {
+//     next();
+//   } else {
+//     res.redirect('/');
+//   }
+// };
 
 <<<<<<< 375e2b176203eb0312676052808b5c0a59d4b921
 <<<<<<< a0dd81f61fe714bbe39542b5cd0121786129f044
@@ -302,7 +301,7 @@ routes.get('/api/order/:id', (req, res) => {
   });
 });
 
-routes.get('/api/order/getAllPending/:ownerId', (req,res) => {
+routes.get('/api/order/getAllPending/:ownerId', (req, res) => {
   db.fetchAllPendingOrders(req.params.ownerId).then(pendingOrders => {
     res.send(pendingOrders);
   });

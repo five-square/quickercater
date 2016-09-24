@@ -7,6 +7,10 @@ import CardActions from 'material-ui/Card/CardActions';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 import ItemCard from './ItemCard';
+<<<<<<< 51693c11530732adf3fc39024ba2432c9536d40c
+=======
+// import Server from '../models/serverAPI';
+>>>>>>> Less lint. More Glint.
 import Menu from '../models/menuAPI';
 
 export default class MenuCard extends Component {

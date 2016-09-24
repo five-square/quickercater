@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
-import Server from '../models/serverAPI';
-import Paper from 'material-ui/Paper';
-// import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
-import OrderTable from './OrderTable';
 import FlatButton from 'material-ui/FlatButton';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+// import Server from '../models/serverAPI';
+import Paper from 'material-ui/Paper';
+// import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn }
+//  from 'material-ui/Table';
+import OrderTable from './OrderTable';
+
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -15,7 +17,7 @@ export default class Dashboard extends Component {
     };
   }
 
-   handleOnMouseEnter() {
+  handleOnMouseEnter() {
     this.setState({ hover: 5 });
   }
 
@@ -26,25 +28,29 @@ export default class Dashboard extends Component {
   render() {
     return (
       <div className="Dashboard">
-       <Paper zDepth={this.state.hover}>
-          <Card onMouseEnter={() => this.handleOnMouseEnter()} 
-                onMouseLeave={() => this.handleOnMouseLeave()} >
-            
-                <CardHeader
-      title="All Orders Pending Approval"
-      subtitle="(1)"
-      actAsExpander={true}
-      showExpandableButton={true}
-    />
-            <CardText expandable={true}>
-             <OrderTable handleRowSelection={(row) => this.handleRowSelection(row)} orders={this.props.pendingOrders} />
-             <CardActions>
-              <FlatButton label="Approve" onClick={(e) => console.log('Approve order: ', this.state.rowSelected)} />
-             
-            </CardActions>
+        <Paper zDepth={this.state.hover}>
+          <Card
+            onMouseEnter={() => this.handleOnMouseEnter()}
+            onMouseLeave={() => this.handleOnMouseLeave()}
+          >
+            <CardHeader
+              title="All Orders Pending Approval"
+              subtitle="(1)"
+              actAsExpander
+              showExpandableButton
+            />
+            <CardText expandable>
+              <OrderTable
+                handleRowSelection={(row) =>
+                this.handleRowSelection(row)}
+                orders={this.props.pendingOrders}
+              />
+              <CardActions>
+                <FlatButton label="Approve" />
+              </CardActions>
             </CardText>
-          </Card> 
-          </Paper> 
+          </Card>
+        </Paper>
       </div>
   );
   }

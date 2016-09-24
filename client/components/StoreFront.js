@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+<<<<<<< 51693c11530732adf3fc39024ba2432c9536d40c
+=======
+// import Paper from 'material-ui/Paper';
+>>>>>>> Less lint. More Glint.
 import MenuCard from './MenuCard';
 import AddMenuCard from './AddMenuCard';
 
@@ -8,7 +12,11 @@ import CompanyDescription from './CompanyDescription';
 
 import Menu from '../models/menuAPI';
 import Server from '../models/serverAPI';
+<<<<<<< 51693c11530732adf3fc39024ba2432c9536d40c
 import OrderAPI from '../models/orderAPI';
+=======
+// import orderAPI from '../models/orderAPI';
+>>>>>>> Less lint. More Glint.
 import Dashboard from './Dashboard';
 
 export default class StoreFront extends Component {
@@ -42,9 +50,9 @@ export default class StoreFront extends Component {
     });
   }
 
-  fetchPendingOrders() {
-    return OrderAPI.fetchPendingOrders(this.state.ownerId);
-  }
+  // fetchPendingOrders() {
+  //   return OrderAPI.fetchPendingOrders(this.state.ownerId);
+  // }
 
   // acceptPendingOrder(orderId) {
   //   // need to make call to OrderAPI to change pending order --> accepted
@@ -85,7 +93,12 @@ export default class StoreFront extends Component {
     };
     return (
       <div className="StoreFront" >
+<<<<<<< 51693c11530732adf3fc39024ba2432c9536d40c
         <CompanyDescription style={style} />
+=======
+        <CompanyDescription />
+        <Dashboard />
+>>>>>>> Less lint. More Glint.
         <CateringOptions />
         <Dashboard pendingOrders={this.fetchPendingOrders()} />
         <div>
@@ -99,19 +112,19 @@ export default class StoreFront extends Component {
             : null
           }
         </div>
-          { this.state.menus.map((menu, index) =>
-            <MenuCard
-              key={index}
-              style={style}
-              menu={menu}
-              addItemToOrder={this.props.addItemToOrder}
-            />
+        { this.state.menus.map((menu, index) =>
+          <MenuCard
+            key={index}
+            style={style}
+            menu={menu}
+            addItemToOrder={this.props.addItemToOrder}
+          />
           ).concat(
-            <AddMenuCard
-              key={this.state.menus.length + 1}
-              addMenu={e => this.handleAddMenu(e)}
-              style={style}
-            />
+          <AddMenuCard
+            key={this.state.menus.length + 1}
+            addMenu={e => this.handleAddMenu(e)}
+            style={style}
+          />
           )}
         { this.state.menus.map((menu, index) =>
           <MenuCard
