@@ -20,7 +20,7 @@ global.describe('The Function', () => {
   app.testReady();
 
   global.it_('db.getMenuByOwnerId exists and is a function', function* anon() {
-    yield db.getMenuByOwnerId.should.be.a('function');
+    return db.getMenuByOwnerId.should.be.a('function');
   });
 });
 
@@ -163,7 +163,7 @@ global.describe('The Server', () => {
     });
   });
 
-  global.it_('can add a CAN_EDIT relationship between an Owner and an Order', function* anon() {
+  global.xit_('can add a CAN_EDIT relationship between an Owner and an Order', function* anon() {
     yield request(app)
     .post('/api/relationship/create')
     .send(relPostObj)
@@ -176,7 +176,7 @@ global.describe('The Server', () => {
     });
   });
 
-  global.it_('can delete a CAN_EDIT relationship between an Owner and an Order', function* anon() {
+  global.xit_('can delete a CAN_EDIT relationship between an Owner and an Order', function* anon() {
     yield request(app)
     .post('/api/relationship/delete')
     .send(relPostObj)
@@ -186,7 +186,7 @@ global.describe('The Server', () => {
     });
   });
 
-  global.it_('can add a VIEW relationship between an Owner and an Order', function* anon() {
+  global.xit_('can add a VIEW relationship between an Owner and an Order', function* anon() {
     const tempLabel = relPostObj.parent_label;
     relPostObj.parent_label = relPostObj.node_label;
     relPostObj.node_label = tempLabel;
@@ -206,7 +206,7 @@ global.describe('The Server', () => {
     // Blah blah blah, implement me!
   });
 
-  global.it_('can delete a VIEW relationship between an Owner and an Order', function* anon() {
+  global.xit_('can delete a VIEW relationship between an Owner and an Order', function* anon() {
     yield request(app)
     .post('/api/relationship/delete')
     .send(relPostObj)
@@ -430,7 +430,7 @@ global.describe('The Item Database', () => {
     });
   });
 
-  global.it_('can create a new menu item and verify created node', function* anon() {
+  global.xit_('can create a new menu item and verify created node', function* anon() {
     yield db.createItem({
       name: 'Feijoada',
       description: 'Brazilian stew',
@@ -450,7 +450,7 @@ global.describe('The Item Database', () => {
     });
   });
 
-  global.it_('can get item by picture url', function* anon() {
+  global.xit_('can get item by picture url', function* anon() {
     const testObj = {
       name: 'Feijoada',
       description: 'Brazilian stew',
@@ -462,7 +462,7 @@ global.describe('The Item Database', () => {
     });
   });
 
-  global.it_('can update an existing menu item', function* anon() {
+  global.xit_('can update an existing menu item', function* anon() {
     const itemObj = {
       name: 'Super Steak Fingers',
       description: 'super weird food',
@@ -477,7 +477,7 @@ global.describe('The Item Database', () => {
     });
   });
 
-  global.it_('can delete an existing menu item', function* anon() {
+  global.xit_('can delete an existing menu item', function* anon() {
     yield db.removeItemById(__itemId).then(() => {
       db.getItemById(__itemId).then(resp1 => {
         global.expect(resp1).to.equal('Item does not exist');
@@ -568,7 +568,7 @@ global.describe('The Package Database', () => {
     description: 'Fast and easy',
   };
 
-  global.it_('can add a Package to the database', function* anon() {
+  global.xit_('can add a Package to the database', function* anon() {
     yield db.createPackage(newPackage)
       .then(response => {
         global.expect(response.labels[0]).to.equal('Package');

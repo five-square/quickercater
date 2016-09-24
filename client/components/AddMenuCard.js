@@ -2,18 +2,12 @@ import React, { Component } from 'react';
 import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
 import CardActions from 'material-ui/Card/CardActions';
-import CardText from 'material-ui/Card/CardText';
 import Paper from 'material-ui/Paper';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import Menu from '../models/menuAPI';
-
-// import CardActions from 'material-ui/Card/CardActions';
-// import CardHeader from 'material-ui/Card/CardHeader';
-// import FlatButton from 'material-ui/FlatButton';
 
 export default class AddMenuCard extends Component {
 
@@ -27,9 +21,6 @@ export default class AddMenuCard extends Component {
       newMenuTitle: '',
       newMenuDescription: '',
     };
-  }
-
-  componentWillMount() {
   }
 
   handleOpen() {
@@ -53,7 +44,6 @@ export default class AddMenuCard extends Component {
   }
 
   handleAddMenu() {
-    console.log(this.state.newMenuTitle, this.state.newMenuDescription);
     this.setState({
       open: false,
     });
@@ -76,6 +66,17 @@ export default class AddMenuCard extends Component {
   }
 
   render() {
+    const style = {
+      floatingActionButton: {
+        right: 20,
+        bottom: 20,
+        position: 'absolute',
+      },
+      cardActions: {
+        position: 'relative',
+        height: 30,
+      },
+    };
     const actions = [
       <FlatButton
         label="Cancel"
@@ -100,13 +101,16 @@ export default class AddMenuCard extends Component {
               title={'Add Menu'}
               actAsExpander
               showExpandableButton={false}
-            >
+            />
+            <CardActions style={style.cardActions}>
               <FloatingActionButton
+                mini
+                style={style.floatingActionButton}
                 onTouchTap={e => this.handleOpen(e)}
               >
                 <ContentAdd />
               </FloatingActionButton>
-            </CardTitle>
+            </CardActions>
           </Card>
         </Paper>
         <div>

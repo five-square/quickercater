@@ -72,7 +72,7 @@ const isLoggedIn = (req, res, next) => {
 
 routes.use((req, res, next) => {
   console.log('Route: ', req.url);
-  console.log('In middleware: passport: ', req.session.passport, ' req.user: ', req.user);
+  // console.log('In middleware: passport: ', req.session.passport, ' req.user: ', req.user);
   next();
 });
 

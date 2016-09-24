@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Paper from 'material-ui/Paper';
 import MenuCard from './MenuCard';
 import AddMenuCard from './AddMenuCard';
 
@@ -9,8 +8,6 @@ import CompanyDescription from './CompanyDescription';
 
 import Menu from '../models/menuAPI';
 import Server from '../models/serverAPI';
-
-// import Cart from './Cart';
 
 export default class StoreFront extends Component {
   constructor(props) {
@@ -30,43 +27,18 @@ export default class StoreFront extends Component {
   }
 
   handleAddMenu(menuObj) {
-    console.log('in Storefront, adding menu: ', menuObj);
     const newMenu = Object.assign({}, menuObj, {
-      order: this.state.menus.length + 1,
+      order: this.state.menus.length,
       ownerId: this.state.ownerId,
     });
     Menu.create(newMenu)
-    .then(menu => {
-      console.log('after server call: ', menu);
+    .then(() => {
       Server.getMenusByOwner(this.state.ownerId)
       .then(menus => {
-        console.log('after second server call: ', menus);
         this.setState({ menus });
       });
     });
   }
-
-  // handleAddItemToOrder(itemObj) {
-  //   const items = this.state.order;
-  //   items.push(itemObj);
-  //   console.log('item added', itemObj);
-  //   this.openCart();
-  //   this.setState({
-  //     order: items,
-  //   });
-  // }
-        // <div>
-        //   {
-        //     this.state.openCart
-        //     ? <Cart
-        //       open={this.state.openCart}
-        //       order={this.state.order}
-        //     />
-        //     : null
-        //   }
-        // </div>
-        // <Paper zDepth={1} style={Object.assign({}, style, { width: '60%', paddingTop: '2%' })}>
-        // </Paper>
 
   render() {
     const style = {
@@ -80,8 +52,12 @@ export default class StoreFront extends Component {
     };
     return (
       <div className="StoreFront" >
-        <CompanyDescription />
-        <CateringOptions />
+        {this.state.ownerId === 903
+          ? <div>
+            <CompanyDescription style={style} />
+            <CateringOptions />
+          </div>
+          : null }
         <div>
           <h1>Edit Yo Menu</h1>
           {

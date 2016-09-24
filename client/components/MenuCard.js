@@ -3,13 +3,11 @@ import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
 import CardText from 'material-ui/Card/CardText';
 import Paper from 'material-ui/Paper';
+import CardActions from 'material-ui/Card/CardActions';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentRemove from 'material-ui/svg-icons/content/remove';
 import ItemCard from './ItemCard';
-import Server from '../models/serverAPI';
 import Menu from '../models/menuAPI';
-
-// import CardActions from 'material-ui/Card/CardActions';
-// import CardHeader from 'material-ui/Card/CardHeader';
-// import FlatButton from 'material-ui/FlatButton';
 
 export default class MenuCard extends Component {
 
@@ -52,6 +50,17 @@ export default class MenuCard extends Component {
   }
 
   render() {
+    const style = {
+      floatingActionButton: {
+        right: 20,
+        bottom: 20,
+        position: 'absolute',
+      },
+      cardActions: {
+        position: 'relative',
+        height: 30,
+      },
+    };
     return (
       <div style={this.state.style}>
         <Paper zDepth={this.state.hover}>
@@ -79,6 +88,11 @@ export default class MenuCard extends Component {
                 />
               )}
             </CardText>
+            <CardActions style={style.cardActions}>
+              <FloatingActionButton style={style.floatingActionButton} mini>
+                <ContentRemove />
+              </FloatingActionButton>
+            </CardActions>
           </Card>
         </Paper>
         <br />

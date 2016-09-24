@@ -14,15 +14,17 @@ export default class CompanyDescription extends React.Component {
   render() {
     const style = {
       height: 400,
-      width: 1550,
-      margin: 20,
+      width: '80%',
+      flex: '50%',
+      marginLeft: 'auto',
+      marginRight: 'auto',
       textAlign: 'center',
       display: 'inline-block',
       borderColor: '#1DE9B6',
       borderStyle: 'solid',
     };
     return (
-      < div >
+      <div>
         <Paper style={style} zDepth={1} rounded={false}>
           <img alt="logo" src="http://churrocoaustin.com/wp-content/uploads/2014/12/ChurrCoLogoSalmon144x144.png " />
           <h1>Churro Co. Austin Catering</h1>
@@ -31,7 +33,7 @@ export default class CompanyDescription extends React.Component {
           Our food truck provides everything from office lunches
           to weddings to private events to festivals.</h2>
         </Paper>
-      < /div>
+      </div>
 		);
   }
 
