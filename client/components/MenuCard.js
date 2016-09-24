@@ -8,6 +8,8 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 import ItemCard from './ItemCard';
 import Menu from '../models/menuAPI';
+import AddItemCard from './AddItemsButton';
+import Item from '../models/itemAPI';
 
 export default class MenuCard extends Component {
 
@@ -49,6 +51,27 @@ export default class MenuCard extends Component {
     this.props.addItemToOrder(itemObj);
   }
 
+  handleAddItem(itemObj) {
+    const newItem = Object.assign({}, itemObj, {
+      menuId: this.state.id,
+    });
+    console.log('New item object: ', newItem);
+    Item.createItem(newItem)
+    .then(id => {
+      const add = {
+        menuId: this.state.id,
+        itemId: id.id,
+        order: this.state.items.length,
+      };
+      Menu.addItem(add).then(() => {
+        console.log('item being added to menu obj', add);
+        Menu.getItems(this.state.id)
+        .then(items => {
+          this.setState({ items });
+        });
+      });
+    });
+  }
   render() {
     const style = {
       floatingActionButton: {
@@ -60,6 +83,15 @@ export default class MenuCard extends Component {
         position: 'relative',
         height: 30,
       },
+    };
+    const addItemStyle = {
+      width: '60%',
+      flex: '50%',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
     };
     return (
       <div style={this.state.style}>
@@ -88,7 +120,13 @@ export default class MenuCard extends Component {
                   addItemToOrder={this.props.addItemToOrder}
                   updateTotalPrice={this.props.updateTotalPrice}
                 />
-              )}
+              ).concat(
+                <AddItemCard
+                  key={this.state.items.length + 1}
+                  addItem={e => this.handleAddItem(e)}
+                  style={addItemStyle}
+                />
+            )}
             </CardText>
             <CardActions style={style.cardActions}>
               <FloatingActionButton style={style.floatingActionButton} mini>

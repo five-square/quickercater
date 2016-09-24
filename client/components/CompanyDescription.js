@@ -10,7 +10,7 @@ export default class CompanyDescription extends React.Component {
 
   constructor(props) {
     super(props);
-    this.setState({ place: 'holder', fixes: 'lint issues' });
+    this.state = {};
   }
 
   render() {

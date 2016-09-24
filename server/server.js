@@ -329,8 +329,8 @@ routes.post('/api/customer/create', (req, res) => {
 */
 
 routes.post('/api/item/create', (req, res) => {
-  if (req.body && req.body.itemObj) {
-    db.createItem(req.body.itemObj).then(item => {
+  if (req.body.menuId !== null) {
+    db.createItem(req.body).then(item => {
       res.status(201).send(item);
     });
   } else {

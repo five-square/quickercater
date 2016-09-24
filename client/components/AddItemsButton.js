@@ -4,7 +4,9 @@ import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import TextField from 'material-ui/TextField';
-// import ItemAPI from '../models/itemAPI';
+import Paper from 'material-ui/Paper';
+import Card from 'material-ui/Card';
+import CardTitle from 'material-ui/Card/CardTitle';
 
 export default class AddItem extends React.Component {
 
@@ -12,22 +14,63 @@ export default class AddItem extends React.Component {
     super(props);
     this.state = {
       open: false,
+      hover: 2,
+      newItemTitle: '',
+      newItemDescription: '',
+      newItemPrice: '',
+      newItemPicture: '',
     };
   }
 
+  handleOnMouseEnter() {
+    this.setState({
+      hover: 5,
+    });
+  }
+
+  handleOnMouseLeave() {
+    this.setState({
+      hover: 2,
+    });
+  }
   handleOpen() {
     this.setState({ open: true });
   }
 
-  handleSubmit() { // right now this consoles item obj
-    this.setState({ open: false });
-    const item = {
-      name: this.refs.name.getValue(),
-      description: this.refs.description.getValue(),
-      price: this.refs.price.getValue(),
-      picture: this.refs.picture.getValue(),
-    };
-    console.log('Attempt Item Add: ', item);
+  handleAddItem() {
+    this.setState({
+      open: false,
+    });
+    this.props.addItem({
+      name: this.state.newItemTitle,
+      description: this.state.newItemDescription,
+      price: this.state.newItemPrice,
+      picture: this.state.newItemPicture,
+    });
+  }
+
+  handleItemTitleChange(e) {
+    this.setState({
+      newItemTitle: e.currentTarget.value,
+    });
+  }
+
+  handleItemDescriptionChange(e) {
+    this.setState({
+      newItemDescription: e.currentTarget.value,
+    });
+  }
+
+  handleItemPriceChange(e) {
+    this.setState({
+      newItemPrice: e.currentTarget.value,
+    });
+  }
+
+  handleItemPictureChange(e) {
+    this.setState({
+      newItemPicture: e.currentTarget.value,
+    });
   }
 
   handleCancel() {
@@ -46,15 +89,25 @@ export default class AddItem extends React.Component {
         label="Submit"
         primary
         keyboardFocused
-        onTouchTap={e => this.handleSubmit(e)}
+        onTouchTap={e => this.handleAddItem(e)}
       />,
     ];
     // This is the actual modal
     return (
       <div>
-        <FloatingActionButton mini onTouchTap={e => this.handleOpen(e)} >
-          <ContentAdd />
-        </FloatingActionButton>
+        <Paper zDepth={this.state.hover}>
+          <Card
+            onMouseEnter={e => this.handleOnMouseEnter(e)}
+            onMouseLeave={e => this.handleOnMouseLeave(e)}
+          >
+            <CardTitle
+              title={'Add Item'}
+            />
+            <FloatingActionButton mini onTouchTap={e => this.handleOpen(e)} >
+              <ContentAdd />
+            </FloatingActionButton>
+          </Card>
+        </Paper>
         <Dialog
           title="Add Item"
           actions={actions}
@@ -63,27 +116,28 @@ export default class AddItem extends React.Component {
           onRequestClose={(e) => this.handleClose(e)}
         >
           <TextField
-            ref="name"
             hintText="Item"
-            floatingLabelText="Item Name"
-          />
-          <br />
+            floatingLabelText="Enter Item Title"
+            value={this.state.newItemTitle}
+            onChange={e => this.handleItemTitleChange(e)}
+          /><br />
           <TextField
-            ref="description"
             hintText="Description"
-            floatingLabelText="Item Description"
-          />
-          <br />
+            floatingLabelText="Enter Item Description"
+            value={this.state.newItemDescription}
+            onChange={e => this.handleItemDescriptionChange(e)}
+          /><br />
           <TextField
-            ref="price"
             hintText="Price"
-            floatingLabelText="Item Price"
-            defaultValue="$"
+            floatingLabelText="Enter Item Price"
+            value={this.state.newItemPrice}
+            onChange={e => this.handleItemPriceChange(e)}
           />
           <br />
           <TextField
-            ref="picture"
             floatingLabelText="Add Picture"
+            value={this.state.newItemPicture}
+            onChange={e => this.handleItemPictureChange(e)}
           />
         </Dialog>
       </div>
