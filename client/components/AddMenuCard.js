@@ -1,26 +1,13 @@
 import React, { Component } from 'react';
 import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
-<<<<<<< HEAD
 import CardActions from 'material-ui/Card/CardActions';
-=======
-// import CardActions from 'material-ui/Card/CardActions';
-// import CardText from 'material-ui/Card/CardText';
->>>>>>> db4071b151f8b38ea156f5fc0ade8e5c82f35c78
 import Paper from 'material-ui/Paper';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-<<<<<<< HEAD
-=======
-// import Menu from '../models/menuAPI';
-
-// import CardActions from 'material-ui/Card/CardActions';
-// import CardHeader from 'material-ui/Card/CardHeader';
-// import FlatButton from 'material-ui/FlatButton';
->>>>>>> db4071b151f8b38ea156f5fc0ade8e5c82f35c78
 
 export default class AddMenuCard extends Component {
 

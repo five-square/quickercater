@@ -1,19 +1,13 @@
 import React, { Component } from 'react';
-// import Paper from 'material-ui/Paper';
 import MenuCard from './MenuCard';
 import AddMenuCard from './AddMenuCard';
 import Cart from './Cart';
 import CateringOptions from './PackageCard';
 import Server from '../models/serverAPI';
-<<<<<<< HEAD
 import OrderAPI from '../models/orderAPI';
 import Dashboard from './Dashboard';
 import CompanyDescription from './CompanyDescription';
-=======
-import Dashboard from './Dashboard';
-import CompanyDescription from './CompanyDescription';
-// import Cart from './Cart';
->>>>>>> db4071b151f8b38ea156f5fc0ade8e5c82f35c78
+import Menu from '../models/menuAPI';
 
 export default class StoreFront extends Component {
   constructor(props) {
@@ -46,9 +40,9 @@ export default class StoreFront extends Component {
     });
   }
 
-  // fetchPendingOrders() {
-  //   return OrderAPI.fetchPendingOrders(this.state.ownerId);
-  // }
+  fetchPendingOrders() {
+    return OrderAPI.fetchPendingOrders(this.state.ownerId);
+  }
 
   // acceptPendingOrder(orderId) {
   //   // need to make call to OrderAPI to change pending order --> accepted
@@ -57,28 +51,9 @@ export default class StoreFront extends Component {
 
   // completeAcceptedOrder(orderId) {
   //   // 1. Call OrderAPI.completeAcceptedOrder?
-<<<<<<< HEAD
   //   // OA.cAO needs to remove the -[rel:EDIT]->(owner) relationship
   //   // discuss this with team
 
-  // }
-
-  // fetchPendingOrders() {
-  //   return OrderAPI.fetchPendingOrders(this.state.ownerId);
-=======
-  //   //.             -- OA.cAO needs to remove the -[rel:EDIT]->(owner) relationship
-  //   //                -- discuss this with team
-  // }
-
-  // handleAddItemToOrder(itemObj) {
-  //   const items = this.state.order;
-  //   items.push(itemObj);
-  //   console.log('item added', itemObj);
-  //   this.openCart();
-  //   this.setState({
-  //     order: items,
-  //   });
->>>>>>> db4071b151f8b38ea156f5fc0ade8e5c82f35c78
   // }
 
   render() {

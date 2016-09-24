@@ -22,7 +22,6 @@ global.describe('Component: App', () => {
   global.it('renders without exploding', () => {
     expect(shallow(<App />).length).to.be.above(0);
   });
-<<<<<<< HEAD
 });
 
 global.describe('Component: Cart', () => {
@@ -87,8 +86,6 @@ global.describe('Component: CustomerForm', () => {
 	global.it('renders without exploding', () => {
 		global.expect(shallow(<CustomerForm />)).to.be.above(0);
 	});
->>>>>>> Adds delete button to menu, no delete functionality yet, some styling.
-=======
 });
 
 global.describe('Component: Cart', () => {
@@ -119,24 +116,18 @@ global.describe('Component: CustomerForm', () => {
   global.it('renders without exploding', () => {
     expect(shallow(<CustomerForm />).length).to.be.above(0);
   });
->>>>>>> db4071b151f8b38ea156f5fc0ade8e5c82f35c78
 });
 
 global.describe('Component: Dashboard', () => {
   global.it('renders without exploding', () => {
     expect(shallow(<Dashboard />).length).to.be.above(0);
   });
-<<<<<<< HEAD
-
-=======
->>>>>>> db4071b151f8b38ea156f5fc0ade8e5c82f35c78
   global.it('has access to OrderAPI helper functions', () => {
     orderAPI.getPendingOrders(646).then(resp => {
       global.expect(resp).to.not.be(undefined);
       global.expect(resp).to.not.deep.equal({});
     });
   });
-<<<<<<< HEAD
 });
 
 global.describe('Component: ItemCard', () => {
@@ -178,10 +169,6 @@ global.describe('Component: StoreCard', () => {
 global.describe('Component: StoreFront', () => {
   global.it('renders without exploding', () => {
     expect(shallow(<StoreFront />).length).to.be.above(0);
-  });
-});
-  global.it('renders without exploding', () => {
-    expect(shallow(<ItemCard />).length).to.be.above(0);
   });
 });
 
@@ -275,7 +262,6 @@ global.describe('Component: StoreFront', () => {
 	global.it('renders without exploding', () => {
 		expect(shallow(<StoreFront />)).to.be.above(0);
 	});
-=======
 });
 
 global.describe('Component: ItemCard', () => {
@@ -324,5 +310,4 @@ global.describe('Component: StoreFront', () => {
   global.it('renders without exploding', () => {
     expect(shallow(<StoreFront />).length).to.be.above(0);
   });
->>>>>>> db4071b151f8b38ea156f5fc0ade8e5c82f35c78
 });
