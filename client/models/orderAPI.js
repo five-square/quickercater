@@ -17,6 +17,6 @@ orderAPI.getPendingOrders = (ownerId) =>
     headers: {
       'Content-Type': 'application/json',
     },
-  }).then(resp => resp);
+  }).then(resp => resp.json());
 
 export default orderAPI;

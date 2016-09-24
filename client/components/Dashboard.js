@@ -6,7 +6,7 @@ import Paper from 'material-ui/Paper';
 // import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn }
 //  from 'material-ui/Table';
 import OrderTable from './OrderTable';
-
+import OrderAPI from './../models/OrderAPI';
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -14,7 +14,17 @@ export default class Dashboard extends Component {
     this.state = {
       hover: 2,
       rowSelected: '',
+      ownerId: this.props.ownerId,
     };
+  }
+
+  componentWillMount (){
+    // console.log(this.props.ownerId);
+    var ownerId = this.props.ownerId;
+    OrderAPI.getPendingOrders(ownerId).then(orders => {
+      //this.setState({pendingOrders: orders});
+      console.log(orders);
+    });
   }
 
   handleOnMouseEnter() {
@@ -27,15 +37,15 @@ export default class Dashboard extends Component {
 
   render() {
     return (
-      <div className="Dashboard">
+      <div >
         <Paper zDepth={this.state.hover}>
           <Card
             onMouseEnter={() => this.handleOnMouseEnter()}
             onMouseLeave={() => this.handleOnMouseLeave()}
           >
             <CardHeader
-              title="All Orders Pending Approval"
-              subtitle="(1)"
+              title="Pending Orders"
+              subtitle="(<count>)"
               actAsExpander
               showExpandableButton
             />
@@ -43,11 +53,30 @@ export default class Dashboard extends Component {
               <OrderTable
                 handleRowSelection={(row) =>
                 this.handleRowSelection(row)}
-                orders={this.props.pendingOrders}
+                orders={this.state.pendingOrders}
+                thirdColumnTitle="Accept Order"
+                buttonLabel="Accept"
               />
-              <CardActions>
-                <FlatButton label="Approve" />
-              </CardActions>
+            </CardText>
+          </Card>
+          <Card
+            onMouseEnter={() => this.handleOnMouseEnter()}
+            onMouseLeave={() => this.handleOnMouseLeave()}
+          >
+            <CardHeader
+              title="Approved Orders"
+              subtitle="(<count>)"
+              actAsExpander
+              showExpandableButton
+            />
+            <CardText expandable>
+              <OrderTable
+                handleRowSelection={(row) =>
+                this.handleRowSelection(row)}
+                orders={this.state.pendingOrders}
+                thirdColumnTitle="Complete Order"
+                buttonLabel="Complete"
+              />
             </CardText>
           </Card>
         </Paper>

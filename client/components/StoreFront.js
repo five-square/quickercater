@@ -87,7 +87,7 @@ export default class StoreFront extends Component {
     return (
       <div className="StoreFront" >
         <CompanyDescription />
-        <Dashboard />
+        <Dashboard style={style} ownerId={this.state.ownerId}/>
         <div className="CateringOptions">
           {this.state.packages.map((pack, index) =>
             <CateringOptions

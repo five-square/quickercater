@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn }
   from 'material-ui/Table';
+
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 // import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 // import Server from '../models/serverAPI';
 // import Paper from 'material-ui/Paper';
@@ -9,10 +12,12 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
 export default class OrderTable extends Component {
   constructor(props) {
     super(props);
+    console.log(props.pendingOrders);
     this.state = {
       hover: 2,
-      selectable: false,
       showCheckboxes: false,
+      thirdColumnTitle: this.props.thirdColumnTitle,
+      buttonLabel: this.props.buttonLabel,
     };
   }
 
@@ -32,19 +37,23 @@ export default class OrderTable extends Component {
   render() {
     return (
       <div className="OrderTable">
-        <Table selectable onRowSelection={(e) => this.props.handleRowSelection(e)}>
+        <Table onRowSelection={(e) => this.props.handleRowSelection(e)}>
           <TableHeader displaySelectAll={false} >
             <TableRow>
               <TableHeaderColumn>Order Number</TableHeaderColumn>
               <TableHeaderColumn>Customer Name</TableHeaderColumn>
-              <TableHeaderColumn>Status</TableHeaderColumn>
+              <TableHeaderColumn>{this.state.thirdColumnTitle}</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false} >
-            <TableRow>
+            <TableRow selectable={false}>
               <TableRowColumn>1</TableRowColumn>
               <TableRowColumn>John Smith</TableRowColumn>
-              <TableRowColumn>Pending</TableRowColumn>
+              <TableRowColumn>
+               <FloatingActionButton mini onClick={() => console.log('stuff')} >
+                 <ContentAdd />
+               </FloatingActionButton>
+              </TableRowColumn>
             </TableRow>
           </TableBody>
         </Table>
