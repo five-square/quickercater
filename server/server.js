@@ -446,6 +446,30 @@ routes.get('/api/auth/logout', (req, res) => {
 /*
   **********************************************************************************************
 
+  Handles endpoints for Package data. Methods served are GET, POST, and DELETE(POST).
+
+  Make sure you are running the Neo4j server first!
+
+  **********************************************************************************************
+*/
+
+routes.get('/api/package/:ownerId', (req, res) => {
+  db.getAllPackages(req.params.ownerId)
+  .then((dbData) => {
+    res.status(201).send(dbData);
+  });
+});
+
+routes.post('/api/package/create', (req, res) => {
+  db.createPackage(req.body)
+ .then((dbData) => {
+   res.status(201).send(dbData);
+ });
+});
+
+/*
+  **********************************************************************************************
+
   Starts the routing decisions for testing and deployment.
 
   **********************************************************************************************
