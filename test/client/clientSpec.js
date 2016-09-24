@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import App from '../../client/components/App';
 import Cart from '../../client/components/Cart';
 import CartItemCard from '../../client/components/CartItemCard';
-import CateringOptions from '../../client/components/CateringOptions';
+import CateringOptions from '../../client/components/PackageCard';
 import CompanyDescription from '../../client/components/CompanyDescription';
 import CustomerForm from '../../client/components/CustomerForm';
 import Dashboard from '../../client/components/Dashboard';
@@ -54,38 +54,38 @@ global.describe('Component: CustomerForm', () => {
   });
 
   global.it('renders without exploding', () => {
-	global.expect(shallow(<App />)).to.be.above(0);
+    expect(shallow(<App />)).to.be.above(0);
   });
 });
 
 global.describe('Component: Cart', () => {
-	global.it('renders without exploding', () => {
-		global.expect(shallow(<Cart />)).to.be.above(0);
-	});
+  global.it('renders without exploding', () => {
+    global.expect(shallow(<Cart />)).to.be.above(0);
+  });
 });
 
 global.describe('Component: CartItemCard', () => {
-	global.it('renders without exploding', () => {
-		global.expect(shallow(<CartItemCard />)).to.be.above(0);
-	});
+  global.it('renders without exploding', () => {
+    global.expect(shallow(<CartItemCard />)).to.be.above(0);
+  });
 });
 
 global.describe('Component: CateringOptions', () => {
-	global.it('renders without exploding', () => {
-		global.expect(shallow(<CateringOptions />)).to.be.above(0);
-	});
+  global.it('renders without exploding', () => {
+    global.expect(shallow(<CateringOptions />)).to.be.above(0);
+  });
 });
 
 global.describe('Component: CompanyDescription', () => {
-	global.it('renders without exploding', () => {
-		global.expect(shallow(<CompanyDescription />)).to.be.above(0);
-	});
+  global.it('renders without exploding', () => {
+    global.expect(shallow(<CompanyDescription />)).to.be.above(0);
+  });
 });
 
 global.describe('Component: CustomerForm', () => {
-	global.it('renders without exploding', () => {
-		global.expect(shallow(<CustomerForm />)).to.be.above(0);
-	});
+  global.it('renders without exploding', () => {
+    global.expect(shallow(<CustomerForm />)).to.be.above(0);
+  });
 });
 
 global.describe('Component: Cart', () => {
@@ -214,54 +214,46 @@ global.describe('Component: StoreFront', () => {
   });
 });
 
-});
-
-global.describe('Component: Header', () => {
-	global.it('renders without exploding', () => {
-		expect(shallow(<Header />)).to.be.above(0);
-	});
-});
-
 global.describe('Component: ItemCard', () => {
-	global.it('renders without exploding', () => {
-		expect(shallow(<ItemCard />)).to.be.above(0);
-	});
+  global.it('renders without exploding', () => {
+    expect(shallow(<ItemCard />)).to.be.above(0);
+  });
 });
 
 global.describe('Component: Lobby', () => {
-	global.it('renders without exploding', () => {
-		expect(shallow(<Lobby />)).to.be.above(0);
-	});
+  global.it('renders without exploding', () => {
+    expect(shallow(<Lobby />)).to.be.above(0);
+  });
 });
 
 global.describe('Component: MenuCard', () => {
-	global.it('renders without exploding', () => {
-		expect(shallow(<MenuCard />)).to.be.above(0);
-	});
+  global.it('renders without exploding', () => {
+    expect(shallow(<MenuCard />)).to.be.above(0);
+  });
 });
 
 global.describe('Component: Navigation', () => {
-	global.it('renders without exploding', () => {
-		expect(shallow(<Navigation />)).to.be.above(0);
-	});
+  global.it('renders without exploding', () => {
+    expect(shallow(<Navigation />)).to.be.above(0);
+  });
 });
 
 global.describe('Component: OrderTable', () => {
-	global.it('renders without exploding', () => {
-		expect(shallow(<OrderTable />)).to.be.above(0);
-	});
+  global.it('renders without exploding', () => {
+    expect(shallow(<OrderTable />)).to.be.above(0);
+  });
 });
 
 global.describe('Component: StoreCard', () => {
-	global.it('renders without exploding', () => {
-		expect(shallow(<StoreCard />)).to.be.above(0);
-	});
+  global.it('renders without exploding', () => {
+    expect(shallow(<StoreCard />)).to.be.above(0);
+  });
 });
 
 global.describe('Component: StoreFront', () => {
-	global.it('renders without exploding', () => {
-		expect(shallow(<StoreFront />)).to.be.above(0);
-	});
+  global.it('renders without exploding', () => {
+    expect(shallow(<StoreFront />)).to.be.above(0);
+  });
 });
 
 global.describe('Component: ItemCard', () => {
