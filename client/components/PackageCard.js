@@ -3,16 +3,15 @@ import React from 'react';
 // import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 // import FlatButton from 'material-ui/FlatButton';
-import Paper from 'material-ui/Paper';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
+// import Paper from 'material-ui/Paper';
+// import FlatButton from 'material-ui/FlatButton';
 import PackageAPI from '../models/packageAPI';
 
 
 export default class CateringOptions extends React.Component {
   constructor(props) {
     super(props);
-    this.setState( {
+    this.setState({
       ownerId: this.props.ownerId,
       // name: this.props.packages.pack.name,
       // packages:[],
