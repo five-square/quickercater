@@ -5,6 +5,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Order from '../models/createOrderAPI';
 import Customer from '../models/CustomerAPI';
+import DatePicker from 'material-ui/DatePicker';
+
 
 export default class OrderCard extends React.Component {
 
@@ -108,11 +110,10 @@ export default class OrderCard extends React.Component {
               floatingLabelFixed
             />
             <br />
-            <TextField
+            Request Date
+            <DatePicker
+              hintText="Date Picker"
               ref="requestDate"
-              hintText="Request date"
-              floatingLabelText="Request date"
-              floatingLabelFixed
             />
             <br />
             <TextField

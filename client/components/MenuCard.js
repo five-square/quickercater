@@ -84,7 +84,9 @@ export default class MenuCard extends Component {
                   description={item.description}
                   price={item.price}
                   picture={item.picture}
+                  quanity={item.quanity}
                   addItemToOrder={this.props.addItemToOrder}
+                  updateTotalPrice={this.props.updateTotalPrice}
                 />
               )}
             </CardText>

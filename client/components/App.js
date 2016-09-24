@@ -18,6 +18,7 @@ export default class App extends Component {
       showStore: false,
       order: [],
       openCart: false,
+      totalPrice : 0,
     };
   }
 
@@ -39,8 +40,12 @@ export default class App extends Component {
     });
   }
 
+  updateTotalPrice(sum) {
+    this.setState({ totalPrice: this.state.totalPrice + sum });
+  }
   handleAddItemToOrder(itemObj) {
     const items = this.state.order;
+    console.log('itemObj in App:', itemObj);
     items.push(itemObj);
     console.log('item added', itemObj);
     this.setState({
@@ -81,12 +86,14 @@ export default class App extends Component {
                 order={this.state.order}
                 viewCart={e => this.viewCart(e)}
                 ownerId={this.state.currentOwnerId}
+                totalPrice={this.state.updateTotalPrice}
               />
             </div>
             { this.state.showStore
               ? <StoreFront
                 ownerId={this.state.currentOwnerId}
                 addItemToOrder={e => this.handleAddItemToOrder(e)}
+                updateTotalPrice = {this.updateTotalPrice}
               />
               : <Lobby selectStore={(id, name) => this.selectStore(id, name)} />
             }

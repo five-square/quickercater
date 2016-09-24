@@ -42,8 +42,10 @@ export default class Cart extends Component {
               key={index}
               style={this.props.style}
               item={item}
+              updateOrderPrice={this.updateOrderPrice}
             />
           )}
+          Total Price = ${this.props.totalPrice}
           <OrderCard
             items={this.state.order}
             OwnerId={this.state.currentOwnerId}
