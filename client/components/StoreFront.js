@@ -2,15 +2,11 @@ import React, { Component } from 'react';
 // import Paper from 'material-ui/Paper';
 import MenuCard from './MenuCard';
 import AddMenuCard from './AddMenuCard';
-
 import Cart from './Cart';
-import CateringOptions from './CateringOptions';
-import CompanyDescription from './CompanyDescription';
-
-import Menu from '../models/menuAPI';
+import CateringOptions from './PackageCard';
 import Server from '../models/serverAPI';
-// import orderAPI from '../models/orderAPI';
 import Dashboard from './Dashboard';
+import CompanyDescription from './CompanyDescription';
 // import Cart from './Cart';
 
 export default class StoreFront extends Component {
@@ -98,7 +94,7 @@ export default class StoreFront extends Component {
       <div className="StoreFront" >
         <CompanyDescription />
         <Dashboard />
-        <CateringOptions />
+        <CateringOptions ownerId={this.state.ownerId} />
         <div>
           <h1>Edit Yo Menu</h1>
           {
