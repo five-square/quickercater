@@ -96,14 +96,6 @@ export default class StoreFront extends Component {
             addMenu={e => this.handleAddMenu(e)}
             style={style}
           />
-          )}
-        { this.state.menus.map((menu, index) =>
-          <MenuCard
-            key={index}
-            style={style}
-            menu={menu}
-            addItemToOrder={this.props.addItemToOrder}
-          />
         )}
       </div>
     );
