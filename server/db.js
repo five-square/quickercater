@@ -461,6 +461,16 @@ db.findAllStores = () => Node.cypherAsync({
 })
 .then(response => response.map(e => e.stores));
 
+db.findStoresByOwnerId = (ownerId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
+    MATCH (owner)-[rel:CAN_EDIT]->(store:Store)
+    RETURN store`,
+  params: {
+    ownerId,
+  },
+});
+
 db.createItem = (itemObj) => Node.cypherAsync({
   query: `
     MERGE (item:Item {
