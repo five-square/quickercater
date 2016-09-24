@@ -73,4 +73,17 @@ MenuAPI.addItem = (newObj) =>
     id: item._id,
   }));
 
+MenuAPI.delete = (menuId) => {
+  console.log('in menuAPI: ', menuId);
+  return fetch('api/menu/delete', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id: menuId }),
+  })
+  .then(data => data.json())
+  .then(data => data);
+};
+
 export default MenuAPI;

@@ -247,7 +247,7 @@ db.createOrderPackageRelationship = (orderId, packageId, quantity) => Node.cyphe
 .then(response => response);
 
 db.createOrderAndRelationships = (orderInfo) => {
-  var saveOrder = {};
+  let saveOrder = {};
   return db.createOrder(orderInfo.order)
     .then((orderCreated) => {
       saveOrder = Object.assign({}, orderCreated);
@@ -403,6 +403,38 @@ db.createMenu = (menuObj) => Node.cypherAsync({
   },
 })
 .then(menu => menu[0]);
+
+db.deleteMenu = (menuId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner)-[r1:CAN_EDIT]->(menu:Menu)-[r2:CAN_EDIT]->(item:Item)
+    WHERE ID(menu) = ${menuId}
+    CREATE (owner)-[:CAN_EDIT]->(item)
+    DELETE r1, r2, menu`,
+  params: {
+    menuId,
+  },
+})
+.then(data => data);
+
+db.prepareMenuForDelete = (menuId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner)-[r1:CAN_EDIT]->(menu:Menu) WHERE ID(menu) = ${menuId}
+    MATCH (owner)-[rels:CAN_EDIT]->(menu2:Menu) WHERE rels.order > r1.order
+    SET rels.order = rels.order - 1
+    RETURN r1, menu`,
+  params: {
+    menuId,
+  },
+})
+.then(data => data);
+
+/*
+  **********************************************************************************************
+
+  These functions will service the GET, POST, UPDATE, and DELETE endpoints for Stores.
+
+  **********************************************************************************************
+*/
 
 db.createStore = (store) => Node.cypherAsync({
   query: `
