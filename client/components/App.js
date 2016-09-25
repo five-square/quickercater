@@ -7,6 +7,7 @@ import StoreFront from './StoreFront';
 import Server from '../models/serverAPI';
 import Navigation from './Navigation';
 import Cart from './Cart';
+import Badge from 'material-ui/Badge';
 
 export default class App extends Component {
   constructor(props) {
@@ -93,10 +94,20 @@ export default class App extends Component {
               ? <StoreFront
                 ownerId={this.state.currentOwnerId}
                 addItemToOrder={e => this.handleAddItemToOrder(e)}
-                updateTotalPrice = {this.updateTotalPrice}
+                updateTotalPrice={this.updateTotalPrice}
               />
               : <Lobby selectStore={(id, name) => this.selectStore(id, name)} />
             }
+          </div>
+        </MuiThemeProvider>
+        <MuiThemeProvider>
+          <div style={{ textAlign: 'center' }}>
+            <Badge
+              badgeContent="&copy;"
+              badgeStyle={{ fontSize: 20 }}
+            >
+      QuickerCater
+            </Badge>
           </div>
         </MuiThemeProvider>
       </div>
