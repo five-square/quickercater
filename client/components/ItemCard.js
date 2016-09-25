@@ -51,7 +51,7 @@ export default class ItemCard extends Component {
           <CardHeader
             title={this.state.name}
             subtitle={this.state.description}
-            avatar={"https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"}
+            avatar={this.state.picture}
             actAsExpander
           />
           <CardText>
