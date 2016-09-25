@@ -11,11 +11,13 @@ MenuAPI.getItems = (menuId) =>
   })
   .then(data => data.json())
   .then(items => items.map(itemElement => ({
-    id: itemElement.item._id,
-    name: itemElement.item.properties.name,
-    price: itemElement.item.properties.price,
-    description: itemElement.item.properties.description,
-    picture: itemElement.item.properties.picture,
+    item: {
+      id: itemElement.item._id,
+      name: itemElement.item.properties.name,
+      price: itemElement.item.properties.price,
+      description: itemElement.item.properties.description,
+      picture: itemElement.item.properties.picture,
+    },
   })));
 
 MenuAPI.removeItem = (menuId, itemId) =>

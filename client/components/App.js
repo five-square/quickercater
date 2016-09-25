@@ -17,9 +17,8 @@ export default class App extends Component {
       currentOwnerId: false,
       currentStoreName: 'Welcome to QuickerCater',
       showStore: false,
-      order: [],
+      globalOrder: {},
       openCart: false,
-      totalPrice : 0,
     };
   }
 
@@ -44,13 +43,54 @@ export default class App extends Component {
   updateTotalPrice(sum) {
     this.setState({ totalPrice: this.state.totalPrice + sum });
   }
+
   handleAddItemToOrder(itemObj) {
-    const items = this.state.order;
-    console.log('itemObj in App:', itemObj);
-    items.push(itemObj);
-    console.log('item added', itemObj);
+    console.log('handleAddItemToOrder itemObj: ', itemObj);
+    if (!this.state.globalOrder[itemObj.ownerId]) {
+      this.state.globalOrder[itemObj.ownerId] = {};
+      this.state.globalOrder[itemObj.ownerId].order = [];
+      this.state.globalOrder[itemObj.ownerId].totalPrice = 0;
+    }
+    this.state.globalOrder[itemObj.ownerId].order.push(itemObj);
     this.setState({
-      order: items,
+      openCart: true,
+    });
+  }
+
+  updateItemToOrder(itemObj) {
+    const itemPos = this.state.globalOrder[itemObj.ownerId].order
+      .map(itemInfo => itemInfo.item.id).indexOf(itemObj.item.id);
+    this.state.globalOrder[itemObj.ownerId].order[itemPos] = itemObj;
+    if (this.state.globalOrder[itemObj.ownerId].order.length > 1) {
+      this.state.globalOrder[itemObj.ownerId].totalPrice =
+        this.state.globalOrder[itemObj.ownerId].order
+        .reduce((a, b) => (a.item.price * a.quantity) + (b.item.price * b.quantity));
+    } else {
+      this.state.globalOrder[itemObj.ownerId].totalPrice =
+          (this.state.globalOrder[itemObj.ownerId].order[0].item.price
+          * this.state.globalOrder[itemObj.ownerId].order[0].quantity);
+    }
+    this.setState({
+      openCart: true,
+    });
+  }
+
+  removeItemFromOrder(ownerId, itemId) {
+    const itemPos = this.state.globalOrder[ownerId].order
+      .map(itemInfo => itemInfo.item.id).indexOf(itemId);
+    this.state.globalOrder[ownerId].totalPrice =
+      (this.state.globalOrder[ownerId].totalPrice -
+          (this.state.globalOrder[ownerId].order[itemPos].item.price
+          * this.state.globalOrder[ownerId].order[itemPos].quantity));
+    this.state.globalOrder[ownerId].order.splice(itemPos, 1);
+    this.setState({
+      openCart: true,
+    });
+  }
+
+  deleteOrderAfterSubmission(ownerId) {
+    delete this.state.globalOrder[ownerId];
+    this.setState({
       openCart: true,
     });
   }
@@ -84,10 +124,13 @@ export default class App extends Component {
             <div>
               <Cart
                 open={this.state.openCart}
-                order={this.state.order}
+                globalOrder={this.state.globalOrder}
                 viewCart={e => this.viewCart(e)}
                 ownerId={this.state.currentOwnerId}
                 totalPrice={this.state.updateTotalPrice}
+                updateItemToOrder={(e, x) => this.updateItemToOrder(e, x)}
+                removeItemFromOrder={(e, x) => this.removeItemFromOrder(e, x)}
+                deleteOrderAfterSubmission={e => this.deleteOrderAfterSubmission(e)}
               />
             </div>
             { this.state.showStore

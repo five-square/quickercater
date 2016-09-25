@@ -3,9 +3,9 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import DatePicker from 'material-ui/DatePicker';
 import Order from '../models/createOrderAPI';
 import Customer from '../models/CustomerAPI';
-import DatePicker from 'material-ui/DatePicker';
 
 
 export default class OrderCard extends React.Component {
@@ -15,6 +15,8 @@ export default class OrderCard extends React.Component {
     this.state = {
       open: false,
       newOrder: {},
+      submitted: false,
+      requestDate: '',
     };
   }
 
@@ -23,7 +25,7 @@ export default class OrderCard extends React.Component {
   }
 
   handleSubmit() {
-    this.setState({ open: false });
+    // this.setState({ open: false });
     const customerInfo = {
       name: this.refs.customerName.getValue(),
       phone: this.refs.customerPhone.getValue(),
@@ -32,27 +34,41 @@ export default class OrderCard extends React.Component {
     };
     const orderInfo = {
       order: {
-        name: this.refs.orderName.getValue(),
+        name: this.refs.ordername.getValue(),
         created_on: new Date(), // populate this in Neo4J query??
-        request_date: this.refs.requestDate.getValue(),
+        request_date: this.state.requestDate,
         fulfilled: false,
-        total_price: this.props.price,
+        total_price: this.props.orderInfo.totalPrice,
         address: this.refs.orderAddress.getValue(),
       },
-      items: this.props.items,
-      ownerId: this.props.ownerId,
+      items: this.props.orderInfo.order
+        .map(itemInfo => ({ itemId: itemInfo.item.id, quantity: itemInfo.quantity })),
+      ownerId: this.props.orderInfo.order[0].ownerId,
       customerId: '',
       package: { id: this.props.ownerId, expires: '10/10/2016' },
     };
+    console.log('this.props.orderInfo: ', this.props.orderInfo);
+    console.log('orderInfo: ', orderInfo);
     Customer.create(customerInfo)
       .then(customer => {
+        console.log('customer created: ', customer);
         orderInfo.customerId = customer._id;
         Order.create(orderInfo)
-          .then(order => this.setState({ newOrder: order }));
+          .then(orderDb => {
+            this.setState({ newOrder: orderDb.order._id, submitted: true });
+            // this.props.deleteOrderAfterSubmission(this.props.orderInfo.order[0].ownerId);
+          });
       });
   }
   handleCancel() {
     this.setState({ open: false });
+  }
+
+  handleRequestDate(event, date) {
+    // this.state.requestDate = date;
+    this.setState({
+      requestDate: date,
+    });
   }
 
   render() {
@@ -73,60 +89,60 @@ export default class OrderCard extends React.Component {
     // This is the actual modal
     return (
       <div>
-        <div>
-          <RaisedButton primary label="Submit" onTouchTap={e => this.handleOpen(e)} />
-          <Dialog
-            title="Please enter your information"
-            actions={actions}
-            modal={false}
-            open={this.state.open}
-            onRequestClose={(e) => this.handleClose(e)}
-          >
-            <TextField
-              ref="customerName"
-              hintText="Your name"
-              floatingLabelText="Your name"
-              floatingLabelFixed
-            />
-            <br />
-            <TextField
-              ref="customerEmail"
-              hintText="Email"
-              floatingLabelText="Email"
-              floatingLabelFixed
-            />
-            <br />
-            <TextField
-              ref="customerPhone"
-              hintText="Phone"
-              floatingLabelText="Phone"
-              floatingLabelFixed
-            />
-            <br />
-            <TextField
-              ref="ordername"
-              hintText="Order name"
-              floatingLabelText="Order name"
-              floatingLabelFixed
-            />
-            <br />
-            Request Date
-            <DatePicker
-              hintText="Date Picker"
-              ref="requestDate"
-            />
-            <br />
-            <TextField
-              ref="orderAddress"
-              hintText="Order address"
-              floatingLabelText="Address"
-              type="password"
-            />
-            <h4>{`Price: ${this.props.price}`}</h4>
-          </Dialog>
-        </div>
-      </div>
-    );
+        { this.state.submitted === false
+          ? <div>
+            <RaisedButton primary label="Submit" onTouchTap={e => this.handleOpen(e)} />
+            <Dialog
+              title="Please enter your information"
+              actions={actions}
+              modal={false}
+              open={this.state.open}
+              onRequestClose={(e) => this.handleClose(e)}
+            >
+              <TextField
+                ref="customerName"
+                hintText="Your name"
+                floatingLabelText="Your name"
+                floatingLabelFixed
+              />
+              <br />
+              <TextField
+                ref="customerEmail"
+                hintText="Email"
+                floatingLabelText="Email"
+                floatingLabelFixed
+              />
+              <br />
+              <TextField
+                ref="customerPhone"
+                hintText="Phone"
+                floatingLabelText="Phone"
+                floatingLabelFixed
+              />
+              <br />
+              <TextField
+                ref="ordername"
+                hintText="Order name"
+                floatingLabelText="Order name"
+                floatingLabelFixed
+              />
+              <br />
+              Request Date
+              <DatePicker
+                hintText="Date Picker"
+                onChange={this.handleRequestDate}
+              />
+              <br />
+              <TextField
+                ref="orderAddress"
+                hintText="Order address"
+                floatingLabelText="Address"
+                type="text"
+              />
+              <h4>{`Price: ${this.props.orderInfo.totalPrice}`}</h4>
+            </Dialog>
+          </div>
+        : <div> Order Submitted - # {this.state.newOrder} </div>}
+      </div>);
   }
 }
-
