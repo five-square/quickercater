@@ -18,63 +18,52 @@ const routes = express.Router();
 
 const assetFolder = path.join(__dirname, '../client/public');
 routes.use(express.static(assetFolder));
-routes.use(passport.initialize());
-routes.use(passport.session());
+// routes.use(passport.initialize());
+// routes.use(passport.session());
 
-passport.serializeUser((user, done) => {
-  console.log('serializeUser: ', user);
-  done(null, user._id);
+routes.use((req, res, next) => {
+  console.log('Route: ', req.url);
+  console.log('Before req.isAuthenticated(): ', req.isAuthenticated(), ' req.user: ', req.user);
+  console.log('Before req.session.passport:: ', req.session.passport);
+  next();
 });
 
-passport.deserializeUser((key, done) => {
-  console.log('deserializeUser id: ', key);
-  db.findNode('Owner', key)
-    .then(user => {
-      console.log('deserializeUser: ', user);
-      done(null, user);
-    });
+routes.use((req, res, next) => {
+  console.log('Route: ', req.url);
+  console.log('After req.isAuthenticated(): ', req.isAuthenticated(), ' req.user: ', req.user);
+  console.log('After req.session.passport:: ', req.session.passport);
+  next();
 });
 
-passport.use('google', new GoogleStrategy({
-  clientID: configAuth.clientID,
-  clientSecret: configAuth.clientSecret,
-  callbackURL: configAuth.callbackURL,
-},
-  (accessToken, refreshToken, profile, done) => {
-    console.log('profile: ', profile);
-    db.findOwnerByEmail(profile.emails[0].value)
-      .then(user => {
-        console.log('findOwnerByEmail: ', user);
-        if (user.length === 0) {
-          const newOwner = {
-            name: profile.displayName,
-            phone: '',
-            email: profile.emails[0].value,
-            description: '',
-            auth_key: profile.id,
-          };
-          db.createOwner(newOwner)
-            .then(owner => done(null, owner));
-        } else {
-          done(null, user[0].owner);
-        }
-      });
-  }
-));
-// const isLoggedIn = (req, res, next) => {
-//   console.log('GET SOME');
-//   if (req.isAuthenticated()) {
-//     next();
-//   } else {
-//     res.redirect('/');
-//   }
-// };
+routes.get('/api/auth/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
 
-// routes.use((req, res, next) => {
-//   console.log('Route: ', req.url);
-//   console.log('In middleware: passport: ', req.session.passport, ' req.user: ', req.user);
-//   next();
-// });
+routes.get('/api/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/api/auth/google' }),
+  (req, res) => {
+    console.log('req.user: ', req.user);
+    console.log('req.session.passport: ', req.session.passport);
+    console.log('req.isAuthenticated(): ', req.isAuthenticated());
+    res.redirect('/');
+  });
+
+routes.get('/api/auth/ownerData',
+  (req, res) => {
+    console.log('After req.user: ', req.user);
+    console.log('req.session.passport: ', req.session.passport);
+    console.log('After req.isAuthenticated(): ', req.isAuthenticated());
+    if (req.user) res.send('req.user');
+    res.send('undefined');
+  });
+
+routes.get('/api/auth/logout', (req, res) => {
+  console.log('In LogOut: ', req.session.passport);
+  // req.session.passport = undefined;
+  req.session.destroy(() => {
+    req.logout();
+    res.clearCookie('connect.sid');
+    res.redirect('/');
+  });
+});
 
 routes.get('/bundle.js', browserify(path.join(__dirname, '../client/main.js'), {
   transform: [[babelify, { presets: ['es2015', 'react'] }]],
@@ -430,40 +419,6 @@ routes.get('/db_reset', (req, res) => {
   });
 });
 
-routes.get('/api/auth/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
-
-
-// routes.use('/api/auth/google/callback',
-//  passport.authenticate('google', { failureRedirect: '/' }),
-
-routes.get('/api/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/api/auth/google' }),
-  (req, res) => {
-    console.log('req.user: ', req.user);
-    console.log('req.session.passport: ', req.session.passport);
-    console.log('req.isAuthenticated(): ', req.isAuthenticated());
-    res.redirect('/');
-  });
-
-routes.get('/api/auth/ownerData',
-  (req, res) => {
-    console.log('After req.user: ', req.user);
-    console.log('req.session.passport: ', req.session.passport);
-    console.log('After req.isAuthenticated(): ', req.isAuthenticated());
-    if (req.user) res.send('req.user');
-    res.send('undefined');
-  });
-
-routes.get('/api/auth/logout', (req, res) => {
-  console.log('In LogOut: ', req.session.passport);
-  // req.session.passport = undefined;
-  req.session.destroy(() => {
-    req.logout();
-    res.clearCookie('connect.sid');
-    res.redirect('/');
-  });
-});
-
 /*
   **********************************************************************************************
 
@@ -506,6 +461,52 @@ if (process.env.NODE_ENV !== 'test') {
     res.sendFile(`${assetFolder}/index.html`);
   });
 
+  passport.use('google', new GoogleStrategy({
+    clientID: configAuth.clientID,
+    clientSecret: configAuth.clientSecret,
+    callbackURL: configAuth.callbackURL,
+  },
+    (accessToken, refreshToken, profile, done) => {
+      console.log('In GoogleStrategy');
+      db.findOwnerByEmail(profile.emails[0].value)
+        .then(user => {
+          console.log('findOwnerByEmail: ', user);
+          if (user.length === 0) {
+            const newOwner = {
+              name: profile.displayName,
+              phone: '',
+              email: profile.emails[0].value,
+              description: '',
+              auth_key: profile.id,
+            };
+            db.createOwner(newOwner)
+              .then(owner => done(null, owner));
+          } else {
+            done(null, user[0].owner);
+          }
+        });
+    }
+  ));
+
+  passport.serializeUser((user, done) => {
+    console.log('serializeUser: ', user);
+    done(null, user);
+  });
+
+  passport.deserializeUser((user, done) => {
+    // console.log('deserializeUser id: ', key);
+    // db.findNode('Owner', key)
+    //   .then(user => {
+    //     console.log('deserializeUser: ', user);
+        done(null, user);
+      // });
+  });
+
+  function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) { return next(); }
+    res.sendStatus(401);
+  }
+
   //
   // We're in development or production mode;
   // create and run a real server.
@@ -522,6 +523,9 @@ if (process.env.NODE_ENV !== 'test') {
     resave: true,
     saveUninitialized: true })
   );    // Parse 'Cookie' request header
+
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   // Mount our main router
   app.use('/', routes);
