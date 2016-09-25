@@ -1,0 +1,66 @@
+import React from 'react';
+import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import PackageAPI from '../models/packageAPI';
+
+
+export default class CateringOptions extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      ownerId: this.props.ownerId,
+      packages: [],
+      name: this.props.pack.pack.properties.name,
+      picture: this.props.pack.pack.properties.picture,
+      description: this.props.pack.pack.properties.description,
+    };
+  }
+
+  componentWillMount() {
+    PackageAPI.getAllPackages(this.props.ownerId)
+    .then(packages => {
+      this.setState({ packages });
+      console.log('State packages', this.state.packages);
+    });
+  }
+
+  render() {
+<<<<<<< 8886333f11942573c47254be2e4e49db8b972dac
+    const style = {
+      height: 550,
+      width: 430,
+      margin: 10,
+      textAlign: 'center',
+      display: 'block',
+    };
+=======
+    const style = Object.assign({}, this.props.style, {
+      width: '30%',
+      marginTop: 20,
+      textAlign: 'center',
+      flexDirection: 'row',
+      display: 'inline-block',
+    });
+>>>>>>> Improves deleting menus, still some naggy bugs
+
+    const styleDiv = {
+      paddingLeft: 50,
+      display: 'inline-block'
+    };
+
+    return (
+      <div>
+        <Card style={style}>
+          <CardTitle />
+          <CardText expandable style={{ wordWarp: 'break-word' }}>
+            <CardMedia
+              overlay={<CardTitle title={this.state.name} />}
+            >
+              <img role="presentation" src={this.state.picture} />
+            </CardMedia>
+            {this.state.description}
+          </CardText>
+        </Card>
+      </div>
+    );
+  }
+}
