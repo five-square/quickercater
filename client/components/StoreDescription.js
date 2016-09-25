@@ -23,7 +23,6 @@ export default class CompanyDescription extends React.Component {
   componentWillMount() {
     Server.getStoresByOwner(this.props.ownerId)
     .then(store => {
-      console.log('storeByOwner: ', store);
       this.setState({ store });
     });
   }
@@ -36,7 +35,7 @@ export default class CompanyDescription extends React.Component {
       marginLeft: 'auto',
       marginRight: 'auto',
       textAlign: 'center',
-      display: 'inline-block',
+      display: 'block',
       borderColor: '#1DE9B6',
       borderStyle: 'solid',
     };

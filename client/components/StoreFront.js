@@ -9,6 +9,7 @@ import Dashboard from './Dashboard';
 import CompanyDescription from './StoreDescription';
 import Menu from '../models/menuAPI';
 import PackageAPI from '../models/packageAPI';
+import AddPackageCard from './AddPackageCard'
 
 export default class StoreFront extends Component {
   constructor(props) {
@@ -110,6 +111,9 @@ export default class StoreFront extends Component {
               ownerId={this.state.ownerId}
               pack={pack}
             />
+          ).concat(
+          <AddPackageCard/>
+
           )}
         </div>
         <div>
