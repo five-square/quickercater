@@ -16,6 +16,15 @@ ServerAPI.getAllStores = () =>
   })
   .then(data => data.json());
 
+ServerAPI.getStoresByOwner = (ownerId) =>
+  fetch(`/api/stores/${ownerId}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(data => data.json());
+
 ServerAPI.getMenusByOwner = (ownerId) =>
   fetch(`/api/menu/${ownerId}`, {
     method: 'get',

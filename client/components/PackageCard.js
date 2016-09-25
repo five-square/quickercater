@@ -27,13 +27,14 @@ export default class CateringOptions extends React.Component {
     const style = {
       height: 550,
       width: 430,
-      margin: 20,
+      margin: 10,
       textAlign: 'center',
-      display: 'inline-block',
+      display: 'block',
     };
 
     const styleDiv = {
       paddingLeft: 50,
+      display: 'inline-block'
     };
 
     return (

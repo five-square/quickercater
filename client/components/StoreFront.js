@@ -6,9 +6,10 @@ import CateringOptions from './PackageCard';
 import Server from '../models/serverAPI';
 import OrderAPI from '../models/orderAPI';
 import Dashboard from './Dashboard';
-import CompanyDescription from './CompanyDescription';
+import CompanyDescription from './StoreDescription';
 import Menu from '../models/menuAPI';
 import PackageAPI from '../models/packageAPI';
+import AddPackageCard from './AddPackageCard'
 
 export default class StoreFront extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ export default class StoreFront extends Component {
       ownerId: this.props.ownerId,
       menus: [],
       packages: [],
+      store: [],
     };
   }
 
@@ -30,6 +32,12 @@ export default class StoreFront extends Component {
     .then(packages => {
       console.log('StoreFront packages', packages);
       this.setState({ packages });
+    });
+
+    Server.getStoresByOwner(this.state.ownerId)
+    .then(store => {
+      console.log('storeplease: ', store);
+      this.setState({ store });
     });
   }
 
@@ -86,7 +94,15 @@ export default class StoreFront extends Component {
     };
     return (
       <div className="StoreFront" >
-        <CompanyDescription />
+        <div className="CompanyDescription">
+          { this.state.store.map((e, i) =>
+            <CompanyDescription
+              key={i}
+              ownerId={this.state.ownerId}
+              store={e.store}
+            />
+        )}
+        </div>
         <Dashboard />
         <div className="CateringOptions">
           {this.state.packages.map((pack, index) =>
@@ -95,6 +111,9 @@ export default class StoreFront extends Component {
               ownerId={this.state.ownerId}
               pack={pack}
             />
+          ).concat(
+          <AddPackageCard/>
+
           )}
         </div>
         <div>
