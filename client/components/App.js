@@ -45,16 +45,20 @@ export default class App extends Component {
   }
 
   handleAddItemToOrder(itemObj) {
-    console.log('handleAddItemToOrder itemObj: ', itemObj);
     if (!this.state.globalOrder[itemObj.ownerId]) {
       this.state.globalOrder[itemObj.ownerId] = {};
       this.state.globalOrder[itemObj.ownerId].order = [];
       this.state.globalOrder[itemObj.ownerId].totalPrice = 0;
     }
-    this.state.globalOrder[itemObj.ownerId].order.push(itemObj);
-    this.setState({
-      openCart: true,
-    });
+    const itemPos = this.state.globalOrder[itemObj.ownerId].order
+      .map(itemInfo => itemInfo.item.id).indexOf(itemObj.item.id);
+    // Check to see if the item is already in the list
+    if (itemPos < 0) {
+      this.state.globalOrder[itemObj.ownerId].order.push(itemObj);
+      this.setState({
+        openCart: true,
+      });
+    }
   }
 
   updateItemToOrder(itemObj) {

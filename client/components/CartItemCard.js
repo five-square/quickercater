@@ -92,7 +92,9 @@ export default class CartItemCard extends Component {
             actAsExpander
           />
           <CardText>
-            <h4>{`Price: ${this.state.qtyxPrice}`}</h4>
+            <h4>
+              {`Price: ${this.state.qtyxPrice}`}
+            </h4>
             <TextField
               ref="quantity"
               hintText="0"

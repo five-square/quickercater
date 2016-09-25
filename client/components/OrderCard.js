@@ -17,11 +17,16 @@ export default class OrderCard extends React.Component {
       newOrder: {},
       submitted: false,
       requestDate: '',
+      ownerId: this.props.ownerId,
     };
   }
 
   handleOpen() {
     this.setState({ open: true });
+  }
+
+  handleRemoveOrder() {
+    this.props.deleteOrderAfterSubmission(this.props.orderInfo.order[0].ownerId);
   }
 
   handleSubmit() {
@@ -47,11 +52,8 @@ export default class OrderCard extends React.Component {
       customerId: '',
       package: { id: this.props.ownerId, expires: '10/10/2016' },
     };
-    console.log('this.props.orderInfo: ', this.props.orderInfo);
-    console.log('orderInfo: ', orderInfo);
     Customer.create(customerInfo)
       .then(customer => {
-        console.log('customer created: ', customer);
         orderInfo.customerId = customer._id;
         Order.create(orderInfo)
           .then(orderDb => {
@@ -92,6 +94,7 @@ export default class OrderCard extends React.Component {
         { this.state.submitted === false
           ? <div>
             <RaisedButton primary label="Submit" onTouchTap={e => this.handleOpen(e)} />
+            <RaisedButton primary label="Cancel" onTouchTap={e => this.handleRemoveOrder(e)} />
             <Dialog
               title="Please enter your information"
               actions={actions}

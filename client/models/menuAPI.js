@@ -18,6 +18,7 @@ MenuAPI.getItems = (menuId) =>
       description: itemElement.item.properties.description,
       picture: itemElement.item.properties.picture,
     },
+    quantity: 1,
   })));
 
 MenuAPI.removeItem = (menuId, itemId) =>
