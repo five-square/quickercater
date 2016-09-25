@@ -19,6 +19,7 @@ export default class App extends Component {
       showStore: false,
       globalOrder: {},
       openCart: false,
+      totalPrice: 0,
     };
   }
 

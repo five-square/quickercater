@@ -217,13 +217,17 @@ routes.post('/api/menu/delete', (req, res) => {
   console.log('in server, before db: ', req.body.id);
   db.prepareMenuForDelete(req.body.id)
   .then(() => {
-    console.log('after db call: ', req.body);
+    console.log('after db prepare call: ', req.body);
     db.deleteMenu(req.body.id)
     .then(() => {
-      res.status(202).send(JSON.stringify('Menu deleted'));
-    })
-    .catch(() => {
-      res.status(404).send(JSON.stringify('Menu not deleted'));
+      db.getMenuByOwnerId(req.body.ownerId)
+      .then(menus => {
+        console.log('after db.getMenu call: ', menus);
+        res.status(202).send(menus);
+      })
+      .catch(() => {
+        res.status(404).send(JSON.stringify('Menu not deleted'));
+      });
     });
   });
 });

@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import MenuCard from './MenuCard';
-import AddMenuCard from './AddMenuCard';
+import MenuContainer from './MenuContainer';
 import Cart from './Cart';
-import CateringOptions from './PackageCard';
-import Server from '../models/serverAPI';
+import PackageCard from './PackageCard';
 import OrderAPI from '../models/orderAPI';
 import Dashboard from './Dashboard';
 import CompanyDescription from './StoreDescription';
-import Menu from '../models/menuAPI';
-import PackageAPI from '../models/packageAPI';
-import AddPackageCard from './AddPackageCard'
+import Server from '../models/serverAPI';
+import Package from '../models/packageAPI';
+import Owner from '../models/ownerAPI';
+import AddPackageCard from './AddPackageCard';
 
 export default class StoreFront extends Component {
   constructor(props) {
@@ -23,14 +22,8 @@ export default class StoreFront extends Component {
   }
 
   componentWillMount() {
-    Server.getMenusByOwner(this.state.ownerId)
-    .then(menus => {
-      console.log(menus);
-      this.setState({ menus });
-    });
-    PackageAPI.getAllPackages(this.state.ownerId)
+    Package.getAllPackages(this.state.ownerId)
     .then(packages => {
-      console.log('StoreFront packages', packages);
       this.setState({ packages });
     });
 
@@ -42,29 +35,51 @@ export default class StoreFront extends Component {
   }
 
   showMenus() {
-    Server.getMenusByOwner(this.state.ownerId)
+    Owner.getMenus(this.state.ownerId)
     .then(menus => {
       this.setState({ menus });
     });
   }
 
-  handleAddMenu(menuObj) {
-    const newMenu = Object.assign({}, menuObj, {
-      order: this.state.menus.length,
-      ownerId: this.state.ownerId,
-    });
-    Menu.create(newMenu)
-    .then(() => {
-      this.showMenus();
-    });
-  }
+  // handleAddMenu(menuObj) {
+  //   const newMenu = Object.assign({}, menuObj, {
+  //     order: this.state.menus.length,
+  //     ownerId: this.state.ownerId,
+  //   });
+  //   Menu.create(newMenu)
+  //   .then(() => {
+  //     this.showMenus();
+  //   });
+  // }
 
-  handleDeleteMenu(menuId) {
-    Menu.delete(menuId)
-    .then(() => {
-      this.showMenus();
-    });
-  }
+  // handleDeleteMenu(menuId) {
+  //   const newMenu = this.state.menus.filter(element => element.id !== menuId);
+  //   console.log('new menu: ', newMenu);
+  //   Menu.delete(menuId, this.state.ownerId)
+  //   .then(menus => {
+  //     console.log('after delete, in promise: ', menus);
+  //     this.setState({ menus });
+  //   });
+  // }
+
+  // showMenus() {
+  //   // e.persist();
+  //   // e.preventDefault();
+  //   // this.hideMenus(e);
+  //   Owner.getMenus(this.state.ownerId)
+  //   .then(menus => {
+  //     console.log('Menus: ', menus);
+  //     this.setState({ menus });
+  //   });
+  // }
+
+  // hideMenus(e) {
+  //   e.persist();
+  //   e.preventDefault();
+  //   this.setState({
+  //     menus: [],
+  //   });
+  // }
 
   fetchPendingOrders() {
     return OrderAPI.fetchPendingOrders(this.state.ownerId);
@@ -106,7 +121,8 @@ export default class StoreFront extends Component {
         <Dashboard />
         <div className="CateringOptions">
           {this.state.packages.map((pack, index) =>
-            <CateringOptions
+            <PackageCard
+              style={style}
               key={index}
               ownerId={this.state.ownerId}
               pack={pack}
@@ -127,23 +143,12 @@ export default class StoreFront extends Component {
             : null
           }
         </div>
-        { this.state.menus.map((menu, index) =>
-          <MenuCard
-            key={index}
-            style={style}
-            menu={menu}
-            addItemToOrder={this.props.addItemToOrder}
-            updateTotalPrice={this.props.updateTotalPrice}
-            deleteMenu={e => this.handleDeleteMenu(e)}
-            ownerId={this.state.ownerId}
-          />
-          ).concat(
-          <AddMenuCard
-            key={this.state.menus.length + 1}
-            addMenu={e => this.handleAddMenu(e)}
-            style={style}
-          />
-        )}
+        <MenuContainer
+          style={style}
+          ownerId={this.state.ownerId}
+          menus={this.state.menus}
+          // addMenu={e => this.handleAddMenu(e)}
+        />
       </div>
     );
   }

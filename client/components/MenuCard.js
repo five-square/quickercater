@@ -24,13 +24,13 @@ export default class MenuCard extends Component {
       items: [],
       description: this.props.menu.description,
       updatedItemOnOrder: this.props.updatedItemOnOrder,
+      show: this.props.show,
     };
   }
 
   componentWillMount() {
     Menu.getItems(this.state.id)
     .then(items => {
-      console.log('items: ', items);
       this.setState({
         items,
       });
@@ -54,14 +54,14 @@ export default class MenuCard extends Component {
   }
 
   handleMenuDelete() {
-    this.props.deleteMenu(this.state.id);
+    this.setState({ show: false });
+    this.props.deleteMenu(this.props.menu.id);
   }
 
   handleAddItem(itemObj) {
     const newItem = Object.assign({}, itemObj, {
       menuId: this.state.id,
     });
-    console.log('New item object: ', newItem);
     Item.createItem(newItem)
     .then(id => {
       const add = {
@@ -70,7 +70,6 @@ export default class MenuCard extends Component {
         order: this.state.items.length,
       };
       Menu.addItem(add).then(() => {
-        console.log('item being added to menu obj', add);
         Menu.getItems(this.state.id)
         .then(items => {
           this.setState({ items });
@@ -78,6 +77,7 @@ export default class MenuCard extends Component {
       });
     });
   }
+
   render() {
     const style = {
       floatingActionButton: {
@@ -100,58 +100,63 @@ export default class MenuCard extends Component {
       justifyContent: 'center',
     };
     return (
-      <div style={this.state.style}>
-        <Paper zDepth={this.state.hover}>
-          <Card
-            onMouseEnter={e => this.handleOnMouseEnter(e)}
-            onMouseLeave={e => this.handleOnMouseLeave(e)}
-            containerStyle={{ backgroundColor: '#e0e0e0' }}
-          >
-            <CardTitle
-              title={this.state.name}
-              subtitle={this.state.description}
-              actAsExpander
-              showExpandableButton={false}
-            />
-            <CardText expandable={false}>
-              {this.state.items.map((itemInfo, index) => {
-                var pic = itemInfo.item.picture;
-                if (itemInfo.item.picture.length < 5 || itemInfo.item.picture === false) {
-                  pic = 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png';
-                }
-                return (<ItemCard
-                  key={index}
-                  id={itemInfo.item.id}
-                  name={itemInfo.item.name}
-                  description={itemInfo.item.description}
-                  price={itemInfo.item.price}
-                  picture={pic}
-                  addItemToOrder={this.props.addItemToOrder}
-                  updateTotalPrice={this.props.updateTotalPrice}
-                  ownerId={this.props.ownerId}
-                />);
-              }).concat(
-                <AddItemCard
-                  key={this.state.items.length + 1}
-                  addItem={e => this.handleAddItem(e)}
-                  style={addItemStyle}
-                  pic={'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png'}
-                />
-            )}
-            </CardText>
-            <CardActions style={style.cardActions}>
-              <FloatingActionButton
-                style={style.floatingActionButton}
-                mini
-                onTouchTap={e => this.handleMenuDelete(e)}
-              >
-                <ContentRemove />
-              </FloatingActionButton>
-            </CardActions>
-          </Card>
-        </Paper>
-        <br />
-      </div>
+      this.state.show
+        ? <div style={this.state.style}>
+          <Paper zDepth={this.state.hover}>
+            <Card
+              onMouseEnter={e => this.handleOnMouseEnter(e)}
+              onMouseLeave={e => this.handleOnMouseLeave(e)}
+              containerStyle={{ backgroundColor: '#e0e0e0' }}
+            >
+              <CardTitle
+                title={this.state.name}
+                subtitle={this.state.description}
+                actAsExpander
+                showExpandableButton={false}
+              />
+              <CardText expandable={false}>
+                {this.state.items.map((itemInfo, index) => {
+                  var pic = itemInfo.item.picture;
+                  if (itemInfo.item.picture.length < 5 || itemInfo.item.picture === false) {
+                    pic = 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png';
+                  }
+                  return (<ItemCard
+                    key={index}
+                    id={itemInfo.item.id}
+                    name={itemInfo.item.name}
+                    description={itemInfo.item.description}
+                    price={itemInfo.item.price}
+                    picture={pic}
+                    addItemToOrder={this.props.addItemToOrder}
+                    updateTotalPrice={this.props.updateTotalPrice}
+                    ownerId={this.props.ownerId}
+                  />);
+                }).concat(
+                  <AddItemCard
+                    key={this.state.items.length + 1}
+                    addItem={e => this.handleAddItem(e)}
+                    style={addItemStyle}
+                    pic={'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png'}
+                  />
+              )}
+              </CardText>
+              <CardActions style={style.cardActions}>
+                <FloatingActionButton
+                  style={style.floatingActionButton}
+                  mini
+                  onTouchTap={e => {
+                    e.preventDefault();
+                    this.handleMenuDelete(e);
+                  }}
+                >
+                  <ContentRemove />
+                </FloatingActionButton>
+              </CardActions>
+            </Card>
+          </Paper>
+          <br />
+        </div>
+      : null
     );
   }
 }
