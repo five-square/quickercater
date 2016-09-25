@@ -112,23 +112,28 @@ export default class MenuCard extends Component {
               showExpandableButton={false}
             />
             <CardText expandable={false}>
-              {this.state.items.map((item, index) =>
-                <ItemCard
+              {this.state.items.map((item, index) => {
+                let pic = item.picture;
+                if (item.picture.length < 5 || item.picture === false) {
+                  pic = 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png';
+                }
+                return (<ItemCard
                   key={index}
                   id={item.id}
                   name={item.name}
                   description={item.description}
                   price={item.price}
-                  picture={item.picture}
+                  picture={pic}
                   quanity={item.quanity}
                   addItemToOrder={this.props.addItemToOrder}
                   updateTotalPrice={this.props.updateTotalPrice}
-                />
-              ).concat(
+                />);
+              }).concat(
                 <AddItemCard
                   key={this.state.items.length + 1}
                   addItem={e => this.handleAddItem(e)}
                   style={addItemStyle}
+                  pic={'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png'}
                 />
             )}
             </CardText>
