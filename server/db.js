@@ -247,15 +247,15 @@ db.createOrderPackageRelationship = (orderId, packageId, quantity) => Node.cyphe
 .then(response => response);
 
 db.createOrderAndRelationships = (orderInfo) => {
-  let saveOrder = {};
+  var saveOrder = {};
   return db.createOrder(orderInfo.order)
     .then((orderCreated) => {
       saveOrder = Object.assign({}, orderCreated);
       return Promise.all([db.addItemsToOrder(orderCreated._id, orderInfo.items, orderInfo.ownerId),
         db.createOrderCustomerRelationship(
           orderCreated._id, orderInfo.customerId, orderInfo.package.expires),
-        db.createOrderPackageRelationship(
-          orderCreated._id, orderInfo.package.id, 1),
+        // db.createOrderPackageRelationship(
+        //   orderCreated._id, orderInfo.package.id, 1),
         db.createRelationship(
           'Owner', orderInfo.ownerId, 'VIEW', 'CustomerOrder', [orderCreated._id]),
         ]);

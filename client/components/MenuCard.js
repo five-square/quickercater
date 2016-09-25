@@ -23,12 +23,14 @@ export default class MenuCard extends Component {
       name: this.props.menu.name,
       items: [],
       description: this.props.menu.description,
+      updatedItemOnOrder: this.props.updatedItemOnOrder,
     };
   }
 
   componentWillMount() {
     Menu.getItems(this.state.id)
     .then(items => {
+      console.log('items: ', items);
       this.setState({
         items,
       });
@@ -112,21 +114,21 @@ export default class MenuCard extends Component {
               showExpandableButton={false}
             />
             <CardText expandable={false}>
-              {this.state.items.map((item, index) => {
-                let pic = item.picture;
-                if (item.picture.length < 5 || item.picture === false) {
+              {this.state.items.map((itemInfo, index) => {
+                var pic = itemInfo.item.picture;
+                if (itemInfo.item.picture.length < 5 || itemInfo.item.picture === false) {
                   pic = 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png';
                 }
                 return (<ItemCard
                   key={index}
-                  id={item.id}
-                  name={item.name}
-                  description={item.description}
-                  price={item.price}
+                  id={itemInfo.item.id}
+                  name={itemInfo.item.name}
+                  description={itemInfo.item.description}
+                  price={itemInfo.item.price}
                   picture={pic}
-                  quanity={item.quanity}
                   addItemToOrder={this.props.addItemToOrder}
                   updateTotalPrice={this.props.updateTotalPrice}
+                  ownerId={this.props.ownerId}
                 />);
               }).concat(
                 <AddItemCard

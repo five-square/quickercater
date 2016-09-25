@@ -306,7 +306,7 @@ routes.get('/api/order/getAllPending/:ownerId', (req, res) => {
 });
 
 routes.post('/api/order/create', (req, res) => {
-  db.createOrder(req.body)
+  db.createOrderAndRelationships(req.body)
   .then((dbData) => {
     res.status(201).send(dbData);
   })

@@ -135,6 +135,7 @@ export default class StoreFront extends Component {
             addItemToOrder={this.props.addItemToOrder}
             updateTotalPrice={this.props.updateTotalPrice}
             deleteMenu={e => this.handleDeleteMenu(e)}
+            ownerId={this.state.ownerId}
           />
           ).concat(
           <AddMenuCard
