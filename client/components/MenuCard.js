@@ -114,8 +114,8 @@ export default class MenuCard extends Component {
               showExpandableButton={false}
             />
             <CardText expandable={false}>
-              {this.state.items.map((itemInfo, index) =>
-                let pic = itemInfo.item.picture;
+              {this.state.items.map((itemInfo, index) => {
+                var pic = itemInfo.item.picture;
                 if (itemInfo.item.picture.length < 5 || itemInfo.item.picture === false) {
                   pic = 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png';
                 }
