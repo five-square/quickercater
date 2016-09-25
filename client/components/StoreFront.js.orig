@@ -4,11 +4,16 @@ import Cart from './Cart';
 import PackageCard from './PackageCard';
 import OrderAPI from '../models/orderAPI';
 import Dashboard from './Dashboard';
+<<<<<<< 8886333f11942573c47254be2e4e49db8b972dac
 import CompanyDescription from './StoreDescription';
-import Server from '../models/serverAPI';
+import Menu from '../models/menuAPI';
+import PackageAPI from '../models/packageAPI';
+import AddPackageCard from './AddPackageCard'
+=======
+import CompanyDescription from './CompanyDescription';
 import Package from '../models/packageAPI';
 import Owner from '../models/ownerAPI';
-import AddPackageCard from './AddPackageCard';
+>>>>>>> Improves deleting menus, still some naggy bugs
 
 export default class StoreFront extends Component {
   constructor(props) {
@@ -26,6 +31,7 @@ export default class StoreFront extends Component {
     .then(packages => {
       this.setState({ packages });
     });
+<<<<<<< 8886333f11942573c47254be2e4e49db8b972dac
 
     Server.getStoresByOwner(this.state.ownerId)
     .then(store => {
@@ -35,7 +41,10 @@ export default class StoreFront extends Component {
   }
 
   showMenus() {
+    Server.getMenusByOwner(this.state.ownerId)
+=======
     Owner.getMenus(this.state.ownerId)
+>>>>>>> Improves deleting menus, still some naggy bugs
     .then(menus => {
       this.setState({ menus });
     });
@@ -143,13 +152,32 @@ export default class StoreFront extends Component {
             : null
           }
         </div>
+<<<<<<< 8886333f11942573c47254be2e4e49db8b972dac
+        { this.state.menus.map((menu, index) =>
+          <MenuCard
+            key={index}
+            style={style}
+            menu={menu}
+            addItemToOrder={this.props.addItemToOrder}
+            updateTotalPrice={this.props.updateTotalPrice}
+            deleteMenu={e => this.handleDeleteMenu(e)}
+            ownerId={this.state.ownerId}
+          />
+          ).concat(
+          <AddMenuCard
+            key={this.state.menus.length + 1}
+            addMenu={e => this.handleAddMenu(e)}
+            style={style}
+          />
+        )}
+=======
         <MenuContainer
           style={style}
           ownerId={this.state.ownerId}
           menus={this.state.menus}
-          addItemToOrder={this.props.addItemToOrder}
           // addMenu={e => this.handleAddMenu(e)}
         />
+>>>>>>> Improves deleting menus, still some naggy bugs
       </div>
     );
   }

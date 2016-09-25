@@ -19,7 +19,10 @@ export default class App extends Component {
       showStore: false,
       globalOrder: {},
       openCart: false,
+<<<<<<< 8886333f11942573c47254be2e4e49db8b972dac
+=======
       totalPrice: 0,
+>>>>>>> Improves deleting menus, still some naggy bugs
     };
   }
 

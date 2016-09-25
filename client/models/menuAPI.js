@@ -38,9 +38,8 @@ MenuAPI.removeItem = (menuId, itemId) =>
     picture: itemElement.item.properties.picture,
   })));
 
-MenuAPI.create = (menuObj) => {
-  console.log('in menu api: ', menuObj);
-  return fetch('/api/menu/create', {
+MenuAPI.create = (menuObj) =>
+  fetch('/api/menu/create', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -48,13 +47,9 @@ MenuAPI.create = (menuObj) => {
     body: JSON.stringify(menuObj),
   })
   .then(data => data.json())
-  .then(menu => {
-    console.log('In Menu.create: ', menu);
-    return ({
-      id: menu.menu._id,
-    });
-  });
-};
+  .then(menu => ({
+    id: menu.menu._id,
+  }));
 
 /*
   {
@@ -76,17 +71,20 @@ MenuAPI.addItem = (newObj) =>
     id: item._id,
   }));
 
-MenuAPI.delete = (menuId) => {
-  console.log('in menuAPI: ', menuId);
-  return fetch('api/menu/delete', {
+MenuAPI.delete = (menuId, ownerId) =>
+  fetch('api/menu/delete', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ id: menuId }),
+    body: JSON.stringify({ id: menuId, ownerId }),
   })
   .then(data => data.json())
-  .then(data => data);
-};
+  .then(menus => menus.map(element => ({
+    id: element.menu._id,
+    name: element.menu.properties.name,
+    description: element.menu.properties.description,
+  })));
+
 
 export default MenuAPI;
