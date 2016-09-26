@@ -258,7 +258,7 @@ db.createOrderPackageRelationship = (orderId, packageId, quantity) => Node.cyphe
 .then(response => response);
 
 db.createOrderAndRelationships = (orderInfo) => {
-  var saveOrder = {};
+  let saveOrder = {};
   return db.createOrder(orderInfo.order)
     .then((orderCreated) => {
       saveOrder = Object.assign({}, orderCreated);
@@ -436,6 +436,46 @@ db.prepareMenuForDelete = (menuId) => Node.cypherAsync({
     RETURN r1, menu`,
   params: {
     menuId,
+  },
+})
+.then(data => data);
+
+db.moveMenuUp = (menuId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner)-[r1:CAN_EDIT]->(menu:Menu) WHERE ID(menu) = ${menuId}
+    MATCH (owner)-[r2:CAN_EDIT]->(menu2:Menu)
+    WHERE r2.order = r1.order  - 1
+    SET r1.order = r1.order - 1
+    SET r2.order = r2.order + 1
+    return owner`,
+  params: {
+    menuId,
+  },
+})
+.then(data => data);
+
+db.moveMenuDown = (menuId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner)-[r1:CAN_EDIT]->(menu:Menu) WHERE ID(menu) = ${menuId}
+    MATCH (owner)-[r2:CAN_EDIT]->(menu2:Menu)
+    WHERE r2.order = r1.order + 1
+    SET r1.order = r1.order + 1
+    SET r2.order = r2.order - 1
+    return owner`,
+  params: {
+    menuId,
+  },
+})
+.then(data => data);
+
+db.updateMenu = (menuObj) => Node.cypherAsync({
+  query: `
+    MATCH (menu:Menu) WHERE ID(menu) = ${menuObj.id}
+    SET menu += {name: {name}, description: {description}}
+    RETURN menu`,
+  params: {
+    name: menuObj.name,
+    description: menuObj.description,
   },
 })
 .then(data => data);

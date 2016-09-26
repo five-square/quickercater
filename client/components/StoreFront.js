@@ -105,6 +105,18 @@ export default class StoreFront extends Component {
   //   // OA.cAO needs to remove the -[rel:EDIT]->(owner) relationship
   //   // discuss this with team
 
+        // <div className="CateringOptions">
+        //   {this.state.packages.map((pack, index) =>
+        //     <PackageCard
+        //       style={style}
+        //       key={index}
+        //       ownerId={this.state.ownerId}
+        //       pack={pack}
+        //     />
+        //   ).concat(
+        //     <AddPackageCard />
+        //   )}
+        // </div>
   // }
 
   render() {
@@ -128,7 +140,12 @@ export default class StoreFront extends Component {
             />
         )}
         </div>
-        <Dashboard style={style} ownerId={this.state.ownerId} pendingOrders={this.state.pendingOrders} acceptedOrders={this.state.acceptedOrders} />
+        <Dashboard
+          style={style}
+          ownerId={this.state.ownerId}
+          pendingOrders={this.state.pendingOrders}
+          acceptedOrders={this.state.acceptedOrders}
+        />
         <div className="CateringOptions">
           {this.state.packages.map((pack, index) =>
             <PackageCard
@@ -138,8 +155,7 @@ export default class StoreFront extends Component {
               pack={pack}
             />
           ).concat(
-          <AddPackageCard/>
-
+            <AddPackageCard key={this.state.packages.length} />
           )}
         </div>
         <div>

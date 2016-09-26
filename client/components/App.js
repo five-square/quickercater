@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-// import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import Badge from 'material-ui/Badge';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+// import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 // import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Lobby from './Lobby';
 import StoreFront from './StoreFront';
 import Server from '../models/serverAPI';
 import Navigation from './Navigation';
 import Cart from './Cart';
-import Badge from 'material-ui/Badge';
 
 export default class App extends Component {
   constructor(props) {
@@ -150,11 +150,9 @@ export default class App extends Component {
         <MuiThemeProvider>
           <div style={{ textAlign: 'center' }}>
             <Badge
-              badgeContent="&copy;"
-              badgeStyle={{ fontSize: 20 }}
-            >
-      QuickerCater
-            </Badge>
+              badgeContent="&copy;QuickerCater"
+              badgeStyle={{ fontSize: 12 }}
+            />
           </div>
         </MuiThemeProvider>
       </div>
