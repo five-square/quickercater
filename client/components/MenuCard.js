@@ -12,6 +12,7 @@ import ItemCard from './ItemCard';
 import Menu from '../models/menuAPI';
 import AddItemCard from './AddItemsButton';
 import Item from '../models/itemAPI';
+import EditMenu from './EditMenu';
 
 export default class MenuCard extends Component {
 
@@ -51,18 +52,7 @@ export default class MenuCard extends Component {
     this.props.addItemToOrder(itemObj);
   }
 
-  handleMoveMenuUp() {
-    console.log('Clicked up!');
-    this.props.moveMenu('UP', this.props.menu.id);
-  }
-
-  handleMoveMenuDown() {
-    console.log('Clicked Down!');
-    this.props.moveMenu('DOWN', this.props.menu.id);
-  }
-
-  handleMenuDelete() {
-    this.props.deleteMenu(this.props.menu.id);
+  handleEditMenu() {
   }
 
   handleAddItem(itemObj) {
@@ -87,6 +77,11 @@ export default class MenuCard extends Component {
 
   render() {
     const style = {
+      floatingEditButton: {
+        right: 170,
+        bottom: 20,
+        position: 'absolute',
+      },
       floatingUpButton: {
         right: 120,
         bottom: 20,
@@ -132,7 +127,7 @@ export default class MenuCard extends Component {
             />
             <CardText expandable>
               {this.state.items.map((itemInfo, index) => {
-                var pic = itemInfo.item.picture;
+                let pic = itemInfo.item.picture;
                 if (itemInfo.item.picture.length < 5 || itemInfo.item.picture === false) {
                   pic = 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png';
                 }
@@ -157,12 +152,19 @@ export default class MenuCard extends Component {
             )}
             </CardText>
             <CardActions style={style.cardActions}>
+              <EditMenu
+                style={style.floatingEditButton}
+                id={this.props.menu.id}
+                name={this.props.menu.name}
+                description={this.props.menu.description}
+                editMenu={this.props.editMenu}
+              />
               <FloatingActionButton
                 style={style.floatingUpButton}
                 mini
                 onTouchTap={e => {
                   e.preventDefault();
-                  this.handleMoveMenuUp(e);
+                  this.props.moveMenu('UP', this.props.menu.id);
                 }}
               >
                 <KeyUp />
@@ -172,7 +174,7 @@ export default class MenuCard extends Component {
                 mini
                 onTouchTap={e => {
                   e.preventDefault();
-                  this.handleMoveMenuDown(e);
+                  this.props.moveMenu('DOWN', this.props.menu.id);
                 }}
               >
                 <KeyDown />
@@ -182,7 +184,7 @@ export default class MenuCard extends Component {
                 mini
                 onTouchTap={e => {
                   e.preventDefault();
-                  this.handleMenuDelete(e);
+                  this.props.deleteMenu(this.props.menu.id);
                 }}
               >
                 <ContentRemove />

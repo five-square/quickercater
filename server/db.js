@@ -468,6 +468,18 @@ db.moveMenuDown = (menuId) => Node.cypherAsync({
 })
 .then(data => data);
 
+db.updateMenu = (menuObj) => Node.cypherAsync({
+  query: `
+    MATCH (menu:Menu) WHERE ID(menu) = ${menuObj.id}
+    SET menu += {name: {name}, description: {description}}
+    RETURN menu`,
+  params: {
+    name: menuObj.name,
+    description: menuObj.description,
+  },
+})
+.then(data => data);
+
 /*
   **********************************************************************************************
 

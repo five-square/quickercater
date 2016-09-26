@@ -56,6 +56,13 @@ export default class MenuContainer extends Component {
     });
   }
 
+  handleEditMenu(menuObj) {
+    Menu.edit(menuObj, this.state.ownerId)
+    .then(() => {
+      this.showMenus();
+    });
+  }
+
   render() {
     console.log('in MenuContainer render(): ', this.state.menus);
     return (
@@ -70,6 +77,7 @@ export default class MenuContainer extends Component {
             updateTotalPrice={this.props.updateTotalPrice}
             deleteMenu={e => this.handleDeleteMenu(e)}
             moveMenu={(d, e) => this.handleMoveMenu(d, e)}
+            editMenu={e => this.handleEditMenu(e)}
           />
           ).concat(
           <AddMenuCard

@@ -199,17 +199,10 @@ routes.put('/api/menu/:ownerId/reorder', (req, res) => {
 
 routes.put('/api/menu/:ownerId/update', (req, res) => {
   console.log(req.body.menuId);
-  if (req.body.direction === 'UP') {
-    db.moveMenuUp(req.body.menuId)
-    .then(dbData => {
-      res.status(201).send(dbData);
-    });
-  } else {
-    db.moveMenuDown(req.body.menuId)
-    .then(dbData => {
-      res.status(201).send(dbData);
-    });
-  }
+  db.updateMenu(req.body)
+  .then(dbData => {
+    res.status(201).send(dbData);
+  });
 });
 
 routes.get('/api/menu/items/:menuId', (req, res) => {
