@@ -287,6 +287,8 @@ db.fetchAllPendingOrders = (ownerId) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
     MATCH (order:CustomerOrder)-[rel:VIEW]->(owner)
+    OPTIONAL MATCH (order)-[rel1:CAN_EDIT]-(owner)
+    WHERE rel1 is null
     RETURN order`,
   params: {
     ownerId,
@@ -294,30 +296,29 @@ db.fetchAllPendingOrders = (ownerId) => Node.cypherAsync({
 })
 .then(response => response);
 
-db.fetchAllAcceptedOrders = (ownerId) => {
+db.fetchAllAcceptedOrders = (ownerId) =>
   Node.cypherAsync({
     query: `
-    MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
-    MATCH (order:CustomerOrder)-[rel:EDIT]->(owner)
+    MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
+    MATCH (order:CustomerOrder)-[rel:CAN_EDIT]-(owner)
     RETURN order`,
     params: {
       ownerId,
     },
   }).then(response => response);
-};
 
 
-db.fetchAllCompletedOrders = (ownerId) => Node.cypherAsync({
-  query: `
-    MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
-    MATCH (order:CustomerOrder)-[rel:VIEW]->(owner)
-    WHERE order.fulfilled = true
-    RETURN order`,
-  params: {
-    ownerId,
-  },
-})
-.then(response => response);
+// db.fetchAllCompletedOrders = (ownerId) => Node.cypherAsync({
+//   query: `
+//     MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
+//     MATCH (order:CustomerOrder)-[rel:VIEW]->(owner)
+//     WHERE order.fulfilled = true
+//     RETURN order`,
+//   params: {
+//     ownerId,
+//   },
+// })
+// .then(response => response);
 
 db.updateOrderStatus = (orderId, status) => Node.cypherAsync({
   query: `
