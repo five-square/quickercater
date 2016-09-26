@@ -52,7 +52,7 @@ AuthPort.on('auth', (req, res, profile) => {
               res.redirect('/');
             });
         } else {
-          res.cookie('sessionId', user[0].owner._id);
+          res.cookie('sessionId', user[0].owner.properties.auth_key);
           res.redirect('/');
         }
       });
