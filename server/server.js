@@ -182,6 +182,36 @@ routes.get('/api/menu/:ownerId', (req, res) => {
   });
 });
 
+routes.put('/api/menu/:ownerId/reorder', (req, res) => {
+  console.log(req.body.menuId);
+  if (req.body.direction === 'UP') {
+    db.moveMenuUp(req.body.menuId)
+    .then(dbData => {
+      res.status(201).send(dbData);
+    });
+  } else {
+    db.moveMenuDown(req.body.menuId)
+    .then(dbData => {
+      res.status(201).send(dbData);
+    });
+  }
+});
+
+routes.put('/api/menu/:ownerId/update', (req, res) => {
+  console.log(req.body.menuId);
+  if (req.body.direction === 'UP') {
+    db.moveMenuUp(req.body.menuId)
+    .then(dbData => {
+      res.status(201).send(dbData);
+    });
+  } else {
+    db.moveMenuDown(req.body.menuId)
+    .then(dbData => {
+      res.status(201).send(dbData);
+    });
+  }
+});
+
 routes.get('/api/menu/items/:menuId', (req, res) => {
   db.getItemsByMenuId(req.params.menuId)
   .then(dbData => {
@@ -204,10 +234,6 @@ routes.post('/api/menu/item/add', (req, res) => {
     res.status(201).send(item);
   });
 });
-
-// routes.post('/api/menu/item/remove', (req, res) => {
-//   db.removeitemFromMenu();
-// });
 
 routes.post('/api/menu/delete', (req, res) => {
   console.log('in server, before db: ', req.body.id);

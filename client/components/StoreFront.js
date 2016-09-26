@@ -9,7 +9,6 @@ import Server from '../models/serverAPI';
 import Package from '../models/packageAPI';
 import Owner from '../models/ownerAPI';
 import AddPackageCard from './AddPackageCard';
-import PackageStepper from './PackageStepper';
 
 export default class StoreFront extends Component {
   constructor(props) {
@@ -141,8 +140,12 @@ export default class StoreFront extends Component {
             />
         )}
         </div>
-        <Dashboard style={style} ownerId={this.state.ownerId} pendingOrders={this.state.pendingOrders} acceptedOrders={this.state.acceptedOrders} />
-        <PackageStepper />
+        <Dashboard
+          style={style}
+          ownerId={this.state.ownerId}
+          pendingOrders={this.state.pendingOrders}
+          acceptedOrders={this.state.acceptedOrders}
+        />
         <div className="CateringOptions">
           {this.state.packages.map((pack, index) =>
             <PackageCard
@@ -152,8 +155,7 @@ export default class StoreFront extends Component {
               pack={pack}
             />
           ).concat(
-          <AddPackageCard/>
-
+            <AddPackageCard key={this.state.packages.length} />
           )}
         </div>
         <div>

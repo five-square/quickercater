@@ -3,24 +3,27 @@ import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import PackageAPI from '../models/packageAPI';
 
 
-export default class CateringOptions extends React.Component {
+export default class PackageCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       ownerId: this.props.ownerId,
       packages: [],
-      name: this.props.pack.pack.properties.name,
-      picture: this.props.pack.pack.properties.picture,
-      description: this.props.pack.pack.properties.description,
+      id: this.props.pack.id,
+      name: this.props.pack.name,
+      picture: this.props.pack.picture,
+      description: this.props.pack.description,
+      cost: this.props.pack.cost,
+      type: this.props.pack.type,
     };
   }
 
   componentWillMount() {
-    PackageAPI.getAllPackages(this.props.ownerId)
-    .then(packages => {
-      this.setState({ packages });
-      console.log('State packages', this.state.packages);
-    });
+    // PackageAPI.getAllPackages(this.props.ownerId)
+    // .then(packages => {
+    //   this.setState({ packages });
+    //   console.log('State packages', this.state.packages);
+    // });
   }
 
   render() {
@@ -34,7 +37,7 @@ export default class CateringOptions extends React.Component {
 
     const styleDiv = {
       paddingLeft: 50,
-      display: 'inline-block'
+      display: 'inline-block',
     };
 
     return (

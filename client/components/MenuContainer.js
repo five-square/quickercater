@@ -15,18 +15,11 @@ export default class MenuContainer extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     Owner.getMenus(this.state.ownerId)
     .then(menus => {
       this.setState({ menus });
     });
-  }
-
-  componentDidUpdate() {
-    console.log('Menu ID to delete: ', this.state.menuToDelete);
-    if (this.state.menuToDelete !== null) {
-      this.state.menuToDelete = null;
-    }
   }
 
   showMenus() {
@@ -49,7 +42,18 @@ export default class MenuContainer extends Component {
   }
 
   handleDeleteMenu(menuId) {
-    Menu.delete(menuId, this.state.ownerId);
+    Menu.delete(menuId, this.state.ownerId)
+    .then(() => {
+      this.showMenus();
+    });
+  }
+
+  handleMoveMenu(direction, menuId) {
+    console.log('completing move on menu ID: ', menuId);
+    Menu.move(direction, menuId, this.state.ownerId)
+    .then(() => {
+      this.showMenus();
+    });
   }
 
   render() {
@@ -65,6 +69,7 @@ export default class MenuContainer extends Component {
             addItemToOrder={this.props.addItemToOrder}
             updateTotalPrice={this.props.updateTotalPrice}
             deleteMenu={e => this.handleDeleteMenu(e)}
+            moveMenu={(d, e) => this.handleMoveMenu(d, e)}
           />
           ).concat(
           <AddMenuCard

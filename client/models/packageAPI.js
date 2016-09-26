@@ -10,7 +10,15 @@ PackageAPI.getAllPackages = (ownerId) =>
       'Content-Type': 'application/json',
     },
   })
-  .then(data => data.json());
+  .then(data => data.json())
+  .then(packages => packages.map(e => ({
+    id: e.pack._id,
+    name: e.pack.properties.name,
+    description: e.pack.properties.description,
+    type: e.pack.properties.type,
+    cost: e.pack.properties.cost,
+    picture: e.pack.properties.picture ? e.pack.properties.picture : null,
+  })));
 
 PackageAPI.createPackage = (pack) =>
   fetch('/api/package/create', {

@@ -59,7 +59,7 @@ MenuAPI.create = (menuObj) =>
   }
  */
 MenuAPI.addItem = (newObj) =>
-  fetch('api/menu/item/add', {
+  fetch('/api/menu/item/add', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ MenuAPI.addItem = (newObj) =>
   }));
 
 MenuAPI.delete = (menuId, ownerId) =>
-  fetch('api/menu/delete', {
+  fetch('/api/menu/delete', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -85,6 +85,29 @@ MenuAPI.delete = (menuId, ownerId) =>
     name: element.menu.properties.name,
     description: element.menu.properties.description,
   })));
+
+MenuAPI.move = (direction, menuId, ownerId) =>
+  fetch(`/api/menu/${ownerId}/reorder`, {
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      direction,
+      menuId,
+    }),
+  })
+  .then(data => data.json());
+
+MenuAPI.edit = (newMenuInfo, ownerId) =>
+  fetch(`/api/menu/${ownerId}/update`, {
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newMenuInfo),
+  })
+  .then(data => data.json());
 
 
 export default MenuAPI;
