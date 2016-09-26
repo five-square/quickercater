@@ -68,15 +68,4 @@ ServerAPI.getOwnerByStoreId = (storeId) =>
     name: owner.owner.properties.name,
   }));
 
-ServerAPI.signOut = () =>
-  fetch('/api/auth/logout', {
-    method: 'get',
-    headers: {
-      'Content-type': 'application/json',
-    },
-  })
-  .then(() => {
-    console.log('maybe now?');
-  });
-
 export default ServerAPI;

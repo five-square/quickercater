@@ -21,14 +21,11 @@ export default class ToolbarExamplesSimple extends React.Component {
   }
 
   signInWithGoogle() {
-    window.location.href = '/api/auth/google';
+    window.location.href = '/auth/google';
   }
 
   signOut() {
-    Server.signOut()
-    .then(() => {
-      console.log('Logged out');
-    });
+    window.location.href = '/api/auth/logout';
   }
 
   handleViewCart() {
