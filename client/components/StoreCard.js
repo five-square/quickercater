@@ -14,9 +14,9 @@ export default class StoreCard extends React.Component {
       hover: 2,
       style: this.props.style,
       id: this.props.id,
-      name: this.props.stores.name,
-      slogan: this.props.stores.slogan,
-      description: this.props.stores.description,
+      name: this.props.store.name,
+      slogan: this.props.store.slogan,
+      description: this.props.store.description,
     };
   }
 
@@ -29,7 +29,7 @@ export default class StoreCard extends React.Component {
   }
 
   handleClick() {
-    this.props.selectStore(this.state.id, this.state.name);
+    this.props.selectStore(Object.assign({}, this.props.store, { id: this.props.id }));
   }
 
   render() {
@@ -51,7 +51,7 @@ export default class StoreCard extends React.Component {
               {this.state.description}
             </CardText>
             <CardActions>
-              <FlatButton label="Take Me There" onClick={e => this.handleClick(e)} />
+              <FlatButton label="Take Me There" onTouchTap={e => this.handleClick(e)} />
             </CardActions>
           </Card>
         </Paper>

@@ -19,6 +19,7 @@ export default class App extends Component {
       owners: [],
       stores: [],
       currentOwnerId: false,
+      currentStore: {},
       currentStoreName: 'Welcome to QuickerCater',
       showStore: false,
       globalOrder: {},
@@ -42,12 +43,14 @@ export default class App extends Component {
     });
   }
 
-  selectStore(storeId, storeName) {
-    Server.getOwnerByStoreId(storeId)
+  selectStore(storeObj) {
+    Server.getOwnerByStoreId(storeObj.id)
     .then(owner => {
+      console.log('in select Store', storeObj);
       this.setState({
         currentOwnerId: owner.id,
-        currentStoreName: `Welcome to ${storeName}`,
+        currentStore: storeObj,
+        currentStoreName: `Welcome to ${storeObj.name}`,
         showStore: true,
       });
     });
@@ -154,6 +157,7 @@ export default class App extends Component {
             { this.state.showStore
               ? <StoreFront
                 ownerId={this.state.currentOwnerId}
+                store={this.state.currentStore}
                 addItemToOrder={e => this.handleAddItemToOrder(e)}
                 updateTotalPrice={this.updateTotalPrice}
               />
