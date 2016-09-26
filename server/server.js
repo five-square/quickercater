@@ -3,7 +3,6 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const browserify = require('browserify-middleware');
 const babelify = require('babelify');
-const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const AuthPort = require('authport');
 const db = require('./db');
@@ -37,7 +36,6 @@ AuthPort.createServer({
 AuthPort.on('auth', (req, res, profile) => {
   db.findOwnerByEmail(profile.data.email)
       .then(user => {
-        console.log('findOwnerByEmail: ', user);
         if (user.length === 0) {
           const newOwner = {
             name: profile.data.name,
@@ -52,12 +50,36 @@ AuthPort.on('auth', (req, res, profile) => {
               res.redirect('/');
             });
         } else {
-          res.cookie('sessionId', user[0].owner.properties.auth_key);
-          res.redirect('/');
+          db.updateOwnerAuthKey(user[0].owner._id, profile.token)
+            .then(ownerInfo => {
+              res.cookie('sessionId', ownerInfo[0].owner.properties.auth_key);
+              res.redirect('/');
+            });
         }
       });
 });
 
+/* This is the middleware that would ensure the authentication*/
+
+function getSignedInUser(req, res, next) {
+  const sessionId = req.cookies && req.cookies.sessionId;
+  if (!sessionId) {
+    // res.status(403).send('Not Authotized');
+    res.redirect('/'); // Right now redirects to root, but should do the above
+  } else {
+    db.findOwnerByAuthKey(sessionId)
+      .then(ownerInfo => {
+        if (ownerInfo.length === 0) {
+          console.log('Invalid Session - no owner found');
+          // res.status(403).send('Not Authotized');
+          res.redirect('/'); // Right now redirects to root, but should do the above
+        } else {
+          req.user = ownerInfo;
+          next();
+        }
+      });
+  }
+}
 /*
   **********************************************************************************************
 

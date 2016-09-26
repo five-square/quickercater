@@ -151,6 +151,17 @@ db.findOwnerByAuthKey = (authKey) => Node.cypherAsync({
   },
 });
 
+
+db.updateOwnerAuthKey = (ownerId, authKey) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
+    SET owner.auth_key = "${authKey}"
+    RETURN owner`,
+  params: {
+    ownerId,
+    authKey,
+  },
+});
 /*
   **********************************************************************************************
 
