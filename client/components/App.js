@@ -9,11 +9,15 @@ import Server from '../models/serverAPI';
 import Navigation from './Navigation';
 import Cart from './Cart';
 
+import Badge from 'material-ui/Badge';
+import cookieAPI from'../models/cookieAPI';
+
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       owners: [],
+      stores: [],
       currentOwnerId: false,
       currentStoreName: 'Welcome to QuickerCater',
       showStore: false,
@@ -22,10 +26,19 @@ export default class App extends Component {
     };
   }
 
+
   componentWillMount() {
+    console.log('Mounted',cookieAPI.getCookie('sessionId'));
     Server.getAllOwners()
     .then(owners => {
       this.setState({ owners });
+       var ownerName = owners.find(owner=> owner.properties.auth_key == cookieAPI.getCookie('sessionId')).properties;
+      console.log('ownername: ',ownerName);
+    });
+    Server.getAllStores()
+    .then(stores => {
+      console.log('stores: ', stores);
+      this.setState({ stores });
     });
   }
 
@@ -124,6 +137,7 @@ export default class App extends Component {
               inStore={this.state.showStore}
               goBack={e => this.handleBackClick(e)}
               viewCart={e => this.viewCart(e)}
+              showMyStore={cookieAPI.getCookie('sessionId') !== ''}
             />
             <div>
               <Cart
@@ -143,7 +157,7 @@ export default class App extends Component {
                 addItemToOrder={e => this.handleAddItemToOrder(e)}
                 updateTotalPrice={this.updateTotalPrice}
               />
-              : <Lobby selectStore={(id, name) => this.selectStore(id, name)} />
+              : <Lobby stores={this.state.stores} selectStore={(id, name) => this.selectStore(id, name)} />
             }
           </div>
         </MuiThemeProvider>

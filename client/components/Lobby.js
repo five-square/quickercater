@@ -6,15 +6,8 @@ export default class Lobby extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      stores: [],
+      stores: this.props.stores || [],
     };
-  }
-  componentWillMount() {
-    Server.getAllStores()
-    .then(stores => {
-      console.log('stores: ', stores);
-      this.setState({ stores });
-    });
   }
 
   render() {
@@ -29,7 +22,7 @@ export default class Lobby extends Component {
     };
     return (
       <div className="Lobby" >
-        { this.state.stores.map((e, i) =>
+        { this.props.stores.map((e, i) =>
           <StoreCard
             key={i}
             id={e._id}
