@@ -9,6 +9,7 @@ import Server from '../models/serverAPI';
 import Package from '../models/packageAPI';
 import Owner from '../models/ownerAPI';
 import AddPackageCard from './AddPackageCard';
+import PackageStepper from './PackageStepper';
 
 export default class StoreFront extends Component {
   constructor(props) {
@@ -105,6 +106,18 @@ export default class StoreFront extends Component {
   //   // OA.cAO needs to remove the -[rel:EDIT]->(owner) relationship
   //   // discuss this with team
 
+        // <div className="CateringOptions">
+        //   {this.state.packages.map((pack, index) =>
+        //     <PackageCard
+        //       style={style}
+        //       key={index}
+        //       ownerId={this.state.ownerId}
+        //       pack={pack}
+        //     />
+        //   ).concat(
+        //     <AddPackageCard />
+        //   )}
+        // </div>
   // }
 
   render() {
@@ -129,6 +142,7 @@ export default class StoreFront extends Component {
         )}
         </div>
         <Dashboard style={style} ownerId={this.state.ownerId} pendingOrders={this.state.pendingOrders} acceptedOrders={this.state.acceptedOrders} />
+        <PackageStepper />
         <div className="CateringOptions">
           {this.state.packages.map((pack, index) =>
             <PackageCard
