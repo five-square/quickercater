@@ -31,6 +31,7 @@
   },
   "homepage": "https://github.com/five-square/caterchimp#readme",
   "dependencies": {
+    "authport": "^1.0.0",
     "babel-core": "^6.14.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-react": "^6.11.1",
@@ -47,9 +48,6 @@
     "material-ui": "^0.15.4",
     "neo4j": "^2.0.0-RC2",
     "nodemon": "^1.10.2",
-    "passport": "^0.3.2",
-    "passport-google-oauth": "^1.0.0",
-    "passport-google-oauth20": "^1.0.0",
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.3.2",
     "react-dom": "^15.3.1",
