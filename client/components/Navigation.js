@@ -48,7 +48,12 @@ export default class ToolbarExamplesSimple extends React.Component {
               : null
             }
             <RaisedButton label="View Cart" primary onClick={e => this.handleViewCart(e)} />
-            <RaisedButton label="Login" primary onClick={e => this.signInWithGoogle(e)} />
+            {this.props.showMyStore
+              ? <RaisedButton label="myStore" primary onClick={e => this.signInWithGoogle(e)} 
+              />
+              : <RaisedButton label="Login" primary onClick={e => this.signInWithGoogle(e)} 
+              />
+            }
             <RaisedButton label="Logout" primary onClick={e => this.signOut(e)} />
           </ToolbarGroup>
         </Toolbar>
