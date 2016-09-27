@@ -98,6 +98,7 @@ export default class CartItemCard extends Component {
               type="number"
               style={{ width: 50 }}
               floatingLabelText="Quanity"
+              value={this.state.quantity}
               onChange={e => this.handleQuantityChange(e)}
               floatingLabelFixed
             />

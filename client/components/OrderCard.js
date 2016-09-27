@@ -93,8 +93,14 @@ export default class OrderCard extends React.Component {
       <div>
         { this.state.submitted === false
           ? <div>
-            <RaisedButton primary label="Submit" onTouchTap={e => this.handleOpen(e)} />
-            <RaisedButton primary label="Cancel" onTouchTap={e => this.handleRemoveOrder(e)} />
+            <RaisedButton
+              primary label="Submit"
+              onTouchTap={e => this.handleOpen(e)}
+            />
+            <RaisedButton
+              primary label="Cancel"
+              onTouchTap={e => this.handleRemoveOrder(e)}
+            />
             <Dialog
               title="Please enter your information"
               actions={actions}

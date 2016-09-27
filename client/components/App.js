@@ -73,6 +73,8 @@ export default class App extends Component {
     // Check to see if the item is already in the list
     if (itemPos < 0) {
       this.state.globalOrder[itemObj.ownerId].order.push(itemObj);
+      this.state.globalOrder[itemObj.ownerId].totalPrice =
+        this.state.globalOrder[itemObj.ownerId].totalPrice + itemObj.item.price;
       this.setState({
         openCart: true,
       });
