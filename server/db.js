@@ -257,6 +257,20 @@ db.createOrderPackageRelationship = (orderId, packageId, quantity) => Node.cyphe
 })
 .then(response => response);
 
+db.createOrderOwnerRelationship = (ownerId, orderId) => Node.cypherAsync({
+  query: `
+    MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
+    MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
+    MERGE (owner)-[relA:CAN_EDIT]->(order)
+    MERGE (owner)<-[relB:VIEW]-(order)
+    RETURN relA, relB`,
+  params: {
+    orderId,
+    ownerId,
+  },
+})
+.then(response => response);
+
 db.createOrderAndRelationships = (orderInfo) => {
   let saveOrder = {};
   return db.createOrder(orderInfo.order)
@@ -267,8 +281,8 @@ db.createOrderAndRelationships = (orderInfo) => {
           orderCreated._id, orderInfo.customerId, orderInfo.package.expires),
         // db.createOrderPackageRelationship(
         //   orderCreated._id, orderInfo.package.id, 1),
-        db.createRelationship(
-          'Owner', orderInfo.ownerId, 'VIEW', 'CustomerOrder', [orderCreated._id]),
+        db.createOrderOwnerRelationship(
+          orderInfo.ownerId, orderCreated._id),
         ]);
     })
     .then(response => ({ order: saveOrder, relationships: response }));

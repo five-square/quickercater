@@ -9,7 +9,6 @@ import Server from '../models/serverAPI';
 import Navigation from './Navigation';
 import Cart from './Cart';
 
-import Badge from 'material-ui/Badge';
 import cookieAPI from'../models/cookieAPI';
 
 export default class App extends Component {
@@ -21,6 +20,7 @@ export default class App extends Component {
       currentOwnerId: false,
       currentStore: {},
       currentStoreName: 'Welcome to QuickerCater',
+      storeName: 'QuickerCater',
       showStore: false,
       globalOrder: {},
       openCart: false,
@@ -51,6 +51,7 @@ export default class App extends Component {
         currentOwnerId: owner.id,
         currentStore: storeObj,
         currentStoreName: `Welcome to ${storeObj.name}`,
+        storeName: storeObj.name,
         showStore: true,
       });
     });
@@ -65,6 +66,7 @@ export default class App extends Component {
       this.state.globalOrder[itemObj.ownerId] = {};
       this.state.globalOrder[itemObj.ownerId].order = [];
       this.state.globalOrder[itemObj.ownerId].totalPrice = 0;
+      this.state.globalOrder[itemObj.ownerId].storeName = this.state.storeName;
     }
     const itemPos = this.state.globalOrder[itemObj.ownerId].order
       .map(itemInfo => itemInfo.item.id).indexOf(itemObj.item.id);
@@ -85,7 +87,7 @@ export default class App extends Component {
       this.state.globalOrder[itemObj.ownerId].totalPrice =
         this.state.globalOrder[itemObj.ownerId].order
         .reduce((a, b) => (a.item.price * a.quantity) + (b.item.price * b.quantity));
-    } else {
+    } else if (this.state.globalOrder[itemObj.ownerId].order.length === 1) {
       this.state.globalOrder[itemObj.ownerId].totalPrice =
           (this.state.globalOrder[itemObj.ownerId].order[0].item.price
           * this.state.globalOrder[itemObj.ownerId].order[0].quantity);

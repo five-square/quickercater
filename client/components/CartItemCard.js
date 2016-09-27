@@ -28,17 +28,16 @@ export default class CartItemCard extends Component {
   handleUpdateItemToOrder() {
     this.props.updateItemToOrder({
       item: {
-        id: this.state.id,
-        name: this.state.name,
-        price: this.state.price,
-        description: this.state.description,
-        picture: this.state.picture,
+        id: this.props.item.id,
+        name: this.props.item.name,
+        price: this.props.item.price,
+        description: this.props.item.description,
+        picture: this.props.item.picture,
       },
       quantity: this.state.quantity,
       ownerId: this.props.ownerId,
-    }, this.state.price);
+    });
   }
-
 
   handleAddItem() {
     this.props.addItem(this.state.ownerId, this.state.id);
@@ -46,17 +45,17 @@ export default class CartItemCard extends Component {
 
   handleQuantityChange(e) {
     if (e.currentTarget.value < 1) {
-      this.setState({ qtyxPrice: this.state.price });
       this.state.quantity = 0;
+      this.setState({ qtyxPrice: this.props.item.price });
     } else {
-      this.setState({ qtyxPrice: this.state.price * e.currentTarget.value });
       this.state.quantity = e.currentTarget.value;
+      this.setState({ qtyxPrice: this.props.item.price * e.currentTarget.value });
     }
     this.handleUpdateItemToOrder();
   }
 
   handleRemoveItem() {
-    this.props.removeItemFromOrder(this.state.ownerId, this.state.id);
+    this.props.removeItemFromOrder(this.props.ownerId, this.props.item.id);
   }
 
   render() {
@@ -92,9 +91,7 @@ export default class CartItemCard extends Component {
             actAsExpander
           />
           <CardText>
-            <h4>
-              {`Price: ${this.state.qtyxPrice}`}
-            </h4>
+            <h4>{`Price: ${this.state.qtyxPrice}`}</h4>
             <TextField
               ref="quantity"
               hintText="0"
