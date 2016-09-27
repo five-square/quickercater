@@ -2,7 +2,7 @@ import fetch from 'isomorphic-fetch';
 // Create, Read, Update, Delete
 const ItemAPI = {};
 
-ItemAPI.createItem = (itemObj) =>
+ItemAPI.create = (itemObj) =>
   fetch('/api/item/create', {
     method: 'post',
     headers: {
@@ -50,7 +50,7 @@ ItemAPI.updateItem = (itemId, itemObj) =>
     picture: itemElement.item.properties.picture,
   })));
 
-ItemAPI.deleteItem = (itemId) => // needs work
+ItemAPI.delete = (itemId) => // needs work
   fetch(`/api/item/delete/${itemId}`, {
     method: 'delete',
     headers: {
@@ -64,4 +64,44 @@ ItemAPI.deleteItem = (itemId) => // needs work
       id: item.item._id,
     });
   });
+
+ItemAPI.remove = (itemId, menuId) => // needs work
+  fetch('/api/item/remove', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      itemId,
+      menuId,
+    }),
+  })
+  .then(data => data.json())
+  .then(items => items.map(itemElement => ({
+    item: {
+      id: itemElement.item._id,
+      name: itemElement.item.properties.name,
+      price: itemElement.item.properties.price,
+      description: itemElement.item.properties.description,
+      picture: itemElement.item.properties.picture,
+    },
+    quantity: 1,
+  })));
+
+ItemAPI.getUnassignedItems = (ownerId) =>
+  fetch(`/api/item/unassigned/${ownerId}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(data => data.json())
+  .then(items => items.map(item => ({
+    id: item.item._id,
+    name: item.item.properties.name,
+    price: item.item.properties.price,
+    description: item.item.properties.description,
+    picture: item.item.properties.picture,
+  })));
+
 export default ItemAPI;

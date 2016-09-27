@@ -34,50 +34,40 @@ export default class Cart extends Component {
   }
 
   createCartItemsArray() {
-    const cartItems = [];
-    let owner = '';
     if (this.props.globalOrder) {
-      for (owner in this.props.globalOrder) {
-        if (this.props.globalOrder.hasOwnProperty(owner)) {
-          this.state.tempOwnerId = owner;
-          cartItems.push(
-            <Card>
-              <CardHeader
-                title={this.props.globalOrder[owner].storeName}
-                actAsExpander
-                showExpandableButton
-                onClick={e => this.handleShowHide(e)}
-              />
-              <CardText
-                // className={this.state.classname}
-              >
-                {this.props.globalOrder[owner].order.map((itemInfo, index) =>
-                  <CartItemCard
-                    key={index}
-                    style={this.props.style}
-                    item={itemInfo.item}
-                    quantity={itemInfo.quantity}
-                    priceToShow={itemInfo.priceToShow}
-                    updateOrderPrice={this.updateOrderPrice}
-                    updateItemToOrder={this.props.updateItemToOrder}
-                    removeItemFromOrder={this.props.removeItemFromOrder}
-                    ownerId={owner}
-                  />
-                )}
-              </CardText>
-              <CardText>
-                Total Price = ${this.props.globalOrder[owner].totalPrice}
-              </CardText>
-              <OrderCard
-                orderInfo={this.props.globalOrder[owner]}
-                deleteOrderAfterSubmission={this.props.deleteOrderAfterSubmission}
-                ownerId={owner}
-              />
-            </Card>);
-        }
-      }
+      return Object.keys(this.props.globalOrder).map((owner, orderIndex) =>
+        <Card key={orderIndex}>
+          <CardHeader
+            title={this.props.globalOrder[owner].storeName}
+            actAsExpander
+            showExpandableButton
+            onClick={e => this.handleShowHide(e)}
+          />
+          {this.props.globalOrder[owner].order.map((itemInfo, cardIndex) =>
+            <CartItemCard
+              key={cardIndex}
+              style={this.props.style}
+              item={itemInfo.item}
+              quantity={itemInfo.quantity}
+              priceToShow={itemInfo.priceToShow}
+              updateOrderPrice={this.updateOrderPrice}
+              updateItemToOrder={this.props.updateItemToOrder}
+              removeItemFromOrder={this.props.removeItemFromOrder}
+              ownerId={owner}
+            />
+          )}
+          <CardText>
+            Total Price = ${this.props.globalOrder[owner].totalPrice}
+          </CardText>
+          <OrderCard
+            orderInfo={this.props.globalOrder[owner]}
+            deleteOrderAfterSubmission={this.props.deleteOrderAfterSubmission}
+            ownerId={owner}
+          />
+        </Card>
+      );
     }
-    return cartItems;
+    return null;
   }
 
   render() {

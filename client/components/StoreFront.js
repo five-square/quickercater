@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import MenuContainer from './MenuContainer';
-import Cart from './Cart';
 import PackageCard from './PackageCard';
 import OrderAPI from '../models/orderAPI';
 import Dashboard from './Dashboard';
@@ -19,6 +18,7 @@ export default class StoreFront extends Component {
       menus: [],
       packages: [],
       editing: false,
+      openItemBank: false,
     };
   }
 
@@ -42,7 +42,6 @@ export default class StoreFront extends Component {
 
   fetchPendingOrders(ownerId) {
     OrderAPI.fetchPendingOrders(ownerId).then(resp => {
-      console.log('StoreF64:', resp);
       this.setState({ pendingOrders: resp });
     });
   }
@@ -52,6 +51,24 @@ export default class StoreFront extends Component {
       this.setState({ acceptedOrders: resp });
     });
   }
+        // <div className="CateringOptions">
+        //   {this.state.packages.map((pack, index) =>
+        //     <PackageCard
+        //       style={style}
+        //       key={index}
+        //       ownerId={this.state.ownerId}
+        //       pack={pack}
+        //     />
+        //   )}
+        //   {this.state.editing
+        //     ? <AddPackageCard key={this.state.packages.length} />
+        //     : null
+        //   }
+        // </div>
+        // <StoreDescription
+        //   ownerId={this.state.ownerId}
+        //   store={this.state.store}
+        // />
 
   render() {
     const style = {
@@ -68,11 +85,10 @@ export default class StoreFront extends Component {
 
         <RaisedButton
           label={`Editing ${this.state.editing ? 'On' : 'Off'}`}
-          primary onClick={() => this.setState({ editing: !this.state.editing })}
-        />
-        <StoreDescription
-          ownerId={this.state.ownerId}
-          store={this.state.store}
+          primary onClick={() => this.setState({
+            editing: !this.state.editing,
+            openItemBank: !this.state.openItemBank,
+          })}
         />
         <Dashboard
           style={style}
@@ -80,31 +96,7 @@ export default class StoreFront extends Component {
           pendingOrders={this.state.pendingOrders}
           acceptedOrders={this.state.acceptedOrders}
         />
-        <div className="CateringOptions">
-          {this.state.packages.map((pack, index) =>
-            <PackageCard
-              style={style}
-              key={index}
-              ownerId={this.state.ownerId}
-              pack={pack}
-            />
-          )}
-          {this.state.editing
-            ? <AddPackageCard key={this.state.packages.length} />
-            : null
-          }
-        </div>
-        <div>
-          <h1>Edit Yo Menu</h1>
-          {
-            this.state.openCart
-            ? <Cart
-              open={this.state.openCart}
-              order={this.state.order}
-            />
-            : null
-          }
-        </div>
+        <h1>Edit Yo Menu</h1>
         <MenuContainer
           style={style}
           ownerId={this.state.ownerId}

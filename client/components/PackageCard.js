@@ -2,7 +2,6 @@ import React from 'react';
 import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import PackageAPI from '../models/packageAPI';
 
-
 export default class PackageCard extends React.Component {
   constructor(props) {
     super(props);

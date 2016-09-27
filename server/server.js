@@ -421,20 +421,29 @@ routes.post('/api/item/update/:id', (req, res) => {
   }
 });
 
-routes.delete('/api/item/delete/:id', (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  db.getItemById(id).then(resp => {
-    if (resp) {
-      db.removeItemById(id).then(x => {
-        if (x) {
-          res.end(`Deleted itemId: ${id}`);
-        } else {
-          res.status(404).end(`Item (${id}) not deleted. Curious error.`);
-        }
+routes.post('/api/item/remove', (req, res) => {
+  const id = parseInt(req.body.itemId, 10);
+  db.prepareItemForRemove(id)
+  .then(resp1 => {
+    if (resp1) {
+      db.removeItemFromMenu(id)
+      .then(() => {
+        db.getItemsByMenuId(req.body.menuId)
+        .then(menus => {
+          console.log(`Item ${id} Removed`);
+          res.status(202).send(menus);
+        });
       });
     } else {
-      res.end('Item not found.');
+      res.status(404).send(`Item ${id} not found.`);
     }
+  });
+});
+
+routes.get('/api/item/unassigned/:ownerId', (req, res) => {
+  db.getUnassignedItems(req.params.ownerId)
+  .then(items => {
+    res.status(200).send(items);
   });
 });
 /*

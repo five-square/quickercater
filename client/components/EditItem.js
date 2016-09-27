@@ -5,7 +5,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import TextField from 'material-ui/TextField';
 
-export default class EditMenu extends Component {
+export default class EditItem extends Component {
 
   constructor(props) {
     super(props);
@@ -50,8 +50,9 @@ export default class EditMenu extends Component {
 
   render() {
     const style = {
-      floatingEditButton: {
-        right: 170,
+      floatingActionButton: {
+        top: 15,
+        right: 20,
         bottom: 20,
         position: 'absolute',
       },
@@ -82,6 +83,8 @@ export default class EditMenu extends Component {
       <div style={style.card}>
         <FloatingActionButton
           style={this.props.style}
+          zDepth={0}
+          secondary
           mini
           onTouchTap={() => this.setState({ open: true })}
         >

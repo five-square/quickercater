@@ -22,10 +22,15 @@ export default class MenuContainer extends Component {
     });
   }
 
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      openItemBank: newProps.editing,
+    });
+  }
+
   showMenus() {
     Owner.getMenus(this.state.ownerId)
     .then(menus => {
-      console.log('Menus in showMenus: ', menus);
       this.setState({ menus });
     });
   }
@@ -49,7 +54,6 @@ export default class MenuContainer extends Component {
   }
 
   handleMoveMenu(direction, menuId) {
-    console.log('completing move on menu ID: ', menuId);
     Menu.move(direction, menuId, this.state.ownerId)
     .then(() => {
       this.showMenus();
@@ -63,8 +67,13 @@ export default class MenuContainer extends Component {
     });
   }
 
+  viewItemBank() {
+    this.setState({
+      openItemBank: false,
+    });
+  }
+
   render() {
-    console.log('in MenuContainer render(): ', this.state.menus);
     return (
       <div className="menu-container">
         { this.state.menus.map((menu, index) =>

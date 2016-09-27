@@ -252,7 +252,7 @@ dbInit.init = () => Node.cypherAsync({
       name: 'Hamburger',
       description: 'Classic burger',
       price: 2.99,
-      picture: true
+      picture: false
     })
     CREATE (bobMain2:Item {
       name: 'Cheeseburger',
@@ -312,7 +312,7 @@ dbInit.init = () => Node.cypherAsync({
       name: 'Enchilada',
       description: 'Nice and cheesy',
       price: 8.99,
-      picture: true
+      picture: false
     })
     CREATE (aliceMain2:Item {
       name: 'Carnitas',

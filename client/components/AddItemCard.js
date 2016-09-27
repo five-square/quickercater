@@ -7,6 +7,8 @@ import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
+import { Tabs, Tab } from 'material-ui/Tabs';
+import SelectItemMenu from './SelectItemMenu';
 
 export default class AddItem extends React.Component {
 
@@ -93,6 +95,7 @@ export default class AddItem extends React.Component {
     let divToRender = '';
     const imgPrev = {
       float: 'right',
+      marginTop: '8%',
       marginRight: '3%',
       height: '25%',
       width: '25%',
@@ -119,6 +122,37 @@ export default class AddItem extends React.Component {
           //   value={this.state.newItemPicture}
           //   onChange={e => this.handleItemPictureChange(e)}
           // />
+          // { this.renderPreview() }
+          // <TextField
+          //   hintText="Item"
+          //   floatingLabelText="Enter Item Title"
+          //   value={this.state.newItemTitle}
+          //   onChange={e => this.handleItemTitleChange(e)}
+          // /><br />
+          // <TextField
+          //   hintText="Description"
+          //   floatingLabelText="Enter Item Description"
+          //   value={this.state.newItemDescription}
+          //   onChange={e => this.handleItemDescriptionChange(e)}
+          // /><br />
+          // <TextField
+          //   hintText="Price"
+          //   floatingLabelText="Enter Item Price"
+          //   value={this.state.newItemPrice}
+          //   onChange={e => this.handleItemPriceChange(e)}
+          // />
+          // <br />
+          // <br />
+          // <FlatButton
+          //   label="Choose an Image"
+          //   labelPosition="before"
+          // >
+          //   <input
+          //     type="file"
+          //     style={style.imageInput}
+          //     onChange={e => this.handleItemPictureChange(e)}
+          //   />
+          // </FlatButton>
   render() {
     const style = {
       floatingActionButton: {
@@ -188,37 +222,48 @@ export default class AddItem extends React.Component {
           open={this.state.open}
           onRequestClose={(e) => this.handleClose(e)}
         >
-          { this.renderPreview() }
-          <TextField
-            hintText="Item"
-            floatingLabelText="Enter Item Title"
-            value={this.state.newItemTitle}
-            onChange={e => this.handleItemTitleChange(e)}
-          /><br />
-          <TextField
-            hintText="Description"
-            floatingLabelText="Enter Item Description"
-            value={this.state.newItemDescription}
-            onChange={e => this.handleItemDescriptionChange(e)}
-          /><br />
-          <TextField
-            hintText="Price"
-            floatingLabelText="Enter Item Price"
-            value={this.state.newItemPrice}
-            onChange={e => this.handleItemPriceChange(e)}
-          />
-          <br />
-          <br />
-          <FlatButton
-            label="Choose an Image"
-            labelPosition="before"
-          >
-            <input
-              type="file"
-              style={style.imageInput}
-              onChange={e => this.handleItemPictureChange(e)}
-            />
-          </FlatButton>
+          <Tabs>
+            <Tab label="Create New" >
+              <div>
+                { this.renderPreview() }
+                <TextField
+                  hintText="Item"
+                  floatingLabelText="Enter Item Title"
+                  value={this.state.newItemTitle}
+                  onChange={e => this.handleItemTitleChange(e)}
+                /><br />
+                <TextField
+                  hintText="Description"
+                  floatingLabelText="Enter Item Description"
+                  value={this.state.newItemDescription}
+                  onChange={e => this.handleItemDescriptionChange(e)}
+                /><br />
+                <TextField
+                  hintText="Price"
+                  floatingLabelText="Enter Item Price"
+                  value={this.state.newItemPrice}
+                  onChange={e => this.handleItemPriceChange(e)}
+                />
+                <br />
+                <br />
+                <FlatButton
+                  label="Choose an Image"
+                  labelPosition="before"
+                >
+                  <input
+                    type="file"
+                    style={style.imageInput}
+                    onChange={e => this.handleItemPictureChange(e)}
+                  />
+                </FlatButton>
+              </div>
+            </Tab>
+            <Tab label="Add Existing" >
+              <div>
+                <SelectItemMenu />
+              </div>
+            </Tab>
+          </Tabs>
         </Dialog>
       </div>
     );
