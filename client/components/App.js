@@ -24,23 +24,38 @@ export default class App extends Component {
       showStore: false,
       globalOrder: {},
       openCart: false,
+      myStore: null,
     };
   }
 
 
   componentWillMount() {
-    console.log('Mounted',cookieAPI.getCookie('sessionId'));
-    Server.getAllOwners()
-    .then(owners => {
-      this.setState({ owners });
-       var ownerName = owners.find(owner=> owner.properties.auth_key == cookieAPI.getCookie('sessionId')).properties;
-      console.log('ownername: ',ownerName);
-    });
-    Server.getAllStores()
-    .then(stores => {
-      console.log('stores: ', stores);
-      this.setState({ stores });
-    });
+    // use newly created endpoint /api/StoresAndOwners to get an array of objects back with each index having
+    // an {owner: {ownerNode...}, store: {storeNode}} which correspond to each other.
+
+    console.log('Mounted App. Session Id: ',cookieAPI.getCookie('sessionId'));
+    // Server.getAllOwners()
+    // .then(owners => {
+    //   this.setState({ owners });
+    //    var ownerName = owners.find(owner=> owner.properties.auth_key == cookieAPI.getCookie('sessionId')).properties;
+    //   console.log('ownername: ',ownerName);
+    // });
+    // Server.getAllStores()
+    // .then(stores => {
+    //   console.log('stores: ', stores);
+    //   this.setState({ stores });
+    // });
+    var sessId = cookieAPI.getCookie('sessionId');
+    Server.getAllStoresAndOwners()
+      .then( storeAndOwnerArray => {
+        var owners = storeAndOwnerArray.map(group=>group.owner);
+        var stores = storeAndOwnerArray.map(group=>group.store);
+        this.setState({ owners, stores});
+        var ownerKeys = owners.map(owner => owner.properties.auth_key);
+        if(ownerKeys.indexOf(sessId) !== -1){
+          this.setState({myStore: stores[ownerKeys.indexOf(sessId)]});
+        }
+      });
   }
 
   selectStore(storeObj) {
@@ -135,6 +150,7 @@ export default class App extends Component {
         // muiTheme={getMuiTheme(darkBaseTheme)}>
 
   render() {
+    //console.log(this.state.owners);
     return (
       <div>
         <MuiThemeProvider>
@@ -144,7 +160,9 @@ export default class App extends Component {
               inStore={this.state.showStore}
               goBack={e => this.handleBackClick(e)}
               viewCart={e => this.viewCart(e)}
-              showMyStore={cookieAPI.getCookie('sessionId') !== ''}
+              showMyStore={this.state.myStore !== null}
+              myStore={this.state.myStore}
+              goToMyStore={this.selectStore.bind(this)}
             />
             <div>
               <Cart

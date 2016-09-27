@@ -102,6 +102,12 @@ routes.get('/', (req, res) => {
   **********************************************************************************************
 */
 
+routes.get('/api/storesAndOwners', (req,res)=>{
+  db.getAllStoresAndOwners().then(ownerAndStores => {
+    res.status(200).send(ownerAndStores);
+  });
+});
+
 routes.get('/api/stores/all', (req, res) => {
   db.findAllStores()
   .then(stores => {

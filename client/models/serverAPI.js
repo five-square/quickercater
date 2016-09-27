@@ -68,4 +68,13 @@ ServerAPI.getOwnerByStoreId = (storeId) =>
     name: owner.owner.properties.name,
   }));
 
+  ServerAPI.getAllStoresAndOwners = () =>
+    fetch('/api/storesAndOwners', {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(data => data.json());
+
 export default ServerAPI;
