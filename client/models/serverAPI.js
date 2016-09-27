@@ -16,8 +16,8 @@ ServerAPI.getAllStores = () =>
   })
   .then(data => data.json());
 
-ServerAPI.getStoresByOwner = (ownerId) =>
-  fetch(`/api/stores/${ownerId}`, {
+ServerAPI.getStoreByOwner = (ownerId) =>
+  fetch(`/api/store/${ownerId}`, {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',

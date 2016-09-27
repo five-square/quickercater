@@ -27,7 +27,7 @@ export default class Lobby extends Component {
             key={i}
             id={e._id}
             style={style}
-            stores={e.properties}
+            store={e.properties}
             selectStore={this.props.selectStore}
           />
         )}

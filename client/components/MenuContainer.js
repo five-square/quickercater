@@ -71,7 +71,7 @@ export default class MenuContainer extends Component {
           <MenuCard
             key={index}
             style={this.state.style}
-            show
+            editing={this.props.editing}
             menu={menu}
             addItemToOrder={this.props.addItemToOrder}
             updateTotalPrice={this.props.updateTotalPrice}
@@ -79,14 +79,15 @@ export default class MenuContainer extends Component {
             moveMenu={(d, e) => this.handleMoveMenu(d, e)}
             editMenu={e => this.handleEditMenu(e)}
           />
-          ).concat(
-          <AddMenuCard
+        )}
+        {this.props.editing
+          ? <AddMenuCard
             key={this.state.menus.length + 1}
             addMenu={e => this.handleAddMenu(e)}
             style={this.state.style}
           />
-        )}
-
+          : null
+        }
       </div>
     );
   }

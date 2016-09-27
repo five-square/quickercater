@@ -101,16 +101,17 @@ export default class MenuCard extends Component {
         position: 'relative',
         height: 30,
       },
+      addItem: {
+        width: '60%',
+        flex: '50%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
     };
-    const addItemStyle = {
-      width: '60%',
-      flex: '50%',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-    };
+
     return (
       <div style={this.state.style}>
         <Paper zDepth={this.state.hover}>
@@ -133,6 +134,7 @@ export default class MenuCard extends Component {
                 }
                 return (<ItemCard
                   key={index}
+                  editing={this.props.editing}
                   id={itemInfo.item.id}
                   name={itemInfo.item.name}
                   description={itemInfo.item.description}
@@ -142,54 +144,59 @@ export default class MenuCard extends Component {
                   updateTotalPrice={this.props.updateTotalPrice}
                   ownerId={this.props.ownerId}
                 />);
-              }).concat(
-                <AddItemCard
+              })}
+              {this.props.editing
+                ? <AddItemCard
                   key={this.state.items.length + 1}
                   addItem={e => this.handleAddItem(e)}
-                  style={addItemStyle}
+                  style={style.addItem}
                   pic={'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png'}
                 />
-            )}
+                : null
+              }
             </CardText>
-            <CardActions style={style.cardActions}>
-              <EditMenu
-                style={style.floatingEditButton}
-                id={this.props.menu.id}
-                name={this.props.menu.name}
-                description={this.props.menu.description}
-                editMenu={this.props.editMenu}
-              />
-              <FloatingActionButton
-                style={style.floatingUpButton}
-                mini
-                onTouchTap={e => {
-                  e.preventDefault();
-                  this.props.moveMenu('UP', this.props.menu.id);
-                }}
-              >
-                <KeyUp />
-              </FloatingActionButton>
-              <FloatingActionButton
-                style={style.floatingDownButton}
-                mini
-                onTouchTap={e => {
-                  e.preventDefault();
-                  this.props.moveMenu('DOWN', this.props.menu.id);
-                }}
-              >
-                <KeyDown />
-              </FloatingActionButton>
-              <FloatingActionButton
-                style={style.floatingDeleteButton}
-                mini
-                onTouchTap={e => {
-                  e.preventDefault();
-                  this.props.deleteMenu(this.props.menu.id);
-                }}
-              >
-                <ContentRemove />
-              </FloatingActionButton>
-            </CardActions>
+            {this.props.editing
+              ? <CardActions style={style.cardActions}>
+                <EditMenu
+                  style={style.floatingEditButton}
+                  id={this.props.menu.id}
+                  name={this.props.menu.name}
+                  description={this.props.menu.description}
+                  editMenu={this.props.editMenu}
+                />
+                <FloatingActionButton
+                  style={style.floatingUpButton}
+                  mini
+                  onTouchTap={e => {
+                    e.preventDefault();
+                    this.props.moveMenu('UP', this.props.menu.id);
+                  }}
+                >
+                  <KeyUp />
+                </FloatingActionButton>
+                <FloatingActionButton
+                  style={style.floatingDownButton}
+                  mini
+                  onTouchTap={e => {
+                    e.preventDefault();
+                    this.props.moveMenu('DOWN', this.props.menu.id);
+                  }}
+                >
+                  <KeyDown />
+                </FloatingActionButton>
+                <FloatingActionButton
+                  style={style.floatingDeleteButton}
+                  mini
+                  onTouchTap={e => {
+                    e.preventDefault();
+                    this.props.deleteMenu(this.props.menu.id);
+                  }}
+                >
+                  <ContentRemove />
+                </FloatingActionButton>
+              </CardActions>
+              : null
+            }
           </Card>
         </Paper>
         <br />
