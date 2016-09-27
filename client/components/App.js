@@ -9,7 +9,7 @@ import Server from '../models/serverAPI';
 import Navigation from './Navigation';
 import Cart from './Cart';
 
-import Badge from 'material-ui/Badge';
+
 import cookieAPI from'../models/cookieAPI';
 
 export default class App extends Component {

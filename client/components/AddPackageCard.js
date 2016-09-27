@@ -18,7 +18,7 @@ export default class AddPackageCard extends React.Component {
       newPackageName: '',
       newPackageDescription: '',
       newPackagePrice: '',
-      newPackagePicture: '',
+      newPackagePicture: false,
       newPackageType: '',
     };
   }
@@ -68,20 +68,59 @@ export default class AddPackageCard extends React.Component {
     });
   }
 
-  handlePackagePictureChange(e) {
-    this.setState({
-      newPackagePicture: e.currentTarget.value,
-    });
-  }
-
   handlePackageTypeChange(e) {
     this.setState({
       newPackageType: e.currentTarget.value,
     });
   }
 
+  handlePackagePictureChange(e) {
+    e.preventDefault();
+
+    const reader = new FileReader();
+    const file = e.currentTarget.files[0];
+    reader.onload = (a) => {
+      this.setState({
+        newPackagePicture: a.target.result,
+      });
+    };
+    reader.readAsDataURL(file);
+  }
+
   handleCancel() {
-    this.setState({ open: false });
+    this.setState({
+      open: false,
+      newPackageName: '',
+      newPackageDescription: '',
+      newPackagePrice: '',
+      newPackagePicture: 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png',
+      newPackageType: '',
+    });
+  }
+  renderPreview() {
+    let divToRender = '';
+    const imgPrev = {
+      float: 'right',
+      marginRight: '3%',
+      height: '25%',
+      width: '25%',
+    };
+    if (this.state.newItemPicture !== false) {
+      divToRender = (
+        <img
+          alt="packagePic"
+          src={this.state.newPackagePicture}
+          style={imgPrev}
+        />);
+    } else {
+      divToRender = (
+        <img
+          alt="packagePic"
+          src={this.props.pic}
+          style={imgPrev}
+        />);
+    }
+    return divToRender;
   }
 
   render() {
@@ -100,8 +139,18 @@ export default class AddPackageCard extends React.Component {
         marginBottom: '5%',
         width: 250,
       },
+      imageInput: {
+        cursor: 'pointer',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        width: '100%',
+        opacity: 0,
+      },
     };
-    // action buttons for Modal
+
     const actions = [
       <FlatButton
         label="Cancel"
@@ -115,7 +164,6 @@ export default class AddPackageCard extends React.Component {
         onTouchTap={e => this.handleAddPackage(e)}
       />,
     ];
-    // This is the actual modal
     return (
       <div style={style.card}>
         <Paper zDepth={this.state.hover} >
@@ -144,6 +192,7 @@ export default class AddPackageCard extends React.Component {
           open={this.state.open}
           onRequestClose={(e) => this.handleClose(e)}
         >
+          { this.renderPreview() }
           <TextField
             hintText="Package Name"
             floatingLabelText="Enter Package Name"
@@ -164,16 +213,22 @@ export default class AddPackageCard extends React.Component {
           />
           <br />
           <TextField
-            floatingLabelText="Add Picture"
-            value={this.state.newPackagePicture}
-            onChange={e => this.handlePackagePictureChange(e)}
-          />
-          <br />
-          <TextField
             floatingLabelText="Add Package Type"
             value={this.state.newPackageType}
             onChange={e => this.handlePackageTypeChange(e)}
           />
+          <br />
+          <br />
+          <FlatButton
+            label="Choose an Image"
+            labelPosition="before"
+          >
+            <input
+              type="file"
+              style={style.imageInput}
+              onChange={e => this.handlePackagePictureChange(e)}
+            />
+          </FlatButton>
         </Dialog>
       </div>
     );
