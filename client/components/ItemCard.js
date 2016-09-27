@@ -46,7 +46,7 @@ export default class ItemCard extends Component {
         position: 'absolute',
       },
       cardActions: {
-        marginTop: 20,
+        marginTop: 40,
         position: 'relative',
         height: 30,
       },
