@@ -14,14 +14,14 @@ export default class CartItemCard extends Component {
     super(props);
     this.state = {
       hover: 2,
-      id: this.props.item.id,
-      name: this.props.item.name,
-      price: this.props.item.price,
-      description: this.props.item.description,
-      picture: this.props.item.picture,
+      id: '',
+      name: '',
+      price: '',
+      description: '',
+      picture: '',
       quantity: 1,
-      qtyxPrice: this.props.item.price,
-      ownerId: this.props.ownerId,
+      qtyxPrice: '',
+      ownerId: '',
     };
   }
 
@@ -36,6 +36,7 @@ export default class CartItemCard extends Component {
       },
       quantity: this.state.quantity,
       ownerId: this.props.ownerId,
+      priceToShow: this.props.item.price * this.state.quantity,
     });
   }
 
@@ -45,10 +46,12 @@ export default class CartItemCard extends Component {
 
   handleQuantityChange(e) {
     if (e.currentTarget.value < 1) {
-      this.state.quantity = 0;
-      this.setState({ qtyxPrice: this.props.item.price });
+      this.state.quantity = 1;
+      this.state.qtyxPrice = this.props.item.price;
+      // this.setState({ qtyxPrice: this.props.item.price });
     } else {
       this.state.quantity = e.currentTarget.value;
+      // this.state.qtyxPrice = this.props.item.price * e.currentTarget.value;
       this.setState({ qtyxPrice: this.props.item.price * e.currentTarget.value });
     }
     this.handleUpdateItemToOrder();
@@ -91,14 +94,14 @@ export default class CartItemCard extends Component {
             actAsExpander
           />
           <CardText>
-            <h4>{`Price: ${this.state.qtyxPrice}`}</h4>
+            <h4>{`Price: ${this.props.priceToShow}`}</h4>
             <TextField
               ref="quantity"
               hintText="0"
               type="number"
               style={{ width: 50 }}
               floatingLabelText="Quanity"
-              value={this.state.quantity}
+              value={this.props.quantity}
               onChange={e => this.handleQuantityChange(e)}
               floatingLabelFixed
             />
