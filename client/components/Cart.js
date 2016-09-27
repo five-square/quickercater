@@ -49,7 +49,7 @@ export default class Cart extends Component {
                 onClick={e => this.handleShowHide(e)}
               />
               <CardText
-                className={this.state.classname}
+                // className={this.state.classname}
               >
                 {this.props.globalOrder[owner].order.map((itemInfo, index) =>
                   <CartItemCard
@@ -57,6 +57,7 @@ export default class Cart extends Component {
                     style={this.props.style}
                     item={itemInfo.item}
                     quantity={itemInfo.quantity}
+                    priceToShow={itemInfo.priceToShow}
                     updateOrderPrice={this.updateOrderPrice}
                     updateItemToOrder={this.props.updateItemToOrder}
                     removeItemFromOrder={this.props.removeItemFromOrder}
