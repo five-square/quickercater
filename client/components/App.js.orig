@@ -8,7 +8,12 @@ import StoreFront from './StoreFront';
 import Server from '../models/serverAPI';
 import Navigation from './Navigation';
 import Cart from './Cart';
+<<<<<<< c8c7a2e2d50097576896cc35990e0f92eb5a7495
+
+import cookieAPI from'../models/cookieAPI';
+=======
 import cookieAPI from '../models/cookieAPI';
+>>>>>>> Adds editing and menu removal to individual items.  Simple bug fixes
 
 export default class App extends Component {
   constructor(props) {
