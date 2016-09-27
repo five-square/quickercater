@@ -30,6 +30,7 @@ export default class ItemCard extends Component {
         picture: this.props.picture,
       },
       ownerId: this.props.ownerId,
+      quantity: 0,
     });
   }
 

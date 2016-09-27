@@ -78,6 +78,7 @@ export default class MenuContainer extends Component {
             deleteMenu={e => this.handleDeleteMenu(e)}
             moveMenu={(d, e) => this.handleMoveMenu(d, e)}
             editMenu={e => this.handleEditMenu(e)}
+            ownerId={this.props.ownerId}
           />
         )}
         {this.props.editing

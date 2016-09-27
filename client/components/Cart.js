@@ -29,8 +29,9 @@ export default class Cart extends Component {
     if (this.props.globalOrder) {
       for (owner in this.props.globalOrder) {
         if (this.props.globalOrder.hasOwnProperty(owner)) {
+          this.state.tempOwnerId = owner;
           cartItems.push(<Card>
-            <h4>Owner:{owner}</h4>
+            <h4>{this.props.globalOrder[owner].storeName}</h4>
             {this.props.globalOrder[owner].order.map((itemInfo, index) =>
               <CartItemCard
                 key={index}
@@ -49,7 +50,7 @@ export default class Cart extends Component {
             <OrderCard
               orderInfo={this.props.globalOrder[owner]}
               deleteOrderAfterSubmission={this.props.deleteOrderAfterSubmission}
-              OwnerId={owner}
+              ownerId={owner}
             />
           </Card>);
         }

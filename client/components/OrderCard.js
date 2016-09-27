@@ -26,7 +26,7 @@ export default class OrderCard extends React.Component {
   }
 
   handleRemoveOrder() {
-    this.props.deleteOrderAfterSubmission(this.props.orderInfo.order[0].ownerId);
+    this.props.deleteOrderAfterSubmission(this.props.ownerId);
   }
 
   handleSubmit() {
