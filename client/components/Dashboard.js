@@ -8,6 +8,11 @@ import Paper from 'material-ui/Paper';
 import OrderTable from './OrderTable';
 import OrderAPI from './../models/OrderAPI';
 
+
+// Implement 1) allow owner to view details of pending order with modal
+//           2) Move order acceptance to details modal
+//           3) Complete order button on Accepted orders table
+
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -22,6 +27,11 @@ export default class Dashboard extends Component {
 
   componentWillReceiveProps (){
     console.log('Dash:', this.props.pendingOrders);
+  }
+
+  handleOnRowClick(row) {
+    //console.log("In dash. Row: " + row + " clicked");
+    // set state here to display edit order dashboard
   }
 
   handleOnMouseEnter() {
@@ -53,6 +63,7 @@ export default class Dashboard extends Component {
                 pendingOrders={this.props.pendingOrders}
                 thirdColumnTitle="Accept Order"
                 buttonLabel="Accept"
+                onRowClick={this.handleOnRowClick.bind(this)}
               />
             </CardText>
           </Card>

@@ -310,19 +310,27 @@ routes.post('/api/relationship/delete', (req, res) => {
   **********************************************************************************************
 */
 
-routes.get('/api/order/:id', (req, res) => {
-  db.findNode('CustomerOrder', req.params.id)
-  .then(dbData => {
-    if (dbData === 'Node does not exist') {
-      const message = 'Order does not exist';
-      throw message;
-    }
-    res.status(200).send(dbData);
-  })
-  .catch(message => {
-    res.status(404).send(message);
+// routes.get('/api/order/:id', (req, res) => {
+//   db.findNode('CustomerOrder', req.params.id)
+//   .then(dbData => {
+//     if (dbData === 'Node does not exist') {
+//       const message = 'Order does not exist';
+//       throw message;
+//     }
+//     res.status(200).send(dbData);
+//   })
+//   .catch(message => {
+//     res.status(404).send(message);
+//   });
+// });
+
+routes.get('/api/order/:orderId', (req,res) => {
+  // get order info with all req relationships
+  db.fetchOrderDetail(req.params.orderId).then( resp => {
+    res.send(resp);
   });
 });
+
 
 routes.get('/api/order/getAllPending/:ownerId', (req, res) => {
   db.fetchAllPendingOrders(req.params.ownerId).then(pendingOrders => {
