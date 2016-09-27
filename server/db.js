@@ -623,6 +623,80 @@ db.removeItemById = (itemId) => Node.cypherAsync({
   },
 }).then(response => response[0].success === 1);
 
+db.getUnassignedItems = (ownerId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner)-[rel:CAN_EDIT]->(item:Item) WHERE ID(owner) = ${ownerId}
+    RETURN item`,
+  params: {
+    ownerId,
+  },
+})
+.then(items => items);
+
+db.removeItemFromMenu = (itemId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner)-[r1:CAN_EDIT]->(menu:Menu)-[r2:CAN_EDIT]->(item:Item)
+    WHERE ID(item) = ${itemId}
+    CREATE (owner)-[:CAN_EDIT]->(item)
+    DELETE r2`,
+  params: {
+    itemId,
+  },
+})
+.then(data => data);
+
+db.prepareItemForRemove = (itemId) => Node.cypherAsync({
+  query: `
+    MATCH (menu:Menu)-[r1:CAN_EDIT]->(item:Item) WHERE ID(item) = ${itemId}
+    MATCH (menu)-[rels:CAN_EDIT]->(item2:Item) WHERE rels.order > r1.order
+    SET rels.order = rels.order - 1
+    RETURN r1, item`,
+  params: {
+    itemId,
+  },
+})
+.then(data => data);
+
+db.moveItemUp = (itemId) => Node.cypherAsync({
+  query: `
+    MATCH (menu:Menu)-[r1:CAN_EDIT]->(item:Item) WHERE ID(item) = ${itemId}
+    MATCH (menu)-[r2:CAN_EDIT]->(item2:Item)
+    WHERE r2.order = r1.order  - 1
+    SET r1.order = r1.order - 1
+    SET r2.order = r2.order + 1
+    return menu`,
+  params: {
+    itemId,
+  },
+})
+.then(data => data);
+
+db.moveItemDown = (itemId) => Node.cypherAsync({
+  query: `
+    MATCH (menu:Menu)-[r1:CAN_EDIT]->(item:Item) WHERE ID(item) = ${itemId}
+    MATCH (menu)-[r2:CAN_EDIT]->(item2:Item)
+    WHERE r2.order = r1.order + 1
+    SET r1.order = r1.order + 1
+    SET r2.order = r2.order - 1
+    return menu`,
+  params: {
+    itemId,
+  },
+})
+.then(data => data);
+
+// db.updateItem = (menuObj) => Node.cypherAsync({
+//   query: `
+//     MATCH (menu:Menu) WHERE ID(menu) = ${menuObj.id}
+//     SET menu += {name: {name}, description: {description}}
+//     RETURN menu`,
+//   params: {
+//     name: menuObj.name,
+//     description: menuObj.description,
+//   },
+// })
+// .then(data => data);
+
 /*
  **********************************************************************************************
   This functions will create, update, get and delete packages.

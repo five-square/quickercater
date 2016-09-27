@@ -8,6 +8,7 @@ import StoreFront from './StoreFront';
 import Server from '../models/serverAPI';
 import Navigation from './Navigation';
 import Cart from './Cart';
+import cookieAPI from '../models/cookieAPI';
 
 import cookieAPI from'../models/cookieAPI';
 
