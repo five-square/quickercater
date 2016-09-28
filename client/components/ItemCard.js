@@ -4,6 +4,7 @@ import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
 import RaisedButton from 'material-ui/RaisedButton';
+import Chip from 'material-ui/Chip';
 import EditButtons from './EditButtons';
 import EditItem from './EditItem';
 
@@ -46,7 +47,7 @@ export default class ItemCard extends Component {
         position: 'absolute',
       },
       cardActions: {
-        marginTop: 40,
+        marginTop: 30,
         position: 'relative',
         height: 30,
       },
@@ -62,15 +63,16 @@ export default class ItemCard extends Component {
     };
 
     return (
-      <div style={this.props.style}>
+      <div style={{ position: 'relative' }}>
         <Card>
+          <Chip style={{ margin: 5, backgroundColor: '#4DD0E1', position: 'absolute', right: -10, top: -15 }}>
+            <span style={{ color: 'white' }}>{`$${this.props.item.price}`}</span>
+          </Chip>
           <CardHeader
             title={this.props.item.name}
             subtitle={this.props.item.description}
             avatar={this.props.picture}
-          >
-            <h4 style={{ float: 'right' }}>{`Price: ${this.props.item.price}`}</h4>
-          </CardHeader>
+          />
           <CardActions style={style.cardActions}>
             {this.props.editing
               ? <div>
@@ -79,6 +81,7 @@ export default class ItemCard extends Component {
                   id={this.props.item.id}
                   name={this.props.item.name}
                   description={this.props.item.description}
+                  price={this.props.item.price}
                   picture={this.props.picture}
                   editItem={this.props.editItem}
                 />

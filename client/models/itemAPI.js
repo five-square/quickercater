@@ -34,8 +34,8 @@ ItemAPI.getItemsbyId = (itemId) =>
     picture: element.item.properties.picture,
   })));
 
-ItemAPI.updateItem = (itemId, itemObj) =>
-  fetch(`/api/item/update/${itemId}`, {
+ItemAPI.edit = (itemObj) =>
+  fetch('/api/item/update', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -43,12 +43,16 @@ ItemAPI.updateItem = (itemId, itemObj) =>
     body: JSON.stringify(itemObj),
   })
   .then(data => data.json())
-  .then(items => items.map(itemElement => ({
-    name: itemElement.item.properties.name,
-    price: itemElement.item.properties.price,
-    description: itemElement.item.properties.description,
-    picture: itemElement.item.properties.picture,
-  })));
+  .then(item => ({
+    item: {
+      id: item.item._id,
+      name: item.item.properties.name,
+      price: item.item.properties.price,
+      description: item.item.properties.description,
+      picture: item.item.properties.picture,
+    },
+    quantity: 1,
+  }));
 
 ItemAPI.delete = (itemId) => // needs work
   fetch(`/api/item/delete/${itemId}`, {

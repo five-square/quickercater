@@ -33,6 +33,15 @@ export default class MenuCard extends Component {
     });
   }
 
+  showItems() {
+    Menu.getItems(this.props.menu.id)
+    .then(items => {
+      this.setState({
+        items,
+      });
+    });
+  }
+
   handleOnMouseEnter() {
     this.setState({
       hover: 5,
@@ -83,10 +92,10 @@ export default class MenuCard extends Component {
     });
   }
 
-  handleEditItem(menuObj) { // in progress
-    Menu.edit(menuObj, this.state.ownerId)
+  handleEditItem(itemObj) { // in progress
+    Item.edit(itemObj)
     .then(() => {
-      this.showMenus();
+      this.showItems();
     });
   }
 
@@ -141,6 +150,7 @@ export default class MenuCard extends Component {
                   updateTotalPrice={this.props.updateTotalPrice}
                   ownerId={this.props.ownerId}
                   removeItem={e => this.handleRemoveItem(e)}
+                  editItem={e => this.handleEditItem(e)}
                 />);
               })}
               {this.props.editing
