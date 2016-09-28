@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-
+//
 const PackageAPI = {};
 
 
@@ -20,7 +20,7 @@ PackageAPI.getAllPackages = (ownerId) =>
     picture: e.pack.properties.picture ? e.pack.properties.picture : null,
   })));
 
-PackageAPI.createPackage = (pack) =>
+PackageAPI.create = (pack) =>
   fetch('/api/package/create', {
     method: 'post',
     headers: {
