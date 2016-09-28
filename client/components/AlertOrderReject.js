@@ -40,7 +40,6 @@ export default class OrderDetails extends Component {
     ];
     return (
       <div>
-        <RaisedButton label="Alert" onTouchTap={this.handleOpen} />
         <Dialog
           actions={actions}
           modal={false}
