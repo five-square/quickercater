@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Card from 'material-ui/Card';
 import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
-import CardText from 'material-ui/Card/CardText';
 import RaisedButton from 'material-ui/RaisedButton';
 import Chip from 'material-ui/Chip';
 import EditButtons from './EditButtons';
@@ -13,7 +12,6 @@ export default class ItemCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hover: 0,
       id: this.props.item.id,
     };
   }
@@ -21,7 +19,7 @@ export default class ItemCard extends Component {
   handleAddItemToOrder() {
     this.props.addItemToOrder({
       item: {
-        id: this.state.id,
+        id: this.props.item.id,
         name: this.props.item.name,
         price: this.props.item.price,
         description: this.props.item.description,
@@ -51,6 +49,18 @@ export default class ItemCard extends Component {
         position: 'relative',
         height: 30,
       },
+      priceChip: {
+        margin: 5,
+        padding: 2,
+        backgroundColor: '#26C6DA',
+        position: 'absolute',
+        right: -25,
+        top: 10,
+      },
+      priceText: {
+        fontSize: '1.1em',
+        color: 'white',
+      },
       addItem: {
         width: '60%',
         flex: '50%',
@@ -65,13 +75,16 @@ export default class ItemCard extends Component {
     return (
       <div style={{ position: 'relative' }}>
         <Card>
-          <Chip style={{ margin: 5, backgroundColor: '#4DD0E1', position: 'absolute', right: -10, top: -15 }}>
-            <span style={{ color: 'white' }}>{`$${this.props.item.price}`}</span>
-          </Chip>
           <CardHeader
             title={this.props.item.name}
             subtitle={this.props.item.description}
             avatar={this.props.picture}
+            style={{ width: '95%' }}
+            children={
+              <Chip style={style.priceChip}>
+                <span style={style.priceText}>{`$${this.props.item.price}`}</span>
+              </Chip>
+            }
           />
           <CardActions style={style.cardActions}>
             {this.props.editing

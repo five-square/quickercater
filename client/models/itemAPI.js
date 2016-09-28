@@ -92,6 +92,19 @@ ItemAPI.remove = (itemId, menuId) => // needs work
     quantity: 1,
   })));
 
+ItemAPI.move = (direction, itemId, menuId) =>
+  fetch(`/api/item/${menuId}/reorder`, {
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      direction,
+      itemId,
+    }),
+  })
+  .then(data => data.json());
+
 ItemAPI.getUnassignedItems = (ownerId) =>
   fetch(`/api/item/unassigned/${ownerId}`, {
     method: 'get',
@@ -100,12 +113,15 @@ ItemAPI.getUnassignedItems = (ownerId) =>
     },
   })
   .then(data => data.json())
-  .then(items => items.map(item => ({
-    id: item.item._id,
-    name: item.item.properties.name,
-    price: item.item.properties.price,
-    description: item.item.properties.description,
-    picture: item.item.properties.picture,
-  })));
+  .then(items => {
+    console.log('in itemAPI: ', items);
+    return items.map(item => ({
+      id: item.item._id,
+      name: item.item.properties.name,
+      price: item.item.properties.price,
+      description: item.item.properties.description,
+      picture: item.item.properties.picture,
+    }));
+  });
 
 export default ItemAPI;

@@ -58,8 +58,8 @@ MenuAPI.create = (menuObj) =>
     order
   }
  */
-MenuAPI.addItem = (newObj) =>
-  fetch('/api/menu/item/add', {
+MenuAPI.addNewItem = (newObj) =>
+  fetch('/api/menu/item/add_new', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -70,6 +70,26 @@ MenuAPI.addItem = (newObj) =>
   .then(item => ({
     id: item._id,
   }));
+
+MenuAPI.addExistingItem = (itemObj) =>
+  fetch('/api/menu/item/add_existing', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(itemObj),
+  })
+  .then(data => data.json())
+  .then(items => items.map(itemElement => ({
+    item: {
+      id: itemElement.items._id,
+      name: itemElement.items.properties.name,
+      price: itemElement.items.properties.price,
+      description: itemElement.items.properties.description,
+      picture: itemElement.items.properties.picture,
+    },
+    quantity: 1,
+  })));
 
 MenuAPI.delete = (menuId, ownerId) =>
   fetch('/api/menu/delete', {
