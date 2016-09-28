@@ -24,6 +24,11 @@ export default class OrderDetails extends Component {
 
   handleCancel() {
     this.setState({ open: false });
+    this.props.handleModalCancel();
+  }
+
+  handleClose() {
+    console.log('clickaway');
   }
 
   handleAccept() {
@@ -51,6 +56,7 @@ export default class OrderDetails extends Component {
   }
 
   render() {
+    console.log(this.props.editable);
     const actions = [
       <FlatButton
         label="Cancel"
