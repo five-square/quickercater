@@ -53,7 +53,7 @@ export default class AddItemCard extends React.Component {
     this.setState({
       open: false,
     });
-    this.props.addItem({
+    this.props.addNewItem({
       name: this.state.newItemTitle,
       description: this.state.newItemDescription,
       price: this.state.newItemPrice,
