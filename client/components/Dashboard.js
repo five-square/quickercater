@@ -18,22 +18,35 @@ export default class Dashboard extends Component {
     super(props);
     this.state = {
       hover: 2,
-      rowSelected: '',
       ownerId: this.props.ownerId,
-      pendingOrders: this.props.pendingOrders || [],
-      acceptedOrders: this.props.acceptedOrders || [],
+      pendingOrders: [],
+      acceptedOrders: [],
       showOrderDetails: -1,
       orderInfo: {},
+      returning: false,
     };
   }
 
-  componentWillReceiveProps (){
+  componentWillMount (){
+    this.fetchPendingOrders(this.props.ownerId);
+    this.fetchAcceptedOrders(this.props.ownerId);
+  }
 
+  fetchPendingOrders(ownerId) {
+    OrderAPI.fetchPendingOrders(ownerId).then(resp => {
+       this.setState({ pendingOrders: resp });
+    });
+  }
+
+  fetchAcceptedOrders(ownerId) {
+    OrderAPI.fetchAcceptedOrders(ownerId).then(resp => {
+       this.setState({ acceptedOrders: resp });
+    });
   }
 
   handleOnRowClick(row) {
-   if(this.props.pendingOrders.length > 0){
-      var orderId = this.props.pendingOrders[row].order._id;
+   if(this.state.pendingOrders.length > 0){
+      var orderId = this.state.pendingOrders[row].order._id;
       OrderAPI.fetchOrderDetails(orderId).then(resp => {
         console.log(resp);
         this.setState({showOrderDetails: orderId, orderInfo: resp});
@@ -45,8 +58,9 @@ export default class Dashboard extends Component {
     OrderAPI.createAcceptOrderRelationship(orderId)
       .then(resp => {
         console.log('handleOrderAccept resp: ', resp);
-        this.props.fetchPendingOrders(this.props.ownerId);
-        this.props.fetchAcceptedOrders(this.props.ownerId);
+        this.fetchPendingOrders(this.props.ownerId);
+        this.fetchAcceptedOrders(this.props.ownerId);
+        this.setState({returning: true});
       });
   }
 
@@ -55,8 +69,8 @@ export default class Dashboard extends Component {
     OrderAPI.deleteRejectedOrder(orderId)
       .then(resp => {
         console.log('handleOrderReject resp: ', resp);
-        this.props.fetchPendingOrders(this.props.ownerId);
-        this.props.fetchAcceptedOrders(this.props.ownerId);
+        this.fetchPendingOrders(this.props.ownerId);
+        this.fetchAcceptedOrders(this.props.ownerId);
       });
   }
 
@@ -84,20 +98,21 @@ export default class Dashboard extends Component {
         
         <Paper zDepth={this.state.hover}>
           <Card
+            expanded={this.state.pendingOrders.length === 0 ? false : undefined}
             onMouseEnter={() => this.handleOnMouseEnter()}
             onMouseLeave={() => this.handleOnMouseLeave()}
           >
             <CardHeader
               title="Pending Orders"
-              subtitle={this.props.pendingOrders === undefined? '0' : this.props.pendingOrders.length}
-              actAsExpander={(Array.isArray(this.props.pendingOrders) && this.props.pendingOrders.length > 0)}
-              showExpandableButton={(Array.isArray(this.props.pendingOrders) && this.props.pendingOrders.length > 0)}
+              subtitle={this.state.pendingOrders === undefined ? '0' : this.state.pendingOrders.length}
+              actAsExpander={(Array.isArray(this.state.pendingOrders) && this.state.pendingOrders.length > 0)}
+              showExpandableButton={(Array.isArray(this.state.pendingOrders) && this.state.pendingOrders.length > 0)}
             />
             <CardText expandable>
               <OrderTable
                 handleRowSelection={(row) =>
                 this.handleRowSelection(row)}
-                AnyOrders={this.props.pendingOrders}
+                AnyOrders={this.state.pendingOrders}
                 thirdColumnTitle="Accept Order"
                 buttonLabel="Accept"
                 onRowClick={this.handleOnRowClick.bind(this)}
@@ -110,15 +125,15 @@ export default class Dashboard extends Component {
           >
             <CardHeader
               title="Approved Orders"
-              subtitle={this.props.acceptedOrders === undefined? '0' : this.props.acceptedOrders.length}
-               actAsExpander={(Array.isArray(this.props.acceptedOrders) && this.props.acceptedOrders.length > 0)}
-              showExpandableButton={(Array.isArray(this.props.acceptedOrders) && this.props.acceptedOrders.length > 0)}
+              subtitle={this.state.acceptedOrders === undefined? '0' : this.state.acceptedOrders.length}
+               actAsExpander={(Array.isArray(this.state.acceptedOrders) && this.state.acceptedOrders.length > 0)}
+              showExpandableButton={(Array.isArray(this.state.acceptedOrders) && this.state.acceptedOrders.length > 0)}
             />
             <CardText expandable >
               <OrderTable
                 handleRowSelection={(row) =>
                 this.handleRowSelection(row)}
-                AnyOrders={this.props.acceptedOrders}
+                AnyOrders={this.state.acceptedOrders}
                 thirdColumnTitle="Complete Order"
                 buttonLabel="Complete"
               />

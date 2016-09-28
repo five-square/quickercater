@@ -26,26 +26,15 @@ export default class OrderTable extends Component {
     this.state = {
       // orders,
       onClickMethod: (this.props.onRowClick  == undefined) ? (r) => console.log('default row click action on row: ',r) : this.props.onRowClick,
-      hover: 2,
       showCheckboxes: false,
-      thirdColumnTitle: this.props.thirdColumnTitle,
       buttonLabel: this.props.buttonLabel,
     };
     // console.log('Order Table:',this.state.orders);
   }
 
-  handleOnMouseEnter() {
-    this.setState({ hover: 5 });
-  }
-
-  handleOnMouseLeave() {
-    this.setState({ hover: 2 });
-  }
-
   render() {
     let orders = [];
     orders = this.props.AnyOrders.map(x => x.order);
-    console.log('orders: ', orders);
     return (
       <div className="OrderTable">
         <Table onCellClick={this.state.onClickMethod}>
