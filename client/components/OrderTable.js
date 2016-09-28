@@ -13,25 +13,25 @@ export default class OrderTable extends Component {
   constructor(props) {
     super(props);
 
-    var orders = [];
-    if (this.props.acceptedOrders === undefined) {
-      if(this.props.pendingOrders === undefined) {
-        //throw new Error('No orders passed to via either acceptedOrders/pendingOrders');
-      } else {
-        orders = this.props.pendingOrders.map(x=>x.order);
-      }
-    } else {
-      orders = this.props.acceptedOrders.map(x=>x.order);
-    }
+    // var orders = [];
+    // if (this.props.acceptedOrders === undefined) {
+    //   if(this.props.pendingOrders === undefined) {
+    //     //throw new Error('No orders passed to via either acceptedOrders/pendingOrders');
+    //   } else {
+    //     orders = this.props.pendingOrders.map(x=>x.order);
+    //   }
+    // } else {
+    //   orders = this.props.acceptedOrders.map(x=>x.order);
+    // }
     this.state = {
-      orders,
+      // orders,
       onClickMethod: (this.props.onRowClick  == undefined) ? (r) => console.log('default row click action on row: ',r) : this.props.onRowClick,
       hover: 2,
       showCheckboxes: false,
       thirdColumnTitle: this.props.thirdColumnTitle,
       buttonLabel: this.props.buttonLabel,
     };
-    console.log('Order Table:',this.state.orders);
+    // console.log('Order Table:',this.state.orders);
   }
 
   handleOnMouseEnter() {
@@ -43,6 +43,9 @@ export default class OrderTable extends Component {
   }
 
   render() {
+    var orders = [];
+    orders = this.props.AnyOrders.map(x => x.order);
+    console.log('orders: ', orders);
     return (
       <div className="OrderTable">
         <Table onCellClick={this.state.onClickMethod}>
@@ -54,14 +57,14 @@ export default class OrderTable extends Component {
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false} showRowHover >
-            {this.state.orders.map(order => 
+            {orders.map(order =>
               <TableRow key={order._id}>
-              <TableRowColumn>{order._id}</TableRowColumn>
-              <TableRowColumn>{order.properties.name}</TableRowColumn>
-              <TableRowColumn>
-               {order.properties.total_price}
-              </TableRowColumn>
-            </TableRow>
+                <TableRowColumn>{order._id}</TableRowColumn>
+                <TableRowColumn>{order.properties.name}</TableRowColumn>
+                <TableRowColumn>
+                  {order.properties.total_price}
+                </TableRowColumn>
+              </TableRow>
               )}
           </TableBody>
         </Table>

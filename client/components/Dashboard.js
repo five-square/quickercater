@@ -50,6 +50,16 @@ export default class Dashboard extends Component {
       });
   }
 
+  handleOrderReject(orderId) {
+    console.log('handleOrderReject orderId: ', orderId);
+    OrderAPI.deleteRejectedOrder(orderId)
+      .then(resp => {
+        console.log('handleOrderReject resp: ', resp);
+        this.props.fetchPendingOrders(this.props.ownerId);
+        this.props.fetchAcceptedOrders(this.props.ownerId);
+      });
+  }
+
   handleOnMouseEnter() {
     this.setState({ hover: 5 });
   }
@@ -67,6 +77,7 @@ export default class Dashboard extends Component {
               showMe={this.state.showOrderDetails > -1}
               orderInfo={this.state.orderInfo} pending={true}
               handleOrderAccept={e => this.handleOrderAccept(e)}
+              handleOrderReject={e=> this.handleOrderReject(e)}
               />
            : null
         }
@@ -86,7 +97,7 @@ export default class Dashboard extends Component {
               <OrderTable
                 handleRowSelection={(row) =>
                 this.handleRowSelection(row)}
-                pendingOrders={this.props.pendingOrders}
+                AnyOrders={this.props.pendingOrders}
                 thirdColumnTitle="Accept Order"
                 buttonLabel="Accept"
                 onRowClick={this.handleOnRowClick.bind(this)}
@@ -107,7 +118,7 @@ export default class Dashboard extends Component {
               <OrderTable
                 handleRowSelection={(row) =>
                 this.handleRowSelection(row)}
-                acceptedOrders={this.props.acceptedOrders}
+                AnyOrders={this.props.acceptedOrders}
                 thirdColumnTitle="Complete Order"
                 buttonLabel="Complete"
               />

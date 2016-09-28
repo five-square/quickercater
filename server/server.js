@@ -365,9 +365,9 @@ routes.post('/api/order/create', (req, res) => {
 });
 
 routes.post('/api/order/delete', (req, res) => {
-  db.deleteNode('CustomerOrder', req.body.order_id)
-  .then(() => {
-    res.status(202).send('Order deleted');
+  db.deleteOrder(req.body.orderId)
+  .then((dbData) => {
+    res.status(202).send(dbData);
   });
 });
 
