@@ -25,12 +25,12 @@ export default class OrderTable extends Component {
     }
     this.state = {
       orders,
+      onClickMethod: (this.props.onRowClick  == undefined) ? (r) => console.log('default row click action on row: ',r) : this.props.onRowClick,
       hover: 2,
       showCheckboxes: false,
       thirdColumnTitle: this.props.thirdColumnTitle,
       buttonLabel: this.props.buttonLabel,
     };
-
     console.log('Order Table:',this.state.orders);
   }
 
@@ -42,35 +42,27 @@ export default class OrderTable extends Component {
     this.setState({ hover: 2 });
   }
 
-// major problems here in order of importance
-// 1. OrderTable is generalized between pending and accepted.
-//  Need to figure out min props to make it work as one or the other
-// 2. Need to map over orders and display them in the table.
-
   render() {
     return (
       <div className="OrderTable">
-        <Table onRowSelection={(e) => this.props.handleRowSelection(e)}>
-          <TableHeader displaySelectAll={false} >
+        <Table onCellClick={this.state.onClickMethod}>
+          <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
               <TableHeaderColumn>Order Number</TableHeaderColumn>
               <TableHeaderColumn>Customer Name</TableHeaderColumn>
-              <TableHeaderColumn>{this.state.thirdColumnTitle}</TableHeaderColumn>
+              <TableHeaderColumn>Total Order Price</TableHeaderColumn>
             </TableRow>
           </TableHeader>
-          <TableBody displayRowCheckbox={false} >
+          <TableBody displayRowCheckbox={false} showRowHover >
             {this.state.orders.map(order => 
-              <TableRow selectable={false} key={order._id}>
+              <TableRow key={order._id}>
               <TableRowColumn>{order._id}</TableRowColumn>
               <TableRowColumn>{order.properties.name}</TableRowColumn>
               <TableRowColumn>
-               <FloatingActionButton mini onClick={() => console.log(order._id)} >
-                 <ContentAdd />
-               </FloatingActionButton>
+               {order.properties.total_price}
               </TableRowColumn>
             </TableRow>
               )}
-            
           </TableBody>
         </Table>
       </div>

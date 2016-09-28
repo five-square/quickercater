@@ -37,7 +37,7 @@ dbInit.init = () => Node.cypherAsync({
       phone: '555-444-5555',
       email: 'bob@window.com',
       description: 'I love American food',
-      auth_key: true
+      auth_key: 'ya29.Ci9qAxZIA7hXRvO68DYxb45faKUCweuu2YrGawMJzrH1LZ_U8ia_8GCw52jdmgS8CQ'
     })
    
     CREATE (carly:Customer {
@@ -451,7 +451,6 @@ dbInit.init = () => Node.cypherAsync({
     CREATE (carlyOrder2)-[:REQUEST {quantity: 50}]->(aliceDessert1)
     CREATE (carlyOrder2)-[:REQUEST]->(aliceDelivery)
     CREATE (carlyOrder2)-[:VIEW]->(alice)
-    CREATE (alice)-[:CAN_EDIT]->(carlyOrder2)
     CREATE (carly)-[:CREATED {created_on: 'yesterday', expires: 'tomorrow'}]->(carlyOrder1)
     CREATE (carlyOrder1)-[:VIEW]->(carly)
     CREATE (carlyOrder1)-[:VIEW]->(bob)
@@ -459,8 +458,7 @@ dbInit.init = () => Node.cypherAsync({
     CREATE (carlyOrder1)-[:REQUEST {quantity: 100}]->(bobSide1)
     CREATE (carlyOrder1)-[:REQUEST {quantity: 100}]->(bobMain3)
     CREATE (carlyOrder1)-[:REQUEST {quantity: 100}]->(bobDessert1)
-    CREATE (carlyOrder1)-[:REQUEST]->(bobTruck)
-    CREATE (bob)-[:CAN_EDIT]->(carlyOrder1)`,
+    CREATE (carlyOrder1)-[:REQUEST]->(bobTruck)`,
 });
 
 dbInit.clearRelationships = () => Node.cypherAsync({

@@ -261,9 +261,8 @@ db.createOrderOwnerRelationship = (ownerId, orderId) => Node.cypherAsync({
   query: `
     MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
     MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
-    MERGE (owner)-[relA:CAN_EDIT]->(order)
     MERGE (owner)<-[relB:VIEW]-(order)
-    RETURN relA, relB`,
+    RETURN relB`,
   params: {
     orderId,
     ownerId,
@@ -332,6 +331,16 @@ db.fetchAllAcceptedOrders = (ownerId) =>
     },
   }).then(response => response);
 
+db.fetchOrderDetail = (orderId) => 
+  Node.cypherAsync({
+    query: `MATCH (order:CustomerOrder)-[rel:REQUEST]-(item:Item) WHERE ID(order) = ${orderId}
+            MATCH  (order)<-[CREATED]-(customer:Customer)
+            Return order, item,rel,customer`,
+    params: {
+      orderId,
+    },
+  })
+.then(resp=>resp);
 
 // db.fetchAllCompletedOrders = (ownerId) => Node.cypherAsync({
 //   query: `
