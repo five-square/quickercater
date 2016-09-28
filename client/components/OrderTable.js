@@ -43,7 +43,7 @@ export default class OrderTable extends Component {
   }
 
   render() {
-    var orders = [];
+    let orders = [];
     orders = this.props.AnyOrders.map(x => x.order);
     console.log('orders: ', orders);
     return (

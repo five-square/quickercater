@@ -39,6 +39,7 @@ export default class OrderDetails extends Component {
   handleReject(orderId) {
     this.setState({ open: false });
     this.props.handleOrderReject(orderId);
+    this.setState({ rejectAlert: false });
   }
 
   handleOnMouseEnter() {

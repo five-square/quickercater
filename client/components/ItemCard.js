@@ -27,7 +27,7 @@ export default class ItemCard extends Component {
       },
       ownerId: this.props.ownerId,
       quantity: 1,
-      priceToShow: this.props.price,
+      priceToShow: this.props.item.price,
     });
   }
 
