@@ -71,7 +71,6 @@ export default class OrderDetails extends Component {
     ];
     return (
       <div>
-        
         <Dialog
           title={`Order # ${this.props.orderInfo.order.id}`}
           actions={actions}
@@ -102,12 +101,12 @@ export default class OrderDetails extends Component {
                 </TableRow>
               </TableHeader>
               <TableBody displayRowCheckbox={false}>
-                {this.props.orderInfo.items.map(itemInfo =>
-                  <TableRow selectable={false} key={itemInfo.item.id}>
-                    <TableRowColumn>{itemInfo.item.id}</TableRowColumn>
-                    <TableRowColumn>{itemInfo.item.name}</TableRowColumn>
-                    <TableRowColumn>{itemInfo.item.quantity}</TableRowColumn>
-                    <TableRowColumn>${itemInfo.item.price}</TableRowColumn>
+                {this.props.orderInfo.items.map(item =>
+                  <TableRow selectable={false} key={item.id}>
+                    <TableRowColumn>{item.id}</TableRowColumn>
+                    <TableRowColumn>{item.name}</TableRowColumn>
+                    <TableRowColumn>{item.quantity}</TableRowColumn>
+                    <TableRowColumn>${item.price}</TableRowColumn>
                   </TableRow>
                   )}
               </TableBody>
