@@ -14,6 +14,8 @@ export default class EditItem extends Component {
       hover: 2,
       name: this.props.name,
       description: this.props.description,
+      price: this.props.price,
+      picture: this.props.picture,
     };
   }
 
@@ -22,25 +24,33 @@ export default class EditItem extends Component {
   }
 
   handleSubmitEdit() {
-    this.props.editMenu({
+    this.props.editItem({
       id: this.props.id,
       name: this.state.name,
       description: this.state.description,
+      price: this.state.price,
+      picture: this.state.picture,
     });
     this.setState({
       open: false,
     });
   }
 
-  handleMenuNameChange(e) {
+  handleItemNameChange(e) {
     this.setState({
       name: e.currentTarget.value,
     });
   }
 
-  handleMenuDescriptionChange(e) {
+  handleItemDescriptionChange(e) {
     this.setState({
       description: e.currentTarget.value,
+    });
+  }
+
+  handleItemPriceChange(e) {
+    this.setState({
+      price: e.currentTarget.value,
     });
   }
 
@@ -99,15 +109,21 @@ export default class EditItem extends Component {
         >
           <TextField
             hintText="Item"
-            floatingLabelText="Enter Menu Name"
+            floatingLabelText="Enter Item Name"
             value={this.state.name}
-            onChange={e => this.handleMenuNameChange(e)}
+            onChange={e => this.handleItemNameChange(e)}
           /><br />
           <TextField
             hintText="Description"
-            floatingLabelText="Enter Menu Description"
+            floatingLabelText="Enter Item Description"
             value={this.state.description}
-            onChange={e => this.handleMenuDescriptionChange(e)}
+            onChange={e => this.handleItemDescriptionChange(e)}
+          /><br />
+          <TextField
+            hintText="Price"
+            floatingLabelText="Enter Item Price"
+            value={this.state.price}
+            onChange={e => this.handleItemPriceChange(e)}
           /><br />
         </Dialog>
       </div>

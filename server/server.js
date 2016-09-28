@@ -408,25 +408,11 @@ routes.get('/api/item/:id', (req, res) => {
   }
 });
 
-routes.post('/api/item/update/:id', (req, res) => {
-  const id = req.params.id;
-  const reqBody = req.body;
-  if (reqBody && reqBody.itemObj) {
-    if (!reqBody.itemObj._id) {
-      reqBody.itemObj._id = parseInt(id, 10);
-    }
-    db.getItemById(id).then(x => {
-      if (x) {
-        db.updateItem(reqBody.itemObj).then(() => {
-          res.end('Item likely updated.');
-        });
-      } else {
-        res.status(404).end('Item ID not found.');
-      }
-    });
-  } else {
-    res.status(404).end('Malformed update request. Req.body.itemObj must exist.');
-  }
+routes.post('/api/item/update', (req, res) => {
+  db.updateItem(req.body)
+  .then(item => {
+    res.status(201).send(item);
+  });
 });
 
 routes.post('/api/item/remove', (req, res) => {

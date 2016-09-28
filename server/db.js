@@ -599,26 +599,19 @@ db.getItemByPicture = (picture) => Node.cypherAsync({
   },
 }).then(resp => resp[0].item);
 
-db.updateItem = (itemObj) => {
-  const id1 = itemObj._id;
-  const itemCopy = Object.assign({}, itemObj);
-  delete itemCopy._id;  // don't want to create an '_id' prop (doesn't go both ways)
-  return Node.cypherAsync({
-    query: `
-      MATCH (item:Item)
-      WHERE ID(item) = {id}
-      SET item = {itemCopy}
-      RETURN item`,
-    params: {
-      id: id1,
-      name: itemCopy.name,
-      description: itemCopy.description,
-      price: itemCopy.price,
-      picure: itemCopy.picure,
-      itemCopy,
-    },
-  }).then(response => response[0].item);
-};
+db.updateItem = (itemObj) => Node.cypherAsync({
+  query: `
+    MATCH (item:Item) WHERE ID(item) = ${itemObj.id}
+    SET item += {name: {name}, description: {description}, price: {price}, picture: {picture}}
+    RETURN item`,
+  params: {
+    name: itemObj.name,
+    description: itemObj.description,
+    price: itemObj.price,
+    picture: itemObj.picture,
+  },
+})
+.then(item => item[0]);
 
 db.removeItemById = (itemId) => Node.cypherAsync({
   query: `MATCH (i:Item)
