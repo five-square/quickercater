@@ -29,8 +29,6 @@ export default class StoreFront extends Component {
         packages,
       });
     });
-    this.fetchPendingOrders(this.state.ownerId);
-    this.fetchAcceptedOrders(this.state.ownerId);
   }
 
   showMenus() {
@@ -40,6 +38,7 @@ export default class StoreFront extends Component {
     });
   }
 
+<<<<<<< ad3549b24dce6a859380d7ef81a53268d4d1ec14
   fetchPendingOrders(ownerId) {
     OrderAPI.fetchPendingOrders(ownerId).then(resp => {
       this.setState({ pendingOrders: resp });
@@ -69,7 +68,6 @@ export default class StoreFront extends Component {
       this.showPackages();
     });
   }
-
         // <div className="CateringOptions">
         //   {this.state.packages.map((pack, index) =>
         //     <PackageCard
@@ -112,10 +110,6 @@ export default class StoreFront extends Component {
         <Dashboard
           style={style}
           ownerId={this.state.ownerId}
-          pendingOrders={this.state.pendingOrders}
-          acceptedOrders={this.state.acceptedOrders}
-          fetchPendingOrders={e => this.fetchPendingOrders(e)}
-          fetchAcceptedOrders={e => this.fetchAcceptedOrders(e)}
         />
         <div className="CateringOptions">
           {this.state.packages.map((pack, index) =>
