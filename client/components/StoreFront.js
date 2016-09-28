@@ -38,7 +38,6 @@ export default class StoreFront extends Component {
     });
   }
 
-<<<<<<< ad3549b24dce6a859380d7ef81a53268d4d1ec14
   fetchPendingOrders(ownerId) {
     OrderAPI.fetchPendingOrders(ownerId).then(resp => {
       this.setState({ pendingOrders: resp });
