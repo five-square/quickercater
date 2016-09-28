@@ -6,6 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Card from 'material-ui/Card';
 import CardText from 'material-ui/Card/CardText';
+import AlertOrderReject from './AlertOrderReject';
 
 export default class OrderDetails extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ export default class OrderDetails extends Component {
     this.state = {
       hover: 2,
       open: this.props.showMe,
+      rejectAlert: false,
     };
   }
 
@@ -29,8 +31,14 @@ export default class OrderDetails extends Component {
     this.setState({ open: false });
   }
 
-  handleReject() {
-    this.props.handleOrderReject();
+  showRejectAlert() {
+    this.setState({ rejectAlert: true });
+    // this.props.handleOrderReject(this.props.orderInfo.order.id);
+  }
+
+  handleReject(orderId) {
+    this.setState({ open: false });
+    this.props.handleOrderReject(orderId);
   }
 
   handleOnMouseEnter() {
@@ -42,15 +50,6 @@ export default class OrderDetails extends Component {
   }
 
   render() {
-    // removed by GH____
-    // <RaisedButton
-    //       primary label="View order"
-    //       onTouchTap={e => this.handleOpen(e)}
-    //     />
-    //     <RaisedButton
-    //       primary label="Cancel"
-    //       onTouchTap={e => this.handleRemoveOrder(e)}
-    //     />
     const actions = [
       <FlatButton
         label="Cancel"
@@ -67,12 +66,22 @@ export default class OrderDetails extends Component {
         label="Reject"
         primary
         keyboardFocused
-        onTouchTap={e => this.handleReject(e)}
+        onTouchTap={e => this.showRejectAlert(e)}
       />,
     ];
     return (
       <div>
+        {
+          this.state.rejectAlert
+          ? <AlertOrderReject
+            showMe={this.state.rejectAlert}
+            orderId={this.props.orderInfo.order.id}
+            handleReject={e => this.handleReject(e)}
+          />
+          : null
+        }
         <Dialog
+          autoScrollBodyContent
           title={`Order # ${this.props.orderInfo.order.id}`}
           actions={actions}
           modal={false}

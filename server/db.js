@@ -355,6 +355,19 @@ db.addAcceptedOrder = (orderInfo) =>
     },
   }).then(response => response);
 
+db.deleteOrder = (orderId) => Node.cypherAsync({
+  query: `
+    MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
+    OPTIONAL MATCH (order)-[rel]-()
+    WITH rel, order, order._id AS order_id
+    DELETE order, rel
+    RETURN order_id`,
+  params: {
+    orderId,
+  },
+})
+.then(response => response);
+
 // db.fetchAllCompletedOrders = (ownerId) => Node.cypherAsync({
 //   query: `
 //     MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
