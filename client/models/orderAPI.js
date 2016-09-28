@@ -25,21 +25,21 @@ orderAPI.fetchPendingOrders = (ownerId) =>
     },
   }).then(resp => resp.json()).catch(e=>console.error(e));
 
-  orderAPI.fetchOrderDetail = (orderId) => 
+  orderAPI.fetchOrderDetails = (orderId) => 
     fetch(`/api/order/${orderId}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json'
       },
     }).then(resp => resp.json()).then(orderItemRel => {
-      console.log(orderItemRel);
       var orderObj = Object.assign({},orderItemRel[0].order.properties, { id: orderItemRel[0].order._id} );
       var items = orderItemRel.map( dbObj =>{
         return Object.assign({},dbObj.item.properties, {id: dbObj.item._id, quantity: dbObj.rel.properties.quantity } );
       });
       var result = { items: items, order: orderObj, customer: orderItemRel[0].customer.properties };
-      //return result;
-      return result;
+     console.log(result);
+     
+     return result;
     });
 
 export default orderAPI;

@@ -12,7 +12,7 @@ export default class OrderDetails extends Component {
     super(props);
     this.state = {
       hover: 2,
-      open: false,
+      open: this.props.showMe,
     };
   }
 
@@ -41,6 +41,15 @@ export default class OrderDetails extends Component {
   }
 
   render() {
+    // removed by GH____
+    // <RaisedButton
+    //       primary label="View order"
+    //       onTouchTap={e => this.handleOpen(e)}
+    //     />
+    //     <RaisedButton
+    //       primary label="Cancel"
+    //       onTouchTap={e => this.handleRemoveOrder(e)}
+    //     />
     const actions = [
       <FlatButton
         label="Cancel"
@@ -62,16 +71,9 @@ export default class OrderDetails extends Component {
     ];
     return (
       <div>
-        <RaisedButton
-          primary label="View order"
-          onTouchTap={e => this.handleOpen(e)}
-        />
-        <RaisedButton
-          primary label="Cancel"
-          onTouchTap={e => this.handleRemoveOrder(e)}
-        />
+        
         <Dialog
-          title={`Order # ${this.props.order.id}`}
+          title={`Order # ${this.props.orderInfo.order.id}`}
           actions={actions}
           modal={false}
           open={this.state.open}
@@ -80,10 +82,10 @@ export default class OrderDetails extends Component {
           <Card>
             <CardText>
               <h3>Customer Information: </h3>
-              <h4>Name: {this.props.customer.name}</h4>
-              <h4>Email: {this.props.customer.email} </h4>
-              <h4>Phone: {this.props.customer.phone}</h4>
-              <h4>Address: {this.props.customer.address}</h4>
+              <h4>Name: {this.props.orderInfo.customer.name}</h4>
+              <h4>Email: {this.props.orderInfo.customer.email} </h4>
+              <h4>Phone: {this.props.orderInfo.customer.phone}</h4>
+              <h4>Address: {this.props.orderInfo.customer.address}</h4>
             </CardText>
           </Card>
           <div className="OrderTable">
@@ -100,7 +102,7 @@ export default class OrderDetails extends Component {
                 </TableRow>
               </TableHeader>
               <TableBody displayRowCheckbox={false}>
-                {this.props.items.map(itemInfo =>
+                {this.props.orderInfo.items.map(itemInfo =>
                   <TableRow selectable={false} key={itemInfo.item.id}>
                     <TableRowColumn>{itemInfo.item.id}</TableRowColumn>
                     <TableRowColumn>{itemInfo.item.name}</TableRowColumn>
@@ -110,7 +112,7 @@ export default class OrderDetails extends Component {
                   )}
               </TableBody>
             </Table>
-            <h4>Total Price ${this.props.order.total_price}</h4>
+            <h4>Total Price ${this.props.orderInfo.order.total_price}</h4>
           </div>
         </Dialog>
       </div>
