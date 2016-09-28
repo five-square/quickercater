@@ -42,4 +42,15 @@ orderAPI.fetchPendingOrders = (ownerId) =>
      return result;
     });
 
+
+orderAPI.createAcceptOrderRelationship = (acceptedOrderId) =>
+  fetch('/api/order/accepted/', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ orderId: acceptedOrderId }),
+  })
+  .then(resp => resp.json());
+
 export default orderAPI;

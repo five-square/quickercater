@@ -41,6 +41,15 @@ export default class Dashboard extends Component {
    }
   }
 
+  handleOrderAccept(orderId) {
+    OrderAPI.createAcceptOrderRelationship(orderId)
+      .then(resp => {
+        console.log('handleOrderAccept resp: ', resp);
+        this.props.fetchPendingOrders(this.props.ownerId);
+        this.props.fetchAcceptedOrders(this.props.ownerId);
+      });
+  }
+
   handleOnMouseEnter() {
     this.setState({ hover: 5 });
   }
@@ -53,8 +62,12 @@ export default class Dashboard extends Component {
     // only mount orderdetails if we have a click. Then pass in correct orderObj via orderInfo prop(call with row number passed onClick)
     return (
       <div >
-        {this.state.showOrderDetails !== -1 
-          ? <OrderDetails showMe={this.state.showOrderDetails > -1} orderInfo={this.state.orderInfo} pending={true} />
+        {this.state.showOrderDetails !== -1
+          ? <OrderDetails
+              showMe={this.state.showOrderDetails > -1}
+              orderInfo={this.state.orderInfo} pending={true}
+              handleOrderAccept={e => this.handleOrderAccept(e)}
+              />
            : null
         }
         
