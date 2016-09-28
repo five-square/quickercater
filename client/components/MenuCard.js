@@ -100,7 +100,7 @@ export default class MenuCard extends Component {
   handleMoveItem(direction, itemId) { // in progress
     Item.move(direction, itemId, this.props.id)
     .then(() => {
-      this.showMenus();
+      this.showItems();
     });
   }
 
