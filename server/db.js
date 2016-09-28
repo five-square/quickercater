@@ -435,7 +435,7 @@ db.getItemsByMenuId = (menuId) => Node.cypherAsync({
   },
 });
 
-db.addItemToMenu = (obj) => Node.cypherAsync({
+db.addNewItemToMenu = (obj) => Node.cypherAsync({
   query: `
     MATCH (menu:Menu) WHERE ID(menu) = ${obj.menuId}
     MATCH (item:Item) WHERE ID(item) = ${obj.itemId}
@@ -446,6 +446,21 @@ db.addItemToMenu = (obj) => Node.cypherAsync({
   },
 })
 .then(item => item[0]);
+
+db.addExistingItemToMenu = (obj) => Node.cypherAsync({
+  query: `
+    MATCH (menu:Menu) WHERE ID(menu) = ${obj.menuId}
+    MATCH (owner:Owner)-[rel1:CAN_EDIT]->(item:Item) WHERE ID(item) = ${obj.itemId}
+    CREATE (menu)-[:CAN_EDIT {order: {order}}]->(item)
+    DELETE rel1
+    WITH menu
+    MATCH (menu)-[rel2:CAN_EDIT]->(items:Item)
+    RETURN items ORDER BY rel2.order`,
+  params: {
+    order: obj.order,
+  },
+})
+.then(items => items);
 
 db.createMenu = (menuObj) => Node.cypherAsync({
   query: `

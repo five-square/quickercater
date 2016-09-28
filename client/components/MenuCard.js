@@ -58,7 +58,7 @@ export default class MenuCard extends Component {
     this.props.addItemToOrder(itemObj);
   }
 
-  handleAddItem(itemObj) {
+  handleAddNewItem(itemObj) {
     const newItem = Object.assign({}, itemObj, {
       menuId: this.props.menu.id,
     });
@@ -69,12 +69,24 @@ export default class MenuCard extends Component {
         itemId: id.id,
         order: this.state.items.length,
       };
-      Menu.addItem(add).then(() => {
+      Menu.addNewItem(add).then(() => {
         Menu.getItems(this.props.menu.id)
         .then(items => {
           this.setState({ items });
         });
       });
+    });
+  }
+
+  handleAddExistingItem(itemObj) {
+    const add = {
+      menuId: this.props.menu.id,
+      itemId: itemObj.id,
+      order: this.state.items.length,
+    };
+    Menu.addExistingItem(add)
+    .then(items => {
+      this.setState({ items });
     });
   }
 
@@ -85,14 +97,14 @@ export default class MenuCard extends Component {
     });
   }
 
-  handleMoveItem(direction, menuId) { // in progress
-    Menu.move(direction, menuId, this.state.ownerId)
+  handleMoveItem(direction, itemId) { // in progress
+    Item.move(direction, itemId, this.props.id)
     .then(() => {
       this.showMenus();
     });
   }
 
-  handleEditItem(itemObj) { // in progress
+  handleEditItem(itemObj) {
     Item.edit(itemObj)
     .then(() => {
       this.showItems();
@@ -151,14 +163,17 @@ export default class MenuCard extends Component {
                   ownerId={this.props.ownerId}
                   removeItem={e => this.handleRemoveItem(e)}
                   editItem={e => this.handleEditItem(e)}
+                  moveItem={(d, i, m) => this.handleMoveItem(d, i, m)}
                 />);
               })}
               {this.props.editing
                 ? <AddItemCard
                   key={this.state.items.length + 1}
-                  addItem={e => this.handleAddItem(e)}
+                  addNewItem={e => this.handleAddNewItem(e)}
+                  addExistingItem={e => this.handleAddExistingItem(e)}
                   style={style.addItem}
                   pic={'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png'}
+                  ownerId={this.props.ownerId}
                 />
                 : null
               }

@@ -227,10 +227,17 @@ routes.post('/api/menu/create', (req, res) => {
   });
 });
 
-routes.post('/api/menu/item/add', (req, res) => {
-  db.addItemToMenu(req.body)
+routes.post('/api/menu/item/add_new', (req, res) => {
+  db.addNewItemToMenu(req.body)
   .then(item => {
     res.status(201).send(item);
+  });
+});
+
+routes.post('/api/menu/item/add_existing', (req, res) => {
+  db.addExistingItemToMenu(req.body)
+  .then(items => {
+    res.status(201).send(items);
   });
 });
 
@@ -324,9 +331,9 @@ routes.post('/api/relationship/delete', (req, res) => {
 //   });
 // });
 
-routes.get('/api/order/:orderId', (req,res) => {
+routes.get('/api/order/:orderId', (req, res) => {
   // get order info with all req relationships
-  db.fetchOrderDetail(req.params.orderId).then( resp => {
+  db.fetchOrderDetail(req.params.orderId).then(resp => {
     res.send(resp);
   });
 });
@@ -438,6 +445,21 @@ routes.post('/api/item/remove', (req, res) => {
       res.status(404).send(`Item ${id} not found.`);
     }
   });
+});
+
+routes.put('/api/item/:menuId/reorder', (req, res) => {
+  console.log(req.body.itemId);
+  if (req.body.direction === 'UP') {
+    db.moveItemUp(req.body.itemId)
+    .then(dbData => {
+      res.status(201).send(dbData);
+    });
+  } else {
+    db.moveItemDown(req.body.itemId)
+    .then(dbData => {
+      res.status(201).send(dbData);
+    });
+  }
 });
 
 routes.get('/api/item/unassigned/:ownerId', (req, res) => {

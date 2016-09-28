@@ -8,9 +8,10 @@ import Paper from 'material-ui/Paper';
 import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import SelectItemMenu from './SelectItemMenu';
+import ItemList from './ItemList';
+import Item from '../models/itemAPI';
 
-export default class AddItem extends React.Component {
+export default class AddItemCard extends React.Component {
 
   constructor(props) {
     super(props);
@@ -21,7 +22,16 @@ export default class AddItem extends React.Component {
       newItemDescription: '',
       newItemPrice: '',
       newItemPicture: false,
+      unassignedItems: [],
     };
+  }
+
+  componentDidMount() {
+    console.log('in AddItemCard', this.props.ownerId);
+    Item.getUnassignedItems(this.props.ownerId)
+    .then(items => {
+      this.setState({ unassignedItems: items });
+    });
   }
 
   handleOnMouseEnter() {
@@ -39,7 +49,7 @@ export default class AddItem extends React.Component {
     this.setState({ open: true });
   }
 
-  handleAddItem() {
+  handleAddNewItem() {
     this.setState({
       open: false,
     });
@@ -49,6 +59,13 @@ export default class AddItem extends React.Component {
       price: this.state.newItemPrice,
       picture: this.state.newItemPicture,
     });
+  }
+
+  handleAddExistingItem(itemObj) {
+    this.setState({
+      open: false,
+    });
+    this.props.addExistingItem(itemObj);
   }
 
   handleItemTitleChange(e) {
@@ -91,6 +108,7 @@ export default class AddItem extends React.Component {
       newItemPicture: 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png',
     });
   }
+
   renderPreview() {
     let divToRender = '';
     const imgPrev = {
@@ -117,42 +135,7 @@ export default class AddItem extends React.Component {
     }
     return divToRender;
   }
-          // <TextField
-          //   floatingLabelText="Add Picture"
-          //   value={this.state.newItemPicture}
-          //   onChange={e => this.handleItemPictureChange(e)}
-          // />
-          // { this.renderPreview() }
-          // <TextField
-          //   hintText="Item"
-          //   floatingLabelText="Enter Item Title"
-          //   value={this.state.newItemTitle}
-          //   onChange={e => this.handleItemTitleChange(e)}
-          // /><br />
-          // <TextField
-          //   hintText="Description"
-          //   floatingLabelText="Enter Item Description"
-          //   value={this.state.newItemDescription}
-          //   onChange={e => this.handleItemDescriptionChange(e)}
-          // /><br />
-          // <TextField
-          //   hintText="Price"
-          //   floatingLabelText="Enter Item Price"
-          //   value={this.state.newItemPrice}
-          //   onChange={e => this.handleItemPriceChange(e)}
-          // />
-          // <br />
-          // <br />
-          // <FlatButton
-          //   label="Choose an Image"
-          //   labelPosition="before"
-          // >
-          //   <input
-          //     type="file"
-          //     style={style.imageInput}
-          //     onChange={e => this.handleItemPictureChange(e)}
-          //   />
-          // </FlatButton>
+
   render() {
     const style = {
       floatingActionButton: {
@@ -190,7 +173,7 @@ export default class AddItem extends React.Component {
         label="Submit"
         primary
         keyboardFocused
-        onTouchTap={e => this.handleAddItem(e)}
+        onTouchTap={e => this.handleAddNewItem(e)}
       />,
     ];
     // This is the actual modal
@@ -260,7 +243,10 @@ export default class AddItem extends React.Component {
             </Tab>
             <Tab label="Add Existing" >
               <div>
-                <SelectItemMenu />
+                <ItemList
+                  items={this.state.unassignedItems}
+                  addExistingItem={e => this.handleAddExistingItem(e)}
+                />
               </div>
             </Tab>
           </Tabs>
