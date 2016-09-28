@@ -8,7 +8,7 @@ import StoreDescription from './StoreDescription';
 import PackageAPI from '../models/packageAPI';
 import Owner from '../models/ownerAPI';
 import AddPackageCard from './AddPackageCard';
-
+//
 export default class StoreFront extends Component {
   constructor(props) {
     super(props);

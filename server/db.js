@@ -3,7 +3,7 @@ const Promise = require('bluebird');
 const neo4j = Promise.promisifyAll(require('neo4j'));
 
 const Node = new neo4j.GraphDatabase({ url: process.env.GRAPHENEDB_URL || 'http://neo4j:start@localhost:7474' });
-
+//
 const db = module.exports;
 
 /*
