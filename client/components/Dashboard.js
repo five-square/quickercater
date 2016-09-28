@@ -7,7 +7,7 @@ import Paper from 'material-ui/Paper';
 //  from 'material-ui/Table';
 import OrderTable from './OrderTable';
 import OrderAPI from './../models/OrderAPI';
-
+import OrderDetails from './OrderDetails';
 
 // Implement 1) allow owner to view details of pending order with modal
 //           2) Move order acceptance to details modal
@@ -22,16 +22,23 @@ export default class Dashboard extends Component {
       ownerId: this.props.ownerId,
       pendingOrders: this.props.pendingOrders || [],
       acceptedOrders: this.props.acceptedOrders || [],
+      showOrderDetails: -1,
+      orderInfo: {},
     };
   }
 
   componentWillReceiveProps (){
-    console.log('Dash:', this.props.pendingOrders);
+
   }
 
   handleOnRowClick(row) {
-    //console.log("In dash. Row: " + row + " clicked");
-    // set state here to display edit order dashboard
+   if(this.props.pendingOrders.length > 0){
+      var orderId = this.props.pendingOrders[row].order._id;
+      OrderAPI.fetchOrderDetails(orderId).then(resp => {
+        console.log(resp);
+        this.setState({showOrderDetails: orderId, orderInfo: resp});
+      });
+   }
   }
 
   handleOnMouseEnter() {
@@ -43,8 +50,14 @@ export default class Dashboard extends Component {
   }
 
   render() {
+    // only mount orderdetails if we have a click. Then pass in correct orderObj via orderInfo prop(call with row number passed onClick)
     return (
       <div >
+        {this.state.showOrderDetails !== -1 
+          ? <OrderDetails showMe={this.state.showOrderDetails > -1} orderInfo={this.state.orderInfo} pending={true} />
+           : null
+        }
+        
         <Paper zDepth={this.state.hover}>
           <Card
             onMouseEnter={() => this.handleOnMouseEnter()}
