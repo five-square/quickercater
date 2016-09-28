@@ -18,10 +18,10 @@ export default class AddPackageCard extends React.Component {
       newPackageName: '',
       newPackageDescription: '',
       newPackagePrice: '',
-      newPackagePicture: '',
+      newPackagePicture: false,
       newPackageType: '',
-    };
-  }
+  };
+}
 
   handleOnMouseEnter() {
     this.setState({
@@ -34,19 +34,21 @@ export default class AddPackageCard extends React.Component {
       hover: 2,
     });
   }
+
   handleOpen() {
     this.setState({ open: true });
   }
 
-  handleAddPackage() {
+ handleAddPackage() {
     this.setState({
       open: false,
     });
-    this.props.addItem({
-      name: this.state.newItemTitle,
-      description: this.state.newItemDescription,
-      price: this.state.newItemPrice,
-      picture: this.state.newItemPicture,
+    this.props.addPackage({
+      name: this.state.newPackageName,
+      description: this.state.newPackageDescription,
+      cost: this.state.newPackagePrice,
+      type: this.state.newPackageType,
+      picture: this.state.newPackagePicture,
     });
   }
 
@@ -80,8 +82,53 @@ export default class AddPackageCard extends React.Component {
     });
   }
 
+  handlePackagePictureChange(e) {
+    e.preventDefault();
+
+    const reader = new FileReader();
+    const file = e.currentTarget.files[0];
+    reader.onload = (a) => {
+      this.setState({
+        newPackagePicture: a.target.result,
+      });
+    };
+    reader.readAsDataURL(file);
+  }
+
   handleCancel() {
-    this.setState({ open: false });
+    this.setState({
+      open: false,
+      newPackageName: '',
+      newPackageDescription: '',
+      newPackagePrice: '',
+      newPackagePicture: 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png',
+      newPackageType: '',
+    });
+  }
+  renderPreview() {
+    let divToRender = '';
+    const imgPrev = {
+      float: 'right',
+      marginRight: '3%',
+      height: '25%',
+      width: '25%',
+    };
+    if (this.state.newPackagePicture !== false) {
+      divToRender = (
+        <img
+          alt="packagePic"
+          src={this.state.newPackagePicture}
+          style={imgPrev}
+        />);
+    } else {
+      divToRender = (
+        <img
+          alt="packagePic"
+          src={this.props.pic}
+          style={imgPrev}
+        />);
+    }
+    return divToRender;
   }
 
   render() {
@@ -99,6 +146,16 @@ export default class AddPackageCard extends React.Component {
       card: {
         marginBottom: '5%',
         width: 250,
+      },
+      imageInput: {
+        cursor: 'pointer',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        width: '100%',
+        opacity: 0,
       },
     };
     // action buttons for Modal
@@ -164,16 +221,22 @@ export default class AddPackageCard extends React.Component {
           />
           <br />
           <TextField
-            floatingLabelText="Add Picture"
-            value={this.state.newPackagePicture}
-            onChange={e => this.handlePackagePictureChange(e)}
-          />
-          <br />
-          <TextField
             floatingLabelText="Add Package Type"
             value={this.state.newPackageType}
             onChange={e => this.handlePackageTypeChange(e)}
           />
+          <br />
+          <br />
+          <FlatButton
+            label="Choose an Image"
+            labelPosition="before"
+          >
+            <input
+              type="file"
+              style={style.imageInput}
+              onChange={e => this.handlePackagePictureChange(e)}
+            />
+          </FlatButton>
         </Dialog>
       </div>
     );

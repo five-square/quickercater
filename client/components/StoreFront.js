@@ -5,7 +5,7 @@ import PackageCard from './PackageCard';
 import OrderAPI from '../models/orderAPI';
 import Dashboard from './Dashboard';
 import StoreDescription from './StoreDescription';
-import Package from '../models/packageAPI';
+import PackageAPI from '../models/packageAPI';
 import Owner from '../models/ownerAPI';
 import AddPackageCard from './AddPackageCard';
 
@@ -23,7 +23,7 @@ export default class StoreFront extends Component {
   }
 
   componentWillMount() {
-    Package.getAllPackages(this.state.ownerId)
+    PackageAPI.getAllPackages(this.state.ownerId)
     .then(packages => {
       this.setState({
         packages,
@@ -51,6 +51,25 @@ export default class StoreFront extends Component {
       this.setState({ acceptedOrders: resp });
     });
   }
+
+  showPackages() {
+    PackageAPI.getAllPackages(this.state.ownerId)
+    .then(packages => {
+      this.setState({ packages });
+    });
+  }
+
+  handleAddPackage(pkg) {
+    const newPackage = Object.assign({}, pkg, {
+      order: this.state.packages.length,
+      ownerId: this.state.ownerId,
+    });
+    PackageAPI.create(newPackage)
+    .then(() => {
+      this.showPackages();
+    });
+  }
+
         // <div className="CateringOptions">
         //   {this.state.packages.map((pack, index) =>
         //     <PackageCard
@@ -98,6 +117,23 @@ export default class StoreFront extends Component {
           fetchPendingOrders={e => this.fetchPendingOrders(e)}
           fetchAcceptedOrders={e => this.fetchAcceptedOrders(e)}
         />
+        <div className="CateringOptions">
+          {this.state.packages.map((pack, index) =>
+            <PackageCard
+              style={style}
+              key={index}
+              ownerId={this.state.ownerId}
+              pack={pack}
+            />
+          )}
+          {this.state.editing
+            ? <AddPackageCard
+              key={this.state.packages.length + 1}
+              addPackage={e => this.handleAddPackage(e)}
+            />
+            : null
+          }
+        </div>
         <h1>Edit Yo Menu</h1>
         <MenuContainer
           style={style}

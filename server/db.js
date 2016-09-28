@@ -767,19 +767,30 @@ db.createPackage = (pkg) => Node.cypherAsync({
       description: {description},
       picture: {picture}
     })
-    MATCH(owner:Owner) WHERE ID(owner) = {ownerId}
-    MERGE(owner) -[:CAN_EDIT]->(pack)
+    WITH pack
+    MATCH(owner:Owner) WHERE ID(owner) = ${pkg.ownerId}
+    MERGE(owner)-[:CAN_EDIT]->(pack)
     RETURN pack`,
   params: {
-    name: pkg.pack.name,
-    type: pkg.pack.type,
-    cost: pkg.pack.cost,
-    description: pkg.pack.description,
-    picture: pkg.pack.picture,
-    ownerId: pkg.ownerId,
+    name: pkg.name,
+    type: pkg.type,
+    cost: pkg.cost,
+    description: pkg.description,
+    picture: pkg.picture,
   },
 })
 .then(response => response.pack);
+
+db.deletePack = (packId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner)-[:CAN_EDIT]->(pack:Package)
+    WHERE ID(pack) = ${packId}
+    DELETE pack`,
+  params: {
+    packId,
+  },
+})
+.then(data => data);
 
  /* ****************************************************************
  */
