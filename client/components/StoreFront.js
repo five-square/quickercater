@@ -95,6 +95,8 @@ export default class StoreFront extends Component {
           ownerId={this.state.ownerId}
           pendingOrders={this.state.pendingOrders}
           acceptedOrders={this.state.acceptedOrders}
+          fetchPendingOrders={e => this.fetchPendingOrders(e)}
+          fetchAcceptedOrders={e => this.fetchAcceptedOrders(e)}
         />
         <h1>Edit Yo Menu</h1>
         <MenuContainer

@@ -25,7 +25,8 @@ export default class OrderDetails extends Component {
   }
 
   handleAccept() {
-    this.props.handleOrderAccept();
+    this.props.handleOrderAccept(this.props.orderInfo.order.id);
+    this.setState({ open: false });
   }
 
   handleReject() {

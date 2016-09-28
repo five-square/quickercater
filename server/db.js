@@ -342,6 +342,19 @@ db.fetchOrderDetail = (orderId) =>
   })
 .then(resp=>resp);
 
+db.addAcceptedOrder = (orderInfo) =>
+  Node.cypherAsync({
+    query: `
+    MATCH (order:CustomerOrder) WHERE ID(order) = ${orderInfo.orderId}
+    MATCH (order)-[relA:VIEW]->(owner:Owner)
+    MERGE (owner)-[relB:CAN_EDIT]->(order)
+    DELETE relA
+    RETURN order`,
+    params: {
+      orderId: orderInfo.orderId,
+    },
+  }).then(response => response);
+
 // db.fetchAllCompletedOrders = (ownerId) => Node.cypherAsync({
 //   query: `
 //     MATCH (owner:Owner) WHERE ID(owner) = {ownerId}

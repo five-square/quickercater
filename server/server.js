@@ -331,6 +331,12 @@ routes.get('/api/order/:orderId', (req,res) => {
   });
 });
 
+routes.post('/api/order/accepted', (req, res) => {
+  // get order info with all req relationships
+  db.addAcceptedOrder(req.body).then(resp => {
+    res.send(resp);
+  });
+});
 
 routes.get('/api/order/getAllPending/:ownerId', (req, res) => {
   db.fetchAllPendingOrders(req.params.ownerId).then(pendingOrders => {
