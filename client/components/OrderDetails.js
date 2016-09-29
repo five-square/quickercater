@@ -3,10 +3,11 @@ import Dialog from 'material-ui/Dialog';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn }
   from 'material-ui/Table';
 import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 import Card from 'material-ui/Card';
 import CardText from 'material-ui/Card/CardText';
 import AlertOrderReject from './AlertOrderReject';
+import OrderAPI from '../models/OrderAPI';
 
 export default class OrderDetails extends Component {
   constructor(props) {
@@ -15,6 +16,10 @@ export default class OrderDetails extends Component {
       hover: 2,
       open: this.props.showMe,
       rejectAlert: false,
+      items: this.props.orderInfo.items,
+      order: this.props.orderInfo.order,
+      customer: this.props.orderInfo.customer,
+      removedItems: [],
     };
   }
 
@@ -32,7 +37,7 @@ export default class OrderDetails extends Component {
   }
 
   handleAccept() {
-    this.props.handleOrderAccept(this.props.orderInfo.order.id);
+    this.props.handleOrderAccept(this.state.order.id);
     this.setState({ open: false });
   }
 
@@ -47,6 +52,40 @@ export default class OrderDetails extends Component {
     this.setState({ rejectAlert: false });
   }
 
+  handleQuantityChange(e) {
+    const tempItems = this.state.items.slice();
+    const itemId = parseInt(e.currentTarget.id, 10);
+    const tempOrder = Object.assign({}, this.state.order);
+    const itemPos = tempItems.map(item => item.id).indexOf(itemId);
+    if (e.currentTarget.value < 0) {
+      tempItems[itemPos].quantity = 0;
+    } else {
+      tempItems[itemPos].quantity = e.currentTarget.value;
+    }
+    tempItems[itemPos].total =
+      tempItems[itemPos].quantity * tempItems[itemPos].price;
+    tempItems[itemPos].total =
+      Math.round((tempItems[itemPos].total + 0.00001) * 100) / 100;
+    tempOrder.total_price = tempItems
+      .reduce((a, b) => a + parseInt(b.total, 10), 0);
+    this.setState({ items: tempItems, order: tempOrder });
+  }
+
+  handleRemoveItem(e, itemId) {
+    const tempItems = this.state.items.slice();
+    const tempOrder = Object.assign({}, this.state.order);
+    const itemPos = tempItems.map(item => item.id).indexOf(itemId);
+    tempOrder.total_price -= (tempItems[itemPos].price * tempItems[itemPos].quantity);
+    tempItems.splice(itemPos, 1);
+    this.state.removedItems.push(itemId);
+    this.setState({ items: tempItems, order: tempOrder });
+  }
+
+  handleSubmit() {
+    OrderAPI.updateOrder(this.state.order.id, this.state.items, this.state.removedItems)
+      .then(resp => console.log('handleSubmit resp: ', resp));
+  }
+
   handleOnMouseEnter() {
     this.setState({ hover: 5 });
   }
@@ -59,11 +98,6 @@ export default class OrderDetails extends Component {
     console.log(this.props.editable);
     const actions = [
       <FlatButton
-        label="Cancel"
-        primary
-        onTouchTap={e => this.handleCancel(e)}
-      />,
-      <FlatButton
         label="Accept"
         primary
         keyboardFocused
@@ -72,8 +106,25 @@ export default class OrderDetails extends Component {
       <FlatButton
         label="Reject"
         primary
-        keyboardFocused
         onTouchTap={e => this.showRejectAlert(e)}
+      />,
+      <FlatButton
+        label="Cancel"
+        primary
+        onTouchTap={e => this.handleCancel(e)}
+      />,
+    ];
+    const actionsEditable = [
+      <FlatButton
+        label="Submit"
+        primary
+        keyboardFocused
+        onTouchTap={e => this.handleSubmit(e)}
+      />,
+      <FlatButton
+        label="Cancel"
+        primary
+        onTouchTap={e => this.handleCancel(e)}
       />,
     ];
     return (
@@ -82,15 +133,15 @@ export default class OrderDetails extends Component {
           this.state.rejectAlert
           ? <AlertOrderReject
             showMe={this.state.rejectAlert}
-            orderId={this.props.orderInfo.order.id}
+            orderId={this.state.order.id}
             handleReject={e => this.handleReject(e)}
           />
           : null
         }
         <Dialog
           autoScrollBodyContent
-          title={`Order # ${this.props.orderInfo.order.id}`}
-          actions={actions}
+          title={`Order # ${this.state.order.id}`}
+          actions={this.props.editable ? actionsEditable : actions}
           modal={false}
           open={this.state.open}
           onRequestClose={(e) => this.handleClose(e)}
@@ -98,10 +149,10 @@ export default class OrderDetails extends Component {
           <Card>
             <CardText>
               <h3>Customer Information: </h3>
-              <h4>Name: {this.props.orderInfo.customer.name}</h4>
-              <h4>Email: {this.props.orderInfo.customer.email} </h4>
-              <h4>Phone: {this.props.orderInfo.customer.phone}</h4>
-              <h4>Address: {this.props.orderInfo.customer.address}</h4>
+              <h4>Name: {this.state.customer.name}</h4>
+              <h4>Email: {this.state.customer.email} </h4>
+              <h4>Phone: {this.state.customer.phone}</h4>
+              <h4>Address: {this.state.customer.address}</h4>
             </CardText>
           </Card>
           <div className="OrderTable">
@@ -115,20 +166,52 @@ export default class OrderDetails extends Component {
                   <TableHeaderColumn>Name</TableHeaderColumn>
                   <TableHeaderColumn>Quantity</TableHeaderColumn>
                   <TableHeaderColumn>Price</TableHeaderColumn>
+                  <TableHeaderColumn>Total</TableHeaderColumn>
+                  {this.props.editable
+                    ? <TableHeaderColumn>''</TableHeaderColumn>
+                    : null
+                  }
+                  <TableHeaderColumn>''</TableHeaderColumn>
                 </TableRow>
               </TableHeader>
               <TableBody displayRowCheckbox={false}>
-                {this.props.orderInfo.items.map(item =>
+                {this.state.items.map(item =>
                   <TableRow selectable={false} key={item.id}>
                     <TableRowColumn>{item.id}</TableRowColumn>
                     <TableRowColumn>{item.name}</TableRowColumn>
-                    <TableRowColumn>{item.quantity}</TableRowColumn>
+                    <TableRowColumn>
+                      {this.props.editable
+                        ? <TextField
+                          ref="quantity"
+                          id={item.id.toString()}
+                          type="number"
+                          style={{ width: 50 }}
+                          value={item.quantity}
+                          onChange={e => this.handleQuantityChange(e)}
+                          floatingLabelFixed
+                        />
+                      : item.quantity
+                      }
+
+                    </TableRowColumn>
                     <TableRowColumn>${item.price}</TableRowColumn>
+                    <TableRowColumn>${item.total}</TableRowColumn>
+                    {this.props.editable
+                      ? <TableRowColumn>
+                        <FlatButton
+                          label="Remove"
+                          secondary
+                          onTouchTap={e => this.handleRemoveItem(e, item.id)}
+                        />
+                      </TableRowColumn>
+                      : null
+                    }
+
                   </TableRow>
                   )}
               </TableBody>
             </Table>
-            <h4>Total Price ${this.props.orderInfo.order.total_price}</h4>
+            <h4>Total Price ${this.state.order.total_price}</h4>
           </div>
         </Dialog>
       </div>

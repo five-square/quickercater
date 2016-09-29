@@ -378,6 +378,13 @@ routes.post('/api/order/delete', (req, res) => {
   });
 });
 
+routes.post('/api/order/update', (req, res) => {
+  db.updateOrder(req.body.orderId, req.body.items, req.body.removedItems)
+  .then((dbData) => {
+    res.status(202).send(dbData);
+  });
+});
+
 /* Create customer end point*/
 routes.post('/api/customer/create', (req, res) => {
   db.createNewCustomer(req.body)

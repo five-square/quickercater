@@ -407,6 +407,18 @@ db.updateItemQtyOnOrder = (orderId, itemId, quantity) => Node.cypherAsync({
 })
 .then(response => response);
 
+db.updateOrder = (orderId, items, removedItems) =>
+  Promise.all(items.map(item => db.updateItemQtyOnOrder(orderId, item.id, item.quantity)))
+  .then(response => {
+    if (removedItems.length > 0) {
+      Promise.all(removedItems
+          .map(itemId => db.deleteRelationship('CustomerOrder', orderId, 'REQUEST', 'Item', itemId)
+      ));
+    }
+    return response;
+  });
+
+
 /*
   **********************************************************************************************
 
