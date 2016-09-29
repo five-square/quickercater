@@ -5,6 +5,7 @@ import PackageCard from './PackageCard';
 import OrderAPI from '../models/orderAPI';
 import Dashboard from './Dashboard';
 import StoreDescription from './StoreDescription';
+import PackageContainer from './PackageContainer';
 import PackageAPI from '../models/packageAPI';
 import Owner from '../models/ownerAPI';
 import AddPackageCard from './AddPackageCard';
@@ -85,6 +86,23 @@ export default class StoreFront extends Component {
         //   ownerId={this.state.ownerId}
         //   store={this.state.store}
         // />
+        // <div className="CateringOptions">
+        //   {this.state.packages.map((pack, index) =>
+        //     <PackageCard
+        //       style={style}
+        //       key={index}
+        //       ownerId={this.state.ownerId}
+        //       pack={pack}
+        //     />
+        //   )}
+        //   {this.state.editing
+        //     ? <AddPackageCard
+        //       key={this.state.packages.length + 1}
+        //       addPackage={e => this.handleAddPackage(e)}
+        //     />
+        //     : null
+        //   }
+        // </div>
 
   render() {
     const style = {
@@ -114,24 +132,10 @@ export default class StoreFront extends Component {
           style={style}
           ownerId={this.state.ownerId}
         />
-        <div className="CateringOptions">
-          {this.state.packages.map((pack, index) =>
-            <PackageCard
-              style={style}
-              key={index}
-              ownerId={this.state.ownerId}
-              pack={pack}
-              deletePackage={e => this.handleDeletePackage(e)}
-            />
-          )}
-          {this.state.editing
-            ? <AddPackageCard
-              key={this.state.packages.length + 1}
-              addPackage={e => this.handleAddPackage(e)}
-            />
-            : null
-          }
-        </div>
+        <PackageContainer
+          ownerId={this.state.ownerId}
+          editing={this.state.editing}
+        />
         <h1>Edit Yo Menu</h1>
         <MenuContainer
           style={style}
