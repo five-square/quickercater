@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import MenuContainer from './MenuContainer';
-import PackageCard from './PackageCard';
 import OrderAPI from '../models/orderAPI';
 import Dashboard from './Dashboard';
-import StoreDescription from './StoreDescription';
 import PackageContainer from './PackageContainer';
-import PackageAPI from '../models/packageAPI';
-import Owner from '../models/ownerAPI';
-import AddPackageCard from './AddPackageCard';
+// import Owner from '../models/ownerAPI';
+// import StoreDescription from './StoreDescription';
 
 export default class StoreFront extends Component {
   constructor(props) {
@@ -16,27 +13,9 @@ export default class StoreFront extends Component {
     this.state = {
       ownerId: this.props.ownerId,
       store: this.props.store,
-      menus: [],
-      packages: [],
       editing: false,
       openItemBank: false,
     };
-  }
-
-  componentWillMount() {
-    PackageAPI.getAllPackages(this.state.ownerId)
-    .then(packages => {
-      this.setState({
-        packages,
-      });
-    });
-  }
-
-  showMenus() {
-    Owner.getMenus(this.state.ownerId)
-    .then(menus => {
-      this.setState({ menus });
-    });
   }
 
   fetchPendingOrders(ownerId) {
@@ -51,58 +30,10 @@ export default class StoreFront extends Component {
     });
   }
 
-  showPackages() {
-    PackageAPI.getAllPackages(this.state.ownerId)
-    .then(packages => {
-      this.setState({ packages });
-    });
-  }
-
-  handleAddPackage(pkg) {
-    const newPackage = Object.assign({}, pkg, {
-      order: this.state.packages.length,
-      ownerId: this.state.ownerId,
-    });
-    PackageAPI.create(newPackage)
-    .then(() => {
-      this.showPackages();
-    });
-  }
-        // <div className="CateringOptions">
-        //   {this.state.packages.map((pack, index) =>
-        //     <PackageCard
-        //       style={style}
-        //       key={index}
-        //       ownerId={this.state.ownerId}
-        //       pack={pack}
-        //     />
-        //   )}
-        //   {this.state.editing
-        //     ? <AddPackageCard key={this.state.packages.length} />
-        //     : null
-        //   }
-        // </div>
         // <StoreDescription
         //   ownerId={this.state.ownerId}
         //   store={this.state.store}
         // />
-        // <div className="CateringOptions">
-        //   {this.state.packages.map((pack, index) =>
-        //     <PackageCard
-        //       style={style}
-        //       key={index}
-        //       ownerId={this.state.ownerId}
-        //       pack={pack}
-        //     />
-        //   )}
-        //   {this.state.editing
-        //     ? <AddPackageCard
-        //       key={this.state.packages.length + 1}
-        //       addPackage={e => this.handleAddPackage(e)}
-        //     />
-        //     : null
-        //   }
-        // </div>
 
   render() {
     const style = {
@@ -136,7 +67,6 @@ export default class StoreFront extends Component {
         <MenuContainer
           style={style}
           ownerId={this.state.ownerId}
-          menus={this.state.menus}
           addItemToOrder={this.props.addItemToOrder}
           editing={this.state.editing}
         />

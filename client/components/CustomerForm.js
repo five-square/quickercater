@@ -19,7 +19,7 @@ export default class CustomerForm extends React.Component {
     };
 
     return (
-      < div style={style}>
+      <div style={style}>
         <Paper zDepth={2}>
           <TextField hintText="First name" style={style} underlineShow={false} />
           <Divider />
@@ -36,6 +36,6 @@ export default class CustomerForm extends React.Component {
           <TextField hintText="Event End Time" style={style} underlineShow={false} />
           <Divider />
         </Paper>
-      < /div>);
+      </div>);
   }
 }

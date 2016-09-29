@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import Card from 'material-ui/Card';
 import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
-import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import EditButtons from './EditButtons';
+// import FlatButton from 'material-ui/FlatButton';
+// import EditButtons from './EditButtons';
 import EditItem from './EditItem';
 
 export default class BankItemCard extends Component {

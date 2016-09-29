@@ -4,17 +4,11 @@ import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
 import RaisedButton from 'material-ui/RaisedButton';
 import Chip from 'material-ui/Chip';
+// import { Sortable } from 'react-sortable';
 import EditButtons from './EditButtons';
 import EditItem from './EditItem';
 
-export default class ItemCard extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      id: this.props.item.id,
-    };
-  }
+class ItemCard extends Component {
 
   handleAddItemToOrder() {
     this.props.addItemToOrder({
@@ -82,7 +76,7 @@ export default class ItemCard extends Component {
             style={{ width: '95%' }}
             children={
               <Chip style={style.priceChip}>
-                <span style={style.priceText}>{`$${this.props.item.price}`}</span>
+                <span style={style.priceText}>{`$${this.props.item.price.toFixed(2)}`}</span>
               </Chip>
             }
           />
@@ -120,3 +114,5 @@ export default class ItemCard extends Component {
     );
   }
 }
+
+export default ItemCard;

@@ -1,7 +1,7 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
-import Server from '../models/serverAPI';
+// import Server from '../models/serverAPI';
 
 export default class ToolbarExamplesSimple extends React.Component {
 
