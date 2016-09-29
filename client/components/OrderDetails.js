@@ -176,7 +176,6 @@ export default class OrderDetails extends Component {
                     ? <TableHeaderColumn>''</TableHeaderColumn>
                     : null
                   }
-                  <TableHeaderColumn>''</TableHeaderColumn>
                 </TableRow>
               </TableHeader>
               <TableBody displayRowCheckbox={false}>
