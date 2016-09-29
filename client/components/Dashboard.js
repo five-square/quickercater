@@ -6,7 +6,7 @@ import Paper from 'material-ui/Paper';
 // import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn }
 //  from 'material-ui/Table';
 import OrderTable from './OrderTable';
-import OrderAPI from './../models/OrderAPI';
+import OrderAPI from './../models/orderAPI';
 import OrderDetails from './OrderDetails';
 
 // Implement 1) allow owner to view details of pending order with modal
