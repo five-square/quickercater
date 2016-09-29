@@ -7,6 +7,7 @@ import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
+import ContentRemove from 'material-ui/svg-icons/content/remove';
 //
 export default class AddPackageCard extends React.Component {
 
@@ -20,8 +21,8 @@ export default class AddPackageCard extends React.Component {
       newPackagePrice: '',
       newPackagePicture: false,
       newPackageType: '',
-  };
-}
+    };
+  }
 
   handleOnMouseEnter() {
     this.setState({
@@ -39,7 +40,7 @@ export default class AddPackageCard extends React.Component {
     this.setState({ open: true });
   }
 
- handleAddPackage() {
+  handleAddPackage() {
     this.setState({
       open: false,
     });
@@ -67,12 +68,6 @@ export default class AddPackageCard extends React.Component {
   handlePackagePriceChange(e) {
     this.setState({
       newPackagePrice: e.currentTarget.value,
-    });
-  }
-
-  handlePackagePictureChange(e) {
-    this.setState({
-      newPackagePicture: e.currentTarget.value,
     });
   }
 
@@ -156,6 +151,11 @@ export default class AddPackageCard extends React.Component {
         left: 0,
         width: '100%',
         opacity: 0,
+      },
+      floatingDeleteButton: {
+        right: 20,
+        bottom: 20,
+        position: 'absolute',
       },
     };
     // action buttons for Modal
