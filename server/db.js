@@ -407,17 +407,29 @@ db.updateItemQtyOnOrder = (orderId, itemId, quantity) => Node.cypherAsync({
 })
 .then(response => response);
 
-db.updateOrder = (orderId, items, removedItems) =>
-  Promise.all(items.map(item => db.updateItemQtyOnOrder(orderId, item.id, item.quantity)))
-  .then(response => {
-    if (removedItems.length > 0) {
-      Promise.all(removedItems
-          .map(itemId => db.deleteRelationship('CustomerOrder', orderId, 'REQUEST', 'Item', itemId)
-      ));
-    }
-    return response;
-  });
+db.updateOrderTotalPrice = (order) => Node.cypherAsync({
+  query: `
+    MATCH (order:CustomerOrder) WHERE ID(order) = {orderId}
+    SET order.total_price = {total_price}
+    RETURN order`,
+  params: {
+    orderId: order.id,
+    total_price: order.total_price,
+  },
+})
+.then(response => response);
 
+db.updateOrder = (order, items, removedItems) =>
+   Promise.all([db.updateOrderTotalPrice(order)]
+    .concat(items.map(item => db.updateItemQtyOnOrder(order.id, item.id, item.quantity))))
+    .then(response => {
+      if (removedItems.length > 0) {
+        Promise.all(removedItems
+          .map(itemId => db.deleteRelationship('CustomerOrder', order.id, 'REQUEST', 'Item', itemId)
+        ));
+      }
+      return response;
+    });
 
 /*
   **********************************************************************************************

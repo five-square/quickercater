@@ -379,7 +379,7 @@ routes.post('/api/order/delete', (req, res) => {
 });
 
 routes.post('/api/order/update', (req, res) => {
-  db.updateOrder(req.body.orderId, req.body.items, req.body.removedItems)
+  db.updateOrder(req.body.order, req.body.items, req.body.removedItems)
   .then((dbData) => {
     res.status(202).send(dbData);
   });

@@ -66,13 +66,13 @@ orderAPI.deleteRejectedOrder = (rejectedOrderId) =>
   })
   .then(resp => resp.json());
 
-orderAPI.updateOrder = (orderId, items, removedItems) =>
+orderAPI.updateOrder = (order, items, removedItems) =>
   fetch('/api/order/update/', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ orderId, items, removedItems }),
+    body: JSON.stringify({ order, items, removedItems }),
   })
   .then(resp => resp.json());
 
