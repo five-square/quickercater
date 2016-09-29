@@ -519,6 +519,13 @@ routes.post('api/package/delete', (req, res) =>{
   });
 });
 
+routes.post('/api/package/update', (req, res) => {
+  db.updatePackage(req.body)
+  .then(data => {
+    res.status(201).send(data);
+  });
+});
+
 /* Google SignIn and logout */
 routes.get('/auth/:service', AuthPort.app);
 

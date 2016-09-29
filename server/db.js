@@ -792,6 +792,21 @@ db.deletePack = (packId) => Node.cypherAsync({
 })
 .then(data => data);
 
+db.updatePackage = (packObj) => Node.cypherAsync({
+  query: `
+    MATCH (pack:Package) WHERE ID(pack) = ${packObj.id}
+    SET pack += {name: {name}, description: {description}, cost: {cost}, type: {type}, picture: {picture}}
+    RETURN item`,
+  params: {
+    name: packObj.name,
+    description: packObj.description,
+    cost: packObj.price,
+    type: packObj.type,
+    picture: packObj.picture,
+  },
+})
+.then(pack => pack[0]);
+
  /* ****************************************************************
  */
 
