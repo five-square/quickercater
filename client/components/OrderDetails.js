@@ -84,6 +84,8 @@ export default class OrderDetails extends Component {
   handleSubmit() {
     OrderAPI.updateOrder(this.state.order.id, this.state.items, this.state.removedItems)
       .then(resp => console.log('handleSubmit resp: ', resp));
+    this.setState({ open: false });
+    this.props.handleModalCancel();
   }
 
   handleOnMouseEnter() {
