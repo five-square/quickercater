@@ -38,10 +38,10 @@ export default class RegisterModal extends React.Component {
   handleSubmit() {
     const newStoreInfo = {
       name: this.state.newStoreName,
-      description: this.state.newStoreDescription,
-      slogan: this.state.newStoreSlogan,
+      picture: this.state.newStoreLogo,
       address: this.state.newStoreAddress,
-      logo: this.state.newStoreLogo,
+      slogan: this.state.newStoreSlogan,
+      description: this.state.newStoreDescription,
     };
     this.setState({ dialogOpen: false });
     console.log('New Store created', newStoreInfo);
