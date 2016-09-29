@@ -94,37 +94,43 @@ dbInit.init = () => Node.cypherAsync({
       name: 'Delivery',
       type: 'delivery',
       cost: 25,
-      description: 'Fast and easy'
+      description: 'Fast and easy',
+      picture: 'http://placehold.it/500x500'
     })
     CREATE (aliceTruck:Package {
       name: 'Food Truck',
       type: 'truck',
       cost: 15,
-      description: 'Fast and friendly'
+      description: 'Fast and friendly',
+      picture: 'http://placehold.it/500x500'
     })
     CREATE (aliceOnSite:Package {
       name: 'On-site',
       type: 'onSite',
       cost: 75,
-      description: 'The whole enchilada'
+      description: 'The whole enchilada',
+      picture: 'http://placehold.it/500x500'
     })
     CREATE (bobDelivery:Package {
       name: 'Delivery',
       type: 'delivery',
       cost: 20,
-      description: 'Slow and steady'
+      description: 'Slow and steady',
+      picture: 'http://placehold.it/500x500'
     })
     CREATE (bobTruck:Package {
       name: 'Food Truck',
       type: 'truck',
       cost: 10, 
-      description: 'Slow and friendly'
+      description: 'Slow and friendly',
+      picture: 'http://placehold.it/500x500'
     })
     CREATE (bobOnSite:Package {
       name: 'On-site',
       type: 'onSite',
       cost: 50,
-      description: 'The whole tamale'
+      description: 'The whole tamale',
+      picture: 'http://placehold.it/500x500'
     })
 
     CREATE (churrocoMenu1:Menu {

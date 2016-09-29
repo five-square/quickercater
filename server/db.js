@@ -740,18 +740,6 @@ db.moveItemDown = (itemId) => Node.cypherAsync({
 })
 .then(data => data);
 
-// db.updateItem = (menuObj) => Node.cypherAsync({
-//   query: `
-//     MATCH (menu:Menu) WHERE ID(menu) = ${menuObj.id}
-//     SET menu += {name: {name}, description: {description}}
-//     RETURN menu`,
-//   params: {
-//     name: menuObj.name,
-//     description: menuObj.description,
-//   },
-// })
-// .then(data => data);
-
 /*
  **********************************************************************************************
   This functions will create, update, get and delete packages.
@@ -807,7 +795,13 @@ db.deletePack = (packId) => Node.cypherAsync({
 db.updatePackage = (packObj) => Node.cypherAsync({
   query: `
     MATCH (pack:Package) WHERE ID(pack) = ${packObj.id}
-    SET pack += {name: {name}, description: {description}, cost: {cost}, type: {type}, picture: {picture}}
+    SET pack += {
+      name: {name},
+      description: {description},
+      cost: {cost},
+      type: {type},
+      picture: {picture}
+    }
     RETURN item`,
   params: {
     name: packObj.name,
