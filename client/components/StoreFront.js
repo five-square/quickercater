@@ -117,7 +117,6 @@ export default class StoreFront extends Component {
 
     return (
       <div className="StoreFront" >
-        <RegisterModal />
         <RaisedButton
           label={`Editing ${this.state.editing ? 'On' : 'Off'}`}
           primary onClick={() => this.setState({
