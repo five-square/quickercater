@@ -88,7 +88,7 @@ export default class PackageContainer extends Component {
           ? <PackageSlider
             style={style}
             packages={this.state.packages}
-            editing={this.state.editing}
+            editing={this.props.editing}
             addNewPackage={e => this.handleAddPackage(e)}
           />
           : null

@@ -6,7 +6,7 @@ import Paper from 'material-ui/Paper';
 import KeyLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import KeyRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import PackageCard from './PackageCard';
-import AddPackageCard from './AddPackageCard';
+// import AddPackageCard from './AddPackageCard';
 
 export default class PackageSlider extends Component {
   constructor(props) {
@@ -39,6 +39,13 @@ export default class PackageSlider extends Component {
       continuous: true,
       slidesPerView: 2,
     };
+            // {this.props.editing
+            //   ? <AddPackageCard
+            //     key={this.props.package.length}
+            //     addNewPackage={this.props.addNewPackage}
+            //   />
+            //   : null
+            // }
 
     return (
       <Paper zDepth={2} style={this.props.style.paper}>
@@ -59,13 +66,6 @@ export default class PackageSlider extends Component {
                 />
               </div>
             )}
-            {this.props.editing
-              ? <AddPackageCard
-                key={this.props.package.length}
-                addNewPackage={this.props.addNewPackage}
-              />
-              : null
-            }
           </ReactSwipe>
           <div>
             <FloatingActionButton

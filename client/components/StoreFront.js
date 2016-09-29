@@ -115,18 +115,18 @@ export default class StoreFront extends Component {
       justifyContent: 'center',
     };
     const buttonStyle = {
-      textAlign: 'right'
+      textAlign: 'right',
     };
     return (
       <div className="StoreFront" >
         <div style={buttonStyle}>
-        <RaisedButton
-          label={`Editing ${this.state.editing ? 'On' : 'Off'}`}
-          primary onClick={() => this.setState({
-            editing: !this.state.editing,
-            openItemBank: !this.state.openItemBank,
-          })}
-        />
+          <RaisedButton
+            label={`Editing ${this.state.editing ? 'On' : 'Off'}`}
+            primary onClick={() => this.setState({
+              editing: !this.state.editing,
+              openItemBank: !this.state.openItemBank,
+            })}
+          />
         </div>
         <Dashboard
           style={style}
