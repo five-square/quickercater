@@ -7,7 +7,7 @@ import TextField from 'material-ui/TextField';
 import Card from 'material-ui/Card';
 import CardText from 'material-ui/Card/CardText';
 import AlertOrderReject from './AlertOrderReject';
-import OrderAPI from '../models/OrderAPI';
+import OrderAPI from '../models/orderAPI';
 
 export default class OrderDetails extends Component {
   constructor(props) {
@@ -75,14 +75,16 @@ export default class OrderDetails extends Component {
     const tempItems = this.state.items.slice();
     const tempOrder = Object.assign({}, this.state.order);
     const itemPos = tempItems.map(item => item.id).indexOf(itemId);
-    tempOrder.total_price -= (tempItems[itemPos].price * tempItems[itemPos].quantity);
+    if (tempOrder.total_price > 0) {
+      tempOrder.total_price -= (tempItems[itemPos].price * tempItems[itemPos].quantity);
+    }
     tempItems.splice(itemPos, 1);
     this.state.removedItems.push(itemId);
     this.setState({ items: tempItems, order: tempOrder });
   }
 
   handleSubmit() {
-    OrderAPI.updateOrder(this.state.order.id, this.state.items, this.state.removedItems)
+    OrderAPI.updateOrder(this.state.order, this.state.items, this.state.removedItems)
       .then(resp => console.log('handleSubmit resp: ', resp));
     this.setState({ open: false });
     this.props.handleModalCancel();
@@ -154,7 +156,8 @@ export default class OrderDetails extends Component {
               <h4>Name: {this.state.customer.name}</h4>
               <h4>Email: {this.state.customer.email} </h4>
               <h4>Phone: {this.state.customer.phone}</h4>
-              <h4>Address: {this.state.customer.address}</h4>
+              <h4>Address: {this.state.order.address}</h4>
+              <h4>Request Date: {this.state.order.request_date}</h4>
             </CardText>
           </Card>
           <div className="OrderTable">
