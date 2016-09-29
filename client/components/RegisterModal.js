@@ -40,10 +40,10 @@ export default class RegisterModal extends React.Component {
    var ownerId = this.props.ownerId; // use me for db call
     const newStoreInfo = {
       name: this.state.newStoreName,
-      description: this.state.newStoreDescription,
-      slogan: this.state.newStoreSlogan,
+      picture: this.state.newStoreLogo,
       address: this.state.newStoreAddress,
-      logo: this.state.newStoreLogo,
+      slogan: this.state.newStoreSlogan,
+      description: this.state.newStoreDescription,
     };
     this.setState({ dialogOpen: false });
     // create store node and link to owner.
