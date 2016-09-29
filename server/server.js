@@ -28,8 +28,8 @@ routes.get('/api/tags-example', (req, res) => {
 /* AuthPort Set up */
 AuthPort.createServer({
   service: 'google',
-  id: configAuth.clientID,
-  secret: configAuth.clientSecret,
+  id: process.env.googleClientId || configAuth.clientID,
+  secret: process.env.googleSecret || configAuth.clientSecret,
   scope: ['email', 'profile'],
 });
 
