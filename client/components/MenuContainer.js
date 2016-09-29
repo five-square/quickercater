@@ -3,6 +3,7 @@ import MenuCard from './MenuCard';
 import AddMenuCard from './AddMenuCard';
 import Menu from '../models/menuAPI';
 import Owner from '../models/ownerAPI';
+import MenuCardDraggable from './MenuCardDraggable';
 
 export default class MenuContainer extends Component {
   constructor(props) {
@@ -54,6 +55,12 @@ export default class MenuContainer extends Component {
   }
 
   handleMoveMenu(direction, menuId) {
+    const location = this.state.menus.map((e, i) => {
+      if (e.id === menuId) {
+        return i;
+      }
+    })[0];
+    console.log('in handleMoveMenu: location: ', location, ', menuId: ', menuId);
     Menu.move(direction, menuId, this.state.ownerId)
     .then(() => {
       this.showMenus();
@@ -74,22 +81,39 @@ export default class MenuContainer extends Component {
   }
 
   render() {
+    console.log('in MenuContainer render: ', this.state.menus);
     return (
       <div className="menu-container">
-        { this.state.menus.map((menu, index) =>
-          <MenuCard
-            key={index}
-            style={this.state.style}
-            editing={this.props.editing}
-            menu={menu}
-            addItemToOrder={this.props.addItemToOrder}
-            updateTotalPrice={this.props.updateTotalPrice}
-            deleteMenu={e => this.handleDeleteMenu(e)}
-            moveMenu={(d, e) => this.handleMoveMenu(d, e)}
-            editMenu={e => this.handleEditMenu(e)}
-            ownerId={this.props.ownerId}
-          />
-        )}
+        {this.props.editing
+          ? this.state.menus.map((menu, index) =>
+            <MenuCardDraggable
+              key={index}
+              style={this.state.style}
+              editing={this.props.editing}
+              menu={menu}
+              addItemToOrder={this.props.addItemToOrder}
+              updateTotalPrice={this.props.updateTotalPrice}
+              deleteMenu={e => this.handleDeleteMenu(e)}
+              moveMenu={(d, e) => this.handleMoveMenu(d, e)}
+              editMenu={e => this.handleEditMenu(e)}
+              ownerId={this.props.ownerId}
+            />
+          )
+          : this.state.menus.map((menu, index) =>
+            <MenuCard
+              key={index}
+              style={this.state.style}
+              editing={this.props.editing}
+              menu={menu}
+              addItemToOrder={this.props.addItemToOrder}
+              updateTotalPrice={this.props.updateTotalPrice}
+              deleteMenu={e => this.handleDeleteMenu(e)}
+              moveMenu={(d, e) => this.handleMoveMenu(d, e)}
+              editMenu={e => this.handleEditMenu(e)}
+              ownerId={this.props.ownerId}
+            />
+          )
+        }
         {this.props.editing
           ? <AddMenuCard
             key={this.state.menus.length + 1}

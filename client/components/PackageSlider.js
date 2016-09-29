@@ -67,20 +67,18 @@ export default class PackageSlider extends Component {
               </div>
             )}
           </ReactSwipe>
-          <div>
-            <FloatingActionButton
-              style={this.props.style.floatingLeftButton}
-              onTouchTap={e => this.prev(e)}
-            >
-              <KeyLeft />
-            </FloatingActionButton>
-            <FloatingActionButton
-              style={this.props.style.floatingRightButton}
-              onTouchTap={e => this.next(e)}
-            >
-              <KeyRight />
-            </FloatingActionButton>
-          </div>
+          <FloatingActionButton
+            style={this.props.style.floatingLeftButton}
+            onTouchTap={e => this.prev(e)}
+          >
+            <KeyLeft />
+          </FloatingActionButton>
+          <FloatingActionButton
+            style={this.props.style.floatingRightButton}
+            onTouchTap={e => this.next(e)}
+          >
+            <KeyRight />
+          </FloatingActionButton>
         </div>
         <Card style={this.props.style.description}>
           <CardTitle

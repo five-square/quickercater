@@ -20,8 +20,15 @@ export default class PackageContainer extends Component {
     });
   }
 
-  handleAddPackage() {
-    alert('Clicked Add New!');
+  handleAddPackage(pkg) {
+    const newPackage = Object.assign({}, pkg, {
+      order: this.state.packages.length,
+      ownerId: this.state.ownerId,
+    });
+    Package.create(newPackage)
+    .then(() => {
+      this.showPackages();
+    });
   }
 
   render() {
@@ -33,6 +40,7 @@ export default class PackageContainer extends Component {
         marginLeft: 'auto',
         marginRight: 'auto',
         textAlign: 'center',
+        position: 'relative',
         // display: 'block',
       },
       div: {
@@ -60,12 +68,12 @@ export default class PackageContainer extends Component {
       },
       floatingRightButton: {
         position: 'absolute',
-        bottom: 20,
+        bottom: '40%',
         right: 20,
       },
       floatingLeftButton: {
         position: 'absolute',
-        bottom: 20,
+        bottom: '40%',
         left: 20,
       },
       description: {
