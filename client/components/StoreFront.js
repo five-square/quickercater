@@ -121,6 +121,7 @@ export default class StoreFront extends Component {
               key={index}
               ownerId={this.state.ownerId}
               pack={pack}
+              deletePackage={e => this.handleDeletePackage(e)}
             />
           )}
           {this.state.editing

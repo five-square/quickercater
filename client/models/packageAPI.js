@@ -31,9 +31,9 @@ PackageAPI.create = (pack) =>
   .then(data => data);
 
 
-PackageAPI.deletePackage = (packageID) =>
-  fetch(`/api/package/${packageID}`, {
-    method: 'post',
+PackageAPI.delete = (packageID) =>
+  fetch(`/api/package/delete/`, {
+    method: 'delete',
     headers: {
       'Content-Type': 'application/json',
     },
