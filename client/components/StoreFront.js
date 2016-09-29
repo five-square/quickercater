@@ -9,7 +9,7 @@ import PackageContainer from './PackageContainer';
 import PackageAPI from '../models/packageAPI';
 import Owner from '../models/ownerAPI';
 import AddPackageCard from './AddPackageCard';
-//
+
 export default class StoreFront extends Component {
   constructor(props) {
     super(props);
@@ -114,20 +114,16 @@ export default class StoreFront extends Component {
       alignItems: 'center',
       justifyContent: 'center',
     };
-    const buttonStyle = {
-      textAlign: 'right',
-    };
+
     return (
       <div className="StoreFront" >
-        <div style={buttonStyle}>
-          <RaisedButton
-            label={`Editing ${this.state.editing ? 'On' : 'Off'}`}
-            primary onClick={() => this.setState({
-              editing: !this.state.editing,
-              openItemBank: !this.state.openItemBank,
-            })}
-          />
-        </div>
+        <RaisedButton
+          label={`Editing ${this.state.editing ? 'On' : 'Off'}`}
+          primary onClick={() => this.setState({
+            editing: !this.state.editing,
+            openItemBank: !this.state.openItemBank,
+          })}
+        />
         <Dashboard
           style={style}
           ownerId={this.state.ownerId}
