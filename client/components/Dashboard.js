@@ -61,7 +61,7 @@ export default class Dashboard extends Component {
         console.log('handleOrderAccept resp: ', resp);
         this.fetchPendingOrders(this.props.ownerId);
         this.fetchAcceptedOrders(this.props.ownerId);
-        this.setState({returning: true});
+        this.setState({returning: true, showOrderDetails: -1 });
       });
   }
 
