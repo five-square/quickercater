@@ -28,9 +28,10 @@ routes.get('/api/tags-example', (req, res) => {
 /* AuthPort Set up */
 AuthPort.createServer({
   service: 'google',
-  id: configAuth.clientID,
-  secret: configAuth.clientSecret,
+  id: process.env.googleClientId || configAuth.clientID,
+  secret: process.env.googleClientSecret || configAuth.clientSecret,
   scope: ['email', 'profile'],
+  redirect_uri: 'http://quickercater.heroku.com'
 });
 
 AuthPort.on('auth', (req, res, profile) => {
