@@ -191,7 +191,7 @@ export default class App extends Component {
           <div style={{ textAlign: 'center' }}>
             <Badge
               badgeContent="&copy;QuickerCater"
-              badgeStyle={{ fontSize: 12 }}
+              badgeStyle={{ fontSize: 12, background: 0 }}
             />
           </div>
         </MuiThemeProvider>
