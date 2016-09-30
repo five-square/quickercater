@@ -80,7 +80,7 @@ class ItemCard extends Component {
             style={{ width: '95%' }}
             children={
               <Chip style={style.priceChip}>
-                <span style={style.priceText}>{`$${this.props.item.price}`}</span>
+                <span style={style.priceText}>{`$${(+this.props.item.price).toFixed(2)}`}</span>
               </Chip>
             }
           />
