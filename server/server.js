@@ -220,6 +220,14 @@ routes.put('/api/menu/:ownerId/reorder', (req, res) => {
   }
 });
 
+routes.put('/api/menu/reorder', (req, res) => {
+  console.log(req.body);
+  db.updateMenuOrder(req.body)
+  .then(menus => {
+    res.status(201).send(menus);
+  });
+});
+
 routes.put('/api/menu/:ownerId/update', (req, res) => {
   console.log(req.body.menuId);
   db.updateMenu(req.body)
@@ -443,6 +451,14 @@ routes.get('/api/item/:id', (req, res) => {
       }
     });
   }
+});
+
+routes.put('/api/item/reorder', (req, res) => {
+  console.log(req.body);
+  db.updateItemOrder(req.body)
+  .then(items => {
+    res.status(201).send(items);
+  });
 });
 
 routes.post('/api/item/update', (req, res) => {
