@@ -56,6 +56,7 @@ AuthPort.on('auth', (req, res, profile) => {
               res.redirect('/');
             });
         } else {
+          console.log('Authport User: ',user);
           db.updateOwnerAuthKey(user[0].owner._id, profile.token)
             .then(ownerInfo => {
               res.cookie('sessionId', ownerInfo[0].owner.properties.auth_key);
