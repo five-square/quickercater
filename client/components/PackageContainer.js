@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import Package from '../models/packageAPI';
 import PackageSlider from './PackageSlider';
 import EditPackage from './EditPackage';
-import AddPackageCard from './AddPackageCard'
+import AddPackageCard from './AddPackageCard';
 
 export default class PackageContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      packages: [], 
+      packages: [],
+      ownerId: this.props.ownerId,
     };
   }
 

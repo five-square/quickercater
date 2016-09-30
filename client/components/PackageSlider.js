@@ -63,6 +63,7 @@ export default class PackageSlider extends Component {
                   ownerId={this.props.ownerId}
                   editing={this.props.editing}
                   pack={pack}
+                  target={this.props.packages}
                   delete={this.props.deletePackage}
                 />
               </div>

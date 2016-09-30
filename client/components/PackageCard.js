@@ -30,6 +30,7 @@ const PackageCard = (props) => (
       <img role="presentation" src={props.pack.picture} />
     </CardMedia>
     {props.editing
+<<<<<<< ac61ff4d5092bfe598f9e2e57d154d2d1f081883
       ? <div style={style.floatingEditButton}>
         <EditPackage
           edit={props.handleSubmitEdit}
@@ -46,6 +47,24 @@ const PackageCard = (props) => (
       </div>
       : null
     }
+=======
+              ? <div style={style.floatingEditButton}>
+                <EditPackage
+                  edit={props.handleSubmitEdit}
+                /><br />
+                <AddPackageCard
+                  edit={props.handleAddPackage}
+                /><br />
+                <FloatingActionButton
+                  mini
+                  onTouchTap={() => props.delete(props.target.pack.id)}
+                >
+                  <ContentRemove />
+                </FloatingActionButton>
+              </div>
+              : null
+            }
+>>>>>>> added files
   </Card>
 );
 
