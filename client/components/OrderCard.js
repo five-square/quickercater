@@ -105,6 +105,20 @@ export default class OrderCard extends React.Component {
   }
 
   render() {
+    const style = {
+      cancelBtn: {
+        right: 30,
+        bottom: 0,
+        position: 'absolute',
+      },
+      card: {
+        margin: 1,
+        width: '90%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        position: 'relative',
+      },
+    };
     // action buttons for Modal
     console.log('this.props.orderInfo: ', this.props.orderInfo);
     const actions = [
@@ -122,15 +136,16 @@ export default class OrderCard extends React.Component {
     ];
     // This is the actual modal
     return (
-      <div>
+      <div style={style.card}>
         { this.state.reviewOrder === false
           ? <div>
             <RaisedButton
               primary label="Submit"
               onTouchTap={e => this.handleOpen(e)}
             />
-            <RaisedButton
+            <FlatButton
               primary label="Cancel"
+              style={style.cancelBtn}
               onTouchTap={e => this.handleRemoveOrder(e)}
             />
             <Dialog
