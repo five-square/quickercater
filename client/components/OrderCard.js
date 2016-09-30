@@ -6,6 +6,7 @@ import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import OrderAPI from '../models/orderAPI';
 import Customer from '../models/CustomerAPI';
+import OrderConfirmation from './OrderConfirmation';
 
 
 export default class OrderCard extends React.Component {
@@ -58,7 +59,7 @@ export default class OrderCard extends React.Component {
         OrderAPI.create(orderInfo)
           .then(orderDb => {
             this.setState({ newOrder: orderDb.order._id, submitted: true });
-            // this.props.deleteOrderAfterSubmission(this.props.orderInfo.order[0].ownerId);
+            // this.props.deleteOrderAfterSubmission(this.props.ownerId);
           });
       });
   }
@@ -151,7 +152,13 @@ export default class OrderCard extends React.Component {
               <h4>{`Price: ${this.props.orderInfo.totalPrice}`}</h4>
             </Dialog>
           </div>
-        : <div> Order Submitted - # {this.state.newOrder} </div>}
+        : <OrderConfirmation
+          orderId={this.state.newOrder}
+          storeName={this.props.storeName}
+          showMe
+          ownerId={this.props.ownerId}
+          deleteOrderAfterSubmission={this.props.deleteOrderAfterSubmission}
+        />}
       </div>);
   }
 }

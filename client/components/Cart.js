@@ -43,7 +43,7 @@ export default class Cart extends Component {
             showExpandableButton
             onClick={e => this.handleShowHide(e)}
           />
-          <CardText expandable>
+          <CardText>
             {this.props.globalOrder[owner].order.map((itemInfo, cardIndex) =>
               <CartItemCard
                 key={(cardIndex * 2) + 1}
@@ -65,6 +65,7 @@ export default class Cart extends Component {
             orderInfo={this.props.globalOrder[owner]}
             deleteOrderAfterSubmission={this.props.deleteOrderAfterSubmission}
             ownerId={owner}
+            storeName={this.props.globalOrder[owner].storeName}
           />
         </Card>
       );
