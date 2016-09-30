@@ -13,6 +13,7 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
+import OwnerAPI from '../models/OwnerAPI';
 
 export default class RegisterModal extends React.Component {
 
@@ -36,7 +37,7 @@ export default class RegisterModal extends React.Component {
   }
 
   handleSubmit() {
-   var ownerId = this.props.ownerId;
+   var ownerId = this.props.ownerId; // use me for db call
     const newStoreInfo = {
       name: this.state.newStoreName,
       description: this.state.newStoreDescription,
@@ -45,10 +46,9 @@ export default class RegisterModal extends React.Component {
       logo: this.state.newStoreLogo,
     };
     this.setState({ dialogOpen: false });
-    
     // create store node and link to owner.
-
-    console.log('New Store created', newStoreInfo);
+    OwnerAPI.createStore(newStoreInfo).then(x=>console.log('RM50:',x));
+    //console.log('New Store created', newStoreInfo);
   }
 
   handleCancel() {

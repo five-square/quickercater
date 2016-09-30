@@ -16,4 +16,14 @@ OwnerAPI.getMenus = (ownerId) =>
     description: element.menu.properties.description,
   })));
 
+OwnerAPI.createStore = (ownerId) => 
+  fetch('/api/store/create', {
+    method: 'get',
+    headers: {
+      'Content-Type':'application/json',
+    },
+  })
+  .then(data => data.json())
+  .then(newStore => console.log('NewStore: ', newStore));
+
 export default OwnerAPI;

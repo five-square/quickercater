@@ -129,6 +129,15 @@ routes.get('/api/store/:id', (req, res) => {
   });
 });
 
+routes.post('/api/store/create', (req,res) => {
+// name picture address description slogan 
+  db.createStore(req.body)
+  .then(newStore =>{
+     console.log(newStore);
+     res.send(newStore);
+  });
+})
+
 /*
   **********************************************************************************************
 
