@@ -11,7 +11,6 @@ import Cart from './Cart';
 import cookieAPI from '../models/cookieAPI';
 import RegisterModal from './RegisterModal';
 
-
 export default class App extends Component {
   constructor(props) {
     super(props);

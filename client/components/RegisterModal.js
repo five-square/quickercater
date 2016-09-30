@@ -13,7 +13,7 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import OwnerAPI from '../models/OwnerAPI';
+import OwnerAPI from '../models/ownerAPI';
 
 export default class RegisterModal extends React.Component {
 
