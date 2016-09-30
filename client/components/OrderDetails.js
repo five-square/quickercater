@@ -84,10 +84,15 @@ export default class OrderDetails extends Component {
   }
 
   handleSubmit() {
-    OrderAPI.updateOrder(this.state.order, this.state.items, this.state.removedItems)
-      .then(resp => console.log('handleSubmit resp: ', resp));
-    this.setState({ open: false });
-    this.props.handleModalCancel();
+    if (this.props.customerView) {
+      this.props.handleOrderAccept();
+      this.setState({ open: false });
+    } else {
+      OrderAPI.updateOrder(this.state.order, this.state.items, this.state.removedItems)
+        .then(resp => console.log('handleSubmit resp: ', resp));
+      this.setState({ open: false });
+      this.props.handleModalCancel();
+    }
   }
 
   handleOnMouseEnter() {
@@ -144,15 +149,18 @@ export default class OrderDetails extends Component {
         }
         <Dialog
           autoScrollBodyContent
-          title={`Order # ${this.state.order.id}`}
-          actions={this.props.editable ? actionsEditable : actions}
+          title={this.props.customerView ? 'Review Order' : `Order # ${this.state.order.id}`}
+          actions={this.props.editable || this.props.customerView ? actionsEditable : actions}
           modal={false}
           open={this.state.open}
           onRequestClose={(e) => this.handleClose(e)}
         >
           <Card>
             <CardText>
-              <h3>Customer Information: </h3>
+              {this.props.customerView
+                ? <h3>Your Information: </h3>
+                : <h3>Customer Information: </h3>
+              }
               <h4>Name: {this.state.customer.name}</h4>
               <h4>Email: {this.state.customer.email} </h4>
               <h4>Phone: {this.state.customer.phone}</h4>
