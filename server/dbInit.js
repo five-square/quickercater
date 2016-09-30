@@ -350,15 +350,15 @@ dbInit.init = () => Node.cypherAsync({
       name: 'Casa de Alice',
       picture: false,
       address: '123 YourMom Rd.',
-      slogan: "I'll make all your wildest dreams come true",
-      description: 'Not a house of prostitution, but we have nice chicharrones.'
+      slogan: "We'll make all your wildest dreams come true",
+      description: 'It's time for some nice chicharrones.'
     })
     CREATE (bobStore:Store {
       name: "Bob's Burger Hole",
       picture: false,
       address: '123 YourMom Blvd.',
       slogan: 'Fill up those buns and put a burger in your hole!',
-      description: 'Also, not a house of prostitution, but our buns are soft'
+      description: 'Big juicy burgers for your enjoyment.'
     })
 
     CREATE (danOrder1:CustomerOrder {
