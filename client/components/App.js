@@ -52,6 +52,7 @@ export default class App extends Component {
       .then( storeAndOwnerArray => {
         var owners = storeAndOwnerArray.map(group=>group.owner);
         var stores = storeAndOwnerArray.map(group=>group.store);
+        console.log(storeAndOwnerArray);
         this.setState({ owners, stores});
         var ownerKeys = owners.map(owner => owner.properties.auth_key);
         if(ownerKeys.indexOf(sessId) !== -1){
