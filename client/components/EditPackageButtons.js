@@ -28,7 +28,7 @@ const EditPackageButtons = (props) => {
         zDepth={props.secondary ? 0 : 2}
         onTouchTap={e => {
           e.preventDefault();
-          props.addNewPackage(props.target.id);
+          props.addNewPackage;
         }}
       >
         <ContentAdd />
@@ -40,7 +40,7 @@ const EditPackageButtons = (props) => {
         zDepth={props.secondary ? 0 : 2}
         onTouchTap={e => {
           e.preventDefault();
-          props.delete(props.target.id);
+          props.delete(props.target.delete);
         }}
       >
         <ContentRemove />

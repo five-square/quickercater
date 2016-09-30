@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import Package from '../models/packageAPI';
 import PackageSlider from './PackageSlider';
 import EditPackage from './EditPackage';
-
+import AddPackageCard from './AddPackageCard'
 
 export default class PackageContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      packages: [],  
+      packages: [], 
     };
   }
 
@@ -35,6 +35,13 @@ export default class PackageContainer extends Component {
       ownerId: this.state.ownerId,
     });
     Package.create(newPackage)
+    .then(() => {
+      this.showPackages();
+    });
+  }
+
+  handleDeletePackage(packId) {
+    Package.delete(packId, this.state.ownerId)
     .then(() => {
       this.showPackages();
     });
@@ -106,7 +113,7 @@ export default class PackageContainer extends Component {
             style={style}
             packages={this.state.packages}
             editing={this.props.editing}
-            addNewPackage={e => this.handleAddPackage(e)}
+            deletePackage={e => this.handleDeletePackage(e)}
           />
 
           : null

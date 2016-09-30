@@ -1,14 +1,17 @@
 import React from 'react';
-import { Card, CardMedia, CardTitle, CardActions } from 'material-ui/Card';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentRemove from 'material-ui/svg-icons/content/remove';
+import { Card, CardMedia, CardTitle } from 'material-ui/Card';
 import EditPackage from './EditPackage';
-import EditPackageButtons from './EditPackageButtons';
 
+
+import AddPackageCard from './AddPackageCard';
 
 const style = {
   floatingEditButton: {
 
-    right: 150,
-    bottom: 480,
+    right: 5,
+    bottom: 380,
     position: 'absolute',
   },
   // cardActions: {
@@ -29,21 +32,20 @@ const PackageCard = (props) => (
     {props.editing
               ? <div style={style.floatingEditButton}>
                 <EditPackage
-
                   edit={props.handleSubmitEdit}
-          
-                />
-                <EditPackageButtons
-                  secondary
-                  targetType={'package'}
-                  target={props.package}
-                  delete={props.deletePackage}
-                  addNewPackage={props.handleAddPackage}
-                />
+                /><br />
+                <AddPackageCard
+                  edit={props.handleAddPackage}
+                /><br />
+                <FloatingActionButton
+                  mini
+                  delete={props.delete}
+                >
+                  <ContentRemove />
+                </FloatingActionButton>
               </div>
               : null
             }
-    
   </Card>
 );
 
