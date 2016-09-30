@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import Package from '../models/packageAPI';
 import PackageSlider from './PackageSlider';
+import EditPackage from './EditPackage';
+
 
 export default class PackageContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      packages: [],
+      packages: [],  
     };
   }
 
@@ -17,6 +19,13 @@ export default class PackageContainer extends Component {
       this.setState({
         packages,
       });
+    });
+  }
+
+  showPackages() {
+    Package.getAllPackages(this.state.ownerId)
+    .then(packages => {
+      this.setState({ packages });
     });
   }
 
@@ -99,9 +108,12 @@ export default class PackageContainer extends Component {
             editing={this.props.editing}
             addNewPackage={e => this.handleAddPackage(e)}
           />
+
           : null
         }
+
       </div>
+
     );
   }
 }
