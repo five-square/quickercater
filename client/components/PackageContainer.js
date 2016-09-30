@@ -22,8 +22,6 @@ export default class PackageContainer extends Component {
     });
   }
 
-<<<<<<< 0095815b89dcb8a46028c22cc7afa4a0e4897c80
-=======
   showPackages() {
     Package.getAllPackages(this.state.ownerId)
     .then(packages => {
@@ -31,7 +29,6 @@ export default class PackageContainer extends Component {
     });
   }
 
->>>>>>> forgot to add files =)
   handleAddPackage(pkg) {
     const newPackage = Object.assign({}, pkg, {
       order: this.state.packages.length,
