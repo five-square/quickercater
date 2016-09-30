@@ -7,6 +7,7 @@ import DatePicker from 'material-ui/DatePicker';
 import OrderAPI from '../models/orderAPI';
 import Customer from '../models/CustomerAPI';
 import OrderConfirmation from './OrderConfirmation';
+import OrderDetails from './OrderDetails';
 
 
 export default class OrderCard extends React.Component {
@@ -19,7 +20,20 @@ export default class OrderCard extends React.Component {
       submitted: false,
       requestDate: '',
       ownerId: this.props.ownerId,
+      orderInfo: {},
+      customerInfo: {},
+      reviewOrder: false,
+      errorTextPhone: '',
     };
+  }
+
+  onChangePhone(event) {
+    const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+    if (event.target.value.match(phoneRegex)) {
+      this.setState({ errorTextPhone: '' });
+    } else {
+      this.setState({ errorTextPhone: 'Invalid format: ###-###-####' });
+    }
   }
 
   handleOpen() {
@@ -33,6 +47,7 @@ export default class OrderCard extends React.Component {
   handleSubmit() {
     // this.setState({ open: false });
     const customerInfo = {
+      id: '',
       name: this.refs.customerName.getValue(),
       phone: this.refs.customerPhone.getValue(),
       email: this.refs.customerEmail.getValue(),
@@ -40,6 +55,7 @@ export default class OrderCard extends React.Component {
     };
     const orderInfo = {
       order: {
+        id: '',
         name: this.refs.ordername.getValue(),
         created_on: new Date(), // populate this in Neo4J query??
         request_date: this.state.requestDate,
@@ -47,35 +63,50 @@ export default class OrderCard extends React.Component {
         total_price: this.props.orderInfo.totalPrice,
         address: this.refs.orderAddress.getValue(),
       },
-      items: this.props.orderInfo.order
-        .map(itemInfo => ({ itemId: itemInfo.item.id, quantity: itemInfo.quantity })),
+      items: this.props.orderInfo.order.map(itemInfo =>
+        Object.assign({}, itemInfo.item,
+          { quantity: itemInfo.quantity,
+           total: itemInfo.item.price * parseInt(itemInfo.quantity, 10) })),
       ownerId: this.props.orderInfo.order[0].ownerId,
-      customerId: '',
+      customer: customerInfo,
       package: { id: this.props.ownerId, expires: '10/10/2016' },
     };
-    Customer.create(customerInfo)
+
+ // var result = { items: items, order: orderObj, customer: orderItemRel[0].customer.properties };
+    this.state.customerInfo = customerInfo;
+    this.state.orderInfo = orderInfo;
+    this.setState({ reviewOrder: true });
+  }
+
+  handleOrderAccept() {
+    Customer.create(this.state.customerInfo)
       .then(customer => {
-        orderInfo.customerId = customer._id;
-        OrderAPI.create(orderInfo)
+        this.state.orderInfo.customer.id = customer._id;
+        OrderAPI.create(this.state.orderInfo)
           .then(orderDb => {
-            this.setState({ newOrder: orderDb.order._id, submitted: true });
+            console.log('handleOrderAccept orderDb: ', orderDb);
+            this.setState({ newOrder: orderDb.order._id,
+                            submitted: true });
             // this.props.deleteOrderAfterSubmission(this.props.ownerId);
           });
       });
   }
+
   handleCancel() {
     this.setState({ open: false });
   }
 
   handleRequestDate(event, date) {
-    // this.state.requestDate = date;
-    this.setState({
-      requestDate: date,
-    });
+    this.state.requestDate = JSON.stringify(date).slice(1, 11);
+  }
+
+  handleModalCancel() {
+    this.setState({ reviewOrder: false, open: false });
   }
 
   render() {
     // action buttons for Modal
+    console.log('this.props.orderInfo: ', this.props.orderInfo);
     const actions = [
       <FlatButton
         label="Cancel"
@@ -92,7 +123,7 @@ export default class OrderCard extends React.Component {
     // This is the actual modal
     return (
       <div>
-        { this.state.submitted === false
+        { this.state.reviewOrder === false
           ? <div>
             <RaisedButton
               primary label="Submit"
@@ -128,6 +159,8 @@ export default class OrderCard extends React.Component {
                 hintText="Phone"
                 floatingLabelText="Phone"
                 floatingLabelFixed
+                errorText={this.state.errorTextPhone}
+                onChange={e => this.onChangePhone(e)}
               />
               <br />
               <TextField
@@ -139,8 +172,9 @@ export default class OrderCard extends React.Component {
               <br />
               Request Date
               <DatePicker
+                ref="requestDate"
                 hintText="Date Picker"
-                onChange={this.handleRequestDate}
+                onChange={(e, date) => this.handleRequestDate(e, date)}
               />
               <br />
               <TextField
@@ -149,16 +183,27 @@ export default class OrderCard extends React.Component {
                 floatingLabelText="Address"
                 type="text"
               />
-              <h4>{`Price: ${this.props.orderInfo.totalPrice}`}</h4>
+              <h4>{`Price: $${this.props.orderInfo.totalPrice}`}</h4>
             </Dialog>
           </div>
-        : <OrderConfirmation
-          orderId={this.state.newOrder}
-          storeName={this.props.storeName}
-          showMe
-          ownerId={this.props.ownerId}
-          deleteOrderAfterSubmission={this.props.deleteOrderAfterSubmission}
-        />}
+        : this.state.submitted
+            ? <OrderConfirmation
+              orderId={this.state.newOrder}
+              storeName={this.props.storeName}
+              showMe
+              ownerId={this.props.ownerId}
+              deleteOrderAfterSubmission={this.props.deleteOrderAfterSubmission}
+            />
+            : <OrderDetails
+              showMe
+              orderInfo={this.state.orderInfo}
+              editable={false}
+              customerView
+              handleOrderAccept={e => this.handleOrderAccept(e)}
+              handleOrderReject={e => this.handleOrderReject(e)}
+              handleModalCancel={e => this.handleModalCancel(e)}
+            />
+      }
       </div>);
   }
 }

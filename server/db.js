@@ -216,7 +216,7 @@ db.addItemsToOrder = (orderId, items, ownerId) => Node.cypherAsync({
     WITH {items} AS itemArray
     UNWIND itemArray AS menuitem
     MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
-    MATCH (item:Item)<-[:CAN_EDIT]-(menu:Menu)<-[:CAN_EDIT]-(owner) WHERE ID(item) = menuitem.itemId
+    MATCH (item:Item)<-[:CAN_EDIT]-(menu:Menu)<-[:CAN_EDIT]-(owner) WHERE ID(item) = menuitem.id
     MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
     MERGE (order)-[rel:REQUEST {quantity: menuitem.quantity}]->(item)
     RETURN rel`,
@@ -277,7 +277,7 @@ db.createOrderAndRelationships = (orderInfo) => {
       saveOrder = Object.assign({}, orderCreated);
       return Promise.all([db.addItemsToOrder(orderCreated._id, orderInfo.items, orderInfo.ownerId),
         db.createOrderCustomerRelationship(
-          orderCreated._id, orderInfo.customerId, orderInfo.package.expires),
+          orderCreated._id, orderInfo.customer.id, orderInfo.package.expires),
         // db.createOrderPackageRelationship(
         //   orderCreated._id, orderInfo.package.id, 1),
         db.createOrderOwnerRelationship(

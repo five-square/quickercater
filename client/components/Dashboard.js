@@ -99,6 +99,7 @@ export default class Dashboard extends Component {
               handleOrderAccept={e => this.handleOrderAccept(e)}
               handleOrderReject={e=> this.handleOrderReject(e)}
               handleModalCancel={this.handleModalCancel.bind(this)}
+              customerView={false}
               />
            : null
         }
