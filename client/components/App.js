@@ -9,6 +9,7 @@ import Server from '../models/serverAPI';
 import Navigation from './Navigation';
 import Cart from './Cart';
 import cookieAPI from '../models/cookieAPI';
+import RegisterModal from './RegisterModal';
 
 export default class App extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ export default class App extends Component {
       globalOrder: {},
       openCart: false,
       myStore: null,
+      showRegisterModal: false,
     };
   }
 
@@ -45,6 +47,7 @@ export default class App extends Component {
     //   this.setState({ stores });
     // });
     var sessId = cookieAPI.getCookie('sessionId');
+
     Server.getAllStoresAndOwners()
       .then( storeAndOwnerArray => {
         var owners = storeAndOwnerArray.map(group=>group.owner);
@@ -54,6 +57,8 @@ export default class App extends Component {
         if(ownerKeys.indexOf(sessId) !== -1){
           this.setState({myStore: stores[ownerKeys.indexOf(sessId)]});
         }
+        if(sessId !== '' && this.state.myStore === null)
+          this.setState({showRegisterModal: true});
       });
   }
 
@@ -164,6 +169,10 @@ export default class App extends Component {
               myStore={this.state.myStore}
               goToMyStore={this.selectStore.bind(this)}
             />
+            {this.state.showRegisterModal
+              ? <RegisterModal ownerId={this.state.ownerId} />
+              : null
+            }
             <div>
               <Cart
                 open={this.state.openCart}

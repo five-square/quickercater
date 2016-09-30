@@ -20,7 +20,7 @@ export default class RegisterModal extends React.Component {
     super(props);
     this.state = {
       loading: false,
-      dialogOpen: false,
+      dialogOpen: true,
       finished: false,
       stepIndex: 0,
       newStoreName: '',
@@ -36,6 +36,7 @@ export default class RegisterModal extends React.Component {
   }
 
   handleSubmit() {
+   var ownerId = this.props.ownerId;
     const newStoreInfo = {
       name: this.state.newStoreName,
       description: this.state.newStoreDescription,
@@ -44,6 +45,9 @@ export default class RegisterModal extends React.Component {
       logo: this.state.newStoreLogo,
     };
     this.setState({ dialogOpen: false });
+    
+    // create store node and link to owner.
+
     console.log('New Store created', newStoreInfo);
   }
 
@@ -87,6 +91,9 @@ export default class RegisterModal extends React.Component {
     }
   }
 
+  handleClose(){
+    console.log('clickaway attempted');
+  }
   handleStoreNameChange(e) {
     this.setState({
       newStoreName: e.currentTarget.value,
@@ -110,6 +117,8 @@ export default class RegisterModal extends React.Component {
       newStoreAddress: e.currentTarget.value,
     });
   }
+
+
 
   handleStoreLogoChange(e) {
     e.preventDefault();
