@@ -38,6 +38,7 @@ export default class RegisterModal extends React.Component {
 
   handleSubmit() {
    var ownerId = this.props.ownerId; // use me for db call
+
     const newStoreInfo = {
       name: this.state.newStoreName,
       picture: this.state.newStoreLogo,
@@ -48,7 +49,6 @@ export default class RegisterModal extends React.Component {
     this.setState({ dialogOpen: false });
     // create store node and link to owner.
     OwnerAPI.createStore(newStoreInfo).then(x=>console.log('RM50:',x));
-    //console.log('New Store created', newStoreInfo);
   }
 
   handleCancel() {
