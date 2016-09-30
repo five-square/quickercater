@@ -54,8 +54,82 @@ export default class EditItem extends Component {
     });
   }
 
+  handleItemPictureChange(e) {
+    e.preventDefault();
+
+    const reader = new FileReader();
+    const file = e.currentTarget.files[0];
+    reader.onload = (a) => {
+      a.preventDefault();
+      this.setState({
+        picture: a.target.result,
+      });
+    };
+    reader.readAsDataURL(file);
+  }
+
   handleCancelEdit() {
     this.setState({ open: false });
+  }
+
+  renderPreview() {
+    let divToRender = '';
+    const style = {
+      imgPrev: {
+        float: 'right',
+        marginTop: '8%',
+        marginRight: '3%',
+        height: '25%',
+        width: '25%',
+      },
+      imageInput: {
+        cursor: 'pointer',
+        position: 'absolute',
+        top: '35%',
+        left: '72%',
+        height: '50%',
+        width: '25%',
+        opacity: 0,
+      },
+      imgButton: {
+        float: 'right',
+        marginTop: '8%',
+        marginRight: '3%',
+        height: '25%',
+        width: '25%',
+      },
+    };
+    if (this.state.picture !== false) {
+      divToRender = (
+        <div>
+          <img
+            role="presentation"
+            src={this.state.picture}
+            style={style.imgPrev}
+          />
+          <input
+            title="Drag and drop to replace image or Click to Add new"
+            type="file"
+            style={style.imageInput}
+            onChange={e => this.handleItemPictureChange(e)}
+          />
+        </div>);
+    } else {
+      divToRender = (
+        <div>
+          <input
+            type="file"
+            style={style.imageInput}
+            onChange={e => this.handleItemPictureChange(e)}
+          />
+          <img
+            role="presentation"
+            src={this.props.pic}
+            style={style.imgPrev}
+          />
+        </div>);
+    }
+    return divToRender;
   }
 
   render() {
@@ -107,24 +181,27 @@ export default class EditItem extends Component {
           open={this.state.open}
           onRequestClose={(e) => this.handleClose(e)}
         >
-          <TextField
-            hintText="Item"
-            floatingLabelText="Enter Item Name"
-            value={this.state.name}
-            onChange={e => this.handleItemNameChange(e)}
-          /><br />
-          <TextField
-            hintText="Description"
-            floatingLabelText="Enter Item Description"
-            value={this.state.description}
-            onChange={e => this.handleItemDescriptionChange(e)}
-          /><br />
-          <TextField
-            hintText="Price"
-            floatingLabelText="Enter Item Price"
-            value={this.state.price}
-            onChange={e => this.handleItemPriceChange(e)}
-          /><br />
+          <div>
+            { this.renderPreview() }
+            <TextField
+              hintText="Item"
+              floatingLabelText="Enter Item Name"
+              value={this.state.name}
+              onChange={e => this.handleItemNameChange(e)}
+            /><br />
+            <TextField
+              hintText="Description"
+              floatingLabelText="Enter Item Description"
+              value={this.state.description}
+              onChange={e => this.handleItemDescriptionChange(e)}
+            /><br />
+            <TextField
+              hintText="Price"
+              floatingLabelText="Enter Item Price"
+              value={this.state.price}
+              onChange={e => this.handleItemPriceChange(e)}
+            /><br />
+          </div>
         </Dialog>
       </div>
     );
