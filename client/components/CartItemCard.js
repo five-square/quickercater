@@ -104,7 +104,7 @@ export default class CartItemCard extends Component {
       />,
     ];
     return (
-      <div expandable>
+      <div>
         <Card style={style.card}>
           <CardHeader
             title={this.props.item.name}
