@@ -17,6 +17,8 @@ export default class StoreCard extends React.Component {
       name: this.props.store.name,
       slogan: this.props.store.slogan,
       description: this.props.store.description,
+      picture: this.props.store.picture,
+      banner: false,
     };
   }
 
@@ -33,17 +35,29 @@ export default class StoreCard extends React.Component {
   }
 
   render() {
+    let pic = 'http://i.imgur.com/TTnNPph.png';
+    if (this.state.picture !== false) {
+      pic = this.state.picture;
+    }
+    let background = { backgroundColor: 'white' };
+    if (this.state.banner !== false) {
+      background = { backgroundImage: `url(${this.state.banner})` };
+    }
     return (
       <div style={this.state.style}>
-        <Paper zDepth={this.state.hover}>
+        <Paper
+          zDepth={this.state.hover}
+          style={background}
+        >
           <Card
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0)' }}
             onMouseEnter={e => this.handleOnMouseEnter(e)}
             onMouseLeave={e => this.handleOnMouseLeave(e)}
           >
             <CardHeader
               title={this.state.name}
               subtitle={this.state.slogan}
-              avatar="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+              avatar={pic}
               actAsExpander
               showExpandableButton
             />
