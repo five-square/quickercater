@@ -36,27 +36,28 @@ export default class Cart extends Component {
   createCartItemsArray() {
     if (this.props.globalOrder) {
       return Object.keys(this.props.globalOrder).map((owner, orderIndex) =>
-        <Card key={orderIndex * 2}>
+        <Card key={orderIndex * 2} >
           <CardHeader
             title={this.props.globalOrder[owner].storeName}
             actAsExpander
             showExpandableButton
             onClick={e => this.handleShowHide(e)}
           />
-          {console.log('orderIndex in Cart: ', orderIndex * 2)}
-          {this.props.globalOrder[owner].order.map((itemInfo, cardIndex) =>
-            <CartItemCard
-              key={(cardIndex * 2) + 1}
-              style={this.props.style}
-              item={itemInfo.item}
-              quantity={itemInfo.quantity}
-              priceToShow={itemInfo.priceToShow}
-              updateOrderPrice={this.updateOrderPrice}
-              updateItemToOrder={this.props.updateItemToOrder}
-              removeItemFromOrder={this.props.removeItemFromOrder}
-              ownerId={owner}
-            >{console.log('cardIndex in Cart: ', (cardIndex * 2) + 1)}</CartItemCard>
-          )}
+          <CardText expandable>
+            {this.props.globalOrder[owner].order.map((itemInfo, cardIndex) =>
+              <CartItemCard
+                key={(cardIndex * 2) + 1}
+                style={this.props.style}
+                item={itemInfo.item}
+                quantity={itemInfo.quantity}
+                priceToShow={itemInfo.priceToShow}
+                updateOrderPrice={this.updateOrderPrice}
+                updateItemToOrder={this.props.updateItemToOrder}
+                removeItemFromOrder={this.props.removeItemFromOrder}
+                ownerId={owner}
+              >{console.log('cardIndex in Cart: ', (cardIndex * 2) + 1)}</CartItemCard>
+            )}
+          </CardText>
           <CardText>
             Total Price = ${this.props.globalOrder[owner].totalPrice}
           </CardText>

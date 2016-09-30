@@ -101,8 +101,9 @@ export default class App extends Component {
     this.state.globalOrder[itemObj.ownerId].order[itemPos] = itemObj;
     if (this.state.globalOrder[itemObj.ownerId].order.length > 1) {
       this.state.globalOrder[itemObj.ownerId].totalPrice =
-        this.state.globalOrder[itemObj.ownerId].order
-        .reduce((a, b) => (a.item.price * a.quantity) + (b.item.price * b.quantity));
+        Number(this.state.globalOrder[itemObj.ownerId].order
+        .reduce((a, b) => (a.item.price * a.quantity) + (b.item.price * b.quantity)))
+        .toFixed(2);
     } else if (this.state.globalOrder[itemObj.ownerId].order.length === 1) {
       this.state.globalOrder[itemObj.ownerId].totalPrice =
           (this.state.globalOrder[itemObj.ownerId].order[0].item.price

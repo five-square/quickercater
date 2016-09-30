@@ -4,7 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
-import Order from '../models/createOrderAPI';
+import OrderAPI from '../models/orderAPI';
 import Customer from '../models/CustomerAPI';
 
 
@@ -55,7 +55,7 @@ export default class OrderCard extends React.Component {
     Customer.create(customerInfo)
       .then(customer => {
         orderInfo.customerId = customer._id;
-        Order.create(orderInfo)
+        OrderAPI.create(orderInfo)
           .then(orderDb => {
             this.setState({ newOrder: orderDb.order._id, submitted: true });
             // this.props.deleteOrderAfterSubmission(this.props.orderInfo.order[0].ownerId);
