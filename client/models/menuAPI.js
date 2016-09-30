@@ -129,5 +129,23 @@ MenuAPI.edit = (newMenuInfo, ownerId) =>
   })
   .then(data => data.json());
 
+MenuAPI.updateOrder = (menuArray) =>
+  fetch('/api/menu/reorder', {
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(menuArray.map((menu, index) => ({
+      index,
+      id: menu.id,
+    }))),
+  })
+  .then(data => data.json())
+  .then(menus => menus.map(element => ({
+    id: element.menu._id,
+    name: element.menu.properties.name,
+    description: element.menu.properties.description,
+  })));
+
 
 export default MenuAPI;

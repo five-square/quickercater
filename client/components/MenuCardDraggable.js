@@ -4,12 +4,13 @@ import CardTitle from 'material-ui/Card/CardTitle';
 import CardText from 'material-ui/Card/CardText';
 import Paper from 'material-ui/Paper';
 import CardActions from 'material-ui/Card/CardActions';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentRemove from 'material-ui/svg-icons/content/remove';
 
 import SortableListItem from './SortableListItem';
 import Menu from '../models/menuAPI';
 import AddItemCard from './AddItemCard';
 import Item from '../models/itemAPI';
-import EditButtons from './EditButtons';
 import EditMenu from './EditMenu';
 import ItemCard from './ItemCard';
 
@@ -37,8 +38,25 @@ export default class MenuCardDraggable extends React.Component {
     });
   }
 
+  componentWillReceiveProps(newProps) {
+    Menu.getItems(newProps.menu.id)
+    .then(items => {
+      this.setState({
+        items,
+      });
+    });
+  }
+
   updateState(obj) {
     this.setState(obj);
+    if (obj.draggingIndex === null) {
+      this.setState(obj, this.updateDatabase);
+    }
+  }
+
+  updateDatabase() {
+    console.log('in updateDatabase', this.state.items);
+    Item.updateOrder(this.state.items);
   }
 
   showItems() {
@@ -105,13 +123,6 @@ export default class MenuCardDraggable extends React.Component {
     });
   }
 
-  handleMoveItem(direction, itemId) { // in progress
-    Item.move(direction, itemId, this.props.id)
-    .then(() => {
-      this.showItems();
-    });
-  }
-
   handleEditItem(itemObj) {
     Item.edit(itemObj)
     .then(() => {
@@ -122,7 +133,12 @@ export default class MenuCardDraggable extends React.Component {
   render() {
     const style = {
       floatingEditButton: {
-        right: 170,
+        right: 70,
+        bottom: 20,
+        position: 'absolute',
+      },
+      floatingDeleteButton: {
+        right: 20,
         bottom: 20,
         position: 'absolute',
       },
@@ -214,13 +230,14 @@ export default class MenuCardDraggable extends React.Component {
                   description={this.props.menu.description}
                   editMenu={this.props.editMenu}
                 />
-                <EditButtons
-                  secondary={false}
-                  targetType={'menu'}
-                  target={this.props.menu}
-                  move={this.props.moveMenu}
-                  delete={this.props.deleteMenu}
-                />
+                <FloatingActionButton
+                  style={style.floatingDeleteButton}
+                  mini
+                  zDepth={2}
+                  onTouchTap={() => this.props.deleteMenu(this.props.menu.id)}
+                >
+                  <ContentRemove />
+                </FloatingActionButton>
               </CardActions>
               : null
             }

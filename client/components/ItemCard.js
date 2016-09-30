@@ -4,8 +4,8 @@ import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
 import RaisedButton from 'material-ui/RaisedButton';
 import Chip from 'material-ui/Chip';
-// import { Sortable } from 'react-sortable';
-import EditButtons from './EditButtons';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentRemove from 'material-ui/svg-icons/content/remove';
 import EditItem from './EditItem';
 
 class ItemCard extends Component {
@@ -24,12 +24,16 @@ class ItemCard extends Component {
       priceToShow: this.props.item.price,
     });
   }
-
             // <EditButtons />
   render() {
     const style = {
       floatingEditButton: {
-        right: 170,
+        right: 70,
+        bottom: 20,
+        position: 'absolute',
+      },
+      floatingDeleteButton: {
+        right: 20,
         bottom: 20,
         position: 'absolute',
       },
@@ -92,13 +96,15 @@ class ItemCard extends Component {
                   picture={this.props.picture}
                   editItem={this.props.editItem}
                 />
-                <EditButtons
+                <FloatingActionButton
+                  style={style.floatingDeleteButton}
+                  mini
                   secondary
-                  targetType={'menu'}
-                  target={this.props.item}
-                  move={this.props.moveItem}
-                  delete={this.props.removeItem}
-                />
+                  zDepth={0}
+                  onTouchTap={() => this.props.removeItem(this.props.item.id)}
+                >
+                  <ContentRemove />
+                </FloatingActionButton>
               </div>
               : <RaisedButton
                 style={style.addToOrderButton}
