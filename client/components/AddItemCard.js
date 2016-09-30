@@ -21,13 +21,12 @@ export default class AddItemCard extends React.Component {
       newItemTitle: '',
       newItemDescription: '',
       newItemPrice: '',
-      newItemPicture: false,
+      newItemPicture: 'http://i.imgur.com/GhWoMa1.png',
       unassignedItems: [],
     };
   }
 
   componentDidMount() {
-    console.log('in AddItemCard', this.props.ownerId);
     Item.getUnassignedItems(this.props.ownerId)
     .then(items => {
       this.setState({ unassignedItems: items });
@@ -92,6 +91,7 @@ export default class AddItemCard extends React.Component {
     const reader = new FileReader();
     const file = e.currentTarget.files[0];
     reader.onload = (a) => {
+      a.preventDefault();
       this.setState({
         newItemPicture: a.target.result,
       });
@@ -105,33 +105,66 @@ export default class AddItemCard extends React.Component {
       newItemTitle: '',
       newItemDescription: '',
       newItemPrice: '',
-      newItemPicture: 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png',
+      newItemPicture: 'http://i.imgur.com/GhWoMa1.png',
     });
   }
 
   renderPreview() {
     let divToRender = '';
-    const imgPrev = {
-      float: 'right',
-      marginTop: '8%',
-      marginRight: '3%',
-      height: '25%',
-      width: '25%',
+    const style = {
+      imgPrev: {
+        float: 'right',
+        marginTop: '8%',
+        marginRight: '3%',
+        height: '25%',
+        width: '25%',
+      },
+      imageInput: {
+        cursor: 'pointer',
+        position: 'absolute',
+        top: '35%',
+        left: '72%',
+        height: '50%',
+        width: '25%',
+        opacity: 0,
+      },
+      imgButton: {
+        float: 'right',
+        marginTop: '8%',
+        marginRight: '3%',
+        height: '25%',
+        width: '25%',
+      },
     };
     if (this.state.newItemPicture !== false) {
       divToRender = (
-        <img
-          role="presentation"
-          src={this.state.newItemPicture}
-          style={imgPrev}
-        />);
+        <div>
+          <img
+            role="presentation"
+            src={this.state.newItemPicture}
+            style={style.imgPrev}
+          />
+          <input
+            title="Drag and drop on the Square only or Click to Add"
+            type="file"
+            style={style.imageInput}
+            onChange={e => this.handleItemPictureChange(e)}
+          />
+        </div>);
     } else {
       divToRender = (
-        <img
-          role="presentation"
-          src={this.props.pic}
-          style={imgPrev}
-        />);
+        <div>
+          <input
+            type="file"
+            style={style.imageInput}
+            onChange={e => this.handleItemPictureChange(e)}
+          />
+          <img
+            role="presentation"
+            src={this.props.pic}
+            style={style.imgPrev}
+          />
+        </div>);
     }
     return divToRender;
   }
@@ -150,16 +183,6 @@ export default class AddItemCard extends React.Component {
       },
       card: {
         marginBottom: '5%',
-      },
-      imageInput: {
-        cursor: 'pointer',
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        right: 0,
-        left: 0,
-        width: '100%',
-        opacity: 0,
       },
     };
     // action buttons for Modal
@@ -228,17 +251,6 @@ export default class AddItemCard extends React.Component {
                   onChange={e => this.handleItemPriceChange(e)}
                 />
                 <br />
-                <br />
-                <FlatButton
-                  label="Choose an Image"
-                  labelPosition="before"
-                >
-                  <input
-                    type="file"
-                    style={style.imageInput}
-                    onChange={e => this.handleItemPictureChange(e)}
-                  />
-                </FlatButton>
               </div>
             </Tab>
             <Tab label="Add Existing" >
