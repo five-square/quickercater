@@ -128,20 +128,20 @@ export default class AddPackageCard extends React.Component {
 
   render() {
     const style = {
-      floatingActionButton: {
-        top: 15,
-        right: 20,
-        bottom: 20,
-        position: 'absolute',
-      },
-      cardActions: {
-        position: 'relative',
-        height: 30,
-      },
-      card: {
-        marginBottom: '5%',
-        width: 250,
-      },
+      // floatingActionButton: {
+      //   top: 15,
+      //   right: 50,
+      //   bottom: 80,
+      //   position: 'absolute',
+      // },
+      // cardActions: {
+      //   position: 'relative',
+      //   height: 30,
+      // },
+      // card: {
+      //   marginBottom: '5%',
+      //   width: 250,
+      // },
       imageInput: {
         cursor: 'pointer',
         position: 'absolute',
@@ -152,11 +152,11 @@ export default class AddPackageCard extends React.Component {
         width: '100%',
         opacity: 0,
       },
-      floatingDeleteButton: {
-        right: 20,
-        bottom: 20,
-        position: 'absolute',
-      },
+      // floatingDeleteButton: {
+      //   right: 20,
+      //   bottom: 20,
+      //   position: 'absolute',
+      // },
     };
     // action buttons for Modal
     const actions = [
@@ -174,26 +174,14 @@ export default class AddPackageCard extends React.Component {
     ];
     // This is the actual modal
     return (
-      <div style={style.card}>
-        <Paper zDepth={this.state.hover} >
-          <Card
-            onMouseEnter={e => this.handleOnMouseEnter(e)}
-            onMouseLeave={e => this.handleOnMouseLeave(e)}
-            style={style.card}
-          >
-            <CardTitle title={'Add Package'} style={style.cardActions}>
-              <FloatingActionButton
-                mini
-                secondary
-                onTouchTap={e => this.handleOpen(e)}
-                style={style.floatingActionButton}
-                zDepth={0}
-              >
-                <ContentAdd />
-              </FloatingActionButton>
-            </CardTitle>
-          </Card>
-        </Paper>
+      <div>       
+        <FloatingActionButton
+          mini 
+          onTouchTap={e => this.handleOpen(e)}
+          zDepth={0}
+        >
+          <ContentAdd />
+        </FloatingActionButton>
         <Dialog
           title="Add Package"
           actions={actions}
