@@ -82,6 +82,41 @@ export default class MenuContainer extends Component {
 
   render() {
     console.log('in MenuContainer render: ', this.state.menus);
+
+    // const menuCardsDraggable = this.state.menus.length
+    //   ? this.state.menus.map((menu, index) =>
+    //     <MenuCardDraggable
+    //       key={index}
+    //       style={this.state.style}
+    //       editing={this.props.editing}
+    //       menu={menu}
+    //       addItemToOrder={this.props.addItemToOrder}
+    //       updateTotalPrice={this.props.updateTotalPrice}
+    //       deleteMenu={e => this.handleDeleteMenu(e)}
+    //       moveMenu={(d, e) => this.handleMoveMenu(d, e)}
+    //       editMenu={e => this.handleEditMenu(e)}
+    //       ownerId={this.props.ownerId}
+    //     />
+    //   )
+    //   : [];
+
+    // const menuCards = this.state.menus.length
+    //   ? this.state.menus.map((menu, index) =>
+    //     <MenuCard
+    //       key={index}
+    //       style={this.state.style}
+    //       editing={this.props.editing}
+    //       menu={menu}
+    //       addItemToOrder={this.props.addItemToOrder}
+    //       updateTotalPrice={this.props.updateTotalPrice}
+    //       deleteMenu={e => this.handleDeleteMenu(e)}
+    //       moveMenu={(d, e) => this.handleMoveMenu(d, e)}
+    //       editMenu={e => this.handleEditMenu(e)}
+    //       ownerId={this.props.ownerId}
+    //     />
+    //   )
+    //   : [];
+
     return (
       <div className="menu-container">
         {this.props.editing

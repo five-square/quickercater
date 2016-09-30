@@ -8,7 +8,12 @@ const AuthPort = require('authport');
 const db = require('./db');
 const dbInit = require('./dbInit');
 //
-const configAuth = require('./config/googleCredentials');
+const configAuth = process.env.googleClientId
+  ? {
+    clientID: process.env.googleClientId,
+    clientSecret: process.env.googleClientSecret,
+  }
+  : require('./config/googleCredentials');
 
 const serverUrl = process.env.PORT || 3000;
 
@@ -28,10 +33,10 @@ routes.get('/api/tags-example', (req, res) => {
 /* AuthPort Set up */
 AuthPort.createServer({
   service: 'google',
-  id: process.env.googleClientId || configAuth.clientID,
-  secret: process.env.googleClientSecret || configAuth.clientSecret,
+  id: configAuth.clientID,
+  secret: configAuth.clientSecret,
   scope: ['email', 'profile'],
-  redirect_uri: 'http://quickercater.heroku.com'
+  redirect_uri: 'http://quickercater.heroku.com',
 });
 
 AuthPort.on('auth', (req, res, profile) => {
@@ -69,18 +74,19 @@ function getSignedInUser(req, res, next) {
     res.redirect('/'); // Right now redirects to root, but should do the above
   } else {
     db.findOwnerByAuthKey(sessionId)
-      .then(ownerInfo => {
-        if (ownerInfo.length === 0) {
-          console.log('Invalid Session - no owner found');
-          // res.status(403).send('Not Authotized');
-          res.redirect('/'); // Right now redirects to root, but should do the above
-        } else {
-          req.user = ownerInfo;
-          next();
-        }
-      });
+    .then(ownerInfo => {
+      if (ownerInfo.length === 0) {
+        console.log('Invalid Session - no owner found');
+        // res.status(403).send('Not Authotized');
+        res.redirect('/'); // Right now redirects to root, but should do the above
+      } else {
+        req.user = ownerInfo;
+        next();
+      }
+    });
   }
 }
+
 /*
   **********************************************************************************************
 
@@ -103,7 +109,7 @@ routes.get('/', (req, res) => {
   **********************************************************************************************
 */
 
-routes.get('/api/storesAndOwners', (req,res)=>{
+routes.get('/api/storesAndOwners', (req, res) => {
   db.getAllStoresAndOwners().then(ownerAndStores => {
     res.status(200).send(ownerAndStores);
   });
@@ -520,9 +526,9 @@ routes.post('/api/package/create', (req, res) => {
  });
 });
 
-routes.post('api/package/delete', (req, res) =>{
+routes.post('api/package/delete', (req, res) => {
   db.deletePack(req.body.packId)
-.then((response) => {
+  .then((response) => {
     res.status(202).send(response);
   });
 });
