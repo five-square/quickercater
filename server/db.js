@@ -568,6 +568,19 @@ db.updateMenu = (menuObj) => Node.cypherAsync({
 })
 .then(data => data);
 
+db.updateMenuOrder = (menuArray) => Node.cypherAsync({
+  query: `
+    WITH {menuArray} AS menuArray
+    UNWIND menuArray AS menuItem
+      MATCH (owner:Owner)-[r:CAN_EDIT]->(menu:Menu) WHERE ID(menu) = menuItem.id
+      SET r.order = menuItem.index
+    RETURN properties(r), menu ORDER BY r.order`,
+  params: {
+    menuArray,
+  },
+})
+.then(data => data);
+
 /*
   **********************************************************************************************
 
@@ -748,6 +761,19 @@ db.moveItemDown = (itemId) => Node.cypherAsync({
     return menu`,
   params: {
     itemId,
+  },
+})
+.then(data => data);
+
+db.updateItemOrder = (itemArray) => Node.cypherAsync({
+  query: `
+    WITH {itemArray} AS itemArray
+    UNWIND itemArray AS itemElement
+      MATCH (menu:Menu)-[r:CAN_EDIT]->(item:Item) WHERE ID(item) = itemElement.id
+      SET r.order = itemElement.index
+    RETURN properties(r), item ORDER BY r.order`,
+  params: {
+    itemArray,
   },
 })
 .then(data => data);

@@ -19,6 +19,10 @@ export default class EditItem extends Component {
     };
   }
 
+  componentWillReceiveProps(newProps) {
+    this.setState({ newProps });
+  }
+
   handleOpen() {
     this.setState({ open: true });
   }

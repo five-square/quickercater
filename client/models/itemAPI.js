@@ -105,6 +105,19 @@ ItemAPI.move = (direction, itemId, menuId) =>
   })
   .then(data => data.json());
 
+ItemAPI.updateOrder = (itemArray) =>
+  fetch('/api/item/reorder', {
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(itemArray.map((item, index) => ({
+      index,
+      id: item.item.id,
+    }))),
+  })
+  .then(data => data.json());
+
 ItemAPI.getUnassignedItems = (ownerId) =>
   fetch(`/api/item/unassigned/${ownerId}`, {
     method: 'get',
