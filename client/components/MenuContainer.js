@@ -3,6 +3,8 @@ import MenuCard from './MenuCard';
 import AddMenuCard from './AddMenuCard';
 import Menu from '../models/menuAPI';
 import Owner from '../models/ownerAPI';
+
+import SortableListItem from './SortableListItem';
 import MenuCardDraggable from './MenuCardDraggable';
 
 export default class MenuContainer extends Component {
@@ -13,6 +15,8 @@ export default class MenuContainer extends Component {
       style: this.props.style,
       ownerId: this.props.ownerId,
       menuToDelete: null,
+      updatedItemOnOrder: this.props.updatedItemOnOrder,
+      draggingIndex: null,
     };
   }
 
@@ -27,6 +31,12 @@ export default class MenuContainer extends Component {
     this.setState({
       openItemBank: newProps.editing,
     });
+  }
+
+  updateState(obj) {
+    // if (this.state.draggingIndex) {
+    this.setState(obj);
+    // }
   }
 
   showMenus() {
@@ -83,72 +93,58 @@ export default class MenuContainer extends Component {
   render() {
     console.log('in MenuContainer render: ', this.state.menus);
 
-    // const menuCardsDraggable = this.state.menus.length
-    //   ? this.state.menus.map((menu, index) =>
-    //     <MenuCardDraggable
-    //       key={index}
-    //       style={this.state.style}
-    //       editing={this.props.editing}
-    //       menu={menu}
-    //       addItemToOrder={this.props.addItemToOrder}
-    //       updateTotalPrice={this.props.updateTotalPrice}
-    //       deleteMenu={e => this.handleDeleteMenu(e)}
-    //       moveMenu={(d, e) => this.handleMoveMenu(d, e)}
-    //       editMenu={e => this.handleEditMenu(e)}
-    //       ownerId={this.props.ownerId}
-    //     />
-    //   )
-    //   : [];
+    const menuCardsDraggable = this.state.menus.length
+      ? this.state.menus.map((menu, index) =>
+        <MenuCardDraggable
+          key={index}
+          style={this.state.style}
+          editing={this.props.editing}
+          menu={menu}
+          addItemToOrder={this.props.addItemToOrder}
+          updateTotalPrice={this.props.updateTotalPrice}
+          deleteMenu={e => this.handleDeleteMenu(e)}
+          moveMenu={(d, e) => this.handleMoveMenu(d, e)}
+          editMenu={e => this.handleEditMenu(e)}
+          ownerId={this.props.ownerId}
+        />
+      )
+      : [];
 
-    // const menuCards = this.state.menus.length
-    //   ? this.state.menus.map((menu, index) =>
-    //     <MenuCard
-    //       key={index}
-    //       style={this.state.style}
-    //       editing={this.props.editing}
-    //       menu={menu}
-    //       addItemToOrder={this.props.addItemToOrder}
-    //       updateTotalPrice={this.props.updateTotalPrice}
-    //       deleteMenu={e => this.handleDeleteMenu(e)}
-    //       moveMenu={(d, e) => this.handleMoveMenu(d, e)}
-    //       editMenu={e => this.handleEditMenu(e)}
-    //       ownerId={this.props.ownerId}
-    //     />
-    //   )
-    //   : [];
+    const menuCards = this.state.menus.length
+      ? this.state.menus.map((menu, index) =>
+        <MenuCard
+          key={index}
+          style={this.state.style}
+          editing={this.props.editing}
+          menu={menu}
+          addItemToOrder={this.props.addItemToOrder}
+          updateTotalPrice={this.props.updateTotalPrice}
+          deleteMenu={e => this.handleDeleteMenu(e)}
+          moveMenu={(d, e) => this.handleMoveMenu(d, e)}
+          editMenu={e => this.handleEditMenu(e)}
+          ownerId={this.props.ownerId}
+        />
+      )
+      : [];
 
     return (
       <div className="menu-container">
-        {this.props.editing
-          ? this.state.menus.map((menu, index) =>
-            <MenuCardDraggable
-              key={index}
-              style={this.state.style}
-              editing={this.props.editing}
-              menu={menu}
-              addItemToOrder={this.props.addItemToOrder}
-              updateTotalPrice={this.props.updateTotalPrice}
-              deleteMenu={e => this.handleDeleteMenu(e)}
-              moveMenu={(d, e) => this.handleMoveMenu(d, e)}
-              editMenu={e => this.handleEditMenu(e)}
-              ownerId={this.props.ownerId}
-            />
-          )
-          : this.state.menus.map((menu, index) =>
-            <MenuCard
-              key={index}
-              style={this.state.style}
-              editing={this.props.editing}
-              menu={menu}
-              addItemToOrder={this.props.addItemToOrder}
-              updateTotalPrice={this.props.updateTotalPrice}
-              deleteMenu={e => this.handleDeleteMenu(e)}
-              moveMenu={(d, e) => this.handleMoveMenu(d, e)}
-              editMenu={e => this.handleEditMenu(e)}
-              ownerId={this.props.ownerId}
-            />
-          )
-        }
+        <div className="list">
+          {this.props.editing
+            ? menuCardsDraggable.map((menuCardDraggable, index) => (
+              <SortableListItem
+                key={index}
+                updateState={e => this.updateState(e)}
+                draggingIndex={this.state.draggingIndex}
+                items={this.state.menus}
+                sortId={index}
+                outline="list"
+              >{menuCardDraggable}</SortableListItem>
+              )
+            )
+            : menuCards
+          }
+        </div>
         {this.props.editing
           ? <AddMenuCard
             key={this.state.menus.length + 1}

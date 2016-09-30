@@ -1,3 +1,17 @@
+html, body {
+    height: 98%;
+    overflow: hidden;
+}
+
+#mainContainer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: auto;
+}
+
 h1, h2, .user-input {
   text-align: center;
 }
