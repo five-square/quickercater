@@ -11,30 +11,17 @@ export default class OrderDetails extends Component {
     };
   }
 
-  handleOpen() {
-    this.setState({ open: true });
-  }
-
   handleClose() {
     this.setState({ open: false });
-  }
-
-  handleRejectorder() {
-    this.setState({ open: false });
-    this.props.handleReject(this.props.orderId);
+    this.props.deleteOrderAfterSubmission(this.props.ownerId);
   }
 
   render() {
     const actions = [
       <FlatButton
-        label="No"
+        label="ok"
         primary
         onTouchTap={e => this.handleClose(e)}
-      />,
-      <FlatButton
-        label="Yes"
-        primary
-        onTouchTap={e => this.handleRejectorder(e)}
       />,
     ];
     return (
@@ -45,7 +32,7 @@ export default class OrderDetails extends Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          Are you sure you want to reject this order?
+          Order #{this.props.orderId} submitted to {this.props.storeName}
         </Dialog>
       </div>
     );
