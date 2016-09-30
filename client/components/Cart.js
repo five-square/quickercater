@@ -5,6 +5,7 @@ import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import CartItemCard from './CartItemCard';
 import OrderCard from './OrderCard';
 
@@ -83,7 +84,7 @@ export default class Cart extends Component {
               <ToolbarTitle text="My Order" />
             </ToolbarGroup>
             <ToolbarGroup>
-              <RaisedButton
+              <FlatButton
                 primary
                 label="Close"
                 onTouchTap={e => this.handleToggle(e)}
