@@ -68,10 +68,7 @@ export default class OrderCard extends React.Component {
   }
 
   handleRequestDate(event, date) {
-    // this.state.requestDate = date;
-    this.setState({
-      requestDate: date,
-    });
+    this.state.requestDate = JSON.stringify(date).slice(1, 11);
   }
 
   render() {
@@ -139,8 +136,9 @@ export default class OrderCard extends React.Component {
               <br />
               Request Date
               <DatePicker
+                ref="requestDate"
                 hintText="Date Picker"
-                onChange={this.handleRequestDate}
+                onChange={(e, date) => this.handleRequestDate(e, date)}
               />
               <br />
               <TextField
