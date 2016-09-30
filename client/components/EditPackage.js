@@ -12,11 +12,11 @@ export default class EditPackage extends Component {
     this.state = {
       open: false,
       hover: 2,
-      name: this.props.pack.name,
-      description: this.props.pack.description,
-      cost: this.props.pack.cost,
-      type: this.props.pack.type,
-      picture: this.props.pack.picture,
+      name: this.props.name,
+      description: this.props.description,
+      cost: this.props.cost,
+      type: this.props.type,
+      picture: this.props.picture,
     };
   }
 
@@ -25,7 +25,7 @@ export default class EditPackage extends Component {
   }
 
   handleSubmitEdit() {
-    this.props.editPackage({
+    this.props.addPackage({
       name: this.state.name,
       description: this.state.description,
       cost: this.state.cost,
@@ -102,14 +102,14 @@ export default class EditPackage extends Component {
     ];
     // This is the actual modal
     return (
-      <div style={style.card}>
+      <div style={style.floatingEditButton}>
         <FloatingActionButton
           style={this.props.style}
           mini
           onTouchTap={() => this.setState({ open: true })}
         >
           <ModeEdit />
-        </FloatingActionButton>
+        </FloatingActionButton >
         <Dialog
           title="Edit Package Information"
           actions={actions}
@@ -127,19 +127,19 @@ export default class EditPackage extends Component {
             hintText="Description"
             floatingLabelText="Enter Package Description"
             value={this.state.description}
-            onChange={e => this.handleMenuDescriptionChange(e)}
+            onChange={e => this.handlePackageDescriptionChange(e)}
           /><br />
           <TextField
             hintText="Price"
             floatingLabelText="Enter Package Price"
-            value={this.state.description}
-            onChange={e => this.handleMenuDescriptionChange(e)}
+            value={this.state.cost}
+            onChange={e => this.handlePackageCostChange(e)}
           /><br />
           <TextField
             hintText="Type"
             floatingLabelText="Enter Package Type"
-            value={this.state.description}
-            onChange={e => this.handleMenuDescriptionChange(e)}
+            value={this.state.type}
+            onChange={e => this.handlePackageTypeChange(e)}
           /><br />
         </Dialog>
       </div>
