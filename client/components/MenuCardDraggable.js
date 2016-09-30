@@ -4,7 +4,6 @@ import CardTitle from 'material-ui/Card/CardTitle';
 import CardText from 'material-ui/Card/CardText';
 import Paper from 'material-ui/Paper';
 import CardActions from 'material-ui/Card/CardActions';
-// import { Sortable } from 'react-sortable';
 
 import SortableListItem from './SortableListItem';
 import Menu from '../models/menuAPI';
@@ -26,6 +25,7 @@ export default class MenuCardDraggable extends React.Component {
       updatedItemOnOrder: this.props.updatedItemOnOrder,
       draggingIndex: null,
     };
+    this.removeItem = e => this.handleRemoveItem(e);
   }
 
   componentWillMount() {
@@ -155,7 +155,7 @@ export default class MenuCardDraggable extends React.Component {
           addItemToOrder={this.props.addItemToOrder}
           updateTotalPrice={this.props.updateTotalPrice}
           ownerId={this.props.ownerId}
-          removeItem={e => this.handleRemoveItem(e)}
+          removeItem={this.removeItem}
           editItem={e => this.handleEditItem(e)}
           moveItem={(d, i, m) => this.handleMoveItem(d, i, m)}
         />);
