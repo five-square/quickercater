@@ -58,6 +58,7 @@ export default class App extends Component {
   }
 
   selectStore(storeObj) {
+    console.log('Select store: ',storeObj);
     var id = storeObj.id;
     if(storeObj._id && id === undefined)
         id = storeObj._id;
