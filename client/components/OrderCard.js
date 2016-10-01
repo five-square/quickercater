@@ -87,6 +87,14 @@ export default class OrderCard extends React.Component {
             console.log('handleOrderAccept orderDb: ', orderDb);
             this.setState({ newOrder: orderDb.order._id,
                             submitted: true });
+            const mailOptions = {
+              from: 'fivesquare43@gmail.com',
+              to: `${this.state.customerInfo.email}`,
+              subject: 'Hello',
+              text: `Thank you for your Order. Your order # is 
+                    ${orderDb.order._id} with ${this.props.storeName}`,
+            };
+            Customer.sendEmail(mailOptions);
             // this.props.deleteOrderAfterSubmission(this.props.ownerId);
           });
       });

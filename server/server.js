@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const AuthPort = require('authport');
 const db = require('./db');
 const dbInit = require('./dbInit');
+const nodemailer = require('./nodemailer');
 //
 const configAuth = process.env.googleClientId
   ? {
@@ -108,6 +109,11 @@ routes.get('/', (req, res) => {
 
   **********************************************************************************************
 */
+
+
+routes.post('/api/customer/email', (req, res) => {
+  nodemailer.sendConfirmation(req.body);
+});
 
 routes.get('/api/storesAndOwners', (req, res) => {
   db.getAllStoresAndOwners().then(ownerAndStores => {
