@@ -50,6 +50,10 @@ export default class RegisterModal extends React.Component {
     console.log('New Store created', newStoreInfo);
   }
 
+    handleClose(){
+      this.handleCancel();
+    }
+
   handleCancel() {
   this.props.handleUnmountRegisterModal();
     // this.setState({
