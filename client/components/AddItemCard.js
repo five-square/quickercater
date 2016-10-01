@@ -8,7 +8,7 @@ import Paper from 'material-ui/Paper';
 import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import ItemList from './ItemList';
+import AddItemList from './AddItemList';
 import Item from '../models/itemAPI';
 
 export default class AddItemCard extends React.Component {
@@ -253,7 +253,7 @@ export default class AddItemCard extends React.Component {
             </Tab>
             <Tab label="Add Existing" >
               <div>
-                <ItemList
+                <AddItemList
                   items={this.state.unassignedItems}
                   addExistingItem={e => this.handleAddExistingItem(e)}
                 />
