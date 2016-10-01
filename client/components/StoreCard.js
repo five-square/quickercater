@@ -12,12 +12,6 @@ export default class StoreCard extends React.Component {
     super(props);
     this.state = {
       hover: 2,
-      style: this.props.style,
-      id: this.props.id,
-      name: this.props.store.name,
-      slogan: this.props.store.slogan,
-      description: this.props.store.description,
-      picture: this.props.store.picture,
       banner: 'http://i.imgur.com/QdDcUFY.jpg',
     };
   }
@@ -36,15 +30,15 @@ export default class StoreCard extends React.Component {
 
   render() {
     let pic = 'http://i.imgur.com/TTnNPph.png';
-    if (this.state.picture !== false) {
-      pic = this.state.picture;
+    if (this.props.store.picture !== false) {
+      pic = this.props.store.picture;
     }
     let background = { backgroundColor: 'white' };
     if (this.state.banner !== false) {
       background = { backgroundImage: `url(${this.state.banner})` };
     }
     return (
-      <div style={this.state.style}>
+      <div style={this.props.style}>
         <Paper
           zDepth={this.state.hover}
           style={background}
@@ -55,14 +49,14 @@ export default class StoreCard extends React.Component {
             onMouseLeave={e => this.handleOnMouseLeave(e)}
           >
             <CardHeader
-              title={this.state.name}
-              subtitle={this.state.slogan}
+              title={this.props.store.name}
+              subtitle={this.props.store.slogan}
               avatar={pic}
               actAsExpander
               showExpandableButton
             />
             <CardText expandable>
-              {this.state.description}
+              {this.props.store.description}
             </CardText>
             <CardActions>
               <FlatButton label="Take Me There" onTouchTap={e => this.handleClick(e)} />
