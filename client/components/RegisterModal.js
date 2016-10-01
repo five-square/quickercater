@@ -46,7 +46,7 @@ export default class RegisterModal extends React.Component {
       description: this.state.newStoreDescription,
     };
     this.setState({ dialogOpen: false });
-    OwnerAPI.createStore(newStoreInfo,ownerId).then(x=>console.log('RM50:',x));
+    OwnerAPI.createStore(newStoreInfo,this.props.ownerId).then(x=>console.log('RM50:',x));
     console.log('New Store created', newStoreInfo);
   }
 
