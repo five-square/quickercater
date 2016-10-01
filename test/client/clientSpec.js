@@ -5,8 +5,6 @@ import App from '../../client/components/App';
 import Cart from '../../client/components/Cart';
 import CartItemCard from '../../client/components/CartItemCard';
 import CateringOptions from '../../client/components/PackageCard';
-import CompanyDescription from '../../client/components/CompanyDescription';
-import CustomerForm from '../../client/components/CustomerForm';
 import Dashboard from '../../client/components/Dashboard';
 import ItemCard from '../../client/components/ItemCard';
 import Lobby from '../../client/components/Lobby';
@@ -42,22 +40,6 @@ global.describe('Component: CateringOptions', () => {
   });
 });
 
-global.describe('Component: CompanyDescription', () => {
-  global.it('renders without exploding', () => {
-    expect(shallow(<CompanyDescription />).length).to.be.above(0);
-  });
-});
-
-global.describe('Component: CustomerForm', () => {
-  global.it('renders without exploding', () => {
-    expect(shallow(<CustomerForm />).length).to.be.above(0);
-  });
-
-  global.it('renders without exploding', () => {
-    expect(shallow(<App />)).to.be.above(0);
-  });
-});
-
 global.describe('Component: Cart', () => {
   global.it('renders without exploding', () => {
     global.expect(shallow(<Cart />)).to.be.above(0);
@@ -76,18 +58,6 @@ global.describe('Component: CateringOptions', () => {
   });
 });
 
-global.describe('Component: CompanyDescription', () => {
-  global.it('renders without exploding', () => {
-    global.expect(shallow(<CompanyDescription />)).to.be.above(0);
-  });
-});
-
-global.describe('Component: CustomerForm', () => {
-  global.it('renders without exploding', () => {
-    global.expect(shallow(<CustomerForm />)).to.be.above(0);
-  });
-});
-
 global.describe('Component: Cart', () => {
   global.it('renders without exploding', () => {
     expect(shallow(<Cart />).length).to.be.above(0);
@@ -103,18 +73,6 @@ global.describe('Component: CartItemCard', () => {
 global.describe('Component: CateringOptions', () => {
   global.it('renders without exploding', () => {
     expect(shallow(<CateringOptions />).length).to.be.above(0);
-  });
-});
-
-global.describe('Component: CompanyDescription', () => {
-  global.it('renders without exploding', () => {
-    expect(shallow(<CompanyDescription />).length).to.be.above(0);
-  });
-});
-
-global.describe('Component: CustomerForm', () => {
-  global.it('renders without exploding', () => {
-    expect(shallow(<CustomerForm />).length).to.be.above(0);
   });
 });
 

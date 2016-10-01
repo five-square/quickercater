@@ -178,6 +178,7 @@ export default class App extends Component {
             </div>
             { this.state.showStore
               ? <StoreFront
+                title={this.state.currentStoreName}
                 ownerId={this.state.currentOwnerId}
                 store={this.state.currentStore}
                 addItemToOrder={e => this.handleAddItemToOrder(e)}
