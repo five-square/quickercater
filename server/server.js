@@ -14,7 +14,7 @@ const configAuth = process.env.googleClientId
     clientID: process.env.googleClientId,
     clientSecret: process.env.googleClientSecret,
   }
-  : console.log('test');//require('./config/googleCredentials');
+  : require('./config/googleCredentials');
 
 const serverUrl = process.env.PORT || 3000;
 
