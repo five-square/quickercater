@@ -22,6 +22,12 @@ export default class MenuCard extends Component {
       items: [],
       updatedItemOnOrder: this.props.updatedItemOnOrder,
     };
+    this.onMouseEnter = e => this.handleOnMouseEnter(e);
+    this.onMouseLeave = e => this.handleOnMouseLeave(e);
+    this.removeItem = e => this.handleRemoveItem(e);
+    this.editItem = e => this.handleEditItem(e);
+    this.addNewItem = e => this.handleAddNewItem(e);
+    this.addExistingItem = e => this.handleAddExistingItem(e);
   }
 
   componentWillMount() {
@@ -97,13 +103,6 @@ export default class MenuCard extends Component {
     });
   }
 
-  handleMoveItem(direction, itemId) { // in progress
-    Item.move(direction, itemId, this.props.id)
-    .then(() => {
-      this.showItems();
-    });
-  }
-
   handleEditItem(itemObj) {
     Item.edit(itemObj)
     .then(() => {
@@ -137,8 +136,8 @@ export default class MenuCard extends Component {
       <div style={this.state.style}>
         <Paper zDepth={this.state.hover}>
           <Card
-            onMouseEnter={e => this.handleOnMouseEnter(e)}
-            onMouseLeave={e => this.handleOnMouseLeave(e)}
+            onMouseEnter={this.onMouseEnter}
+            onMouseLeave={this.onMouseLeave}
             containerStyle={{ backgroundColor: '#e0e0e0' }}
           >
             <CardTitle
@@ -161,16 +160,15 @@ export default class MenuCard extends Component {
                   addItemToOrder={this.props.addItemToOrder}
                   updateTotalPrice={this.props.updateTotalPrice}
                   ownerId={this.props.ownerId}
-                  removeItem={e => this.handleRemoveItem(e)}
-                  editItem={e => this.handleEditItem(e)}
-                  moveItem={(d, i, m) => this.handleMoveItem(d, i, m)}
+                  removeItem={this.removeItem}
+                  editItem={this.editItem}
                 />);
               })}
               {this.props.editing
                 ? <AddItemCard
                   key={this.state.items.length + 1}
-                  addNewItem={e => this.handleAddNewItem(e)}
-                  addExistingItem={e => this.handleAddExistingItem(e)}
+                  addNewItem={this.addNewItem}
+                  addExistingItem={this.addExistingItem}
                   style={style.addItem}
                   pic={'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png'}
                   ownerId={this.props.ownerId}
