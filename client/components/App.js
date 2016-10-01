@@ -10,6 +10,7 @@ import Navigation from './Navigation';
 import Cart from './Cart';
 import cookieAPI from '../models/cookieAPI';
 import RegisterModal from './RegisterModal';
+import OwnerAPI from '../models/ownerAPI';
 
 
 export default class App extends Component {
@@ -36,32 +37,37 @@ export default class App extends Component {
     // an {owner: {ownerNode...}, store: {storeNode}} which correspond to each other.
 
     console.log('Mounted App. Session Id: ',cookieAPI.getCookie('sessionId'));
-    // Server.getAllOwners()
-    // .then(owners => {
-    //   this.setState({ owners });
-    //    var ownerName = owners.find(owner=> owner.properties.auth_key == cookieAPI.getCookie('sessionId')).properties;
-    //   console.log('ownername: ',ownerName);
-    // });
-    // Server.getAllStores()
-    // .then(stores => {
-    //   console.log('stores: ', stores);
-    //   this.setState({ stores });
-    // });
-    var sessId = cookieAPI.getCookie('sessionId');
 
-    Server.getAllStoresAndOwners()
-      .then( storeAndOwnerArray => {
-        var owners = storeAndOwnerArray.map(group=>group.owner);
-        var stores = storeAndOwnerArray.map(group=>group.store);
-        console.log(storeAndOwnerArray);
-        this.setState({ owners, stores});
-        var ownerKeys = owners.map(owner => owner.properties.auth_key);
-        if(ownerKeys.indexOf(sessId) !== -1){
-          this.setState({myStore: stores[ownerKeys.indexOf(sessId)]});
-        }
-        if(sessId !== '' && this.state.myStore === null)
+    var sessId = cookieAPI.getCookie('sessionId');
+    
+    sessId = 'ya29.Ci9qAxZIA7hXRvO68DYxb45faKUCweuu2YrGawMJzrH1LZ_U8ia_8GCw52jdmgS8CQ';
+    // 1. Check sessionId exists?
+    //      Y? Make DB call to get storeId & storeName
+               // storeId found?
+              // Y? Change Login to 'MyStore'
+              // N? showRegisterModal = true
+    //        N? Not logged in. Regular user / non-owner display
+    //      
+    // 
+
+    Server.getAllStores().then( stores => {
+      this.setState({ stores});
+    });
+
+    if(sessId !== undefined && sessId !== ''){
+      OwnerAPI.getStoreByAuthKey(sessId).then(store => {
+        if(store && store.length > 0){
+          console.log('Owner of Store:',store);
+          this.setState({myStore: store[0].store});
+        } else{
+          console.log('Logged in, no associated store');
           this.setState({showRegisterModal: true});
+        }
       });
+    } else {
+      console.log('Unauthenticated user.');
+    }
+
   }
 
   selectStore(storeObj) {

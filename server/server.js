@@ -188,6 +188,13 @@ routes.delete('/api/owner/:id', (req, res) => {
   });
 });
 
+routes.post('/api/owner/getStoreByAuthKey', (req, res) => {
+  db.findStoreByAuthKey(req.body)
+  .then(resp => {
+    res.send(resp);
+  });
+});
+
 /*
   **********************************************************************************************
 

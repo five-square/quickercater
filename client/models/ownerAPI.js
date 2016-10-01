@@ -26,4 +26,14 @@ OwnerAPI.createStore = (ownerId) =>
   .then(data => data.json())
   .then(newStore => console.log('NewStore: ', newStore));
 
+OwnerAPI.getStoreByAuthKey = (sessionId) => 
+  fetch('/api/owner/getStoreByAuthKey', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({authKey: sessionId}),
+  })
+  .then( data => data.json())
+  .then( store => { console.log(store); return store});
 export default OwnerAPI;
