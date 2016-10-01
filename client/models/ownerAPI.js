@@ -24,8 +24,7 @@ OwnerAPI.createStore = (store, ownerId) =>
     },
     body: JSON.stringify({store, ownerId}),
   })
-  .then(data => data.json())
-  .then(db.linkOwnerToStore(store._id, ownerId));
+  .then(data => data.json());
 
 OwnerAPI.getStoreAndOwnerByAuthKey = (sessionId) => 
   fetch('/api/owner/getStoreAndOwnerByAuthKey', {

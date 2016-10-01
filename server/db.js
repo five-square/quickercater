@@ -617,9 +617,9 @@ db.createStore = (store) => Node.cypherAsync({
     description: store.description,
   },
 })
-.then(response => response[0].order);
+.then(response => response[0].store);
 
-db.linkOwnerToStore = (storeId, ownerid) => Node.cypherAsync({
+db.linkOwnerToStore = (ownerId, storeId) => Node.cypherAsync({
   query: `MATCH (o:Owner) WHERE ID(o) = {ownerId}
           MATCH (s:Store) WHERE ID(s) = {storeId}
           SET (o)-[CAN_EDIT]->(s)
