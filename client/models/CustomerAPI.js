@@ -21,7 +21,4 @@ CustomerAPI.sendEmail = (mailOptions) =>
     body: JSON.stringify(mailOptions),
   })
   .then(data => data.json());
-
-
-
 export default CustomerAPI;
