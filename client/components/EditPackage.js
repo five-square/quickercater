@@ -12,11 +12,11 @@ export default class EditPackage extends Component {
     this.state = {
       open: false,
       hover: 2,
-      name: this.props.name,
-      description: this.props.description,
-      cost: this.props.cost,
-      type: this.props.type,
-      picture: this.props.picture,
+      name: this.props.package.name,
+      description: this.props.package.description,
+      cost: this.props.package.cost,
+      type: this.props.package.type,
+      picture: this.props.package.picture,
     };
   }
 
@@ -129,7 +129,7 @@ export default class EditPackage extends Component {
           />
           <img
             role="presentation"
-            src={this.props.pic}
+            src={this.props.package.picture}
             style={style.imgPrev}
           />
         </div>);
@@ -183,6 +183,7 @@ export default class EditPackage extends Component {
           open={this.state.open}
           onRequestClose={(e) => this.handleClose(e)}
         >
+          {this.renderPreview()}
           <TextField
             hintText="Package Name"
             floatingLabelText="Enter Package Name"

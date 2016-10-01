@@ -8,7 +8,7 @@ import Paper from 'material-ui/Paper';
 import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
-//
+
 export default class AddPackageCard extends React.Component {
 
   constructor(props) {
@@ -41,16 +41,21 @@ export default class AddPackageCard extends React.Component {
   }
 
   handleAddPackage() {
+    console.log('handleAddPackage props: ', this.props);
     this.setState({
       open: false,
     });
-    this.props.handleAddPackage({
+    const newPackage = Object.assign({}, {
       name: this.state.newPackageName,
       description: this.state.newPackageDescription,
       cost: this.state.newPackagePrice,
       type: this.state.newPackageType,
       picture: this.state.newPackagePicture,
+      order: this.props.count.length,
+      ownerId: this.props.ownerId, //props
     });
+    console.log('handleAddPackage newPackage', newPackage);
+    this.props.addPackage(newPackage);
   }
 
   handlePackageNameChange(e) {
@@ -78,8 +83,6 @@ export default class AddPackageCard extends React.Component {
   }
 
   handlePackagePictureChange(e) {
-    e.preventDefault();
-
     const reader = new FileReader();
     const file = e.currentTarget.files[0];
     reader.onload = (a) => {
@@ -189,6 +192,7 @@ export default class AddPackageCard extends React.Component {
           open={this.state.open}
           onRequestClose={(e) => this.handleClose(e)}
         >
+          {this.renderPreview()}
           <TextField
             hintText="Package Name"
             floatingLabelText="Enter Package Name"

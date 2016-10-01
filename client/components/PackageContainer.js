@@ -8,6 +8,7 @@ export default class PackageContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      ownerId: this.props.ownerId,
       packages: [],
     };
   }
@@ -30,11 +31,7 @@ export default class PackageContainer extends Component {
   }
 
   handleAddPackage(pkg) {
-    const newPackage = Object.assign({}, pkg, {
-      order: this.state.packages.length,
-      ownerId: this.props.ownerId,
-    });
-    PackageAPI.create(newPackage)
+    Package.create(pkg)
     .then(() => {
       this.showPackages();
     });
@@ -118,8 +115,10 @@ export default class PackageContainer extends Component {
         {this.state.packages.length
           ? <PackageSlider
             style={style}
+            ownerId={this.state.ownerId}
             packages={this.state.packages}
             editing={this.props.editing}
+            add={this.handleAddPackage}
             deletePackage={e => this.handleDeletePackage(e)}
           />
           : null

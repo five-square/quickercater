@@ -11,7 +11,7 @@ const style = {
   floatingEditButton: {
 
     right: 5,
-    bottom: 380,
+    bottom: 0,
     position: 'absolute',
   },
   // cardActions: {
@@ -32,10 +32,13 @@ const PackageCard = (props) => (
     {props.editing
       ? <div style={style.floatingEditButton}>
         <EditPackage
+          package={props.pack}
           edit={props.handleSubmitEdit}
         /><br />
         <AddPackageCard
-          edit={props.handleAddPackage}
+          count={props.count}
+          ownerId={props.ownerId}
+          addPackage={props.add}
         /><br />
         <FloatingActionButton
           mini
