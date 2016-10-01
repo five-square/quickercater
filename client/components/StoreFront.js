@@ -37,13 +37,17 @@ export default class StoreFront extends Component {
 
   render() {
     const style = {
-      width: '60%',
-      flex: '50%',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
+      menuCards: {
+        width: '95%',
+        flex: '50%',
+        marginTop: '2%',
+        marginBottom: '2%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
     };
 
     return (
@@ -62,10 +66,10 @@ export default class StoreFront extends Component {
         <PackageContainer
           ownerId={this.state.ownerId}
           editing={this.state.editing}
-        />
-        <h1>Edit Yo Menu</h1>
+        /><br />
         <MenuContainer
-          style={style}
+          title={this.props.store.name}
+          style={style.menuCards}
           ownerId={this.state.ownerId}
           addItemToOrder={this.props.addItemToOrder}
           editing={this.state.editing}

@@ -331,7 +331,7 @@ db.fetchAllAcceptedOrders = (ownerId) =>
     },
   }).then(response => response);
 
-db.fetchOrderDetail = (orderId) => 
+db.fetchOrderDetail = (orderId) =>
   Node.cypherAsync({
     query: `MATCH (order:CustomerOrder)-[rel:REQUEST]-(item:Item) WHERE ID(order) = ${orderId}
             MATCH  (order)<-[CREATED]-(customer:Customer)
@@ -340,7 +340,7 @@ db.fetchOrderDetail = (orderId) =>
       orderId,
     },
   })
-.then(resp=>resp);
+.then(resp => resp);
 
 db.addAcceptedOrder = (orderInfo) =>
   Node.cypherAsync({
@@ -510,6 +510,17 @@ db.deleteMenu = (menuId) => Node.cypherAsync({
     WHERE ID(menu) = ${menuId}
     CREATE (owner)-[:CAN_EDIT]->(item)
     DELETE r1, r2, menu`,
+  params: {
+    menuId,
+  },
+})
+.then(data => data);
+
+db.deleteEmptyMenu = (menuId) => Node.cypherAsync({
+  query: `
+    MATCH (owner:Owner)-[r1:CAN_EDIT]->(menu:Menu)
+    WHERE ID(menu) = ${menuId}
+    DELETE r1, menu`,
   params: {
     menuId,
   },

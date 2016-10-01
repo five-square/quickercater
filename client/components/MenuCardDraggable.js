@@ -239,7 +239,9 @@ export default class MenuCardDraggable extends React.Component {
                   style={style.floatingDeleteButton}
                   mini
                   zDepth={2}
-                  onTouchTap={() => this.props.deleteMenu(this.props.menu.id)}
+                  onTouchTap={() => this.props.deleteMenu(
+                    this.props.menu.id, this.state.items.length
+                  )}
                 >
                   <ContentRemove />
                 </FloatingActionButton>

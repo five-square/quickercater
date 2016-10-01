@@ -91,8 +91,23 @@ MenuAPI.addExistingItem = (itemObj) =>
     quantity: 1,
   })));
 
-MenuAPI.delete = (menuId, ownerId) =>
+MenuAPI.deleteWithItems = (menuId, ownerId) =>
   fetch('/api/menu/delete', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id: menuId, ownerId }),
+  })
+  .then(data => data.json())
+  .then(menus => menus.map(element => ({
+    id: element.menu._id,
+    name: element.menu.properties.name,
+    description: element.menu.properties.description,
+  })));
+
+MenuAPI.deleteEmptyMenu = (menuId, ownerId) =>
+  fetch('/api/menu/delete/empty', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
