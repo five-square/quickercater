@@ -151,7 +151,6 @@ db.findOwnerByAuthKey = (authKey) => Node.cypherAsync({
   },
 });
 
-
 db.updateOwnerAuthKey = (ownerId, authKey) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
@@ -620,6 +619,18 @@ db.createStore = (store) => Node.cypherAsync({
 })
 .then(response => response[0].order);
 
+db.linkOwnerToStore = (storeId, ownerid) => Node.cypherAsync({
+  query: `MATCH (o:Owner) WHERE ID(o) = {ownerId}
+          MATCH (s:Store) WHERE ID(s) = {storeId}
+          SET (o)-[CAN_EDIT]->(s)
+          RETURN s,o`,
+  params: {
+    storeId,
+    ownerId,
+  },
+})
+.then(resp => resp);
+
 db.findAllStores = () => Node.cypherAsync({
   query: 'MATCH (stores:Store) RETURN stores',
 })
@@ -638,6 +649,16 @@ db.findStoreByOwnerId = (ownerId) => Node.cypherAsync({
     RETURN store`,
   params: {
     ownerId,
+  },
+});
+
+db.findStoreAndOwnerByAuthKey = (authKey) => Node.cypherAsync({
+  query:`
+      MATCH (owner:Owner) WHERE owner.auth_key = {authKey}
+      OPTIONAL MATCH (owner)--(store:Store)
+      RETURN store, owner`,
+  params: {
+    authKey: authKey.authKey,
   },
 });
 

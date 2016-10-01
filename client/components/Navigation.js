@@ -50,13 +50,19 @@ export default class Navigation extends Component {
               : null
             }
             <RaisedButton label="View Cart" primary onClick={e => this.handleViewCart(e)} />
-            {this.props.showMyStore
-              ? <RaisedButton
-                label="MyStore"
-                primary
-                onClick={() => this.props.goToMyStore(
-                  Object.assign({}, this.props.myStore.properties, { id: this.props.myStore._id })
+            {this.props.loggedIn
+              ? this.props.myStore 
+                ? <RaisedButton
+                   label="MyStore"
+                   primary
+                   onClick={() => this.props.goToMyStore(
+                   Object.assign({}, this.props.myStore.properties, { id: this.props.myStore._id })
                 )}
+              />
+                : <RaisedButton
+                   label="MyStore"
+                   primary
+                   onClick={this.props.openRegisterModal}
               />
               : <RaisedButton
                 label="Login"
