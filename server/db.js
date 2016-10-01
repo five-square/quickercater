@@ -622,7 +622,7 @@ db.createStore = (store) => Node.cypherAsync({
 db.linkOwnerToStore = (ownerId, storeId) => Node.cypherAsync({
   query: `MATCH (o:Owner) WHERE ID(o) = {ownerId}
           MATCH (s:Store) WHERE ID(s) = {storeId}
-          SET (o)-[CAN_EDIT]->(s)
+          MERGE (o)-[:CAN_EDIT]->(s)
           RETURN s,o`,
   params: {
     storeId,
