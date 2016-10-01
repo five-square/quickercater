@@ -18,7 +18,7 @@ export default class StoreCard extends React.Component {
       slogan: this.props.store.slogan,
       description: this.props.store.description,
       picture: this.props.store.picture,
-      banner: false,
+      banner: 'http://i.imgur.com/QdDcUFY.jpg',
     };
   }
 
@@ -50,7 +50,7 @@ export default class StoreCard extends React.Component {
           style={background}
         >
           <Card
-            style={{ backgroundColor: 'rgba(255, 255, 255, 0)' }}
+            style={{ backgroundColor: 'rgba(255, 255, 255, .89)' }}
             onMouseEnter={e => this.handleOnMouseEnter(e)}
             onMouseLeave={e => this.handleOnMouseLeave(e)}
           >
