@@ -40,7 +40,7 @@ export default class App extends Component {
 
     var sessId = cookieAPI.getCookie('sessionId');
     
-    sessId = 'ya29.Ci9qAxZIA7hXRvO68DYxb45faKUCweuu2YrGawMJzrH1LZ_U8ia_8GCw52jdmgS8CQ';
+    //sessId = 'ya29.Ci9qAxZIA7hXRvO68DYxb45faKUCweuu2YrGawMJzrH1LZ_U8ia_8GCw52jdmgS8CQ';
     // 1. Check sessionId exists?
     //      Y? Make DB call to get storeId & storeName
                // storeId found?
