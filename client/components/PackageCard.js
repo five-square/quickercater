@@ -57,7 +57,7 @@ const PackageCard = (props) => (
                 /><br />
                 <FloatingActionButton
                   mini
-                  onTouchTap={() => props.delete(props.target.pack.id)}
+                  onTouchTap={() => props.delete(props.pack.id)}
                 >
                   <ContentRemove />
                 </FloatingActionButton>

@@ -37,7 +37,7 @@ export default class PackageSlider extends Component {
       speed: 300,
       disableScroll: false,
       continuous: true,
-      slidesPerView: 2,
+      slidesPerView: 1,
     };
             // {this.props.editing
             //   ? <AddPackageCard
@@ -63,7 +63,6 @@ export default class PackageSlider extends Component {
                   ownerId={this.props.ownerId}
                   editing={this.props.editing}
                   pack={pack}
-                  target={this.props.packages}
                   delete={this.props.deletePackage}
                 />
               </div>

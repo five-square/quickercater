@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Package from '../models/packageAPI';
+import PackageAPI from '../models/packageAPI';
 import PackageSlider from './PackageSlider';
 import EditPackage from './EditPackage';
 import AddPackageCard from './AddPackageCard';
@@ -9,12 +9,11 @@ export default class PackageContainer extends Component {
     super(props);
     this.state = {
       packages: [],
-      ownerId: this.props.ownerId,
     };
   }
 
   componentWillMount() {
-    Package.getAllPackages(this.props.ownerId)
+    PackageAPI.getAllPackages(this.props.ownerId)
     .then(packages => {
       console.log('in PackageContainer: packages: ', packages);
       this.setState({
@@ -24,7 +23,7 @@ export default class PackageContainer extends Component {
   }
 
   showPackages() {
-    Package.getAllPackages(this.state.ownerId)
+    PackageAPI.getAllPackages(this.props.ownerId)
     .then(packages => {
       this.setState({ packages });
     });
@@ -33,16 +32,23 @@ export default class PackageContainer extends Component {
   handleAddPackage(pkg) {
     const newPackage = Object.assign({}, pkg, {
       order: this.state.packages.length,
-      ownerId: this.state.ownerId,
+      ownerId: this.props.ownerId,
     });
-    Package.create(newPackage)
+    PackageAPI.create(newPackage)
     .then(() => {
       this.showPackages();
     });
   }
 
   handleDeletePackage(packId) {
-    Package.delete(packId, this.state.ownerId)
+    PackageAPI.delete(packId, this.props.ownerId)
+    .then(() => {
+      this.showPackages();
+    });
+  }
+
+  handleEditPackage(pack) {
+    PackageAPI.update(pack, this.state.packages.id)
     .then(() => {
       this.showPackages();
     });
