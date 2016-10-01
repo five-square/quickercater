@@ -130,6 +130,18 @@ routes.get('/api/store/:id', (req, res) => {
   });
 });
 
+routes.post('/api/store/create', (req,res) => {
+// name picture address description slogan 
+  console.log('Create Store Req.body',req.body);
+  db.createStore(req.body.store)
+  .then(newStore =>{
+     console.log(newStore);
+     db.linkOwnerToStore(req.body.ownerId,newStore._id)
+     .then(link=> res.send(newStore));
+  });
+
+})
+
 /*
   **********************************************************************************************
 
@@ -179,6 +191,12 @@ routes.delete('/api/owner/:id', (req, res) => {
   });
 });
 
+routes.post('/api/owner/getStoreAndOwnerByAuthKey', (req, res) => {
+  db.findStoreAndOwnerByAuthKey(req.body)
+  .then(resp => {
+    res.send(resp);
+  });
+});
 /*
   **********************************************************************************************
 

@@ -9,6 +9,8 @@ import Server from '../models/serverAPI';
 import Navigation from './Navigation';
 import Cart from './Cart';
 import cookieAPI from '../models/cookieAPI';
+import OwnerAPI from '../models/ownerAPI';
+import RegisterModal from './RegisterModal';
 
 export default class App extends Component {
   constructor(props) {
@@ -24,41 +26,43 @@ export default class App extends Component {
       globalOrder: {},
       openCart: false,
       myStore: null,
+      showRegisterModal: false,
     };
   }
 
 
   componentWillMount() {
-    // use newly created endpoint /api/StoresAndOwners to get an array of objects back with each index having
-    // an {owner: {ownerNode...}, store: {storeNode}} which correspond to each other.
-
     console.log('Mounted App. Session Id: ',cookieAPI.getCookie('sessionId'));
-    // Server.getAllOwners()
-    // .then(owners => {
-    //   this.setState({ owners });
-    //    var ownerName = owners.find(owner=> owner.properties.auth_key == cookieAPI.getCookie('sessionId')).properties;
-    //   console.log('ownername: ',ownerName);
-    // });
-    // Server.getAllStores()
-    // .then(stores => {
-    //   console.log('stores: ', stores);
-    //   this.setState({ stores });
-    // });
     var sessId = cookieAPI.getCookie('sessionId');
-    Server.getAllStoresAndOwners()
-      .then( storeAndOwnerArray => {
-        var owners = storeAndOwnerArray.map(group=>group.owner);
-        var stores = storeAndOwnerArray.map(group=>group.store);
-        this.setState({ owners, stores});
-        var ownerKeys = owners.map(owner => owner.properties.auth_key);
-        if(ownerKeys.indexOf(sessId) !== -1){
-          this.setState({myStore: stores[ownerKeys.indexOf(sessId)]});
+    
+    //sessId = 'ya29.Ci9qAxZIA7hXRvO68DYxb45faKUCweuu2YrGawMJzrH1LZ_U8ia_8GCw52jdmgS8CQ';
+    Server.getAllStores().then( stores => {
+      this.setState({ stores});
+    });
+
+    if(sessId !== undefined && sessId !== ''){
+      OwnerAPI.getStoreAndOwnerByAuthKey(sessId).then(storeAndOwner => {
+        if(storeAndOwner && storeAndOwner.length > 0 && storeAndOwner[0].store){
+          console.log('Owner of storeAndOwner:',storeAndOwner);
+          this.setState({mystoreAndOwner: storeAndOwner[0].store, currentOwnerId: storeAndOwner[0].owner._id});
+
+        } else if(storeAndOwner.length > 0 || storeAndOwner[0].owner){
+          console.log('Logged in, no associated store',storeAndOwner);
+          this.setState({showRegisterModal: true, currentOwnerId: storeAndOwner[0].owner._id  });
         }
       });
+    } else {
+      console.log('Unauthenticated user.');
+    }
+
   }
 
   selectStore(storeObj) {
-    Server.getOwnerByStoreId(storeObj.id)
+    console.log('Select store: ',storeObj);
+    var id = storeObj.id;
+    if(storeObj._id && id === undefined)
+        id = storeObj._id;
+    Server.getOwnerByStoreId(id)
     .then(owner => {
       console.log('in select Store', storeObj);
       this.setState({
@@ -141,6 +145,15 @@ export default class App extends Component {
     });
   }
 
+  handleMyStoreClick(){ //used to show reg modal when no
+    this.setState({showRegisterModal: true});
+    console.log('setState in app')
+  }
+
+  handleUnmountRegisterModal(){
+    this.setState({showRegisterModal: false});
+  }
+
   handleBackClick() {
     this.setState({
       showStore: false,
@@ -163,7 +176,15 @@ export default class App extends Component {
               showMyStore={this.state.myStore !== null}
               myStore={this.state.myStore}
               goToMyStore={this.selectStore.bind(this)}
+              openRegisterModal={this.handleMyStoreClick.bind(this)}
+              loggedIn={!!this.state.currentOwnerId}
             />
+            {this.state.showRegisterModal
+              ? <RegisterModal 
+                  handleUnmountRegisterModal={this.handleUnmountRegisterModal.bind(this)}
+                  ownerId={this.state.currentOwnerId} />
+              : null
+            }
             <div>
               <Cart
                 open={this.state.openCart}

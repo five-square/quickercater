@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
+import OwnerAPI from '../models/ownerAPI';
 import {
   Table,
   TableBody,
@@ -20,7 +21,7 @@ export default class RegisterModal extends React.Component {
     super(props);
     this.state = {
       loading: false,
-      dialogOpen: false,
+      dialogOpen: true,
       finished: false,
       stepIndex: 0,
       newStoreName: '',
@@ -29,6 +30,7 @@ export default class RegisterModal extends React.Component {
       newStoreAddress: '',
       newStoreLogo: 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png',
     };
+    console.log('Reg Modal OwnerId: ',this.props.ownerId);
   }
 
   handleOpen() {
@@ -44,19 +46,25 @@ export default class RegisterModal extends React.Component {
       description: this.state.newStoreDescription,
     };
     this.setState({ dialogOpen: false });
+    OwnerAPI.createStore(newStoreInfo,this.props.ownerId).then(x=>console.log('RM50:',x));
     console.log('New Store created', newStoreInfo);
   }
 
+    handleClose(){
+      this.handleCancel();
+    }
+
   handleCancel() {
-    this.setState({
-      dialogOpen: false,
-      stepIndex: 0,
-      newStoreName: '',
-      newStoreSlogan: '',
-      newStoreDescription: '',
-      newStoreAddress: '',
-      newStoreLogo: 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png',
-    });
+  this.props.handleUnmountRegisterModal();
+    // this.setState({
+    //   dialogOpen: false,
+    //   stepIndex: 0,
+    //   newStoreName: '',
+    //   newStoreSlogan: '',
+    //   newStoreDescription: '',
+    //   newStoreAddress: '',
+    //   newStoreLogo: 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png',
+    // });
   }
 
   handleNext() {

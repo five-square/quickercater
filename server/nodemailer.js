@@ -1,5 +1,11 @@
 const nodemailer = require('nodemailer');
-const configAuth = require('./config/googleCredentials');
+const configAuth = process.env.googleClientId
+  ? {
+    clientID: process.env.googleClientId,
+    clientSecret: process.env.googleClientSecret,
+    refreshToken: process.env.googleRefreshToken,
+  }
+  : require('./config/googleCredentials');
 
 const nm = module.exports;
 
