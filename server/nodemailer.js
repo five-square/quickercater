@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const configAuth = require('./config/googleCredentials');
 
-const md = module.exports;
+const nm = module.exports;
 
 const smtpTransport = nodemailer.createTransport('SMTP', {
   service: 'Gmail',
@@ -24,15 +24,18 @@ const smtpTransport = nodemailer.createTransport('SMTP', {
 //   text: 'Thank you',
 // };
 
-md.sendConfirmation = (mailOptions) => {
-  smtpTransport.sendMail(mailOptions, (error, response) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log(response);
-    }
-    smtpTransport.close();
-  });
-};
+nm.sendConfirmation = (mailOptions) =>
 
+  new Promise((resolve, reject) => {
+    smtpTransport.sendMail(mailOptions, (error, response) => {
+      smtpTransport.close();
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        console.log(response);
+        resolve(response);
+      }
+    });
+  });
 

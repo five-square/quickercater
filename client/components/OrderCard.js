@@ -94,7 +94,10 @@ export default class OrderCard extends React.Component {
               text: `Thank you for your Order. Your order # is 
                     ${orderDb.order._id} with ${this.props.storeName}`,
             };
-            Customer.sendEmail(mailOptions);
+            Customer.sendEmail(mailOptions)
+              .then(response => {
+                console.log('response after confirmation email sent: ', response);
+              });
             // this.props.deleteOrderAfterSubmission(this.props.ownerId);
           });
       });

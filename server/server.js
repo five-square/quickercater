@@ -110,11 +110,6 @@ routes.get('/', (req, res) => {
   **********************************************************************************************
 */
 
-
-routes.post('/api/customer/email', (req, res) => {
-  nodemailer.sendConfirmation(req.body);
-});
-
 routes.get('/api/storesAndOwners', (req, res) => {
   db.getAllStoresAndOwners().then(ownerAndStores => {
     res.status(200).send(ownerAndStores);
@@ -413,6 +408,14 @@ routes.post('/api/customer/create', (req, res) => {
     res.status(201).send(dbData);
   })
   .catch(err => res.status(500).send(err));
+});
+
+routes.post('/api/customer/email', (req, res) => {
+  nodemailer.sendConfirmation(req.body)
+    .then((resp) => {
+      res.status(201).send(resp);
+    })
+    .catch(err => res.status(500).send(err));
 });
 
 
