@@ -86,8 +86,6 @@ export default class AddItemCard extends React.Component {
   }
 
   handleItemPictureChange(e) {
-    e.preventDefault();
-
     const reader = new FileReader();
     const file = e.currentTarget.files[0];
     reader.onload = (a) => {
