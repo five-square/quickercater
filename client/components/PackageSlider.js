@@ -37,7 +37,7 @@ export default class PackageSlider extends Component {
       speed: 300,
       disableScroll: false,
       continuous: true,
-      slidesPerView: 2,
+      slidesPerView: 1,
     };
             // {this.props.editing
             //   ? <AddPackageCard
@@ -54,7 +54,7 @@ export default class PackageSlider extends Component {
             ref={c => { this.reactSwipe = c; }}
             className="mySwipe"
             swipeOptions={swipeOptions}
-            key={this.props.packages.length}
+            key={this.props.packages.length - 1}
           >
             {this.props.packages.map((pack, index) =>
               <div key={index} style={this.props.style.div}>

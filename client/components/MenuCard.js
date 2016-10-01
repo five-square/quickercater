@@ -76,10 +76,11 @@ export default class MenuCard extends Component {
         order: this.state.items.length,
       };
       Menu.addNewItem(add).then(() => {
-        Menu.getItems(this.props.menu.id)
-        .then(items => {
-          this.setState({ items });
-        });
+        // Menu.getItems(this.props.menu.id)
+        // .then(items => {
+        //   this.setState({ items });
+        // });
+        this.showItems();
       });
     });
   }
