@@ -136,8 +136,8 @@ routes.post('/api/store/create', (req,res) => {
   db.createStore(req.body.store)
   .then(newStore =>{
      console.log(newStore);
-     db.linkOwnerToStore(req.body.owner,newStore._id);
-     res.send(newStore);
+     db.linkOwnerToStore(req.body.ownerId,newStore._id)
+     .then(link=> res.send(newStore));
   });
 
 })
