@@ -3,6 +3,7 @@ import MenuCard from './MenuCard';
 import AddMenuCard from './AddMenuCard';
 import Menu from '../models/menuAPI';
 import Owner from '../models/ownerAPI';
+import Item from '../models/itemAPI';
 
 import SortableListItem from './SortableListItem';
 import MenuCardDraggable from './MenuCardDraggable';
@@ -12,6 +13,7 @@ export default class MenuContainer extends Component {
     super(props);
     this.state = {
       menus: [],
+      itemBank: [],
       style: this.props.style,
       ownerId: this.props.ownerId,
       menuToDelete: null,
@@ -26,9 +28,12 @@ export default class MenuContainer extends Component {
   }
 
   componentWillMount() {
-    Owner.getMenus(this.state.ownerId)
+    Owner.getMenus(this.props.ownerId)
     .then(menus => {
-      this.setState({ menus });
+      Item.getUnassignedItems(this.props.ownerId)
+      .then(items => {
+        this.setState({ menus, itemBank: items });
+      });
     });
   }
 
@@ -54,7 +59,7 @@ export default class MenuContainer extends Component {
   }
 
   showMenus() {
-    Owner.getMenus(this.state.ownerId)
+    Owner.getMenus(this.props.ownerId)
     .then(menus => {
       this.setState({ menus });
     });
@@ -63,7 +68,7 @@ export default class MenuContainer extends Component {
   handleAddMenu(menuObj) {
     const newMenu = Object.assign({}, menuObj, {
       order: this.state.menus.length,
-      ownerId: this.state.ownerId,
+      ownerId: this.props.ownerId,
     });
     Menu.create(newMenu)
     .then(() => {
@@ -72,14 +77,14 @@ export default class MenuContainer extends Component {
   }
 
   handleDeleteMenu(menuId) {
-    Menu.delete(menuId, this.state.ownerId)
+    Menu.delete(menuId, this.props.ownerId)
     .then(() => {
       this.showMenus();
     });
   }
 
   handleEditMenu(menuObj) {
-    Menu.edit(menuObj, this.state.ownerId)
+    Menu.edit(menuObj, this.props.ownerId)
     .then(() => {
       this.showMenus();
     });
