@@ -11,8 +11,8 @@ export default class StoreFront extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ownerId: this.props.ownerId,
-      store: this.props.store,
+      // ownerId: this.props.ownerId,
+      // store: this.props.store,
       editing: false,
       openItemBank: false,
     };
@@ -61,16 +61,16 @@ export default class StoreFront extends Component {
         />
         <Dashboard
           style={style}
-          ownerId={this.state.ownerId}
+          ownerId={this.props.ownerId}
         />
         <PackageContainer
-          ownerId={this.state.ownerId}
+          ownerId={this.props.ownerId}
           editing={this.state.editing}
         /><br />
         <MenuContainer
           title={this.props.store.name}
           style={style.menuCards}
-          ownerId={this.state.ownerId}
+          ownerId={this.props.ownerId}
           addItemToOrder={this.props.addItemToOrder}
           editing={this.state.editing}
         />

@@ -32,36 +32,41 @@ export default class App extends Component {
 
 
   componentWillMount() {
-    console.log('Mounted App. Session Id: ',cookieAPI.getCookie('sessionId'));
-    var sessId = cookieAPI.getCookie('sessionId');
-    
-    //sessId = 'ya29.Ci9qAxZIA7hXRvO68DYxb45faKUCweuu2YrGawMJzrH1LZ_U8ia_8GCw52jdmgS8CQ';
-    Server.getAllStores().then( stores => {
-      this.setState({ stores});
+    console.log('Mounted App. Session Id: ', cookieAPI.getCookie('sessionId'));
+    const sessId = cookieAPI.getCookie('sessionId');
+
+    // sessId = 'ya29.Ci9qAxZIA7hXRvO68DYxb45faKUCweuu2YrGawMJzrH1LZ_U8ia_8GCw52jdmgS8CQ';
+    Server.getAllStores().then(stores => {
+      this.setState({ stores });
     });
 
-    if(sessId !== undefined && sessId !== ''){
+    if (sessId !== undefined && sessId !== '') {
       OwnerAPI.getStoreAndOwnerByAuthKey(sessId).then(storeAndOwner => {
-        if(storeAndOwner && storeAndOwner.length > 0 && storeAndOwner[0].store){
-          console.log('Owner of storeAndOwner:',storeAndOwner);
-          this.setState({mystoreAndOwner: storeAndOwner[0].store, currentOwnerId: storeAndOwner[0].owner._id});
-
-        } else if(storeAndOwner.length > 0 || storeAndOwner[0].owner){
-          console.log('Logged in, no associated store',storeAndOwner);
-          this.setState({showRegisterModal: true, currentOwnerId: storeAndOwner[0].owner._id  });
+        if (storeAndOwner && storeAndOwner.length > 0 && storeAndOwner[0].store) {
+          console.log('Owner of storeAndOwner:', storeAndOwner);
+          this.setState({
+            mystoreAndOwner: storeAndOwner[0].store,
+            currentOwnerId: storeAndOwner[0].owner._id,
+          });
+        } else if (storeAndOwner.length > 0 || storeAndOwner[0].owner) {
+          console.log('Logged in, no associated store', storeAndOwner);
+          this.setState({
+            showRegisterModal: true,
+            currentOwnerId: storeAndOwner[0].owner._id,
+          });
         }
       });
     } else {
       console.log('Unauthenticated user.');
     }
-
   }
 
   selectStore(storeObj) {
-    console.log('Select store: ',storeObj);
-    var id = storeObj.id;
-    if(storeObj._id && id === undefined)
-        id = storeObj._id;
+    console.log('Select store: ', storeObj);
+    let id = storeObj.id;
+    if (storeObj._id && id === undefined) {
+      id = storeObj._id;
+    }
     Server.getOwnerByStoreId(id)
     .then(owner => {
       console.log('in select Store', storeObj);
