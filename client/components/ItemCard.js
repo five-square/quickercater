@@ -3,6 +3,7 @@ import Card from 'material-ui/Card';
 import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import Chip from 'material-ui/Chip';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
@@ -106,7 +107,7 @@ class ItemCard extends Component {
                   <ContentRemove />
                 </FloatingActionButton>
               </div>
-              : <RaisedButton
+              : <FlatButton
                 style={style.addToOrderButton}
                 primary
                 label="Add To Order"
