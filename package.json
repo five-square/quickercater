@@ -11,7 +11,7 @@
   },
   "engines": {
     "node": "6.6.0"
-    },
+  },
   "scripts": {
     "start": "nodemon server/server.js --ignore client/",
     "build": "browserify -t [ babelify --presets [ react ] ] client/main.js -o build/bundle.js",
@@ -50,6 +50,7 @@
     "isomorphic-fetch": "^2.2.1",
     "material-ui": "^0.15.4",
     "neo4j": "^2.0.0-RC2",
+    "nodemailer": "^0.7.1",
     "nodemon": "^1.10.2",
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.3.2",

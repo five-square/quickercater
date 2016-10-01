@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const AuthPort = require('authport');
 const db = require('./db');
 const dbInit = require('./dbInit');
+const nodemailer = require('./nodemailer');
 //
 const configAuth = process.env.googleClientId
   ? {
@@ -426,6 +427,14 @@ routes.post('/api/customer/create', (req, res) => {
     res.status(201).send(dbData);
   })
   .catch(err => res.status(500).send(err));
+});
+
+routes.post('/api/customer/email', (req, res) => {
+  nodemailer.sendConfirmation(req.body)
+    .then((resp) => {
+      res.status(201).send(resp);
+    })
+    .catch(err => res.status(500).send(err));
 });
 
 
