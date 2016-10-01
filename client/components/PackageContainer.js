@@ -122,7 +122,6 @@ export default class PackageContainer extends Component {
             editing={this.props.editing}
             deletePackage={e => this.handleDeletePackage(e)}
           />
-
           : null
         }
 

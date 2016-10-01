@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
-
-import MenuCard from './MenuCard';
-import AddMenuCard from './AddMenuCard';
-import Menu from '../models/menuAPI';
-import Owner from '../models/ownerAPI';
-import Item from '../models/itemAPI';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import SortableListItem from './SortableListItem';
 import MenuCardDraggable from './MenuCardDraggable';
+import MenuCard from './MenuCard';
+import AddMenuCard from './AddMenuCard';
+import ItemBank from './ItemBank';
+
+import Menu from '../models/menuAPI';
+import Owner from '../models/ownerAPI';
+import Item from '../models/itemAPI';
 
 export default class MenuContainer extends Component {
   constructor(props) {
@@ -19,6 +21,7 @@ export default class MenuContainer extends Component {
       itemBank: [],
       style: this.props.style,
       ownerId: this.props.ownerId,
+      openItemBank: false,
       menuToDelete: null,
       updatedItemOnOrder: this.props.updatedItemOnOrder,
       draggingIndex: null,
@@ -43,11 +46,11 @@ export default class MenuContainer extends Component {
     });
   }
 
-  componentWillReceiveProps(newProps) {
-    this.setState({
-      openItemBank: newProps.editing,
-    });
-  }
+  // componentWillReceiveProps(newProps) {
+  //   this.setState({
+  //     openItemBank: newProps.editing,
+  //   });
+  // }
 
   getDraggableMenus() {
     this.menuCardsDraggable = this.state.menus.length
@@ -141,6 +144,12 @@ export default class MenuContainer extends Component {
     });
   }
 
+  handleOpenItemBank() {
+    this.setState({
+      openItemBank: true,
+    });
+  }
+
   viewItemBank() {
     this.setState({
       openItemBank: false,
@@ -158,58 +167,25 @@ export default class MenuContainer extends Component {
         alignItems: 'center',
         justifyContent: 'center',
       },
-      toolbar: {
+      menuToolbar: {
         width: '100%',
-        flex: '50%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
       },
     };
-    // const menuCardsDraggable = this.state.menus.length
-    //   ? this.state.menus.map((menu, index) =>
-    //     <MenuCardDraggable
-    //       key={index}
-    //       style={this.state.style}
-    //       editing={this.props.editing}
-    //       menu={menu}
-    //       addItemToOrder={this.props.addItemToOrder}
-    //       updateTotalPrice={this.props.updateTotalPrice}
-    //       deleteMenu={this.deleteMenu}
-    //       moveMenu={this.moveMenu}
-    //       editMenu={this.editMenu}
-    //       ownerId={this.props.ownerId}
-    //     />
-    //   )
-    //   : [];
     this.getDraggableMenus();
     this.getStaticMenus();
-
-    // const menuCards = this.state.menus.length
-    //   ? this.state.menus.map((menu, index) =>
-    //     <MenuCard
-    //       key={index}
-    //       style={this.state.style}
-    //       editing={this.props.editing}
-    //       menu={menu}
-    //       addItemToOrder={this.props.addItemToOrder}
-    //       updateTotalPrice={this.props.updateTotalPrice}
-    //       deleteMenu={this.deleteMenu}
-    //       moveMenu={this.moveMenu}
-    //       editMenu={this.editMenu}
-    //       ownerId={this.props.ownerId}
-    //     />
-    //   )
-    //   : [];
 
     return (
       <div className="menu-container">
         <Paper zDepth={2} style={style.paper}>
-          <Toolbar style={style.toolbar}>
+          <Toolbar style={style.menuToolbar}>
             <ToolbarGroup>
               <ToolbarTitle text={`${this.props.title}'s Menu`} />
+            </ToolbarGroup>
+            <ToolbarGroup>
+              <ItemBank
+                open={this.state.openItemBank}
+                items={this.state.itemBank}
+              />
             </ToolbarGroup>
           </Toolbar>
           <div className="list">

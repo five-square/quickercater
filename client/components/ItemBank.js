@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import Drawer from 'material-ui/Drawer';
-import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
+import Dialog from 'material-ui/Dialog';
+import Card from 'material-ui/Card';
+import CardHeader from 'material-ui/Card/CardHeader';
+// import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import RaisedButton from 'material-ui/RaisedButton';
-import BankItemCard from './BankItemCard';
+import FlatButton from 'material-ui/FlatButton';
+import BankItemList from './BankItemList';
 import Item from '../models/itemAPI';
+// import BankItemCard from './BankItemCard';
 
 
 export default class ItemBank extends Component {
@@ -11,10 +15,8 @@ export default class ItemBank extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      style: this.props.style,
       open: this.props.open,
-      ownerId: this.props.ownerId,
-      items: [],
+      // items: [],
     };
   }
 
@@ -36,39 +38,64 @@ export default class ItemBank extends Component {
     });
   }
 
-  handleToggle() {
-    this.props.viewItemBank();
+  handleOpen() {
+    this.setState({ open: true });
+  }
+
+  handleClose() {
+    this.setState({ open: false });
   }
 
   render() {
+    console.log('in ItemBank: ', this.state.items);
+    // action buttons for Modal
+    const actions = [
+      <FlatButton
+        label="Close"
+        primary
+        onTouchTap={e => this.handleClose(e)}
+      />,
+    ];
+    // This is the actual modal
     return (
       <div>
-        <Drawer width={325} openSecondary open={this.props.open} >
-          <Toolbar>
-            <ToolbarGroup>
-              <ToolbarTitle text="My Items" />
-            </ToolbarGroup>
-            <ToolbarGroup>
-              <RaisedButton
-                primary
-                label="Close"
-                onTouchTap={e => this.handleToggle(e)}
-              />
-            </ToolbarGroup>
-          </Toolbar>
-          <br />
-          {this.state.items.map((item, index) =>
-            <BankItemCard
-              key={index}
+        <RaisedButton
+          label="Item Bank"
+          primary
+          style={{ margin: 10 }}
+          onClick={e => this.handleOpen(e)}
+        />
+        <Dialog
+          title="My Items"
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={(e) => this.handleClose(e)}
+        >
+          {this.props.items.length
+            ? <BankItemList
+              items={this.props.items}
               editing={this.props.editing}
-              item={item}
-              addItemToOrder={this.props.addItemToOrder}
-              updateTotalPrice={this.props.updateTotalPrice}
-              ownerId={this.props.ownerId}
-              removeItem={e => this.handleRemoveItem(e)}
             />
-          )}
-        </Drawer>
+            // this.props.items.map((item, index) =>
+            //   <BankItemCard
+            //     key={index}
+            //     editing={this.props.editing}
+            //     item={item}
+            //     // addItemToOrder={this.props.addItemToOrder}
+            //     // updateTotalPrice={this.props.updateTotalPrice}
+            //     // ownerId={this.props.ownerId}
+            //     // removeItem={e => this.handleRemoveItem(e)}
+            //   />
+            // )
+            : <Card>
+              <CardHeader
+                title="No unassigned menu items!"
+                subtitle="Go to your menu to add new items"
+              />
+            </Card>
+          }
+        </Dialog>
       </div>
     );
   }
