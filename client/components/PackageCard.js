@@ -46,6 +46,22 @@ const PackageCard = (props) => (
       </div>
       : null
     }
+              ? <div style={style.floatingEditButton}>
+                <EditPackage
+                  edit={props.handleSubmitEdit}
+                /><br />
+                <AddPackageCard
+                  edit={props.handleAddPackage}
+                /><br />
+                <FloatingActionButton
+                  mini
+                  onTouchTap={() => props.delete(props.pack.id)}
+                >
+                  <ContentRemove />
+                </FloatingActionButton>
+              </div>
+              : null
+            }
   </Card>
 );
 

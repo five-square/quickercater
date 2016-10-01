@@ -25,7 +25,7 @@ export default class EditPackage extends Component {
   }
 
   handleSubmitEdit() {
-    this.props.addPackage({
+    this.props.handleEditPackage({
       name: this.state.name,
       description: this.state.description,
       cost: this.state.cost,
@@ -70,7 +70,6 @@ export default class EditPackage extends Component {
   handleCancelEdit() {
     this.setState({ open: false });
   }
-
   render() {
     const style = {
       // floatingEditButton: {

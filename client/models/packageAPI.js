@@ -38,9 +38,9 @@ PackageAPI.delete = (packId) =>
       'Content-Type': 'application/json',
     },
   })
-  .then(data => data.json(data));
+  .then(data => data.json());
 
-PackageAPI.updatePackage = (pack) =>
+PackageAPI.update = (pack) =>
   fetch('/api/package/update', {
     method: 'post',
     headers: {

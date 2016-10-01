@@ -37,7 +37,7 @@ export default class PackageSlider extends Component {
       speed: 300,
       disableScroll: false,
       continuous: true,
-      slidesPerView: 2,
+      slidesPerView: 1,
     };
             // {this.props.editing
             //   ? <AddPackageCard

@@ -832,9 +832,9 @@ db.createPackage = (pkg) => Node.cypherAsync({
 
 db.deletePack = (packId) => Node.cypherAsync({
   query: `
-    MATCH (owner:Owner)-[:CAN_EDIT]->(pack:Package)
+    MATCH (owner:Owner)-[rel:CAN_EDIT]->(pack:Package)
     WHERE ID(pack) = ${packId}
-    DELETE pack`,
+    DELETE rel`,
   params: {
     packId,
   },

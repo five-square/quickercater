@@ -570,8 +570,9 @@ routes.post('/api/package/create', (req, res) => {
  });
 });
 
-routes.post('api/package/delete', (req, res) => {
-  db.deletePack(req.body.packId)
+routes.delete('/api/package/delete/:packId', (req, res) => {
+  console.log('req', req.params.packId)
+  db.deletePack(req.params.packId)
   .then((response) => {
     res.status(202).send(response);
   });
