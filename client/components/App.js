@@ -46,7 +46,7 @@ export default class App extends Component {
           console.log('Owner of storeAndOwner:',storeAndOwner);
           this.setState({mystoreAndOwner: storeAndOwner[0].store, currentOwnerId: storeAndOwner[0].owner._id});
 
-        } else{
+        } else if(storeAndOwner.owner){
           console.log('Logged in, no associated store',storeAndOwner);
           this.setState({showRegisterModal: true, currentOwnerId: storeAndOwner[0].owner._id  });
         }
@@ -58,7 +58,10 @@ export default class App extends Component {
   }
 
   selectStore(storeObj) {
-    Server.getOwnerByStoreId(storeObj.id)
+    var id = storeObj.id;
+    if(storeObj._id && id === undefined)
+        id = storeObj._id;
+    Server.getOwnerByStoreId(id)
     .then(owner => {
       console.log('in select Store', storeObj);
       this.setState({
