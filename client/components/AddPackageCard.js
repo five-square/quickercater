@@ -44,7 +44,7 @@ export default class AddPackageCard extends React.Component {
     this.setState({
       open: false,
     });
-    this.props.addPackage({
+    this.props.handleAddPackage({
       name: this.state.newPackageName,
       description: this.state.newPackageDescription,
       cost: this.state.newPackagePrice,
