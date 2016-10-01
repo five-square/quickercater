@@ -26,7 +26,13 @@ export default class MenuCardDraggable extends React.Component {
       updatedItemOnOrder: this.props.updatedItemOnOrder,
       draggingIndex: null,
     };
+    this.onMouseEnter = e => this.handleOnMouseEnter(e);
+    this.onMouseLeave = e => this.handleOnMouseLeave(e);
     this.removeItem = e => this.handleRemoveItem(e);
+    this.editItem = e => this.handleEditItem(e);
+    this.addNewItem = e => this.handleAddNewItem(e);
+    this.addExistingItem = e => this.handleAddExistingItem(e);
+    this.handleUpdateState = e => this.updateState(e);
   }
 
   componentWillMount() {
@@ -172,8 +178,7 @@ export default class MenuCardDraggable extends React.Component {
           updateTotalPrice={this.props.updateTotalPrice}
           ownerId={this.props.ownerId}
           removeItem={this.removeItem}
-          editItem={e => this.handleEditItem(e)}
-          moveItem={(d, i, m) => this.handleMoveItem(d, i, m)}
+          editItem={this.editItem}
         />);
       })
       : [];
@@ -182,8 +187,8 @@ export default class MenuCardDraggable extends React.Component {
       <div style={this.state.style}>
         <Paper zDepth={0}>
           <Card
-            onMouseEnter={e => this.handleOnMouseEnter(e)}
-            onMouseLeave={e => this.handleOnMouseLeave(e)}
+            onMouseEnter={this.onMouseEnter}
+            onMouseLeave={this.onMouseLeave}
             containerStyle={{ backgroundColor: '#e0e0e0' }}
           >
             <CardTitle
@@ -198,7 +203,7 @@ export default class MenuCardDraggable extends React.Component {
                   ? itemCards.map((itemCard, index) => (
                     <SortableListItem
                       key={index}
-                      updateState={e => this.updateState(e)}
+                      updateState={this.handleUpdateState}
                       draggingIndex={this.state.draggingIndex}
                       items={this.state.items}
                       sortId={index}
@@ -212,8 +217,8 @@ export default class MenuCardDraggable extends React.Component {
               {this.props.editing
                 ? <AddItemCard
                   key={this.state.items.length + 1}
-                  addNewItem={e => this.handleAddNewItem(e)}
-                  addExistingItem={e => this.handleAddExistingItem(e)}
+                  addNewItem={this.addNewItem}
+                  addExistingItem={this.addExistingItem}
                   style={style.addItem}
                   pic={'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png'}
                   ownerId={this.props.ownerId}

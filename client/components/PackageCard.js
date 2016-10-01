@@ -30,22 +30,22 @@ const PackageCard = (props) => (
       <img role="presentation" src={props.pack.picture} />
     </CardMedia>
     {props.editing
-              ? <div style={style.floatingEditButton}>
-                <EditPackage
-                  edit={props.handleSubmitEdit}
-                /><br />
-                <AddPackageCard
-                  edit={props.handleAddPackage}
-                /><br />
-                <FloatingActionButton
-                  mini
-                  delete={props.delete}
-                >
-                  <ContentRemove />
-                </FloatingActionButton>
-              </div>
-              : null
-            }
+      ? <div style={style.floatingEditButton}>
+        <EditPackage
+          edit={props.handleSubmitEdit}
+        /><br />
+        <AddPackageCard
+          edit={props.handleAddPackage}
+        /><br />
+        <FloatingActionButton
+          mini
+          delete={props.delete}
+        >
+          <ContentRemove />
+        </FloatingActionButton>
+      </div>
+      : null
+    }
   </Card>
 );
 
