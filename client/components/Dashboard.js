@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import FlatButton from 'material-ui/FlatButton';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
 // import Server from '../models/serverAPI';
 import Paper from 'material-ui/Paper';
 // import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn }
@@ -30,31 +29,31 @@ export default class Dashboard extends Component {
     };
   }
 
-  componentWillMount (){
+  componentWillMount() {
     this.fetchPendingOrders(this.props.ownerId);
     this.fetchAcceptedOrders(this.props.ownerId);
   }
 
   fetchPendingOrders(ownerId) {
     OrderAPI.fetchPendingOrders(ownerId).then(resp => {
-       this.setState({ pendingOrders: resp });
+      this.setState({ pendingOrders: resp });
     });
   }
 
   fetchAcceptedOrders(ownerId) {
     OrderAPI.fetchAcceptedOrders(ownerId).then(resp => {
-       this.setState({ acceptedOrders: resp });
+      this.setState({ acceptedOrders: resp });
     });
   }
 
   handleOnRowClick(pendingOrder, row) {
   // pendingOrder is bool whether click came from pendingOrder list
-      var orderId = pendingOrder ? this.state.pendingOrders[row].order._id
-                                :  this.state.acceptedOrders[row].order._id;
-      OrderAPI.fetchOrderDetails(orderId).then(resp => {
-        console.log(resp);
-        this.setState({showOrderDetails: orderId, orderInfo: resp, editable: !pendingOrder });
-      });
+    const orderId = pendingOrder ? this.state.pendingOrders[row].order._id
+                                : this.state.acceptedOrders[row].order._id;
+    OrderAPI.fetchOrderDetails(orderId).then(resp => {
+      console.log(resp);
+      this.setState({ showOrderDetails: orderId, orderInfo: resp, editable: !pendingOrder });
+    });
   }
 
   handleOrderAccept(orderId) {
@@ -74,12 +73,12 @@ export default class Dashboard extends Component {
           });
         this.fetchPendingOrders(this.props.ownerId);
         this.fetchAcceptedOrders(this.props.ownerId);
-        this.setState({returning: true, showOrderDetails: -1 });
+        this.setState({ returning: true, showOrderDetails: -1 });
       });
   }
 
-  handleModalCancel(){
-    this.setState({showOrderDetails: -1});
+  handleModalCancel() {
+    this.setState({ showOrderDetails: -1 });
   }
 
   handleOrderReject(orderId) {
@@ -101,22 +100,22 @@ export default class Dashboard extends Component {
   }
 
   render() {
-    // only mount orderdetails if we have a click. Then pass in correct orderObj via orderInfo prop(call with row number passed onClick)
+    /* only mount orderdetails if we have a click. Then pass in correct orderObj
+    via orderInfo prop(call with row number passed onClick) */
     return (
       <div >
         {this.state.showOrderDetails !== -1
           ? <OrderDetails
-              showMe={true}
-              orderInfo={this.state.orderInfo} 
-              editable={this.state.editable}
-              handleOrderAccept={e => this.handleOrderAccept(e)}
-              handleOrderReject={e=> this.handleOrderReject(e)}
-              handleModalCancel={this.handleModalCancel.bind(this)}
-              customerView={false}
-              />
+            showMe
+            orderInfo={this.state.orderInfo}
+            editable={this.state.editable}
+            handleOrderAccept={e => this.handleOrderAccept(e)}
+            handleOrderReject={e => this.handleOrderReject(e)}
+            handleModalCancel={this.handleModalCancel.bind(this)}
+            customerView={false}
+          />
            : null
         }
-        
         <Paper zDepth={this.state.hover}>
           <Card
             expanded={this.state.pendingOrders.length === 0 ? false : undefined}
@@ -125,14 +124,17 @@ export default class Dashboard extends Component {
           >
             <CardHeader
               title="Pending Orders"
-              subtitle={this.state.pendingOrders === undefined ? '0' : this.state.pendingOrders.length}
-              actAsExpander={(Array.isArray(this.state.pendingOrders) && this.state.pendingOrders.length > 0)}
-              showExpandableButton={(Array.isArray(this.state.pendingOrders) && this.state.pendingOrders.length > 0)}
+              subtitle={this.state.pendingOrders === undefined ? '0'
+                        : this.state.pendingOrders.length}
+              actAsExpander={(Array.isArray(this.state.pendingOrders)
+                && this.state.pendingOrders.length > 0)}
+              showExpandableButton={(Array.isArray(this.state.pendingOrders)
+                && this.state.pendingOrders.length > 0)}
             />
             <CardText expandable>
               <OrderTable
                 AnyOrders={this.state.pendingOrders}
-                onRowClick={this.handleOnRowClick.bind(this,true)}
+                onRowClick={this.handleOnRowClick.bind(this, true)}
               />
             </CardText>
           </Card>
@@ -142,13 +144,16 @@ export default class Dashboard extends Component {
           >
             <CardHeader
               title="Approved Orders"
-              subtitle={this.state.acceptedOrders === undefined? '0' : this.state.acceptedOrders.length}
-               actAsExpander={(Array.isArray(this.state.acceptedOrders) && this.state.acceptedOrders.length > 0)}
-              showExpandableButton={(Array.isArray(this.state.acceptedOrders) && this.state.acceptedOrders.length > 0)}
+              subtitle={this.state.acceptedOrders === undefined ? '0'
+                        : this.state.acceptedOrders.length}
+              actAsExpander={(Array.isArray(this.state.acceptedOrders) 
+                              && this.state.acceptedOrders.length > 0)}
+              showExpandableButton={(Array.isArray(this.state.acceptedOrders) 
+                              && this.state.acceptedOrders.length > 0)}
             />
             <CardText expandable >
               <OrderTable
-                onRowClick={this.handleOnRowClick.bind(this,false)}
+                onRowClick={this.handleOnRowClick.bind(this, false)}
                 AnyOrders={this.state.acceptedOrders}
               />
             </CardText>
