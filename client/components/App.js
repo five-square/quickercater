@@ -91,47 +91,51 @@ export default class App extends Component {
       this.state.globalOrder[itemObj.ownerId].totalPrice = 0;
       this.state.globalOrder[itemObj.ownerId].storeName = this.state.storeName;
     }
-    const itemPos = this.state.globalOrder[itemObj.ownerId].order
+    const tempOrder = Object.assign({}, this.state.globalOrder);
+    const itemPos = tempOrder[itemObj.ownerId].order
       .map(itemInfo => itemInfo.item.id).indexOf(itemObj.item.id);
     // Check to see if the item is already in the list
     if (itemPos < 0) {
-      this.state.globalOrder[itemObj.ownerId].order.push(itemObj);
-      this.state.globalOrder[itemObj.ownerId].totalPrice =
-        this.state.globalOrder[itemObj.ownerId].totalPrice + itemObj.item.price;
+      tempOrder[itemObj.ownerId].order.push(itemObj);
+      tempOrder[itemObj.ownerId].totalPrice +=
+                        (parseInt(itemObj.item.price, 10));
       this.setState({
+        globalOrder: tempOrder,
         openCart: true,
       });
     }
   }
 
   updateItemToOrder(itemObj) {
-    const itemPos = this.state.globalOrder[itemObj.ownerId].order
+    const tempOrder = Object.assign({}, this.state.globalOrder);
+    const itemPos = tempOrder[itemObj.ownerId].order
       .map(itemInfo => itemInfo.item.id).indexOf(itemObj.item.id);
-    this.state.globalOrder[itemObj.ownerId].order[itemPos] = itemObj;
-    if (this.state.globalOrder[itemObj.ownerId].order.length > 1) {
-      this.state.globalOrder[itemObj.ownerId].totalPrice =
-        Number(this.state.globalOrder[itemObj.ownerId].order
+    tempOrder[itemObj.ownerId].order[itemPos] = itemObj;
+    if (tempOrder[itemObj.ownerId].order.length > 1) {
+      tempOrder[itemObj.ownerId].totalPrice =
+        Number(tempOrder[itemObj.ownerId].order
         .reduce((a, b) => a + (b.item.price * parseInt(b.quantity, 10)), 0))
         .toFixed(2);
-    } else if (this.state.globalOrder[itemObj.ownerId].order.length === 1) {
-      this.state.globalOrder[itemObj.ownerId].totalPrice =
-          (this.state.globalOrder[itemObj.ownerId].order[0].item.price
-          * this.state.globalOrder[itemObj.ownerId].order[0].quantity);
+    } else if (tempOrder[itemObj.ownerId].order.length === 1) {
+      tempOrder[itemObj.ownerId].totalPrice =
+          (tempOrder[itemObj.ownerId].order[0].item.price
+          * tempOrder[itemObj.ownerId].order[0].quantity);
     }
     this.setState({
+      globalOrder: tempOrder,
       openCart: true,
     });
   }
 
   removeItemFromOrder(ownerId, itemId) {
-    const itemPos = this.state.globalOrder[ownerId].order
+    const tempOrder = Object.assign({}, this.state.globalOrder);
+    const itemPos = tempOrder[ownerId].order
       .map(itemInfo => itemInfo.item.id).indexOf(itemId);
-    this.state.globalOrder[ownerId].totalPrice =
-      (this.state.globalOrder[ownerId].totalPrice -
-          (this.state.globalOrder[ownerId].order[itemPos].item.price
-          * this.state.globalOrder[ownerId].order[itemPos].quantity));
-    this.state.globalOrder[ownerId].order.splice(itemPos, 1);
+    tempOrder[ownerId].totalPrice -= (tempOrder[ownerId].order[itemPos].item.price
+          * tempOrder[ownerId].order[itemPos].quantity);
+    tempOrder[ownerId].order.splice(itemPos, 1);
     this.setState({
+      globalOrder: tempOrder,
       openCart: true,
     });
   }
