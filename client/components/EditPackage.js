@@ -9,14 +9,15 @@ export default class EditPackage extends Component {
 
   constructor(props) {
     super(props);
+    console.log('Edit Package constructor props', this.props);
     this.state = {
       open: false,
       hover: 2,
-      name: this.props.name,
-      description: this.props.description,
-      cost: this.props.cost,
-      type: this.props.type,
-      picture: this.props.picture,
+      name: this.props.package.name,
+      description: this.props.package.description,
+      cost: this.props.package.cost,
+      type: this.props.package.type,
+      picture: this.props.package.picture,
     };
   }
 
@@ -25,16 +26,19 @@ export default class EditPackage extends Component {
   }
 
   handleSubmitEdit() {
-    this.props.handleEditPackage({
+    this.setState({
+      open: false,
+    });
+    const editPackage = Object.assign({}, {
+      id: this.props.package.id,
       name: this.state.name,
       description: this.state.description,
       cost: this.state.cost,
       type: this.state.type,
       picture: this.state.picture,
+      ownerId: this.props.ownerId,
     });
-    this.setState({
-      open: false,
-    });
+    this.props.editPackage(editPackage);
   }
 
   handlePackageNameChange(e) {
@@ -61,15 +65,82 @@ export default class EditPackage extends Component {
     });
   }
 
-  handlePackagePictureChange(e) {
-    this.setState({
-      picture: e.currentTarget.value,
-    });
+  handleItemPictureChange(e) {
+    const reader = new FileReader();
+    const file = e.currentTarget.files[0];
+    reader.onload = (a) => {
+      a.preventDefault();
+      this.setState({
+        picture: a.target.result,
+      });
+    };
+    reader.readAsDataURL(file);
   }
 
   handleCancelEdit() {
     this.setState({ open: false });
   }
+
+  renderPreview() {
+    let divToRender = '';
+    const style = {
+      imgPrev: {
+        float: 'right',
+        marginTop: '8%',
+        marginRight: '3%',
+        height: '25%',
+        width: '25%',
+      },
+      imageInput: {
+        cursor: 'pointer',
+        position: 'absolute',
+        top: '35%',
+        left: '72%',
+        height: '50%',
+        width: '25%',
+        opacity: 0,
+      },
+      imgButton: {
+        float: 'right',
+        marginTop: '8%',
+        marginRight: '3%',
+        height: '25%',
+        width: '25%',
+      },
+    };
+    if (this.state.picture !== false) {
+      divToRender = (
+        <div>
+          <img
+            role="presentation"
+            src={this.state.picture}
+            style={style.imgPrev}
+          />
+          <input
+            title="Drag and drop to replace image or Click to Add new"
+            type="file"
+            style={style.imageInput}
+            onChange={e => this.handleItemPictureChange(e)}
+          />
+        </div>);
+    } else {
+      divToRender = (
+        <div>
+          <input
+            type="file"
+            style={style.imageInput}
+            onChange={e => this.handleItemPictureChange(e)}
+          />
+          <img
+            role="presentation"
+            src={this.props.package.picture}
+            style={style.imgPrev}
+          />
+        </div>);
+    }
+    return divToRender;
+  }
+
   render() {
     const style = {
       // floatingEditButton: {
@@ -116,6 +187,7 @@ export default class EditPackage extends Component {
           open={this.state.open}
           onRequestClose={(e) => this.handleClose(e)}
         >
+          {this.renderPreview()}
           <TextField
             hintText="Package Name"
             floatingLabelText="Enter Package Name"
