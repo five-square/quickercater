@@ -38,13 +38,14 @@ export default class PackageContainer extends Component {
   }
 
   handleDeletePackage(packId) {
-    PackageAPI.delete(packId, this.props.ownerId)
+    PackageAPI.delete(packId, packId.ownerId)
     .then(() => {
       this.showPackages();
     });
   }
 
   handleEditPackage(pack) {
+    console.log('Pack to update and pack', pack);
     PackageAPI.update(pack, pack.id)
     .then(() => {
       this.showPackages();
@@ -118,9 +119,9 @@ export default class PackageContainer extends Component {
             ownerId={this.state.ownerId}
             packages={this.state.packages}
             editing={this.props.editing}
-            add={this.handleAddPackage}
-            edit={this.handleEditPackage}
-            deletePackage={e => this.handleDeletePackage(e)}
+            add={e => this.handleAddPackage(e)}
+            edit={e => this.handleEditPackage(e)}
+            delete={e => this.handleDeletePackage(e)}
           />
           : null
         }

@@ -19,7 +19,7 @@ export default class AddPackageCard extends React.Component {
       newPackageName: '',
       newPackageDescription: '',
       newPackagePrice: '',
-      newPackagePicture: false,
+      newPackagePicture: 'http://i.imgur.com/GhWoMa1.png',
       newPackageType: '',
     };
   }
@@ -130,19 +130,20 @@ export default class AddPackageCard extends React.Component {
         width: '25%',
       },
     };
-    if (this.state.newItemPicture !== false) {
+    if (this.state.newPackagePicture !== false) {
       divToRender = (
         <div>
           <img
             role="presentation"
-            src={this.state.newItemPicture}
+            src={this.state.newPackagePicture}
             style={style.imgPrev}
+            onChange={e => this.handlePackagePictureChange(e)}
           />
           <input
             title="Drag and drop on the Square only or Click to Add"
             type="file"
             style={style.imageInput}
-            onChange={e => this.handleItemPictureChange(e)}
+            onChange={e => this.handlePackagePictureChange(e)}
           />
         </div>);
     } else {

@@ -33,7 +33,7 @@ export default class EditPackage extends Component {
       id: this.props.package.id,
       name: this.state.name,
       description: this.state.description,
-      cost: this.state.price,
+      cost: this.state.cost,
       type: this.state.type,
       picture: this.state.picture,
       ownerId: this.props.ownerId,

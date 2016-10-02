@@ -34,7 +34,7 @@ const PackageCard = (props) => (
         <EditPackage
           ownerId={props.ownerId}
           package={props.pack}
-          editPackage={props.edit}
+          editPackage={e => props.edit(e)}
         /><br />
         <AddPackageCard
           count={props.count}
@@ -42,8 +42,15 @@ const PackageCard = (props) => (
           addPackage={props.add}
         /><br />
         <FloatingActionButton
+          style={style.floatingDeleteButton}
           mini
-          delete={props.delete}
+          secondary={props.secondary}
+          zDepth={props.secondary ? 0 : 2}
+          onTouchTap={e => {
+            e.preventDefault();
+            console.log('props in onTouchTap del pack', props);
+            props.delete(props.pack.id, props.pack.ownerId);
+          }}
         >
           <ContentRemove />
         </FloatingActionButton>

@@ -66,7 +66,7 @@ export default class PackageSlider extends Component {
                   count={this.props.packages}
                   add={this.props.add}
                   edit={this.props.edit}
-                  delete={this.props.deletePackage}
+                  delete={this.props.delete}
                 />
               </div>
             )}

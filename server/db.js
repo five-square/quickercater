@@ -873,10 +873,11 @@ db.updatePackage = (packObj) => Node.cypherAsync({
       picture: {picture}
     }
     RETURN pack`,
+
   params: {
     name: packObj.name,
     description: packObj.description,
-    cost: packObj.price,
+    cost: packObj.cost,
     type: packObj.type,
     picture: packObj.picture,
   },
