@@ -9,6 +9,7 @@ export default class EditPackage extends Component {
 
   constructor(props) {
     super(props);
+    console.log('Edit Package constructor props', this.props);
     this.state = {
       open: false,
       hover: 2,
@@ -25,16 +26,19 @@ export default class EditPackage extends Component {
   }
 
   handleSubmitEdit() {
-    this.props.handleEditPackage({
-      name: this.state.name,
-      description: this.state.description,
-      cost: this.state.cost,
-      type: this.state.type,
-      picture: this.state.picture,
-    });
     this.setState({
       open: false,
     });
+    const editPackage = Object.assign({}, {
+      id: this.props.package.id,
+      name: this.state.name,
+      description: this.state.description,
+      cost: this.state.price,
+      type: this.state.type,
+      picture: this.state.picture,
+      ownerId: this.props.ownerId,
+    });
+    this.props.editPackage(editPackage);
   }
 
   handlePackageNameChange(e) {

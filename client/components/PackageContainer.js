@@ -31,7 +31,7 @@ export default class PackageContainer extends Component {
   }
 
   handleAddPackage(pkg) {
-    Package.create(pkg)
+    PackageAPI.create(pkg)
     .then(() => {
       this.showPackages();
     });
@@ -45,7 +45,7 @@ export default class PackageContainer extends Component {
   }
 
   handleEditPackage(pack) {
-    PackageAPI.update(pack, this.state.packages.id)
+    PackageAPI.update(pack, pack.id)
     .then(() => {
       this.showPackages();
     });
@@ -119,6 +119,7 @@ export default class PackageContainer extends Component {
             packages={this.state.packages}
             editing={this.props.editing}
             add={this.handleAddPackage}
+            edit={this.handleEditPackage}
             deletePackage={e => this.handleDeletePackage(e)}
           />
           : null

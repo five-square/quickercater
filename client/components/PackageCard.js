@@ -32,8 +32,9 @@ const PackageCard = (props) => (
     {props.editing
       ? <div style={style.floatingEditButton}>
         <EditPackage
+          ownerId={props.ownerId}
           package={props.pack}
-          edit={props.handleSubmitEdit}
+          editPackage={props.edit}
         /><br />
         <AddPackageCard
           count={props.count}
@@ -49,22 +50,6 @@ const PackageCard = (props) => (
       </div>
       : null
     }
-              ? <div style={style.floatingEditButton}>
-                <EditPackage
-                  edit={props.handleSubmitEdit}
-                /><br />
-                <AddPackageCard
-                  edit={props.handleAddPackage}
-                /><br />
-                <FloatingActionButton
-                  mini
-                  onTouchTap={() => props.delete(props.pack.id)}
-                >
-                  <ContentRemove />
-                </FloatingActionButton>
-              </div>
-              : null
-            }
   </Card>
 );
 
