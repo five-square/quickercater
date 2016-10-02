@@ -62,6 +62,7 @@ export default class StoreFront extends Component {
         <Dashboard
           style={style}
           ownerId={this.props.ownerId}
+          storeName={this.props.store.name}
         />
         <PackageContainer
           ownerId={this.props.ownerId}

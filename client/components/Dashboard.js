@@ -8,6 +8,8 @@ import Paper from 'material-ui/Paper';
 import OrderTable from './OrderTable';
 import OrderAPI from './../models/orderAPI';
 import OrderDetails from './OrderDetails';
+import Customer from '../models/CustomerAPI';
+import Email from './emailHtml';
 
 // Implement 1) allow owner to view details of pending order with modal
 //           2) Move order acceptance to details modal
@@ -59,6 +61,17 @@ export default class Dashboard extends Component {
     OrderAPI.createAcceptOrderRelationship(orderId)
       .then(resp => {
         console.log('handleOrderAccept resp: ', resp);
+        const mailOptions = {
+          from: 'fivesquare43@gmail.com',
+          to: `${this.state.orderInfo.customer.email}`,
+          subject: 'Hello from QuickerCater',
+          generateTextFromHTML: true,
+          html: Email.compose(this.state.orderInfo, this.props.storeName, 'accepted'),
+        };
+        Customer.sendEmail(mailOptions)
+          .then(response => {
+            console.log('response after confirmation email sent: ', response);
+          });
         this.fetchPendingOrders(this.props.ownerId);
         this.fetchAcceptedOrders(this.props.ownerId);
         this.setState({returning: true, showOrderDetails: -1 });

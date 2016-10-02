@@ -8,7 +8,7 @@ import OrderAPI from '../models/orderAPI';
 import Customer from '../models/CustomerAPI';
 import OrderConfirmation from './OrderConfirmation';
 import OrderDetails from './OrderDetails';
-
+import Email from './emailHtml';
 
 export default class OrderCard extends React.Component {
 
@@ -78,44 +78,44 @@ export default class OrderCard extends React.Component {
     this.setState({ reviewOrder: true });
   }
 
-  constructEmailContent() {
-    const emailHtml = [];
-    emailHtml.push(`<div><p>Hello ${this.state.orderInfo.customer.name},</p><div>`);
-    emailHtml.push(`<div><p>Thank you,  
-      ${this.props.storeName} is currently reviewing your order.
-      We will get back to you shortly.</p></div>`);
-    emailHtml.push('<div><p>Below are your order details:</p></div>');
-    emailHtml.push(`<div><h3>Order number: ${this.state.newOrder}</h3></div>`);
-    emailHtml.push(`<div>
-                    <table>
-                    <thead>
-                    <tr>
-                      <th style="border:1px solid #999; padding:0.5rem">Item Id</th>
-                      <th style="border:1px solid #999; padding:0.5rem">Name</th>
-                      <th style="border:1px solid #999; padding:0.5rem">Price</th>
-                      <th style="border:1px solid #999; padding:0.5rem">Quantity</th>
-                      <th style="border:1px solid #999; padding:0.5rem">Total</th>
-                    </tr>
-                    </thead>
-                    <tbody>`);
-    emailHtml.push(this.state.orderInfo.items.map(item =>
-      (`<tr>
-        <td style="border:1px solid #999; padding:0.5rem">${item.id}</td>
-        <td style="border:1px solid #999; padding:0.5rem">${item.name}</td>
-        <td style="border:1px solid #999; padding:0.5rem">$${item.price}</td>
-        <td style="border:1px solid #999; padding:0.5rem">${item.quantity}</td>
-        <td style="border:1px solid #999; padding:0.5rem">$${item.total}</td>
-      </tr>`)
-    ).join(''));
-    emailHtml.push('</tbody></table></div>');
-    emailHtml.push(`<div>
-      <h4>Total price: $${this.state.orderInfo.order.total_price}</h4>
-      </div>`);
-    emailHtml.push('<br>');
-    emailHtml.push('<div><p>Thank You, </p></div>');
-    emailHtml.push('<div><p>QuickerCater</p></div>');
-    return emailHtml.join('');
-  }
+  // constructEmailContent() {
+  //   const emailHtml = [];
+  //   emailHtml.push(`<div><p>Hello ${this.state.orderInfo.customer.name},</p><div>`);
+  //   emailHtml.push(`<div><p>Thank you,
+  //     ${this.props.storeName} is currently reviewing your order.
+  //     We will get back to you shortly.</p></div>`);
+  //   emailHtml.push('<div><p>Below are your order details:</p></div>');
+  //   emailHtml.push(`<div><h3>Order number: ${this.state.newOrder}</h3></div>`);
+  //   emailHtml.push(`<div>
+  //                   <table>
+  //                   <thead>
+  //                   <tr>
+  //                     <th style="border:1px solid #999; padding:0.5rem">Item Id</th>
+  //                     <th style="border:1px solid #999; padding:0.5rem">Name</th>
+  //                     <th style="border:1px solid #999; padding:0.5rem">Price</th>
+  //                     <th style="border:1px solid #999; padding:0.5rem">Quantity</th>
+  //                     <th style="border:1px solid #999; padding:0.5rem">Total</th>
+  //                   </tr>
+  //                   </thead>
+  //                   <tbody>`);
+  //   emailHtml.push(this.state.orderInfo.items.map(item =>
+  //     (`<tr>
+  //       <td style="border:1px solid #999; padding:0.5rem">${item.id}</td>
+  //       <td style="border:1px solid #999; padding:0.5rem">${item.name}</td>
+  //       <td style="border:1px solid #999; padding:0.5rem">$${item.price}</td>
+  //       <td style="border:1px solid #999; padding:0.5rem">${item.quantity}</td>
+  //       <td style="border:1px solid #999; padding:0.5rem">$${item.total}</td>
+  //     </tr>`)
+  //   ).join(''));
+  //   emailHtml.push('</tbody></table></div>');
+  //   emailHtml.push(`<div>
+  //     <h4>Total price: $${this.state.orderInfo.order.total_price}</h4>
+  //     </div>`);
+  //   emailHtml.push('<br>');
+  //   emailHtml.push('<div><p>Thank You, </p></div>');
+  //   emailHtml.push('<div><p>QuickerCater</p></div>');
+  //   return emailHtml.join('');
+  // }
 
   handleOrderAccept() {
     Customer.create(this.state.customerInfo)
@@ -124,6 +124,7 @@ export default class OrderCard extends React.Component {
         OrderAPI.create(this.state.orderInfo)
           .then(orderDb => {
             console.log('handleOrderAccept orderDb: ', orderDb);
+            this.state.orderInfo.order.id = orderDb.order._id;
             this.setState({ newOrder: orderDb.order._id,
                             submitted: true });
             const mailOptions = {
@@ -131,7 +132,7 @@ export default class OrderCard extends React.Component {
               to: `${this.state.customerInfo.email}`,
               subject: 'Hello from QuickerCater',
               generateTextFromHTML: true,
-              html: this.constructEmailContent(),
+              html: Email.compose(this.state.orderInfo, this.props.storeName, 'pending'),
             };
             Customer.sendEmail(mailOptions)
               .then(response => {
