@@ -3,13 +3,8 @@ import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
 import CardText from 'material-ui/Card/CardText';
 import Paper from 'material-ui/Paper';
-import CardActions from 'material-ui/Card/CardActions';
 import ItemCard from './ItemCard';
 import Menu from '../models/menuAPI';
-import AddItemCard from './AddItemCard';
-import Item from '../models/itemAPI';
-import EditButtons from './EditButtons';
-import EditMenu from './EditMenu';
 
 export default class MenuCard extends Component {
 
@@ -17,8 +12,6 @@ export default class MenuCard extends Component {
     super(props);
     this.state = {
       hover: 2,
-      expandable: false,
-      style: this.props.style,
       items: [],
       updatedItemOnOrder: this.props.updatedItemOnOrder,
     };
@@ -31,15 +24,6 @@ export default class MenuCard extends Component {
   }
 
   componentWillMount() {
-    Menu.getItems(this.props.menu.id)
-    .then(items => {
-      this.setState({
-        items,
-      });
-    });
-  }
-
-  showItems() {
     Menu.getItems(this.props.menu.id)
     .then(items => {
       this.setState({
@@ -64,77 +48,9 @@ export default class MenuCard extends Component {
     this.props.addItemToOrder(itemObj);
   }
 
-  handleAddNewItem(itemObj) {
-    const newItem = Object.assign({}, itemObj, {
-      menuId: this.props.menu.id,
-    });
-    Item.create(newItem)
-    .then(id => {
-      const add = {
-        menuId: this.props.menu.id,
-        itemId: id.id,
-        order: this.state.items.length,
-      };
-      Menu.addNewItem(add).then(() => {
-        // Menu.getItems(this.props.menu.id)
-        // .then(items => {
-        //   this.setState({ items });
-        // });
-        this.showItems();
-      });
-    });
-  }
-
-  handleAddExistingItem(itemObj) {
-    const add = {
-      menuId: this.props.menu.id,
-      itemId: itemObj.id,
-      order: this.state.items.length,
-    };
-    Menu.addExistingItem(add)
-    .then(items => {
-      this.setState({ items });
-    });
-  }
-
-  handleRemoveItem(itemId) {
-    Item.remove(itemId, this.props.menu.id)
-    .then(items => {
-      this.setState({ items });
-    });
-  }
-
-  handleEditItem(itemObj) {
-    Item.edit(itemObj)
-    .then(() => {
-      this.showItems();
-    });
-  }
-
   render() {
-    const style = {
-      floatingEditButton: {
-        right: 170,
-        bottom: 20,
-        position: 'absolute',
-      },
-      cardActions: {
-        position: 'relative',
-        height: 30,
-      },
-      addItem: {
-        width: '60%',
-        flex: '50%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-    };
-
     return (
-      <div style={this.state.style}>
+      <div style={this.props.style}>
         <Paper zDepth={this.state.hover}>
           <Card
             onMouseEnter={this.onMouseEnter}
@@ -165,37 +81,7 @@ export default class MenuCard extends Component {
                   editItem={this.editItem}
                 />);
               })}
-              {this.props.editing
-                ? <AddItemCard
-                  key={this.state.items.length + 1}
-                  addNewItem={this.addNewItem}
-                  addExistingItem={this.addExistingItem}
-                  style={style.addItem}
-                  pic={'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png'}
-                  ownerId={this.props.ownerId}
-                />
-                : null
-              }
             </CardText>
-            {this.props.editing
-              ? <CardActions style={style.cardActions}>
-                <EditMenu
-                  style={style.floatingEditButton}
-                  id={this.props.menu.id}
-                  name={this.props.menu.name}
-                  description={this.props.menu.description}
-                  editMenu={this.props.editMenu}
-                />
-                <EditButtons
-                  secondary={false}
-                  targetType={'menu'}
-                  target={this.props.menu}
-                  move={this.props.moveMenu}
-                  delete={this.props.deleteMenu}
-                />
-              </CardActions>
-              : null
-            }
           </Card>
         </Paper>
         <br />

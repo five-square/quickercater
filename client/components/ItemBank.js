@@ -2,13 +2,9 @@ import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 import Card from 'material-ui/Card';
 import CardHeader from 'material-ui/Card/CardHeader';
-// import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import BankItemList from './BankItemList';
-import Item from '../models/itemAPI';
-// import BankItemCard from './BankItemCard';
-
 
 export default class ItemBank extends Component {
 
@@ -16,26 +12,7 @@ export default class ItemBank extends Component {
     super(props);
     this.state = {
       open: this.props.open,
-      // items: [],
     };
-  }
-
-  componentWillMount() {
-    Item.getUnassignedItems(this.props.ownerId)
-    .then(items => {
-      this.setState({
-        items,
-      });
-    });
-  }
-
-  getUnassignedItems() {
-    Item.getUnassignedItems(this.props.ownerId)
-    .then(items => {
-      this.setState({
-        items,
-      });
-    });
   }
 
   handleOpen() {
@@ -47,7 +24,7 @@ export default class ItemBank extends Component {
   }
 
   render() {
-    console.log('in ItemBank: ', this.state.items);
+    // console.log('in ItemBank: items: ', this.props.items, ', menus: ', this.props.menus);
     // action buttons for Modal
     const actions = [
       <FlatButton
@@ -72,22 +49,15 @@ export default class ItemBank extends Component {
           open={this.state.open}
           onRequestClose={(e) => this.handleClose(e)}
         >
-          {this.props.items.length
+          {this.props.items.length && this.props.menus.length
             ? <BankItemList
               items={this.props.items}
+              menus={this.props.menus}
               editing={this.props.editing}
+              editItemInBank={this.props.editItemInBank}
+              deleteItemInBank={this.props.deleteItemInBank}
+              addItemToMenu={this.props.addItemToMenu}
             />
-            // this.props.items.map((item, index) =>
-            //   <BankItemCard
-            //     key={index}
-            //     editing={this.props.editing}
-            //     item={item}
-            //     // addItemToOrder={this.props.addItemToOrder}
-            //     // updateTotalPrice={this.props.updateTotalPrice}
-            //     // ownerId={this.props.ownerId}
-            //     // removeItem={e => this.handleRemoveItem(e)}
-            //   />
-            // )
             : <Card>
               <CardHeader
                 title="No unassigned menu items!"

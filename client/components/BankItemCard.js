@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
-import ContentAdd from 'material-ui/svg-icons/content/add';
 import Chip from 'material-ui/Chip';
 import { ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
+import AddItemToMenu from './AddItemToMenu';
 import EditItem from './EditItem';
 
 export default class BankItemCard extends Component {
 
   constructor(props) {
     super(props);
-    console.log('in BankItemCard constructor', this.props);
     this.state = {
-      hover: 0,
       id: this.props.item.id,
     };
   }
@@ -87,28 +85,22 @@ export default class BankItemCard extends Component {
           id={this.props.item.id}
           name={this.props.item.name}
           description={this.props.item.description}
+          price={this.props.item.price}
           picture={this.props.item.picture || 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png'}
           editItem={this.props.editItem}
         />
-        <FloatingActionButton
+        <AddItemToMenu
           style={style.floatingAddButton}
-          secondary
-          zDepth={0}
-          mini
-          onTouchTap={() => {
-            alert('Add to menu!');
-          }}
-        >
-          <ContentAdd />
-        </FloatingActionButton>
+          menus={this.props.menus}
+          item={this.props.item}
+          addItemToMenu={this.props.addItemToMenu}
+        />
         <FloatingActionButton
           style={style.floatingDeleteButton}
           secondary
           zDepth={0}
           mini
-          onTouchTap={() => {
-            alert('Delete completely!');
-          }}
+          onTouchTap={() => this.props.deleteItemInBank(this.props.item.id)}
         >
           <ContentRemove />
         </FloatingActionButton>

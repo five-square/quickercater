@@ -637,10 +637,10 @@ db.findAllStores = () => Node.cypherAsync({
 .then(response => response.map(e => e.stores));
 
 db.getAllStoresAndOwners = () => Node.cypherAsync({
-   query: `
+  query: `
     MATCH (owner:Owner)-[rel:CAN_EDIT]->(store:Store)
     RETURN store,owner`,
-}).then(resp=> resp);
+}).then(resp => resp);
 
 db.findStoreByOwnerId = (ownerId) => Node.cypherAsync({
   query: `
@@ -653,10 +653,10 @@ db.findStoreByOwnerId = (ownerId) => Node.cypherAsync({
 });
 
 db.findStoreAndOwnerByAuthKey = (authKey) => Node.cypherAsync({
-  query:`
-      MATCH (owner:Owner) WHERE owner.auth_key = {authKey}
-      OPTIONAL MATCH (owner)--(store:Store)
-      RETURN store, owner`,
+  query: `
+    MATCH (owner:Owner) WHERE owner.auth_key = {authKey}
+    OPTIONAL MATCH (owner)--(store:Store)
+    RETURN store, owner`,
   params: {
     authKey: authKey.authKey,
   },
@@ -723,17 +723,17 @@ db.updateItem = (itemObj) => Node.cypherAsync({
 })
 .then(item => item[0]);
 
-db.removeItemById = (itemId) => Node.cypherAsync({
-  query: `MATCH (i:Item)
-          WHERE ID(i) = {id}  
-          OPTIONAL MATCH () -[rel]-(i)
-          DELETE rel
-          DELETE i
-          return count(i) as success`,
+db.deleteItemById = (itemId) => Node.cypherAsync({
+  query: `
+    MATCH (item:Item)<-[r:CAN_EDIT]-(owner:Owner) WHERE ID(item) = ${itemId}
+    DELETE r
+    WITH item
+    MATCH (item) WHERE size((item)--()) = 0
+    DELETE item`,
   params: {
-    id: itemId,
+    itemId,
   },
-}).then(response => response[0].success === 1);
+}).then(response => response);
 
 db.getUnassignedItems = (ownerId) => Node.cypherAsync({
   query: `

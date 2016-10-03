@@ -344,21 +344,24 @@ dbInit.init = () => Node.cypherAsync({
       picture: 'http://churrocoaustin.com/wp-content/uploads/2014/12/ChurrCoLogoSalmon144x144.png',
       address: '1620 E. Riverside Dr.',
       slogan: "Smile, it's Churro time!",
-      description: 'Sweet stuff'
+      description: 'Sweet stuff',
+      type: 'Dessert'
     })
     CREATE (aliceStore:Store {
       name: 'Casa de Alice',
       picture: false,
       address: '123 YourMom Rd.',
       slogan: "I'll make all your wildest dreams come true",
-      description: 'We have nice chicharrones.'
+      description: 'We have nice chicharrones.',
+      type: 'Mexican'
     })
     CREATE (bobStore:Store {
       name: "Bob's Burger Hole",
       picture: false,
       address: '123 YourMom Blvd.',
       slogan: 'Fill up those buns and put a burger in your hole!',
-      description: 'Big, juicy burgers for your enjoyment'
+      description: 'Big, juicy burgers for your enjoyment',
+      type: 'American'
     })
 
     CREATE (danOrder1:CustomerOrder {

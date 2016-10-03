@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-// import Server from '../models/serverAPI';
 import Paper from 'material-ui/Paper';
-// import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn }
-//  from 'material-ui/Table';
 import OrderTable from './OrderTable';
 import OrderAPI from './../models/orderAPI';
 import OrderDetails from './OrderDetails';
@@ -103,7 +100,7 @@ export default class Dashboard extends Component {
     /* only mount orderdetails if we have a click. Then pass in correct orderObj
     via orderInfo prop(call with row number passed onClick) */
     return (
-      <div >
+      <div>
         {this.state.showOrderDetails !== -1
           ? <OrderDetails
             showMe
@@ -111,7 +108,7 @@ export default class Dashboard extends Component {
             editable={this.state.editable}
             handleOrderAccept={e => this.handleOrderAccept(e)}
             handleOrderReject={e => this.handleOrderReject(e)}
-            handleModalCancel={this.handleModalCancel.bind(this)}
+            handleModalCancel={e => this.handleModalCancel(e)}
             customerView={false}
           />
            : null
@@ -146,9 +143,9 @@ export default class Dashboard extends Component {
               title="Approved Orders"
               subtitle={this.state.acceptedOrders === undefined ? '0'
                         : this.state.acceptedOrders.length}
-              actAsExpander={(Array.isArray(this.state.acceptedOrders) 
+              actAsExpander={(Array.isArray(this.state.acceptedOrders)
                               && this.state.acceptedOrders.length > 0)}
-              showExpandableButton={(Array.isArray(this.state.acceptedOrders) 
+              showExpandableButton={(Array.isArray(this.state.acceptedOrders)
                               && this.state.acceptedOrders.length > 0)}
             />
             <CardText expandable >

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
-import RaisedButton from 'material-ui/RaisedButton';
+// import RaisedButton from 'material-ui/RaisedButton';
 
 import SortableListItem from './SortableListItem';
 import MenuCardDraggable from './MenuCardDraggable';
@@ -31,6 +31,10 @@ export default class MenuContainer extends Component {
     this.editMenu = e => this.handleEditMenu(e);
     this.handleUpdateState = e => this.updateState(e);
     this.addMenu = e => this.handleAddMenu(e);
+    this.editItemInBank = e => this.handleEditItemInBank(e);
+    this.deleteItemInBank = e => this.handleDeleteItemInBank(e);
+    this.addItemToMenu = (item, menu) => this.handleAddItemToMenu(item, menu);
+    this.refreshItemBank = e => this.handleRefreshItemBank(e);
 
     this.menuCards = [];
     this.menuCardsDraggable = [];
@@ -46,12 +50,6 @@ export default class MenuContainer extends Component {
     });
   }
 
-  // componentWillReceiveProps(newProps) {
-  //   this.setState({
-  //     openItemBank: newProps.editing,
-  //   });
-  // }
-
   getDraggableMenus() {
     this.menuCardsDraggable = this.state.menus.length
       ? this.state.menus.map((menu, index) =>
@@ -65,6 +63,7 @@ export default class MenuContainer extends Component {
           deleteMenu={this.deleteMenu}
           moveMenu={this.moveMenu}
           editMenu={this.editMenu}
+          refreshItemBank={this.refreshItemBank}
           ownerId={this.props.ownerId}
         />
       )
@@ -88,6 +87,13 @@ export default class MenuContainer extends Component {
         />
       )
       : [];
+  }
+
+  handleRefreshItemBank() {
+    Item.getUnassignedItems(this.props.ownerId)
+    .then(items => {
+      this.setState({ itemBank: items });
+    });
   }
 
   updateState(obj) {
@@ -150,9 +156,34 @@ export default class MenuContainer extends Component {
     });
   }
 
-  viewItemBank() {
-    this.setState({
-      openItemBank: false,
+  handleEditItemInBank() {
+
+  }
+
+  handleDeleteItemInBank(itemId) {
+    console.log('in MenuContainer: ', itemId);
+    const newItemBank = this.state.itemBank.filter(item => item.id !== itemId);
+    Item.delete(itemId);
+    this.setState({ itemBank: newItemBank });
+  }
+
+  handleAddItemToMenu(itemId, menuId) {
+    Menu.getItems(menuId)
+    .then(items =>
+      Menu.addExistingItem({
+        itemId,
+        menuId,
+        order: items.length,
+      })
+    )
+    .then(() => {
+      Owner.getMenus(this.props.ownerId)
+      .then(menus => {
+        Item.getUnassignedItems(this.props.ownerId)
+        .then(items => {
+          this.setState({ menus, itemBank: items });
+        });
+      });
     });
   }
 
@@ -182,10 +213,17 @@ export default class MenuContainer extends Component {
               <ToolbarTitle text={`${this.props.title}'s Menu`} />
             </ToolbarGroup>
             <ToolbarGroup>
-              <ItemBank
-                open={this.state.openItemBank}
-                items={this.state.itemBank}
-              />
+              { this.props.editing
+                ? <ItemBank
+                  open={this.state.openItemBank}
+                  items={this.state.itemBank}
+                  menus={this.state.menus}
+                  editItemInBank={this.editItemInBank}
+                  deleteItemInBank={this.deleteItemInBank}
+                  addItemToMenu={this.addItemToMenu}
+                />
+                : null
+              }
             </ToolbarGroup>
           </Toolbar>
           <div className="list">
