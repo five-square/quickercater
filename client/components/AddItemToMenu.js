@@ -5,7 +5,7 @@ import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 
-export default class PopoverExampleSimple extends React.Component {
+export default class AddItemToMenu extends React.Component {
 
   constructor(props) {
     super(props);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-export default class OrderDetails extends Component {
+export default class AlertOrderReject extends Component {
   constructor(props) {
     super(props);
     this.state = {
