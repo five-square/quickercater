@@ -79,7 +79,7 @@ export default class PackageContainer extends Component {
         position: 'relative',
       },
       paper: {
-        width: '60%',
+        width: '70%',
         flex: '50%',
         marginLeft: 'auto',
         marginRight: 'auto',

@@ -156,8 +156,11 @@ export default class MenuContainer extends Component {
     });
   }
 
-  handleEditItemInBank() {
-
+  handleEditItemInBank(itemObj) {
+    Item.edit(itemObj)
+    .then(() => {
+      this.refreshItemBank();
+    });
   }
 
   handleDeleteItemInBank(itemId) {
@@ -190,7 +193,7 @@ export default class MenuContainer extends Component {
   render() {
     const style = {
       paper: {
-        width: '64%',
+        width: '75%',
         flex: '50%',
         marginLeft: 'auto',
         marginRight: 'auto',

@@ -33,7 +33,7 @@ export default class StoreCard extends React.Component {
     if (this.props.store.picture !== false) {
       pic = this.props.store.picture;
     }
-    let background = { backgroundColor: 'white' };
+    let background = null; // { backgroundColor: 'white' };
     if (this.state.banner !== false) {
       background = { backgroundImage: `url(${this.state.banner})` };
     }
@@ -41,10 +41,10 @@ export default class StoreCard extends React.Component {
       <div style={this.props.style}>
         <Paper
           zDepth={this.state.hover}
-          style={background}
+          // style={background}
         >
           <Card
-            style={{ backgroundColor: 'rgba(255, 255, 255, .89)' }}
+            // style={{ backgroundColor: 'rgba(255, 255, 255, .89)' }}
             onMouseEnter={e => this.handleOnMouseEnter(e)}
             onMouseLeave={e => this.handleOnMouseLeave(e)}
           >
