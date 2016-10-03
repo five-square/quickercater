@@ -19,18 +19,6 @@ export default class StoreFront extends Component {
     this.toggleEditing = e => this.handleToggleEditing(e);
   }
 
-  fetchPendingOrders(ownerId) {
-    OrderAPI.fetchPendingOrders(ownerId).then(resp => {
-      this.setState({ pendingOrders: resp });
-    });
-  }
-
-  fetchAcceptedOrders(ownerId) {
-    OrderAPI.fetchAcceptedOrders(ownerId).then(resp => {
-      this.setState({ acceptedOrders: resp });
-    });
-  }
-
   handleToggleEditing() {
     this.setState({
       editing: !this.state.editing,
@@ -81,12 +69,15 @@ export default class StoreFront extends Component {
 
     return (
       <div className="StoreFront" >
-        <Dashboard
+        {this.props.showDashboard
+        ? <Dashboard
           style={style.dashboard}
           ownerId={this.props.ownerId}
           storeName={this.props.store.name}
           toggleEditing={this.toggleEditing}
         />
+        : null
+      }
         <Paper zDepth={2} style={style.paper}>
           <Tabs style={style.tabs}>
             <Tab label="Packages"><br />
