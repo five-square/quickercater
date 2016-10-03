@@ -17,6 +17,7 @@ export default class OrderDetails extends Component {
 
   handleClose() {
     this.setState({ open: false });
+    this.props.handleRejectNo();
   }
 
   handleRejectorder() {

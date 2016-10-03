@@ -97,6 +97,7 @@ export default class CartItemCard extends Component {
     };
     const actions = [
       <FlatButton
+        key={this.props.passKey + 5}
         style={style.removeBtn}
         label="Remove"
         secondary
@@ -105,8 +106,9 @@ export default class CartItemCard extends Component {
     ];
     return (
       <div>
-        <Card style={style.card}>
+        <Card style={style.card} key={this.props.passKey + 1}>
           <CardHeader
+            key={this.props.passKey + 2}
             title={this.props.item.name}
             actAsExpander
             children={
@@ -115,8 +117,9 @@ export default class CartItemCard extends Component {
               </Chip>
             }
           />
-          <CardText >
+          <CardText key={this.props.passKey + 3}>
             <TextField
+            key={this.props.passKey + 4}
               ref="quantity"
               hintText="0"
               type="number"
