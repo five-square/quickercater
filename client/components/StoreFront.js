@@ -69,12 +69,15 @@ export default class StoreFront extends Component {
 
     return (
       <div className="StoreFront" >
-        <Dashboard
+        {this.props.showDashboard
+        ? <Dashboard
           style={style.dashboard}
           ownerId={this.props.ownerId}
           storeName={this.props.store.name}
           toggleEditing={this.toggleEditing}
         />
+        : null
+      }
         <Paper zDepth={2} style={style.paper}>
           <Tabs style={style.tabs}>
             <Tab label="Packages"><br />

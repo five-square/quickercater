@@ -45,7 +45,7 @@ export default class App extends Component {
         if (storeAndOwner && storeAndOwner.length > 0 && storeAndOwner[0].store) {
           console.log('Owner of storeAndOwner:', storeAndOwner);
           this.setState({
-            mystore: storeAndOwner[0].store,
+            myStore: storeAndOwner[0].store,
             currentOwnerId: storeAndOwner[0].owner._id,
           });
         } else if (storeAndOwner.length > 0 || storeAndOwner[0].owner) {
@@ -219,6 +219,7 @@ export default class App extends Component {
                 store={this.state.currentStore}
                 addItemToOrder={e => this.handleAddItemToOrder(e)}
                 updateTotalPrice={this.updateTotalPrice}
+                showDashboard={this.state.myStore._id == this.state.currentStore.id}
               />
               : <Lobby stores={this.state.stores} selectStore={(id, name) => this.selectStore(id, name)} />
             }
