@@ -177,7 +177,7 @@ export default class EditItem extends Component {
           <ModeEdit />
         </FloatingActionButton>
         <Dialog
-          title="Edit Menu Information"
+          title="Edit Item Information"
           actions={actions}
           modal={false}
           open={this.state.open}
@@ -199,7 +199,7 @@ export default class EditItem extends Component {
             /><br />
             <TextField
               hintText="Price"
-              floatingLabelText="Enter Item Price"
+              floatingLabelText="Enter Item Price (in dollars)"
               value={this.state.price}
               onChange={e => this.handleItemPriceChange(e)}
             /><br />

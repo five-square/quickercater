@@ -268,6 +268,13 @@ routes.post('/api/menu/item/add_new', (req, res) => {
   });
 });
 
+/*
+{
+  menuId,
+  itemId,
+  order
+}
+ */
 routes.post('/api/menu/item/add_existing', (req, res) => {
   db.addExistingItemToMenu(req.body)
   .then(items => {
@@ -489,6 +496,21 @@ routes.get('/api/item/:id', (req, res) => {
   }
 });
 
+routes.delete('/api/item/:id', (req, res) => {
+  const id = +req.params.id;
+  console.log('in server, before db call: id: ', id, ', req.params.id: ', req.params.id);
+  if (id) {
+    db.deleteItemById(id)
+    .then(resp => {
+      if (resp) {
+        res.status(202).send(resp);
+      } else {
+        res.status(404).end(`Could not get itemId: ${id}`);
+      }
+    });
+  }
+});
+
 routes.put('/api/item/reorder', (req, res) => {
   console.log(req.body);
   db.updateItemOrder(req.body)
@@ -589,7 +611,7 @@ routes.post('/api/package/create', (req, res) => {
 });
 
 routes.delete('/api/package/delete/:packId', (req, res) => {
-  console.log('req', req.params.packId)
+  console.log('req', req.params.packId);
   db.deletePack(req.params.packId)
   .then((response) => {
     res.status(202).send(response);

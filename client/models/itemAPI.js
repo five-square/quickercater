@@ -54,20 +54,14 @@ ItemAPI.edit = (itemObj) =>
     quantity: 1,
   }));
 
-ItemAPI.delete = (itemId) => // needs work
-  fetch(`/api/item/delete/${itemId}`, {
+ItemAPI.delete = (itemId) =>
+  fetch(`/api/item/${itemId}`, {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',
     },
   })
-  .then(data => data.json())
-  .then(item => {
-    console.log('In Item delete: ', item);
-    return ({
-      id: item.item._id,
-    });
-  });
+  .then(data => data.json());
 
 ItemAPI.remove = (itemId, menuId) => // needs work
   fetch('/api/item/remove', {

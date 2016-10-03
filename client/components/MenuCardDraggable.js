@@ -125,7 +125,7 @@ export default class MenuCardDraggable extends React.Component {
   handleRemoveItem(itemId) {
     Item.remove(itemId, this.props.menu.id)
     .then(items => {
-      this.setState({ items });
+      this.setState({ items }, this.props.refreshItemBank);
     });
   }
 

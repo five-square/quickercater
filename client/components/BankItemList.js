@@ -11,7 +11,10 @@ const BankItemList = (props) => (
           <BankItemCard
             editing={props.editing}
             item={item}
-            index={index}
+            menus={props.menus}
+            editItemInBank={props.editItemInBank}
+            deleteItemInBank={props.deleteItemInBank}
+            addItemToMenu={props.addItemToMenu}
           />
           <Divider />
         </div>
