@@ -97,8 +97,10 @@ export default class App extends Component {
     // Check to see if the item is already in the list
     if (itemPos < 0) {
       tempOrder[itemObj.ownerId].order.push(itemObj);
-      tempOrder[itemObj.ownerId].totalPrice +=
-                        (parseInt(itemObj.item.price, 10));
+      tempOrder[itemObj.ownerId].totalPrice =
+            Number(parseFloat(tempOrder[itemObj.ownerId].totalPrice) +
+                        (parseFloat(itemObj.item.price)))
+                        .toFixed(2);
       this.setState({
         globalOrder: tempOrder,
         openCart: true,
@@ -118,8 +120,9 @@ export default class App extends Component {
         .toFixed(2);
     } else if (tempOrder[itemObj.ownerId].order.length === 1) {
       tempOrder[itemObj.ownerId].totalPrice =
-          (tempOrder[itemObj.ownerId].order[0].item.price
-          * tempOrder[itemObj.ownerId].order[0].quantity);
+          Number((tempOrder[itemObj.ownerId].order[0].item.price
+          * tempOrder[itemObj.ownerId].order[0].quantity))
+          .toFixed(2);
     }
     this.setState({
       globalOrder: tempOrder,
@@ -131,8 +134,11 @@ export default class App extends Component {
     const tempOrder = Object.assign({}, this.state.globalOrder);
     const itemPos = tempOrder[ownerId].order
       .map(itemInfo => itemInfo.item.id).indexOf(itemId);
-    tempOrder[ownerId].totalPrice -= (tempOrder[ownerId].order[itemPos].item.price
-          * tempOrder[ownerId].order[itemPos].quantity);
+    tempOrder[ownerId].totalPrice =
+          (tempOrder[ownerId].totalPrice -
+          (tempOrder[ownerId].order[itemPos].item.price
+          * tempOrder[ownerId].order[itemPos].quantity))
+          .toFixed(2);
     tempOrder[ownerId].order.splice(itemPos, 1);
     this.setState({
       globalOrder: tempOrder,

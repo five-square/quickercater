@@ -57,7 +57,7 @@ export default class Cart extends Component {
                 updateItemToOrder={this.props.updateItemToOrder}
                 removeItemFromOrder={this.props.removeItemFromOrder}
                 ownerId={owner}
-              >{console.log('cardIndex in Cart: ', (cardIndex * 2) + 1)}</CartItemCard>
+              />
             )}
           </CardText>
           <CardText>
