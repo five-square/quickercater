@@ -46,6 +46,11 @@ export default class OrderDetails extends Component {
     // this.props.handleOrderReject(this.props.orderInfo.order.id);
   }
 
+  handleRejectNo() {
+    this.setState({ rejectAlert: false });
+    // this.props.handleOrderReject(this.props.orderInfo.order.id);
+  }
+
   handleReject(orderId) {
     this.setState({ open: false });
     this.props.handleOrderReject(orderId);
@@ -141,9 +146,10 @@ export default class OrderDetails extends Component {
         {
           this.state.rejectAlert
           ? <AlertOrderReject
-            showMe={this.state.rejectAlert}
+            showMe={true}
             orderId={this.state.order.id}
             handleReject={e => this.handleReject(e)}
+            handleRejectNo={e => this.handleRejectNo(e)}
           />
           : null
         }
