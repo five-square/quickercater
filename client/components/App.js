@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Badge from 'material-ui/Badge';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-// import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
-// import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Lobby from './Lobby';
 import StoreFront from './StoreFront';
 import Server from '../models/serverAPI';
@@ -178,7 +178,7 @@ export default class App extends Component {
         // muiTheme={getMuiTheme(darkBaseTheme)}>
 
   render() {
-    //console.log(this.state.owners);
+    // console.log(this.state.owners);
     return (
       <div>
         <MuiThemeProvider>
@@ -195,7 +195,7 @@ export default class App extends Component {
               loggedIn={!!this.state.currentOwnerId}
             />
             {this.state.showRegisterModal
-              ? <RegisterModal 
+              ? <RegisterModal
                   handleUnmountRegisterModal={this.handleUnmountRegisterModal.bind(this)}
                   ownerId={this.state.currentOwnerId} />
               : null

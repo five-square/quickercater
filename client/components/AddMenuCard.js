@@ -95,7 +95,7 @@ export default class AddMenuCard extends Component {
           <Card
             onMouseEnter={e => this.handleOnMouseEnter(e)}
             onMouseLeave={e => this.handleOnMouseLeave(e)}
-            containerStyle={{ backgroundColor: '#e0e0e0' }}
+            // containerStyle={{ backgroundColor: '#e0e0e0' }}
           >
             <CardTitle
               title={'Add Menu'}

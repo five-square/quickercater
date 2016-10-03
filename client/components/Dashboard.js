@@ -6,6 +6,7 @@ import OrderAPI from './../models/orderAPI';
 import OrderDetails from './OrderDetails';
 import Customer from '../models/CustomerAPI';
 import Email from './emailHtml';
+import DashboardNavBar from './DashboardNavBar';
 
 // Implement 1) allow owner to view details of pending order with modal
 //           2) Move order acceptance to details modal
@@ -100,7 +101,10 @@ export default class Dashboard extends Component {
     /* only mount orderdetails if we have a click. Then pass in correct orderObj
     via orderInfo prop(call with row number passed onClick) */
     return (
-      <div>
+      <div style={this.props.style}>
+        <DashboardNavBar
+          toggleEditing={this.props.toggleEditing}
+        />
         {this.state.showOrderDetails !== -1
           ? <OrderDetails
             showMe

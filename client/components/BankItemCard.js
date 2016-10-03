@@ -87,7 +87,7 @@ export default class BankItemCard extends Component {
           description={this.props.item.description}
           price={this.props.item.price}
           picture={this.props.item.picture || 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png'}
-          editItem={this.props.editItem}
+          editItem={this.props.editItemInBank}
         />
         <AddItemToMenu
           style={style.floatingAddButton}
