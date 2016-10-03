@@ -45,7 +45,7 @@ export default class App extends Component {
         if (storeAndOwner && storeAndOwner.length > 0 && storeAndOwner[0].store) {
           console.log('Owner of storeAndOwner:', storeAndOwner);
           this.setState({
-            mystoreAndOwner: storeAndOwner[0].store,
+            mystore: storeAndOwner[0].store,
             currentOwnerId: storeAndOwner[0].owner._id,
           });
         } else if (storeAndOwner.length > 0 || storeAndOwner[0].owner) {

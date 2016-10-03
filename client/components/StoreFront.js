@@ -19,18 +19,6 @@ export default class StoreFront extends Component {
     this.toggleEditing = e => this.handleToggleEditing(e);
   }
 
-  fetchPendingOrders(ownerId) {
-    OrderAPI.fetchPendingOrders(ownerId).then(resp => {
-      this.setState({ pendingOrders: resp });
-    });
-  }
-
-  fetchAcceptedOrders(ownerId) {
-    OrderAPI.fetchAcceptedOrders(ownerId).then(resp => {
-      this.setState({ acceptedOrders: resp });
-    });
-  }
-
   handleToggleEditing() {
     this.setState({
       editing: !this.state.editing,
