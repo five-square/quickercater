@@ -7,7 +7,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { PopoverAnimationVertical } from 'material-ui/Popover';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import ColorPicker from './ColorPicker';
+import ColorPicker2 from './ColorPicker2';
 // import NavigationClose from 'material-ui/svg-icons/navigation/close';
 // import EditColorScheme from './EditColorScheme';
 
@@ -90,7 +90,7 @@ export default class AppBarExampleIconMenu extends Component {
           open={this.state.openDialog}
           onRequestClose={this.closeDialog}
         >
-          <ColorPicker />
+          <ColorPicker2 />
         </Dialog>
       </div>
     );
