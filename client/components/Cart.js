@@ -6,6 +6,8 @@ import CardText from 'material-ui/Card/CardText';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 import CartItemCard from './CartItemCard';
 import OrderCard from './OrderCard';
 
@@ -31,6 +33,14 @@ export default class Cart extends Component {
       this.setState({ classname: 'show' });
     } else {
       this.setState({ classname: 'hidden' });
+    }
+  }
+
+  handleChoosePkg(event, value, ownerId) {
+    if (value > 0) {
+      const packId = this.props.globalOrder[ownerId].packages[value - 1].id;
+      console.log('packId: ', packId);
+      this.props.updatePackageOption(ownerId, packId);
     }
   }
 
@@ -60,6 +70,24 @@ export default class Cart extends Component {
               />
             )}
           </CardText>
+          <DropDownMenu
+            value={this.props.globalOrder[owner].selectedPkgId}
+            onChange={(e, value) => {
+              const tempOwner = owner;
+              this.handleChoosePkg(e, value, tempOwner);
+            }}
+          >
+            <MenuItem key={0} value={0} primaryText="Choose a package" />
+            {this.props.globalOrder[owner].packages.map((pack, index) => {
+              const pkgDesc = `${pack.name} : $ ${pack.cost}`;
+              const indexPack = index + 1;
+              return (<MenuItem
+                key={indexPack}
+                value={pack.id}
+                primaryText={pkgDesc}
+              />);
+            })}
+          </DropDownMenu>
           <CardText>
             Total Price = ${this.props.globalOrder[owner].totalPrice}
           </CardText>

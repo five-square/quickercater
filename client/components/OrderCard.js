@@ -69,9 +69,11 @@ export default class OrderCard extends React.Component {
            total: itemInfo.item.price * parseInt(itemInfo.quantity, 10) })),
       ownerId: this.props.orderInfo.order[0].ownerId,
       customer: customerInfo,
-      package: { id: this.props.ownerId, expires: '10/10/2016' },
+      package: { id: this.props.orderInfo.selectedPkgId,
+                  name: this.props.orderInfo.selectedPkgDesc,
+                  cost: this.props.orderInfo.selectedPkgCost,
+                  expires: '10/10/2016' },
     };
-
  // var result = { items: items, order: orderObj, customer: orderItemRel[0].customer.properties };
     this.state.customerInfo = customerInfo;
     this.state.orderInfo = orderInfo;

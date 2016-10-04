@@ -17,6 +17,7 @@ export default class PackageContainer extends Component {
     PackageAPI.getAllPackages(this.props.ownerId)
     .then(packages => {
       console.log('in PackageContainer: packages: ', packages);
+      this.props.updatePackagesByOwner(packages);
       this.setState({
         packages,
       });

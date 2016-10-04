@@ -90,6 +90,10 @@ export default class App extends Component {
       this.state.globalOrder[itemObj.ownerId].order = [];
       this.state.globalOrder[itemObj.ownerId].totalPrice = 0;
       this.state.globalOrder[itemObj.ownerId].storeName = this.state.storeName;
+      this.state.globalOrder[itemObj.ownerId].packages = itemObj.packages;
+      this.state.globalOrder[itemObj.ownerId].selectedPkgId = 0;
+      this.state.globalOrder[itemObj.ownerId].selectedPkgDesc = '';
+      this.state.globalOrder[itemObj.ownerId].selectedPkgCost = 0;
     }
     const tempOrder = Object.assign({}, this.state.globalOrder);
     const itemPos = tempOrder[itemObj.ownerId].order
@@ -115,15 +119,36 @@ export default class App extends Component {
     tempOrder[itemObj.ownerId].order[itemPos] = itemObj;
     if (tempOrder[itemObj.ownerId].order.length > 1) {
       tempOrder[itemObj.ownerId].totalPrice =
-        Number(tempOrder[itemObj.ownerId].order
+        Number(tempOrder[itemObj.ownerId].selectedPkgCost + tempOrder[itemObj.ownerId].order
         .reduce((a, b) => a + (b.item.price * parseInt(b.quantity, 10)), 0))
         .toFixed(2);
     } else if (tempOrder[itemObj.ownerId].order.length === 1) {
       tempOrder[itemObj.ownerId].totalPrice =
-          Number((tempOrder[itemObj.ownerId].order[0].item.price
+          Number(tempOrder[itemObj.ownerId].selectedPkgCost +
+            (tempOrder[itemObj.ownerId].order[0].item.price
           * tempOrder[itemObj.ownerId].order[0].quantity))
           .toFixed(2);
     }
+    this.setState({
+      globalOrder: tempOrder,
+      openCart: true,
+    });
+  }
+
+  updatePackageOption(ownerId, packageId) {
+    console.log('ownerId: ', ownerId, 'packageId: ', packageId);
+    let prevPkgCost = 0;
+    const tempOrder = Object.assign({}, this.state.globalOrder);
+    const pkgPos = tempOrder[ownerId].packages
+      .map(pack => pack.id).indexOf(packageId);
+    if (tempOrder[ownerId].selectedPkgId > 0) {
+      prevPkgCost = parseFloat(tempOrder[ownerId].selectedPkgCost);
+    }
+    tempOrder[ownerId].selectedPkgId = packageId;
+    tempOrder[ownerId].selectedPkgDesc = tempOrder[ownerId].packages[pkgPos].name;
+    tempOrder[ownerId].selectedPkgCost = tempOrder[ownerId].packages[pkgPos].cost;
+    tempOrder[ownerId].totalPrice = Number((parseFloat(tempOrder[ownerId].totalPrice)
+      + parseFloat(tempOrder[ownerId].packages[pkgPos].cost)) - prevPkgCost).toFixed(2);
     this.setState({
       globalOrder: tempOrder,
       openCart: true,
@@ -213,6 +238,7 @@ export default class App extends Component {
                 updateItemToOrder={(e, x) => this.updateItemToOrder(e, x)}
                 removeItemFromOrder={(e, x) => this.removeItemFromOrder(e, x)}
                 deleteOrderAfterSubmission={e => this.deleteOrderAfterSubmission(e)}
+                updatePackageOption={(e, x) => this.updatePackageOption(e, x)}
               />
             </div>
             { this.state.showStore

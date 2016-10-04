@@ -227,6 +227,7 @@ db.addItemsToOrder = (orderId, items, ownerId) => Node.cypherAsync({
 })
 .then(response => response);
 
+// Remember to add this {expires: {orderExpiry}}
 db.createOrderCustomerRelationship = (orderId, customerId, orderExpiry) => Node.cypherAsync({
   query: `
     MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
@@ -242,16 +243,15 @@ db.createOrderCustomerRelationship = (orderId, customerId, orderExpiry) => Node.
 })
 .then(response => response);
 
-db.createOrderPackageRelationship = (orderId, packageId, quantity) => Node.cypherAsync({
+db.createOrderPackageRelationship = (orderId, packageId) => Node.cypherAsync({
   query: `
     MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
     MATCH (pkg:Package) WHERE ID(pkg) = ${packageId}
-    MERGE (order)-[rel:REQUEST {quantity: {quantity}}]->(pkg)
+    MERGE (order)-[rel:REQUEST]->(pkg)
     RETURN rel`,
   params: {
     orderId,
     packageId,
-    quantity,
   },
 })
 .then(response => response);
@@ -277,8 +277,8 @@ db.createOrderAndRelationships = (orderInfo) => {
       return Promise.all([db.addItemsToOrder(orderCreated._id, orderInfo.items, orderInfo.ownerId),
         db.createOrderCustomerRelationship(
           orderCreated._id, orderInfo.customer.id, orderInfo.package.expires),
-        // db.createOrderPackageRelationship(
-        //   orderCreated._id, orderInfo.package.id, 1),
+        db.createOrderPackageRelationship(
+          orderCreated._id, orderInfo.package.id),
         db.createOrderOwnerRelationship(
           orderInfo.ownerId, orderCreated._id),
         ]);

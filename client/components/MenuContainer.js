@@ -84,6 +84,7 @@ export default class MenuContainer extends Component {
           moveMenu={this.moveMenu}
           editMenu={this.editMenu}
           ownerId={this.props.ownerId}
+          packages={this.props.packages}
         />
       )
       : [];

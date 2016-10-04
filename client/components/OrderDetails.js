@@ -21,6 +21,7 @@ export default class OrderDetails extends Component {
       items: this.props.orderInfo.items,
       order: this.props.orderInfo.order,
       customer: this.props.orderInfo.customer,
+      package: this.props.orderInfo.package,
       removedItems: [],
       orderUpdated: false,
     };
@@ -277,11 +278,13 @@ export default class OrderDetails extends Component {
                       </TableRowColumn>
                       : null
                     }
-
                   </TableRow>
                   )}
               </TableBody>
             </Table>
+            {this.props.customerView
+              ? <h4>{this.state.package.name}: ${this.state.package.cost}</h4>
+              : null}
             <h4>Total Price ${this.state.order.total_price}</h4>
           </div>
         </Dialog>
