@@ -154,10 +154,13 @@ export default class OrderCard extends React.Component {
     ];
     if (this.state.reviewOrder === false) {
       return (<div>
-        <RaisedButton
-          primary label="Submit"
-          onTouchTap={e => this.handleOpen(e)}
-        />
+        {this.props.orderInfo.selectedPkgId > 0
+          ? <RaisedButton
+            primary label="Submit"
+            onTouchTap={e => this.handleOpen(e)}
+          />
+          : null
+        }
         <FlatButton
           primary label="Cancel"
           style={style.cancelBtn}

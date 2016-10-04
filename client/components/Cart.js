@@ -45,6 +45,9 @@ export default class Cart extends Component {
   }
 
   createCartItemsArray() {
+    const style = {
+      defaultPkgText: { color: 'red' },
+    };
     if (this.props.globalOrder) {
       return Object.keys(this.props.globalOrder).map((owner, orderIndex) =>
         <Card key={orderIndex * 6} initiallyExpanded >
@@ -76,8 +79,15 @@ export default class Cart extends Component {
               const tempOwner = owner;
               this.handleChoosePkg(e, value, tempOwner);
             }}
+            labelStyle={this.props.globalOrder[owner].selectedPkgId > 0
+              ? null
+              : style.defaultPkgText}
           >
-            <MenuItem key={0} value={0} primaryText="Choose a package" />
+            <MenuItem
+              key={0}
+              value={0}
+              primaryText="Choose a package"
+            />
             {this.props.globalOrder[owner].packages.map((pack, index) => {
               const pkgDesc = `${pack.name} : $ ${pack.cost}`;
               const indexPack = index + 1;
