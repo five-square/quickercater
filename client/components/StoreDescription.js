@@ -1,6 +1,6 @@
 import React from 'react';
 import Paper from 'material-ui/Paper';
-// import EditStore from './EditStore';
+import EditStore from './EditStore';
 
 export default class StoreDescription extends React.Component {
 
@@ -8,32 +8,46 @@ export default class StoreDescription extends React.Component {
     super(props);
     this.state = {};
   }
-          // <EditStore
-          //   edit={this.props.editing}
-          //   store={this.props.store}
-          //   editStore={e => this.props.handleEditStore(e)}
-          // />
   render() {
     const style = {
-      height: 400,
       width: '80%',
-      flex: '50%',
-      marginLeft: 'auto',
+      height: 130,
+      paddingTop: '0%',
+      paddingBottom: '5%',
+      marginTop: '2%',
       marginRight: 'auto',
-      textAlign: 'center',
-      display: 'block',
-      borderColor: '#1DE9B6',
-      borderStyle: 'solid',
+      marginBottom: '2%',
+      marginLeft: 'auto',
+      alignItems: 'center',
+      postion: 'absoulte',
+      left: '10%',
+      overflowY: 'auto',
+      wordWrap: 'break-word',
+      img: {
+        position: 'relative',
+        left: 18,
+        top: 14,
+        height: 100,
+        width: 100,
+      },
     };
     return (
       <div>
         <Paper style={style} zDepth={1} rounded={false}>
-          <img alt="logo" src={this.props.store.picture} />
-          <h1>{this.props.store.name}</h1>
-          <h2>{this.props.store.description}</h2>
+          <img alt="logo" style={style.img} src={this.props.store.picture} />
+          <h1 style={{ marginTop: '-8%' }}>{this.props.store.name}</h1>
+          <h3 style={{ marginLeft: '19%', marginRight: '20%' }}>{this.props.store.description}</h3>
+          {this.props.editing ?
+            <EditStore
+              edit={this.props.editing}
+              store={this.props.store}
+              editStore={e => this.props.handleEditStore(e)}
+            />
+            : null
+          }
         </Paper>
       </div>
-		);
+    );
   }
 
 }

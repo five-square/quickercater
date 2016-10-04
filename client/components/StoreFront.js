@@ -6,7 +6,7 @@ import OrderAPI from '../models/orderAPI';
 import Owner from '../models/ownerAPI';
 import Dashboard from './Dashboard';
 import PackageContainer from './PackageContainer';
-// import StoreDescription from './StoreDescription';
+import StoreDescription from './StoreDescription';
 
 export default class StoreFront extends Component {
   constructor(props) {
@@ -26,12 +26,7 @@ export default class StoreFront extends Component {
       openItemBank: !this.state.openItemBank,
     });
   }
-  // <StoreDescription
-  //   ownerId={this.props.ownerId}
-  //   editing={this.state.editing}
-  //   store={this.state.store}
-  //   handleEditStore={e => this.handleEditStore(e)}
-  // /><br />
+
   fetchPendingOrders(ownerId) {
     OrderAPI.fetchPendingOrders(ownerId).then(resp => {
       this.setState({ pendingOrders: resp });
@@ -54,10 +49,6 @@ export default class StoreFront extends Component {
   updatePackagesByOwner(packages) {
     this.setState({ packages });
   }
-        // <StoreDescription
-        //   ownerId={this.state.ownerId}
-        //   store={this.state.store}
-        // />
 
   render() {
     const style = {
@@ -106,6 +97,12 @@ export default class StoreFront extends Component {
         />
         : null
       }
+        <StoreDescription
+          ownerId={this.props.ownerId}
+          editing={this.state.editing}
+          store={this.state.store}
+          handleEditStore={e => this.handleEditStore(e)}
+        /><br />
         <Paper zDepth={2} style={style.paper}>
           <Tabs style={style.tabs}>
             <Tab label="Packages"><br />
