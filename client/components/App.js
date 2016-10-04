@@ -71,11 +71,13 @@ export default class App extends Component {
     .then(owner => {
       console.log('in select Store', storeObj);
       this.setState({
-        currentOwnerId: owner.id,
+        selectedStoreOwnerId: owner.id,
+        currentOwnerId: false,
         currentStore: storeObj,
         currentStoreName: `Welcome to ${storeObj.name}`,
         storeName: storeObj.name,
         showStore: true,
+        ownerIdOfCurrentStore: owner.id,
       });
     });
   }
@@ -206,7 +208,7 @@ export default class App extends Component {
         // muiTheme={getMuiTheme(darkBaseTheme)}>
 
   render() {
-    // console.log(this.state.owners);
+    // console.log(this.state.currentOwnerId);
     return (
       <div>
         <MuiThemeProvider>
@@ -233,7 +235,6 @@ export default class App extends Component {
                 open={this.state.openCart}
                 globalOrder={this.state.globalOrder}
                 viewCart={e => this.viewCart(e)}
-                ownerId={this.state.currentOwnerId}
                 totalPrice={this.state.updateTotalPrice}
                 updateItemToOrder={(e, x) => this.updateItemToOrder(e, x)}
                 removeItemFromOrder={(e, x) => this.removeItemFromOrder(e, x)}
@@ -249,6 +250,7 @@ export default class App extends Component {
                 addItemToOrder={e => this.handleAddItemToOrder(e)}
                 updateTotalPrice={this.updateTotalPrice}
                 showDashboard={this.state.myStore && (this.state.myStore._id == this.state.currentStore.id) }
+                ownerIdOfCurrentStore={this.state.ownerIdOfCurrentStore}
               />
               : <Lobby stores={this.state.stores} selectStore={(id, name) => this.selectStore(id, name)} />
             }

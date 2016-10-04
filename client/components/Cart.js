@@ -19,7 +19,7 @@ export default class Cart extends Component {
     this.state = {
       style: this.props.style,
       order: this.props.globalOrder,
-      currentOwnerId: this.props.ownerId,
+      //currentOwnerId: this.props.ownerId,
       classname: 'hidden',
     };
   }
