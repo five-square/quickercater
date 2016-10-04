@@ -70,7 +70,10 @@ export default class Navigation extends Component {
                 onClick={e => this.signInWithGoogle(e)}
               />
             }
-            <RaisedButton label="Logout" primary onClick={e => this.signOut(e)} />
+            {this.props.loggedIn
+          ? <RaisedButton label="Logout" primary onClick={e => this.signOut(e)} />
+          : null
+          }
           </ToolbarGroup>
         </Toolbar>
         <br />
