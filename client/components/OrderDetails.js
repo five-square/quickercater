@@ -156,6 +156,11 @@ export default class OrderDetails extends Component {
         onTouchTap={e => this.handleSubmit(e)}
       />,
       <FlatButton
+        label="Fulfilled"
+        primary
+        onTouchTap={e => this.handleOrderFulfilled(e)}
+      />,
+      <FlatButton
         label="Cancel"
         primary
         onTouchTap={e => this.handleCancel(e)}
@@ -175,6 +180,12 @@ export default class OrderDetails extends Component {
       />,
     ];
     const actionsDefault = [
+      <FlatButton
+        label="Fulfilled"
+        keyboardFocused
+        primary
+        onTouchTap={e => this.handleOrderFulfilled(e)}
+      />,
       <FlatButton
         label="Cancel"
         primary
