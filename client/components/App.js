@@ -147,8 +147,11 @@ export default class App extends Component {
   }
 
   deleteOrderAfterSubmission(ownerId) {
-    delete this.state.globalOrder[ownerId];
+    console.log('deleteOrderAfterSubmission: ', ownerId)
+    const tempOrder = Object.assign({}, this.state.globalOrder);
+    delete tempOrder[ownerId];
     this.setState({
+      globalOrder: tempOrder,
       openCart: true,
     });
   }
