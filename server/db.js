@@ -330,6 +330,17 @@ db.fetchAllAcceptedOrders = (ownerId) =>
     },
   }).then(response => response);
 
+db.fetchAllCompletedOrders = (ownerId) =>
+  Node.cypherAsync({
+    query: `
+    MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
+    MATCH (order:CustomerOrder)-[rel:COMPLETE]-(owner)
+    RETURN order`,
+    params: {
+      ownerId,
+    },
+  }).then(response => response);
+
 db.fetchOrderDetail = (orderId) =>
   Node.cypherAsync({
     query: `MATCH (order:CustomerOrder)-[rel:REQUEST]-(item:Item) WHERE ID(order) = ${orderId}

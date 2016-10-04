@@ -8,9 +8,8 @@ import Customer from '../models/CustomerAPI';
 import Email from './emailHtml';
 import DashboardNavBar from './DashboardNavBar';
 
-// Implement 1) allow owner to view details of pending order with modal
-//           2) Move order acceptance to details modal
-//           3) Complete order button on Accepted orders table
+// Implement:
+// 1. fetchCompletedOrders - API, endpoint, db call
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -20,6 +19,7 @@ export default class Dashboard extends Component {
       ownerId: this.props.ownerId,
       pendingOrders: [],
       acceptedOrders: [],
+      completedOrders: [],
       showOrderDetails: -1,
       orderInfo: {},
       returning: false,
@@ -30,6 +30,7 @@ export default class Dashboard extends Component {
   componentWillMount() {
     this.fetchPendingOrders(this.props.ownerId);
     this.fetchAcceptedOrders(this.props.ownerId);
+    this.fetchCompletedOrders(this.props.ownerId);
   }
 
   fetchPendingOrders(ownerId) {
@@ -41,6 +42,12 @@ export default class Dashboard extends Component {
   fetchAcceptedOrders(ownerId) {
     OrderAPI.fetchAcceptedOrders(ownerId).then(resp => {
       this.setState({ acceptedOrders: resp });
+    });
+  }
+
+  fetchCompletedOrders(ownerId){
+    OrderAPI.fetchCompletedOrders(ownerId).then(resp => {
+      this.setState({completedOrders: resp});
     });
   }
 
@@ -156,6 +163,26 @@ export default class Dashboard extends Component {
               <OrderTable
                 onRowClick={this.handleOnRowClick.bind(this, false)}
                 AnyOrders={this.state.acceptedOrders}
+              />
+            </CardText>
+          </Card>
+          <Card
+            onMouseEnter={() => this.handleOnMouseEnter()}
+            onMouseLeave={() => this.handleOnMouseLeave()}
+          >
+            <CardHeader
+              title="Completed Orders"
+              subtitle={this.state.completedOrders === undefined ? '0'
+                        : this.state.completedOrders.length}
+              actAsExpander={(Array.isArray(this.state.completedOrders)
+                              && this.state.completedOrders.length > 0)}
+              showExpandableButton={(Array.isArray(this.state.completedOrders)
+                              && this.state.completedOrders.length > 0)}
+            />
+            <CardText expandable >
+              <OrderTable
+                onRowClick={this.handleOnRowClick.bind(this, false)}
+                AnyOrders={this.state.completedOrders}
               />
             </CardText>
           </Card>
