@@ -48,7 +48,7 @@ export default class App extends Component {
             myStore: storeAndOwner[0].store,
             currentOwnerId: storeAndOwner[0].owner._id,
           });
-        } else if (storeAndOwner.length > 0 || storeAndOwner[0].owner) {
+        } else if (storeAndOwner.length > 0 && storeAndOwner[0].owner) {
           console.log('Logged in, no associated store', storeAndOwner);
           this.setState({
             showRegisterModal: true,
@@ -219,7 +219,7 @@ export default class App extends Component {
                 store={this.state.currentStore}
                 addItemToOrder={e => this.handleAddItemToOrder(e)}
                 updateTotalPrice={this.updateTotalPrice}
-                showDashboard={this.state.myStore._id == this.state.currentStore.id}
+                showDashboard={this.state.myStore && (this.state.myStore._id == this.state.currentStore.id) }
               />
               : <Lobby stores={this.state.stores} selectStore={(id, name) => this.selectStore(id, name)} />
             }
