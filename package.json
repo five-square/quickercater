@@ -54,6 +54,7 @@
     "nodemon": "^1.10.2",
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.3.2",
+    "react-color": "^2.3.2",
     "react-dom": "^15.3.2",
     "react-sortable": "^1.1.0",
     "react-swipe": "^5.0.5",

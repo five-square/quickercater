@@ -24,7 +24,10 @@ export default class Dashboard extends Component {
       orderInfo: {},
       returning: false,
       editable: false,
+      viewMenu: false,
     };
+    this.openMenu = e => this.handleOpenMenu(e);
+    this.closeMenu = e => this.handleCloseMenu(e);
   }
 
   componentWillMount() {
@@ -49,6 +52,14 @@ export default class Dashboard extends Component {
     OrderAPI.fetchCompletedOrders(ownerId).then(resp => {
       this.setState({completedOrders: resp});
     });
+  }
+
+  handleOpenMenu() {
+    this.setState({ viewMenu: true });
+  }
+
+  handleCloseMenu() {
+    this.setState({ viewMenu: false });
   }
 
   handleOnRowClick(pendingOrder, row) {
@@ -111,6 +122,9 @@ export default class Dashboard extends Component {
       <div style={this.props.style}>
         <DashboardNavBar
           toggleEditing={this.props.toggleEditing}
+          open={this.state.viewMenu}
+          openMenu={this.openMenu}
+          closeMenu={this.closeMenu}
         />
         {this.state.showOrderDetails !== -1
           ? <OrderDetails
