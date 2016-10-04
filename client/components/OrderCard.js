@@ -146,7 +146,7 @@ export default class OrderCard extends React.Component {
         onTouchTap={e => this.handleCancel(e)}
       />,
       <FlatButton
-        label="Submit"
+        label="Review"
         primary
         keyboardFocused
         onTouchTap={e => this.handleSubmit(e)}
@@ -156,7 +156,7 @@ export default class OrderCard extends React.Component {
       return (<div>
         {this.props.orderInfo.selectedPkgId > 0
           ? <RaisedButton
-            primary label="Submit"
+            primary label="Check out"
             onTouchTap={e => this.handleOpen(e)}
           />
           : null

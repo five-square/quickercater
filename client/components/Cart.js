@@ -74,7 +74,9 @@ export default class Cart extends Component {
             )}
           </CardText>
           <DropDownMenu
+            expandable
             value={this.props.globalOrder[owner].selectedPkgId}
+            autoWidth
             onChange={(e, value) => {
               const tempOwner = owner;
               this.handleChoosePkg(e, value, tempOwner);
