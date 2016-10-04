@@ -62,7 +62,7 @@ export default class Dashboard extends Component {
     this.setState({ viewMenu: false });
   }
 
-  handleOnRowClick(pendingOrder, row) {
+  handleOnRowClick(pendingOrder, completedOrder, row) {
   // pendingOrder is bool whether click came from pendingOrder list
     const orderId = pendingOrder ? this.state.pendingOrders[row].order._id
                                 : this.state.acceptedOrders[row].order._id;
@@ -89,6 +89,17 @@ export default class Dashboard extends Component {
           });
         this.fetchPendingOrders(this.props.ownerId);
         this.fetchAcceptedOrders(this.props.ownerId);
+        this.setState({ returning: true, showOrderDetails: -1 });
+      });
+  }
+
+  handleOrderFulfilled(orderId) {
+    OrderAPI.createFulfilledOrderRelationship(orderId)
+      .then(response => {
+        console.log('handleOrderFulfilled response: ', response);
+        this.fetchPendingOrders(this.props.ownerId);
+        this.fetchAcceptedOrders(this.props.ownerId);
+        this.fetchCompletedOrders(this.props.ownerId);
         this.setState({ returning: true, showOrderDetails: -1 });
       });
   }
@@ -134,6 +145,7 @@ export default class Dashboard extends Component {
             handleOrderAccept={e => this.handleOrderAccept(e)}
             handleOrderReject={e => this.handleOrderReject(e)}
             handleModalCancel={e => this.handleModalCancel(e)}
+            handleOrderFulfilled={e => this.handleOrderFulfilled(e)}
             customerView={false}
             storeName={this.props.storeName}
           />

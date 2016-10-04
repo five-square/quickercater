@@ -64,6 +64,16 @@ orderAPI.createAcceptOrderRelationship = (acceptedOrderId) =>
   })
   .then(resp => resp.json());
 
+orderAPI.createFulfilledOrderRelationship = (fulfilledOrderId) =>
+  fetch('/api/order/fulfilled/', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ orderId: fulfilledOrderId }),
+  })
+  .then(resp => resp.json());
+
 orderAPI.deleteRejectedOrder = (rejectedOrderId) =>
   fetch('/api/order/delete/', {
     method: 'post',

@@ -45,6 +45,11 @@ export default class OrderDetails extends Component {
     this.setState({ open: false });
   }
 
+  handleFulfilled() {
+    this.props.handleOrderFulfilled(this.state.order.id);
+    this.setState({ open: false });
+  }
+
   showRejectAlert() {
     this.setState({ rejectAlert: true });
     // this.props.handleOrderReject(this.props.orderInfo.order.id);
@@ -158,7 +163,7 @@ export default class OrderDetails extends Component {
       <FlatButton
         label="Fulfilled"
         primary
-        onTouchTap={e => this.handleOrderFulfilled(e)}
+        onTouchTap={e => this.handleFulfilled(e)}
       />,
       <FlatButton
         label="Cancel"
@@ -184,7 +189,7 @@ export default class OrderDetails extends Component {
         label="Fulfilled"
         keyboardFocused
         primary
-        onTouchTap={e => this.handleOrderFulfilled(e)}
+        onTouchTap={e => this.handleFulfilled(e)}
       />,
       <FlatButton
         label="Cancel"
