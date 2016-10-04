@@ -15,20 +15,32 @@ export default class StoreDescription extends React.Component {
           // />
   render() {
     const style = {
-      height: 400,
       width: '80%',
-      flex: '50%',
-      marginLeft: 'auto',
+      heigh: '20%',
+      flex: 1,
+      flexShrink: 1,
+      flexBasis: '50%',
+      marginTop: '2%',
       marginRight: 'auto',
-      textAlign: 'center',
-      display: 'block',
-      borderColor: '#1DE9B6',
-      borderStyle: 'solid',
+      marginBottom: '2%',
+      marginLeft: 'auto',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      postion: 'absoulte',
+      left: '10%',
+      img: {
+        position: 'relative',
+        left: '5%',
+        top: 60,
+        height: '10%',
+        width: '10%',
+      },
     };
     return (
       <div>
         <Paper style={style} zDepth={1} rounded={false}>
-          <img alt="logo" src={this.props.store.picture} />
+          <img alt="logo" style={style.img} src={this.props.store.picture} />
           <h1>{this.props.store.name}</h1>
           <h2>{this.props.store.description}</h2>
         </Paper>
