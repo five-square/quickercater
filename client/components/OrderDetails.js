@@ -94,7 +94,7 @@ export default class OrderDetails extends Component {
     }
     tempItems.splice(itemPos, 1);
     this.state.removedItems.push(itemId);
-    this.setState({ items: tempItems, order: tempOrder });
+    this.setState({ items: tempItems, order: tempOrder, orderUpdated: true });
   }
 
   handleSubmit() {
