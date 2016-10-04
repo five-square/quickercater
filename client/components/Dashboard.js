@@ -23,8 +23,8 @@ export default class Dashboard extends Component {
       showOrderDetails: -1,
       orderInfo: {},
       returning: false,
-      editable: false,
       viewMenu: false,
+      orderState: 'pending',
     };
     this.openMenu = e => this.handleOpenMenu(e);
     this.closeMenu = e => this.handleCloseMenu(e);
@@ -64,11 +64,30 @@ export default class Dashboard extends Component {
 
   handleOnRowClick(pendingOrder, completedOrder, row) {
   // pendingOrder is bool whether click came from pendingOrder list
-    const orderId = pendingOrder ? this.state.pendingOrders[row].order._id
-                                : this.state.acceptedOrders[row].order._id;
+    console.log('pendingOrder: ', pendingOrder, 'completedOrder: ', completedOrder);
+    // let orderId = pendingOrder ? this.state.pendingOrders[row].order._id
+    //                             : completedOrder
+    //                               ? this.state.completedOrders[row].order._id
+    //                               : this.state.acceptedOrders[row].order._id;
+    let orderId;
+    let orderType;
+    if (pendingOrder) {
+      orderId = this.state.pendingOrders[row].order._id;
+      orderType = 'pending';
+    } else if (completedOrder) {
+      orderId = this.state.completedOrders[row].order._id;
+      orderType = 'completed';
+    } else {
+      orderId = this.state.acceptedOrders[row].order._id;
+      orderType = 'accepted';
+    }
+    console.log('handleOnRowClick orderType: ', orderType);
     OrderAPI.fetchOrderDetails(orderId).then(resp => {
       console.log(resp);
-      this.setState({ showOrderDetails: orderId, orderInfo: resp, editable: !pendingOrder });
+      this.setState({ showOrderDetails: orderId,
+        orderInfo: resp,
+        orderState: orderType,
+         });
     });
   }
 
@@ -141,12 +160,11 @@ export default class Dashboard extends Component {
           ? <OrderDetails
             showMe
             orderInfo={this.state.orderInfo}
-            editable={this.state.editable}
             handleOrderAccept={e => this.handleOrderAccept(e)}
             handleOrderReject={e => this.handleOrderReject(e)}
             handleModalCancel={e => this.handleModalCancel(e)}
             handleOrderFulfilled={e => this.handleOrderFulfilled(e)}
-            customerView={false}
+            orderState={this.state.orderState}
             storeName={this.props.storeName}
           />
            : null
@@ -169,7 +187,7 @@ export default class Dashboard extends Component {
             <CardText expandable>
               <OrderTable
                 AnyOrders={this.state.pendingOrders}
-                onRowClick={this.handleOnRowClick.bind(this, true)}
+                onRowClick={this.handleOnRowClick.bind(this, true, false)}
               />
             </CardText>
           </Card>
@@ -188,7 +206,7 @@ export default class Dashboard extends Component {
             />
             <CardText expandable >
               <OrderTable
-                onRowClick={this.handleOnRowClick.bind(this, false)}
+                onRowClick={this.handleOnRowClick.bind(this, false, false)}
                 AnyOrders={this.state.acceptedOrders}
               />
             </CardText>
@@ -208,7 +226,7 @@ export default class Dashboard extends Component {
             />
             <CardText expandable >
               <OrderTable
-                onRowClick={this.handleOnRowClick.bind(this, false)}
+                onRowClick={this.handleOnRowClick.bind(this, false, true)}
                 AnyOrders={this.state.completedOrders}
               />
             </CardText>
