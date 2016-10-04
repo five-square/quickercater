@@ -142,6 +142,13 @@ routes.post('/api/store/create', (req,res) => {
 
 })
 
+routes.post('/api/store/update', (req, res) => {
+  db.updateStore(req.body.store)
+  .then(store => {
+    res.send(store.properties);
+  });
+});
+
 /*
   **********************************************************************************************
 

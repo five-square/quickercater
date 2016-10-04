@@ -1,21 +1,18 @@
 import React from 'react';
-// import Card from 'material-ui/Card';
-// import CardActions from 'material-ui/Card/CardActions';
-// import CardHeader from 'material-ui/Card/CardHeader';
-// import CardText from 'material-ui/Card/CardText';
-// import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
-// import Server from '../models/serverAPI';
+// import EditStore from './EditStore';
 
 export default class StoreDescription extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      ownerId: this.props.ownerId,
-    };
+    this.state = {};
   }
-
+          // <EditStore
+          //   edit={this.props.editing}
+          //   store={this.props.store}
+          //   editStore={e => this.props.handleEditStore(e)}
+          // />
   render() {
     const style = {
       height: 400,
@@ -31,7 +28,7 @@ export default class StoreDescription extends React.Component {
     return (
       <div>
         <Paper style={style} zDepth={1} rounded={false}>
-          <img alt="logo" src={this.state.logo} />
+          <img alt="logo" src={this.props.store.picture} />
           <h1>{this.props.store.name}</h1>
           <h2>{this.props.store.description}</h2>
         </Paper>

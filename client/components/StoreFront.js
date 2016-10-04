@@ -4,9 +4,9 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import Paper from 'material-ui/Paper';
 import MenuContainer from './MenuContainer';
 import OrderAPI from '../models/orderAPI';
+import Owner from '../models/ownerAPI';
 import Dashboard from './Dashboard';
 import PackageContainer from './PackageContainer';
-// import Owner from '../models/ownerAPI';
 // import StoreDescription from './StoreDescription';
 
 export default class StoreFront extends Component {
@@ -15,6 +15,7 @@ export default class StoreFront extends Component {
     this.state = {
       editing: false,
       openItemBank: false,
+      store: this.props.store,
     };
     this.toggleEditing = e => this.handleToggleEditing(e);
   }
@@ -23,9 +24,30 @@ export default class StoreFront extends Component {
     this.setState({
       editing: !this.state.editing,
       openItemBank: !this.state.openItemBank,
+  // <StoreDescription
+  //   ownerId={this.props.ownerId}
+  //   editing={this.state.editing}
+  //   store={this.state.store}
+  //   handleEditStore={e => this.handleEditStore(e)}
+  // /><br />
+  fetchPendingOrders(ownerId) {
+    OrderAPI.fetchPendingOrders(ownerId).then(resp => {
+      this.setState({ pendingOrders: resp });
     });
   }
 
+  fetchAcceptedOrders(ownerId) {
+    OrderAPI.fetchAcceptedOrders(ownerId).then(resp => {
+      this.setState({ acceptedOrders: resp });
+    });
+  }
+
+  handleEditStore(setStore) {
+    Owner.updateStore(setStore)
+    .then((store) => {
+      this.setState({ store });
+    });
+  }
         // <StoreDescription
         //   ownerId={this.state.ownerId}
         //   store={this.state.store}

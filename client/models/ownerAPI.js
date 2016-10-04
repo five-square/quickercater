@@ -26,6 +26,16 @@ OwnerAPI.createStore = (store, ownerId) =>
   })
   .then(data => data.json());
 
+OwnerAPI.updateStore = (store, ownerId) =>
+  fetch('/api/store/update', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ store, ownerId }),
+  })
+  .then(data => data.json());
+
 OwnerAPI.getStoreAndOwnerByAuthKey = (sessionId) => 
   fetch('/api/owner/getStoreAndOwnerByAuthKey', {
     method: 'post',
