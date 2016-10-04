@@ -71,8 +71,7 @@ export default class App extends Component {
     .then(owner => {
       console.log('in select Store', storeObj);
       this.setState({
-        selectedStoreOwnerId: owner.id,
-        currentOwnerId: false,
+        ownerIdOfCurrentStore: owner.id,
         currentStore: storeObj,
         currentStoreName: `Welcome to ${storeObj.name}`,
         storeName: storeObj.name,
