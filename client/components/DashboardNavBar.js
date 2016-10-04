@@ -1,36 +1,98 @@
-import React from 'react';
+import React, { Component } from 'react';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { PopoverAnimationVertical } from 'material-ui/Popover';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import ColorPicker from './ColorPicker';
 // import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import EditColorScheme from './EditColorScheme';
+// import EditColorScheme from './EditColorScheme';
 
-const AppBarExampleIconMenu = (props) => (
-  <AppBar
-    title="My Dashboard"
-    titleStyle={{ alignItems: 'left' }}
-    iconStyleLeft={{ display: 'none' }}
-    iconElementRight={
-      <IconMenu
-        iconButtonElement={
-          <IconButton><MoreVertIcon /></IconButton>
-        }
-        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        animation={PopoverAnimationVertical}
-      >
-        <MenuItem
-          primaryText="Edit Packages and Menus"
-          onTouchTap={props.toggleEditing}
+export default class AppBarExampleIconMenu extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+      openDialog: false,
+    };
+    this.openMenu = e => this.handleOpenMenu(e);
+    this.closeMenu = e => this.handleCloseMenu(e);
+    this.closeMenuOpenDialog = e => this.handleCloseMenuOpenDialog(e);
+    this.closeDialog = e => this.handleCloseDialog(e);
+  }
+
+  handleOpenMenu() {
+    this.setState({ open: true });
+  }
+
+  handleCloseMenu() {
+    this.setState({ open: false });
+  }
+
+  handleCloseMenuOpenDialog() {
+    this.setState({
+      open: false,
+      openDialog: true,
+    });
+  }
+
+  handleCloseDialog() {
+    this.setState({ openDialog: false });
+  }
+  // <EditColorScheme closeMenuOpenDialog={this.closeMenuOpenDialog} open={this.state.openDialog} />
+
+  render() {
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary
+        onTouchTap={this.closeDialog}
+      />,
+      <FlatButton
+        label="Submit"
+        primary
+        keyboardFocused
+        onTouchTap={this.closeDialog}
+      />,
+    ];
+    return (
+      <div>
+        <AppBar
+          title="My Dashboard"
+          titleStyle={{ alignItems: 'left' }}
+          iconStyleLeft={{ display: 'none' }}
+          iconElementRight={
+            <IconMenu
+              iconButtonElement={
+                <IconButton><MoreVertIcon /></IconButton>
+              }
+              open={this.state.menuOpen}
+              targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+              animation={PopoverAnimationVertical}
+            >
+              <MenuItem
+                primaryText="Edit Packages and Menus"
+                onTouchTap={this.props.toggleEditing}
+              />
+              <MenuItem primaryText="Edit Color Scheme" onTouchTap={this.closeMenuOpenDialog} />
+              <MenuItem primaryText="Edit Owner Profile" />
+            </IconMenu>
+          }
         />
-        <EditColorScheme />
-        <MenuItem primaryText="Edit Owner Profile" />
-      </IconMenu>
-    }
-  />
-);
-
-export default AppBarExampleIconMenu;
+        <Dialog
+          title="Dialog With Actions"
+          actions={actions}
+          modal={false}
+          open={this.state.openDialog}
+          onRequestClose={this.closeDialog}
+        >
+          <ColorPicker />
+        </Dialog>
+      </div>
+    );
+  }
+}
