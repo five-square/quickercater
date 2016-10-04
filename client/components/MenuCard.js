@@ -79,6 +79,7 @@ export default class MenuCard extends Component {
                   ownerId={this.props.ownerId}
                   removeItem={this.removeItem}
                   editItem={this.editItem}
+                  packages={this.props.packages}
                 />);
               })}
             </CardText>

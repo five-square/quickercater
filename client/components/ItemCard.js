@@ -22,6 +22,7 @@ class ItemCard extends Component {
       ownerId: this.props.ownerId,
       quantity: 1,
       priceToShow: this.props.item.price,
+      packages: this.props.packages,
     });
   }
             // <EditButtons />
