@@ -374,7 +374,7 @@ export default class RegisterModal extends React.Component {
     ];
     // This is the actual modal
     return (
-      <div>
+      <div style={{ postion: 'absolute' }}>
         <div>
           <RaisedButton primary label="Register" onTouchTap={e => this.handleOpen(e)} />
           <Dialog

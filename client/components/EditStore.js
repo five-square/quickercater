@@ -5,17 +5,18 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import TextField from 'material-ui/TextField';
 
-export default class EditItem extends Component {
+export default class EditStoreInfo extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       open: false,
       hover: 2,
-      name: this.props.name,
-      description: this.props.description,
-      price: this.props.price,
-      picture: this.props.picture,
+      name: this.props.store.name,
+      description: this.props.store.description,
+      slogan: this.props.store.slogan,
+      picture: this.props.store.picture,
+      address: this.props.store.address,
     };
   }
 
@@ -28,37 +29,44 @@ export default class EditItem extends Component {
   }
 
   handleSubmitEdit() {
-    this.props.editItem({
-      id: this.props.id,
+    this.props.editStore({
+      id: this.props.store.id,
       name: this.state.name,
       description: this.state.description,
-      price: this.state.price,
+      slogan: this.state.slogan,
       picture: this.state.picture,
+      address: this.state.address,
     });
     this.setState({
       open: false,
     });
   }
 
-  handleItemNameChange(e) {
+  handleStoreNameChange(e) {
     this.setState({
       name: e.currentTarget.value,
     });
   }
 
-  handleItemDescriptionChange(e) {
+  handleStoreDescriptionChange(e) {
     this.setState({
       description: e.currentTarget.value,
     });
   }
 
-  handleItemPriceChange(e) {
+  handleStoreSloganChange(e) {
     this.setState({
-      price: e.currentTarget.value,
+      slogan: e.currentTarget.value,
     });
   }
 
-  handleItemPictureChange(e) {
+  handleStoreAddressChange(e) {
+    this.setState({
+      address: e.currentTarget.value,
+    });
+  }
+
+  handleStorePictureChange(e) {
     const reader = new FileReader();
     const file = e.currentTarget.files[0];
     reader.onload = (a) => {
@@ -112,7 +120,7 @@ export default class EditItem extends Component {
             title="Drag and drop to replace image or Click to Add new"
             type="file"
             style={style.imageInput}
-            onChange={e => this.handleItemPictureChange(e)}
+            onChange={e => this.handleStorePictureChange(e)}
           />
         </div>);
     } else {
@@ -121,11 +129,11 @@ export default class EditItem extends Component {
           <input
             type="file"
             style={style.imageInput}
-            onChange={e => this.handleItemPictureChange(e)}
+            onChange={e => this.handleStorePictureChange(e)}
           />
           <img
             role="presentation"
-            src={this.props.pic}
+            src={this.props.store.picture}
             style={style.imgPrev}
           />
         </div>);
@@ -176,7 +184,7 @@ export default class EditItem extends Component {
           <ModeEdit />
         </FloatingActionButton>
         <Dialog
-          title="Edit Item Information"
+          title="Edit Store Information"
           actions={actions}
           modal={false}
           open={this.state.open}
@@ -185,22 +193,28 @@ export default class EditItem extends Component {
           <div>
             { this.renderPreview() }
             <TextField
-              hintText="Item"
-              floatingLabelText="Enter Item Name"
+              hintText="Name"
+              floatingLabelText="Enter store Name"
               value={this.state.name}
-              onChange={e => this.handleItemNameChange(e)}
+              onChange={e => this.handleStoreNameChange(e)}
             /><br />
             <TextField
               hintText="Description"
-              floatingLabelText="Enter Item Description"
+              floatingLabelText="Enter Store Description"
               value={this.state.description}
-              onChange={e => this.handleItemDescriptionChange(e)}
+              onChange={e => this.handleStoreDescriptionChange(e)}
             /><br />
             <TextField
-              hintText="Price"
-              floatingLabelText="Enter Item Price (in dollars)"
-              value={this.state.price}
-              onChange={e => this.handleItemPriceChange(e)}
+              hintText="Slogan"
+              floatingLabelText="Enter Store Slogan"
+              value={this.state.slogan}
+              onChange={e => this.handleStoreSloganChange(e)}
+            /><br />
+            <TextField
+              hintText="Address"
+              floatingLabelText="Enter Store Address"
+              value={this.state.address}
+              onChange={e => this.handleStoreAddressChange(e)}
             /><br />
           </div>
         </Dialog>

@@ -630,6 +630,26 @@ db.createStore = (store) => Node.cypherAsync({
 })
 .then(response => response[0].store);
 
+db.updateStore = (store) => Node.cypherAsync({
+  query: `
+    MATCH (store:Store) WHERE ID(store) = ${store.id}
+    SET store += {
+      name: {name}, 
+      description: {description}, 
+      slogan: {slogan}, 
+      picture: {picture}, 
+      address: {address}}
+    RETURN store`,
+  params: {
+    name: store.name,
+    picture: store.picture,
+    address: store.address,
+    slogan: store.slogan,
+    description: store.description,
+  },
+})
+.then(stores => stores[0].store);
+
 db.linkOwnerToStore = (ownerId, storeId) => Node.cypherAsync({
   query: `MATCH (o:Owner) WHERE ID(o) = {ownerId}
           MATCH (s:Store) WHERE ID(s) = {storeId}
