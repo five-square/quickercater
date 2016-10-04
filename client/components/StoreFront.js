@@ -23,6 +23,8 @@ export default class StoreFront extends Component {
     this.setState({
       editing: !this.state.editing,
       openItemBank: !this.state.openItemBank,
+    });
+  }
   // <StoreDescription
   //   ownerId={this.props.ownerId}
   //   editing={this.state.editing}
