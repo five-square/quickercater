@@ -121,6 +121,7 @@ export default class Dashboard extends Component {
             handleOrderReject={e => this.handleOrderReject(e)}
             handleModalCancel={e => this.handleModalCancel(e)}
             customerView={false}
+            storeName={this.props.storeName}
           />
            : null
         }

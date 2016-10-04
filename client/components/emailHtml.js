@@ -10,7 +10,10 @@ Email.compose = (orderInfo, storeName, context) => {
   } else if (context === 'accepted') {
     emailHtml.push(`<div><p>Congratulations!!,
       ${storeName} accepted your order.</p></div>`);
+  } else if (context === 'updated') {
+    emailHtml.push(`<div><p> ${storeName} updated your order.</p></div>`);
   }
+
   emailHtml.push('<div><p>Below are your order details:</p></div>');
   emailHtml.push(`<div><h3>Order number: ${orderInfo.order.id}</h3></div>`);
   emailHtml.push(`<div>

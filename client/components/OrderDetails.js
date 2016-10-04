@@ -8,6 +8,8 @@ import Card from 'material-ui/Card';
 import CardText from 'material-ui/Card/CardText';
 import AlertOrderReject from './AlertOrderReject';
 import OrderAPI from '../models/orderAPI';
+import Customer from '../models/CustomerAPI';
+import Email from './emailHtml';
 
 export default class OrderDetails extends Component {
   constructor(props) {
@@ -20,6 +22,7 @@ export default class OrderDetails extends Component {
       order: this.props.orderInfo.order,
       customer: this.props.orderInfo.customer,
       removedItems: [],
+      orderUpdated: false,
     };
   }
 
@@ -73,7 +76,7 @@ export default class OrderDetails extends Component {
       Math.round((tempItems[itemPos].total + 0.00001) * 100) / 100;
     tempOrder.total_price = tempItems
       .reduce((a, b) => a + parseInt(b.total, 10), 0);
-    this.setState({ items: tempItems, order: tempOrder });
+    this.setState({ items: tempItems, order: tempOrder, orderUpdated: true });
   }
 
   handleRemoveItem(e, itemId) {
@@ -94,7 +97,24 @@ export default class OrderDetails extends Component {
       this.setState({ open: false });
     } else {
       OrderAPI.updateOrder(this.state.order, this.state.items, this.state.removedItems)
-        .then(resp => console.log('handleSubmit resp: ', resp));
+        .then(orderInfo => {
+          // fetch the updated order information from database to email the customer
+          OrderAPI.fetchOrderDetails(orderInfo[0][0].order._id)
+            .then(order => {
+              console.log(order);
+              const mailOptions = {
+                from: 'fivesquare43@gmail.com',
+                to: `${this.state.customer.email}`,
+                subject: 'Hello from QuickerCater',
+                generateTextFromHTML: true,
+                html: Email.compose(order, this.props.storeName, 'updated'),
+              };
+              Customer.sendEmail(mailOptions)
+                .then(response => {
+                  console.log('response after confirmation email sent: ', response);
+                });
+            });
+        });
       this.setState({ open: false });
       this.props.handleModalCancel();
     }
@@ -108,8 +128,7 @@ export default class OrderDetails extends Component {
     this.setState({ hover: 2 });
   }
 
-  render() {
-    console.log(this.props.editable);
+  buttonsToRender() {
     const actions = [
       <FlatButton
         label="Accept"
@@ -130,6 +149,19 @@ export default class OrderDetails extends Component {
     ];
     const actionsEditable = [
       <FlatButton
+        label="Update"
+        primary
+        keyboardFocused
+        onTouchTap={e => this.handleSubmit(e)}
+      />,
+      <FlatButton
+        label="Cancel"
+        primary
+        onTouchTap={e => this.handleCancel(e)}
+      />,
+    ];
+    const actionsCustomer = [
+      <FlatButton
         label="Submit"
         primary
         keyboardFocused
@@ -141,6 +173,27 @@ export default class OrderDetails extends Component {
         onTouchTap={e => this.handleCancel(e)}
       />,
     ];
+    const actionsDefault = [
+      <FlatButton
+        label="Cancel"
+        primary
+        onTouchTap={e => this.handleCancel(e)}
+      />,
+    ];
+
+    if (this.props.customerView) {
+      return actionsCustomer;
+    } else if (this.props.editable) {
+      if (this.state.orderUpdated) {
+        return actionsEditable;
+      }
+      return actionsDefault;
+    }
+    return actions;
+  }
+
+  render() {
+    console.log(this.props.editable);
     return (
       <div>
         {
@@ -156,7 +209,7 @@ export default class OrderDetails extends Component {
         <Dialog
           autoScrollBodyContent
           title={this.props.customerView ? 'Review Order' : `Order # ${this.state.order.id}`}
-          actions={this.props.editable || this.props.customerView ? actionsEditable : actions}
+          actions={this.buttonsToRender()}
           modal={false}
           open={this.state.open}
           onRequestClose={(e) => this.handleClose(e)}

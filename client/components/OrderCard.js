@@ -104,6 +104,12 @@ export default class OrderCard extends React.Component {
       });
   }
 
+
+  resetAfterConfirmation() {
+    this.setState({ reviewOrder: false, open: false, submitted: false });
+    this.props.deleteOrderAfterSubmission(this.props.ownerId);
+  }
+
   handleCancel() {
     this.setState({ open: false });
   }
@@ -219,7 +225,7 @@ export default class OrderCard extends React.Component {
               storeName={this.props.storeName}
               showMe
               ownerId={this.props.ownerId}
-              deleteOrderAfterSubmission={this.props.deleteOrderAfterSubmission}
+              resetAfterConfirmation={e => this.resetAfterConfirmation(e)}
             />
             : <OrderDetails
               showMe
