@@ -232,8 +232,7 @@ export default class OrderCard extends React.Component {
             : <OrderDetails
               showMe
               orderInfo={this.state.orderInfo}
-              editable={false}
-              customerView
+              orderState={'customerView'}
               handleOrderAccept={e => this.handleOrderAccept(e)}
               handleOrderReject={e => this.handleOrderReject(e)}
               handleModalCancel={e => this.handleModalCancel(e)}

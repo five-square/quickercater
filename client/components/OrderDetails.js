@@ -45,6 +45,11 @@ export default class OrderDetails extends Component {
     this.setState({ open: false });
   }
 
+  handleFulfilled() {
+    this.props.handleOrderFulfilled(this.state.order.id);
+    this.setState({ open: false });
+  }
+
   showRejectAlert() {
     this.setState({ rejectAlert: true });
     // this.props.handleOrderReject(this.props.orderInfo.order.id);
@@ -89,11 +94,11 @@ export default class OrderDetails extends Component {
     }
     tempItems.splice(itemPos, 1);
     this.state.removedItems.push(itemId);
-    this.setState({ items: tempItems, order: tempOrder });
+    this.setState({ items: tempItems, order: tempOrder, orderUpdated: true });
   }
 
   handleSubmit() {
-    if (this.props.customerView) {
+    if (this.props.orderState === 'customerView') {
       this.props.handleOrderAccept();
       this.setState({ open: false });
     } else {
@@ -130,7 +135,8 @@ export default class OrderDetails extends Component {
   }
 
   buttonsToRender() {
-    const actions = [
+    console.log('orderDetails this.props.orderState: ', this.props.orderState);
+    const pendingActions = [
       <FlatButton
         label="Accept"
         primary
@@ -156,6 +162,11 @@ export default class OrderDetails extends Component {
         onTouchTap={e => this.handleSubmit(e)}
       />,
       <FlatButton
+        label="Fulfilled"
+        primary
+        onTouchTap={e => this.handleFulfilled(e)}
+      />,
+      <FlatButton
         label="Cancel"
         primary
         onTouchTap={e => this.handleCancel(e)}
@@ -174,7 +185,20 @@ export default class OrderDetails extends Component {
         onTouchTap={e => this.handleCancel(e)}
       />,
     ];
-    const actionsDefault = [
+    const actionsFulfilled = [
+      <FlatButton
+        label="Ok"
+        primary
+        onTouchTap={e => this.handleCancel(e)}
+      />,
+    ];
+    const actionsEditableBasic = [
+      <FlatButton
+        label="Fulfilled"
+        keyboardFocused
+        primary
+        onTouchTap={e => this.handleFulfilled(e)}
+      />,
       <FlatButton
         label="Cancel"
         primary
@@ -182,19 +206,20 @@ export default class OrderDetails extends Component {
       />,
     ];
 
-    if (this.props.customerView) {
+    if (this.props.orderState === 'customerView') {
       return actionsCustomer;
-    } else if (this.props.editable) {
+    } else if (this.props.orderState === 'accepted') {
       if (this.state.orderUpdated) {
         return actionsEditable;
       }
-      return actionsDefault;
+      return actionsEditableBasic;
+    } else if (this.props.orderState === 'pending') {
+      return pendingActions;
     }
-    return actions;
+    return actionsFulfilled;
   }
 
   render() {
-    console.log(this.props.editable);
     return (
       <div>
         {
@@ -209,7 +234,9 @@ export default class OrderDetails extends Component {
         }
         <Dialog
           autoScrollBodyContent
-          title={this.props.customerView ? 'Review Order' : `Order # ${this.state.order.id}`}
+          title={this.props.orderState === 'customerView'
+            ? 'Review Order'
+            : `Order # ${this.state.order.id}`}
           actions={this.buttonsToRender()}
           modal={false}
           open={this.state.open}
@@ -217,7 +244,7 @@ export default class OrderDetails extends Component {
         >
           <Card>
             <CardText>
-              {this.props.customerView
+              {this.props.orderState === 'customerView'
                 ? <h3>Your Information: </h3>
                 : <h3>Customer Information: </h3>
               }
@@ -240,7 +267,7 @@ export default class OrderDetails extends Component {
                   <TableHeaderColumn>Quantity</TableHeaderColumn>
                   <TableHeaderColumn>Price</TableHeaderColumn>
                   <TableHeaderColumn>Total</TableHeaderColumn>
-                  {this.props.editable
+                  {this.props.orderType === 'accepted'
                     ? <TableHeaderColumn>''</TableHeaderColumn>
                     : null
                   }
@@ -252,7 +279,7 @@ export default class OrderDetails extends Component {
                     <TableRowColumn>{item.id}</TableRowColumn>
                     <TableRowColumn>{item.name}</TableRowColumn>
                     <TableRowColumn>
-                      {this.props.editable
+                      {this.props.orderState === 'accepted'
                         ? <TextField
                           ref="quantity"
                           id={item.id.toString()}
@@ -268,7 +295,7 @@ export default class OrderDetails extends Component {
                     </TableRowColumn>
                     <TableRowColumn>${item.price}</TableRowColumn>
                     <TableRowColumn>${item.total}</TableRowColumn>
-                    {this.props.editable
+                    {this.props.orderState === 'accepted'
                       ? <TableRowColumn>
                         <FlatButton
                           label="Remove"
@@ -282,7 +309,7 @@ export default class OrderDetails extends Component {
                   )}
               </TableBody>
             </Table>
-            {this.props.customerView
+            {this.props.orderState === 'customerView'
               ? <h4>{this.state.package.name}: ${this.state.package.cost}</h4>
               : null}
             <h4>Total Price ${this.state.order.total_price}</h4>

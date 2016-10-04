@@ -341,6 +341,19 @@ db.fetchAllCompletedOrders = (ownerId) =>
     },
   }).then(response => response);
 
+db.changeOrderToFulfilled = (orderInfo) =>
+  Node.cypherAsync({
+    query: `
+    MATCH (order:CustomerOrder) WHERE ID(order) = ${orderInfo.orderId}
+    MATCH (order)<-[relA:CAN_EDIT]-(owner:Owner)
+    MERGE (owner)<-[relB:COMPLETE]-(order)
+    DELETE relA
+    RETURN order`,
+    params: {
+      orderId: orderInfo.orderId,
+    },
+  }).then(response => response);
+
 db.fetchOrderDetail = (orderId) =>
   Node.cypherAsync({
     query: `MATCH (order:CustomerOrder)-[rel:REQUEST]-(item:Item) WHERE ID(order) = ${orderId}
