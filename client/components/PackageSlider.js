@@ -46,6 +46,14 @@ export default class PackageSlider extends Component {
             //   />
             //   : null
             // }
+        //      <Card style={this.props.style.description}>
+        //   <CardTitle
+        //     title={this.props.packages[this.state.slidePosition].name}
+        //   />
+        //   <CardText>
+        //     {this.props.packages[this.state.slidePosition].description}
+        //   </CardText>
+        // </Card>
 
     return (
       <Paper zDepth={2} style={this.props.style.paper}>
@@ -84,14 +92,7 @@ export default class PackageSlider extends Component {
             <KeyRight />
           </FloatingActionButton>
         </div>
-        <Card style={this.props.style.description}>
-          <CardTitle
-            title={this.props.packages[this.state.slidePosition].name}
-          />
-          <CardText>
-            {this.props.packages[this.state.slidePosition].description}
-          </CardText>
-        </Card>
+       
       </Paper>
     );
   }
