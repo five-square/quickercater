@@ -45,6 +45,14 @@ orderAPI.fetchPendingOrders = (ownerId) =>
      return result;
     });
 
+    orderAPI.fetchCompletedOrders = (ownerId) =>
+      fetch(`/api/order/getAllCompletedOrders/${ownerId}`, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }).then(resp => resp.json());
+
 
 orderAPI.createAcceptOrderRelationship = (acceptedOrderId) =>
   fetch('/api/order/accepted/', {

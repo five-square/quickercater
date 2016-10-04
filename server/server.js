@@ -417,9 +417,9 @@ routes.get('/api/order/getAllAccepted/:ownerId', (req, res) => {
   });
 });
 
-routes.get('/api/order/getAllAccepted/:ownerId', (req, res) => {
-  db.fetchAllAcceptedOrders(req.params.ownerId).then(acceptedOrders => {
-    res.send(acceptedOrders);
+routes.get('/api/order/getAllCompletedOrders/:ownerId', (req,res) => {
+  db.fetchAllCompletedOrders(req.params.ownerId).then(completedOrders => {
+    res.send(completedOrders);
   });
 });
 
