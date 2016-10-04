@@ -14,6 +14,7 @@ export default class PackageContainer extends Component {
   }
 
   componentWillMount() {
+    console.log('cwmPKG,',this.props.ownerId);
     PackageAPI.getAllPackages(this.props.ownerId)
     .then(packages => {
       console.log('in PackageContainer: packages: ', packages);

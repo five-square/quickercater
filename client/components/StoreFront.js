@@ -91,7 +91,7 @@ export default class StoreFront extends Component {
         {this.props.showDashboard
         ? <Dashboard
           style={style.dashboard}
-          ownerId={this.props.ownerId}
+          ownerId={this.props.ownerIdOfCurrentStore}
           storeName={this.props.store.name}
           toggleEditing={this.toggleEditing}
         />
@@ -107,7 +107,7 @@ export default class StoreFront extends Component {
           <Tabs style={style.tabs}>
             <Tab label="Packages"><br />
               <PackageContainer
-                ownerId={this.props.ownerId}
+                ownerId={this.props.ownerIdOfCurrentStore}
                 editing={this.state.editing}
                 updatePackagesByOwner={e => this.updatePackagesByOwner(e)}
               /><br />
@@ -116,7 +116,7 @@ export default class StoreFront extends Component {
               <MenuContainer
                 title={this.props.store.name}
                 style={style.menuCards}
-                ownerId={this.props.ownerId}
+                ownerId={this.props.ownerIdOfCurrentStore}
                 addItemToOrder={this.props.addItemToOrder}
                 editing={this.state.editing}
                 packages={this.state.packages}
