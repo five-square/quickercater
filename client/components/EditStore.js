@@ -156,6 +156,11 @@ export default class EditStoreInfo extends Component {
       card: {
         marginBottom: '5%',
       },
+      editBtn: {
+        position: 'absolute',
+        left: '48%',
+        marginTop: '-1%',
+      },
     };
     // action buttons for Modal
     const actions = [
@@ -173,9 +178,8 @@ export default class EditStoreInfo extends Component {
     ];
     // This is the actual modal
     return (
-      <div style={style.card}>
+      <div style={style.editBtn}>
         <FloatingActionButton
-          style={this.props.style}
           zDepth={0}
           secondary
           mini
