@@ -309,9 +309,7 @@ export default class OrderDetails extends Component {
                   )}
               </TableBody>
             </Table>
-            {this.props.orderState === 'customerView'
-              ? <h4>{this.state.package.name}: ${this.state.package.cost}</h4>
-              : null}
+            <h4>{this.state.package.name}: ${this.state.package.cost}</h4>
             <h4>Total Price ${this.state.order.total_price}</h4>
           </div>
         </Dialog>

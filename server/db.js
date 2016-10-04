@@ -356,9 +356,10 @@ db.changeOrderToFulfilled = (orderInfo) =>
 
 db.fetchOrderDetail = (orderId) =>
   Node.cypherAsync({
-    query: `MATCH (order:CustomerOrder)-[rel:REQUEST]-(item:Item) WHERE ID(order) = ${orderId}
+    query: `MATCH (order:CustomerOrder)-[relA:REQUEST]-(item:Item) WHERE ID(order) = ${orderId}
             MATCH  (order)<-[CREATED]-(customer:Customer)
-            Return order, item,rel,customer`,
+            MATCH (order)-[relB:REQUEST]->(package:Package)
+            Return order, item,relA,customer,package`,
     params: {
       orderId,
     },

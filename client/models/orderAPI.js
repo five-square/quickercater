@@ -32,15 +32,21 @@ orderAPI.fetchOrderDetails = (orderId) =>
       'Content-Type': 'application/json',
     },
   }).then(resp => resp.json()).then(orderItemRel => {
+    console.log('fetchOrderDetails orderItemRel: ', orderItemRel);
     const orderObj = Object.assign({}, orderItemRel[0].order.properties,
                                   { id: orderItemRel[0].order._id });
     const items = orderItemRel.map(dbObj =>
      Object.assign({}, dbObj.item.properties,
         { id: dbObj.item._id,
-         quantity: dbObj.rel.properties.quantity,
-         total: dbObj.rel.properties.quantity * dbObj.item.properties.price })
+         quantity: dbObj.relA.properties.quantity,
+         total: dbObj.relA.properties.quantity * dbObj.item.properties.price })
     );
-    const result = { items, order: orderObj, customer: orderItemRel[0].customer.properties };
+    const pack = Object.assign({}, orderItemRel[0].package.properties,
+                              { id: orderItemRel[0].package._id });
+    const result = { items,
+                    order: orderObj,
+                    customer: orderItemRel[0].customer.properties,
+                    package: pack };
     console.log(result);
     return result;
   });
