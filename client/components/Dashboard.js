@@ -151,36 +151,36 @@ export default class Dashboard extends Component {
     return (
       <div style={this.props.style}>
         <Paper zDepth={this.state.hover}>
-        <DashboardNavBar
-          toggleEditing={this.props.toggleEditing}
-          open={this.state.viewMenu}
-          openMenu={this.openMenu}
-          closeMenu={this.closeMenu}
-          colorTheme={this.props.colorTheme}
-          changeTheme={this.props.changeTheme}
-        />
-        {this.state.showOrderDetails !== -1
-          ? <OrderDetails
-            showMe
-            orderInfo={this.state.orderInfo}
-            handleOrderAccept={e => this.handleOrderAccept(e)}
-            handleOrderReject={e => this.handleOrderReject(e)}
-            handleModalCancel={e => this.handleModalCancel(e)}
-            handleOrderFulfilled={e => this.handleOrderFulfilled(e)}
-            orderState={this.state.orderState}
-            storeName={this.props.storeName}
+          <DashboardNavBar
+            toggleEditing={this.props.toggleEditing}
+            open={this.state.viewMenu}
+            openMenu={this.openMenu}
+            closeMenu={this.closeMenu}
+            colorTheme={this.props.colorTheme}
+            changeTheme={this.props.changeTheme}
           />
           {this.state.showOrderDetails !== -1
             ? <OrderDetails
               showMe
               orderInfo={this.state.orderInfo}
-              editable={this.state.editable}
               handleOrderAccept={e => this.handleOrderAccept(e)}
               handleOrderReject={e => this.handleOrderReject(e)}
               handleModalCancel={e => this.handleModalCancel(e)}
-              customerView={false}
+              handleOrderFulfilled={e => this.handleOrderFulfilled(e)}
+              orderState={this.state.orderState}
               storeName={this.props.storeName}
             />
+          // {this.state.showOrderDetails !== -1
+          //   ? <OrderDetails
+          //     showMe
+          //     orderInfo={this.state.orderInfo}
+          //     editable={this.state.editable}
+          //     handleOrderAccept={e => this.handleOrderAccept(e)}
+          //     handleOrderReject={e => this.handleOrderReject(e)}
+          //     handleModalCancel={e => this.handleModalCancel(e)}
+          //     customerView={false}
+          //     storeName={this.props.storeName}
+          //   />
              : null
           }
           <Card
