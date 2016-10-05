@@ -140,19 +140,18 @@ export default class RegisterModal extends React.Component {
     let divToRender = '';
     const style = {
       imgPrev: {
-        float: 'right',
-        marginTop: '8%',
-        marginRight: '3%',
-        height: '25%',
-        width: '25%',
+        position: 'relative',
+        top: '16%',
+        left: '5%',
+        width: '43%',
       },
       imageInput: {
         cursor: 'pointer',
         position: 'absolute',
-        top: '3%',
-        left: '72%',
-        height: '50%',
-        width: '25%',
+        top: '-23%',
+        left: '-127%',
+        height: '150%',
+        width: '200%',
         opacity: 0,
       },
       imgButton: {
@@ -200,19 +199,18 @@ export default class RegisterModal extends React.Component {
     let divToRender = '';
     const style = {
       imgPrev: {
-        float: 'right',
-        marginTop: '8%',
-        marginRight: '3%',
-        height: '25%',
-        width: '25%',
+        position: 'relative',
+        top: '16%',
+        left: '5%',
+        width: '43%',
       },
       imageInput: {
         cursor: 'pointer',
         position: 'absolute',
-        top: '57%',
-        left: '72%',
-        height: '50%',
-        width: '25%',
+        top: '-23%',
+        left: '-4%',
+        height: '161%',
+        width: '200%',
         opacity: 0,
       },
       imgButton: {
@@ -259,7 +257,7 @@ export default class RegisterModal extends React.Component {
   renderSteps() {
     const style = {
       div: {
-        postion: 'relative',
+        position: 'relative',
         left: '2%',
       },
       p: {
@@ -268,8 +266,16 @@ export default class RegisterModal extends React.Component {
       textField: {
         marginTop: 0,
       },
-      logo: {},
-      banner: {},
+      logo: {
+        position: 'absolute',
+        left: '18%',
+        width: '45%',
+      },
+      banner: {
+        position: 'relative',
+        left: '52%',
+        width: '45%',
+      },
       cursor: 'pointer',
     };
     switch (this.state.stepIndex) {
@@ -292,7 +298,7 @@ export default class RegisterModal extends React.Component {
                 onChange={e => this.handleStoreNameChange(e)}
               />
             </div>
-            <div className="newStoreAddress">
+            <div className="newStoreAddress" style={style.div}>
               <p style={style.p}>
                 Please enter your stores Address.
               </p>
@@ -305,7 +311,7 @@ export default class RegisterModal extends React.Component {
                 onChange={e => this.handleStoreAddressChange(e)}
               />
             </div>
-            <div className="newStoreType">
+            <div className="newStoreType" style={style.div}>
               <p style={style.p}>
                 Please enter a category for your Store.
               </p>
@@ -348,8 +354,8 @@ export default class RegisterModal extends React.Component {
         );
       case 3:
         return (
-          <div style={style.div}>
-            <div style={style.div}>
+          <div className="ImagePreviews">
+            <div className="newStoreLogo" style={style.logo}>
               <p style={style.p}>
                 Upload your Store Logo
               </p>
@@ -357,7 +363,7 @@ export default class RegisterModal extends React.Component {
                 {this.renderLogoPreview()}
               </span>
             </div>
-            <div style={style.div}>
+            <div className="newStoreBanner" style={style.banner}>
               <p style={style.p}>
                 Upload a Store Banner
               </p>
