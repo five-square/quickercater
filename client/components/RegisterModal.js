@@ -5,15 +5,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
+
 import OwnerAPI from '../models/ownerAPI';
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
 
 export default class RegisterModal extends React.Component {
 
@@ -26,11 +19,12 @@ export default class RegisterModal extends React.Component {
       stepIndex: 0,
       newStoreName: '',
       newStoreDescription: '',
+      newStoreType: '',
       newStoreSlogan: '',
       newStoreAddress: '',
-      newStoreLogo: 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png',
+      newStoreLogo: 'http://i.imgur.com/GhWoMa1.png',
+      newStoreBanner: 'http://i.imgur.com/GhWoMa1.png',
     };
-    console.log('Reg Modal OwnerId: ',this.props.ownerId);
   }
 
   handleOpen() {
@@ -44,27 +38,20 @@ export default class RegisterModal extends React.Component {
       address: this.state.newStoreAddress,
       slogan: this.state.newStoreSlogan,
       description: this.state.newStoreDescription,
+      type: this.state.newStoreType,
+      banner: this.state.newStoreBanner,
     };
     this.setState({ dialogOpen: false });
-    OwnerAPI.createStore(newStoreInfo,this.props.ownerId).then(x=>console.log('RM50:',x));
+    OwnerAPI.createStore(newStoreInfo, this.props.ownerId).then(x => x);
     console.log('New Store created', newStoreInfo);
   }
 
-    handleClose(){
-      this.handleCancel();
-    }
+  handleClose() {
+    this.handleCancel();
+  }
 
   handleCancel() {
-  this.props.handleUnmountRegisterModal();
-    // this.setState({
-    //   dialogOpen: false,
-    //   stepIndex: 0,
-    //   newStoreName: '',
-    //   newStoreSlogan: '',
-    //   newStoreDescription: '',
-    //   newStoreAddress: '',
-    //   newStoreLogo: 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png',
-    // });
+    this.props.handleUnmountRegisterModal();
   }
 
   handleNext() {
@@ -89,8 +76,10 @@ export default class RegisterModal extends React.Component {
         newStoreName: this.state.newStoreName,
         newStoreSlogan: this.state.newStoreSlogan,
         newStoreDescription: this.state.newStoreDescription,
+        newStoreType: this.state.newStoreType,
         newStoreAddress: this.state.newStoreAddress,
         newStoreLogo: this.state.newStoreLogo,
+        newStoreBanner: this.state.newStoreBanner,
       });
     }
   }
@@ -119,9 +108,13 @@ export default class RegisterModal extends React.Component {
     });
   }
 
-  handleStoreLogoChange(e) {
-    e.preventDefault();
+  handleStoreTypeChange(e) {
+    this.setState({
+      newStoreType: e.currentTarget.value,
+    });
+  }
 
+  handleStoreLogoChange(e) {
     const reader = new FileReader();
     const file = e.currentTarget.files[0];
     reader.onload = (a) => {
@@ -132,40 +125,158 @@ export default class RegisterModal extends React.Component {
     reader.readAsDataURL(file);
   }
 
-  renderPreview() {
-    let divToRender = '';
-    const imgPrev = {
-      height: '100%',
-      width: '100%',
+  handleStoreBannerChange(e) {
+    const reader = new FileReader();
+    const file = e.currentTarget.files[0];
+    reader.onload = (a) => {
+      this.setState({
+        newStoreBanner: a.target.result,
+      });
     };
-    if (this.state.newItemPicture !== false) {
+    reader.readAsDataURL(file);
+  }
+
+  renderLogoPreview() {
+    let divToRender = '';
+    const style = {
+      imgPrev: {
+        position: 'relative',
+        top: '16%',
+        left: '5%',
+        width: '43%',
+      },
+      imageInput: {
+        cursor: 'pointer',
+        position: 'absolute',
+        top: '-23%',
+        left: '-127%',
+        height: '150%',
+        width: '200%',
+        opacity: 0,
+      },
+      imgButton: {
+        float: 'right',
+        marginTop: '8%',
+        marginRight: '3%',
+        height: '25%',
+        width: '25%',
+      },
+    };
+    if (this.state.newStoreLogo !== false) {
       divToRender = (
-        <img
-          role="presentation"
-          src={this.state.newStoreLogo}
-          style={imgPrev}
-        />);
+        <div>
+          <img
+            role="presentation"
+            src={this.state.newStoreLogo}
+            style={style.imgPrev}
+          />
+          <input
+            title="Drag and drop on the Square only or Click to Add"
+            type="file"
+            style={style.imageInput}
+            onChange={e => this.handleStoreLogoChange(e)}
+          />
+        </div>);
     } else {
       divToRender = (
-        <img
-          role="presentation"
-          src={'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png'}
-          style={imgPrev}
-        />);
+        <div>
+          <input
+            type="file"
+            style={style.imageInput}
+            onChange={e => this.handleStoreLogoChange(e)}
+          />
+          <img
+            role="presentation"
+            src={this.props.pic}
+            style={style.imgPrev}
+          />
+        </div>);
+    }
+    return divToRender;
+  }
+
+  renderBannerPreview() {
+    let divToRender = '';
+    const style = {
+      imgPrev: {
+        position: 'relative',
+        top: '16%',
+        left: '5%',
+        width: '43%',
+      },
+      imageInput: {
+        cursor: 'pointer',
+        position: 'absolute',
+        top: '-23%',
+        left: '-4%',
+        height: '161%',
+        width: '200%',
+        opacity: 0,
+      },
+      imgButton: {
+        float: 'right',
+        marginTop: '8%',
+        marginRight: '3%',
+        height: '25%',
+        width: '25%',
+      },
+    };
+    if (this.state.newStoreBanner !== false) {
+      divToRender = (
+        <div>
+          <img
+            role="presentation"
+            src={this.state.newStoreBanner}
+            style={style.imgPrev}
+          />
+          <input
+            title="Drag and drop on the Square only or Click to Add"
+            type="file"
+            style={style.imageInput}
+            onChange={e => this.handleStoreBannerChange(e)}
+          />
+        </div>);
+    } else {
+      divToRender = (
+        <div>
+          <input
+            type="file"
+            style={style.imageInput}
+            onChange={e => this.handleStoreBannerChange(e)}
+          />
+          <img
+            role="presentation"
+            src={this.props.pic}
+            style={style.imgPrev}
+          />
+        </div>);
     }
     return divToRender;
   }
 
   renderSteps() {
-    const styleInput = {
+    const style = {
+      div: {
+        position: 'relative',
+        left: '2%',
+      },
+      p: {
+        margin: 0,
+      },
+      textField: {
+        marginTop: 0,
+      },
+      logo: {
+        position: 'absolute',
+        left: '18%',
+        width: '45%',
+      },
+      banner: {
+        position: 'relative',
+        left: '52%',
+        width: '45%',
+      },
       cursor: 'pointer',
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      right: 0,
-      left: 0,
-      width: '100%',
-      opacity: 0,
     };
     switch (this.state.stepIndex) {
       case 0:
@@ -176,116 +287,90 @@ export default class RegisterModal extends React.Component {
         );
       case 1:
         return (
-          <div>
-            <div style={{ float: 'left', marginLeft: '2%', marginTop: '3%', marginRight: '10%' }}>
-              <p>
-                Please enter your store name.
+          <div className="newStoreName">
+            <div style={style.div}>
+              <p style={style.p}>
+                Please enter your store Name.
               </p>
               <TextField
-                value={this.state.newStoreName}
-                style={{ marginTop: 0 }}
+                style={style.textField}
                 floatingLabelText="Enter Store Name"
                 onChange={e => this.handleStoreNameChange(e)}
               />
             </div>
-            <div style={{ float: 'right', marginBottom: '3%', marginTop: '3%' }}>
-              <p>
-                Please enter your store Slogan.
-              </p>
-              <TextField
-                value={this.state.newStoreSlogan}
-                style={{ marginTop: 0 }}
-                floatingLabelText="Enter Store Slogan"
-                onChange={e => this.handleStoreSloganChange(e)}
-              />
-            </div>
-          </div>
-        );
-      case 2:
-        return (
-          <div>
-            <div style={{ float: 'left', marginRight: '10%' }}>
-              <p>
-                Tell us about your store.
-              </p>
-              <TextField
-                value={this.state.newStoreDescription}
-                multiLine
-                style={{ marginTop: 0 }}
-                rows={2}
-                rowsMax={4}
-                floatingLabelText="Enter Store Description"
-                onChange={e => this.handleStoreDescriptionChange(e)}
-              />
-            </div>
-            <div style={{ float: 'right' }}>
-              <p>
+            <div className="newStoreAddress" style={style.div}>
+              <p style={style.p}>
                 Please enter your stores Address.
               </p>
               <TextField
-                value={this.state.newStoreAddress}
                 multiLine
-                style={{ marginTop: 0 }}
+                style={style.textField}
                 rows={2}
                 rowsMax={2}
                 floatingLabelText="Enter Store Address"
                 onChange={e => this.handleStoreAddressChange(e)}
               />
             </div>
-            <FlatButton
-              style={{ float: 'right' }}
-              label="Choose an Image"
-              labelPosition="before"
-            >
-              <input
-                type="file"
-                style={styleInput}
-                onChange={e => this.handleStoreLogoChange(e)}
+            <div className="newStoreType" style={style.div}>
+              <p style={style.p}>
+                Please enter a category for your Store.
+              </p>
+              <TextField
+                multiLine
+                style={style.textField}
+                floatingLabelText="Enter Category"
+                onChange={e => this.handleStoreTypeChange(e)}
               />
-            </FlatButton>
+            </div>
+          </div>
+        );
+      case 2:
+        return (
+          <div className="newStoreDescription">
+            <div style={style.div}>
+              <p style={style.p}>
+                Tell us about your store.
+              </p>
+              <TextField
+                multiLine
+                style={style.textField}
+                rows={2}
+                rowsMax={4}
+                floatingLabelText="Enter Store Description"
+                onChange={e => this.handleStoreDescriptionChange(e)}
+              />
+            </div>
+            <div style={style.div}>
+              <p style={style.p}>
+                Please enter your store Slogan.
+              </p>
+              <TextField
+                style={style.textField}
+                floatingLabelText="Enter Store Slogan"
+                onChange={e => this.handleStoreSloganChange(e)}
+              />
+            </div>
           </div>
         );
       case 3:
         return (
-          <div style={{ width: '100%', height: '100%' }}>
-            <Table selectable={false} bodyStyle={{ width: '100%' }}>
-              <TableHeader displaySelectAll={false}>
-                <TableRow>
-                  <TableHeaderColumn
-                    colSpan="3"
-                    style={{ textAlign: 'center' }}
-                  >
-                  Lets Review your Info
-                  </TableHeaderColumn>
-                </TableRow>
-              </TableHeader>
-              <TableBody displayRowCheckbox={false}>
-                <TableRow>
-                  <TableHeaderColumn>Store Name</TableHeaderColumn>
-                  <TableHeaderColumn>Store Description</TableHeaderColumn>
-                  <TableHeaderColumn>Store Slogan</TableHeaderColumn>
-                  <TableHeaderColumn>Store Address</TableHeaderColumn>
-                  <TableHeaderColumn>Store Logo</TableHeaderColumn>
-                </TableRow>
-                <TableRow style={{ wordWrap: 'break-word', paddingLeft: 0, paddingRight: 0 }}>
-                  <TableRowColumn style={{ whiteSpace: 'normal' }}>
-                    {this.state.newStoreName}
-                  </TableRowColumn>
-                  <TableRowColumn style={{ whiteSpace: 'normal' }}>
-                    {this.state.newStoreDescription}
-                  </TableRowColumn>
-                  <TableRowColumn style={{ whiteSpace: 'normal' }}>
-                    {this.state.newStoreSlogan}
-                  </TableRowColumn>
-                  <TableRowColumn style={{ whiteSpace: 'normal' }}>
-                    {this.state.newStoreAddress}
-                  </TableRowColumn>
-                  <TableRowColumn style={{ whiteSpace: 'normal' }}>
-                    {this.renderPreview()}
-                  </TableRowColumn>
-                </TableRow>
-              </TableBody>
-            </Table>
+          <div className="ImagePreviews">
+            <div className="newStoreLogo" style={style.logo}>
+              <p style={style.p}>
+                Upload your Store Logo
+              </p>
+              <span>
+                {this.renderLogoPreview()}
+              </span>
+            </div>
+            <div className="newStoreBanner" style={style.banner}>
+              <p style={style.p}>
+                Upload a Store Banner
+              </p>
+              <span>
+                {this.renderBannerPreview()}
+              </span>
+            </div>
           </div>
         );
       case 4:
@@ -301,36 +386,44 @@ export default class RegisterModal extends React.Component {
     }
   }
 
+  renderButtons() {
+    const { stepIndex } = this.state;
+    const style = {
+      position: 'absolute',
+      top: '85%',
+    };
+    return (
+      <div style={style}>
+        <FlatButton
+          label="Back"
+          disabled={stepIndex === 0}
+          onTouchTap={e => this.handlePrev(e)}
+          style={{ marginRight: 12 }}
+        />
+        {this.state.stepIndex === 4
+          ?
+          <RaisedButton
+            secondary
+            label={'Finish'}
+            onTouchTap={e => this.handleSubmit(e)}
+          />
+          :
+          <RaisedButton
+            primary
+            label={'Next'}
+            onTouchTap={e => this.handleNext(e)}
+          />
+        }
+      </div>
+    );
+  }
+
   renderContent() {
     const { stepIndex } = this.state;
-    const contentStyle = { margin: '0 16px', overflow: 'hidden' };
-
     return (
-      <div style={contentStyle}>
+      <div>
         <div>{this.renderSteps(stepIndex)}</div>
         <br />
-        <div style={{ marginTop: 24, marginBottom: 12 }}>
-          <FlatButton
-            label="Back"
-            disabled={stepIndex === 0}
-            onTouchTap={e => this.handlePrev(e)}
-            style={{ marginRight: 12 }}
-          />
-          {this.state.stepIndex === 4
-            ?
-            <RaisedButton
-              secondary
-              label={'Finish'}
-              onTouchTap={e => this.handleSubmit(e)}
-            />
-            :
-            <RaisedButton
-              primary
-              label={'Next'}
-              onTouchTap={e => this.handleNext(e)}
-            />
-          }
-        </div>
       </div>
     );
   }
@@ -349,7 +442,7 @@ export default class RegisterModal extends React.Component {
             <StepLabel>More Store Info</StepLabel>
           </Step>
           <Step>
-            <StepLabel>Review</StepLabel>
+            <StepLabel>Images</StepLabel>
           </Step>
           <Step>
             <StepLabel>Submit</StepLabel>
@@ -363,7 +456,6 @@ export default class RegisterModal extends React.Component {
   }
 
   render() {
-    // action buttons for Modal
     const actions = [
       <FlatButton
         label="Cancel"
@@ -372,9 +464,12 @@ export default class RegisterModal extends React.Component {
         onTouchTap={e => this.handleCancel(e)}
       />,
     ];
-    // This is the actual modal
+    const style = {
+      position: 'absolute',
+    };
+
     return (
-      <div style={{ postion: 'absolute' }}>
+      <div style={style}>
         <div>
           <RaisedButton primary label="Register" onTouchTap={e => this.handleOpen(e)} />
           <Dialog
@@ -385,6 +480,7 @@ export default class RegisterModal extends React.Component {
             onRequestClose={(e) => this.handleClose(e)}
           >
             {this.renderStepper()}
+            {this.renderButtons()}
           </Dialog>
         </div>
       </div>

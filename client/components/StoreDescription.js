@@ -13,7 +13,7 @@ export default class StoreDescription extends React.Component {
       width: '80%',
       height: 130,
       paddingTop: '0%',
-      paddingBottom: '5%',
+      paddingBottom: 0,
       marginTop: '2%',
       marginRight: 'auto',
       marginBottom: '2%',
@@ -36,7 +36,7 @@ export default class StoreDescription extends React.Component {
         <Paper style={style} zDepth={1} rounded={false}>
           <img alt="logo" style={style.img} src={this.props.store.picture} />
           <h1 style={{ marginTop: '-8%' }}>{this.props.store.name}</h1>
-          <h3 style={{ marginLeft: '19%', marginRight: '20%' }}>{this.props.store.description}</h3>
+          <h3 style={{ marginLeft: '19%', marginRight: '20%', marginBottom: 0 }}>{this.props.store.description}</h3>
           {this.props.editing ?
             <EditStore
               edit={this.props.editing}
