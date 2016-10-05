@@ -104,7 +104,7 @@ export default class PackageContainer extends Component {
         height: 175,
         overflowY: 'auto',
         flex: '50%',
-        marginLeft: 'auto',
+        marginLeft: 'auto', 
         marginRight: 'auto',
         marginTop: 20,
         marginBottom: 20,
@@ -115,8 +115,13 @@ export default class PackageContainer extends Component {
 
     return (
       <div>
-        {this.state.packages.length
-          ? <PackageSlider
+        {this.state.packages.length === 0
+          ? <AddPackageCard
+            addPackage={e => this.handleAddPackage(e)}
+            ownerId={this.state.ownerId}
+            
+          />
+          : <PackageSlider
             style={style}
             ownerId={this.state.ownerId}
             packages={this.state.packages}
@@ -125,7 +130,6 @@ export default class PackageContainer extends Component {
             edit={e => this.handleEditPackage(e)}
             delete={e => this.handleDeletePackage(e)}
           />
-          : null
         }
 
       </div>

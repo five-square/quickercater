@@ -51,7 +51,7 @@ export default class AddPackageCard extends React.Component {
       cost: this.state.newPackagePrice,
       type: this.state.newPackageType,
       picture: this.state.newPackagePicture,
-      order: this.props.count.length,
+      // order: this.props.count.length,
       ownerId: this.props.ownerId, //props
     });
     this.props.addPackage(newPackage);
