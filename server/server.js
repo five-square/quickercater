@@ -14,7 +14,7 @@ const configAuth = process.env.googleClientId
     clientID: process.env.googleClientId,
     clientSecret: process.env.googleClientSecret,
   }
-  : require('./config/googleCredentials_example');
+  : require('./config/googleCredentials');
 
 const serverUrl = process.env.PORT || 3000;
 
@@ -677,7 +677,7 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(bodyParser.json({ limit: '16mb' }));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
-  
+
   // Mount our main router
   app.use('/', routes);
 
