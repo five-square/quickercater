@@ -45,6 +45,14 @@ export default class AppBarExampleIconMenu extends Component {
   // <EditColorScheme closeMenuOpenDialog={this.closeMenuOpenDialog} open={this.state.openDialog} />
 
   render() {
+    const style = {
+      dialog: {
+        position: 'relative',
+        height: 350,
+        width: '100%',
+      },
+    };
+
     const actions = [
       <FlatButton
         label="Cancel"
@@ -84,13 +92,18 @@ export default class AppBarExampleIconMenu extends Component {
           }
         />
         <Dialog
-          title="Dialog With Actions"
+          title="Color Schemer"
           actions={actions}
           modal={false}
           open={this.state.openDialog}
           onRequestClose={this.closeDialog}
         >
-          <ColorPicker />
+          <div style={style.dialog}>
+            <ColorPicker
+              colorTheme={this.props.colorTheme}
+              changeTheme={this.props.changeTheme}
+            />
+          </div>
         </Dialog>
       </div>
     );

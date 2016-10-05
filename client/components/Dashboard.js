@@ -150,11 +150,14 @@ export default class Dashboard extends Component {
     via orderInfo prop(call with row number passed onClick) */
     return (
       <div style={this.props.style}>
+        <Paper zDepth={this.state.hover}>
         <DashboardNavBar
           toggleEditing={this.props.toggleEditing}
           open={this.state.viewMenu}
           openMenu={this.openMenu}
           closeMenu={this.closeMenu}
+          colorTheme={this.props.colorTheme}
+          changeTheme={this.props.changeTheme}
         />
         {this.state.showOrderDetails !== -1
           ? <OrderDetails
@@ -167,9 +170,19 @@ export default class Dashboard extends Component {
             orderState={this.state.orderState}
             storeName={this.props.storeName}
           />
-           : null
-        }
-        <Paper zDepth={this.state.hover}>
+          {this.state.showOrderDetails !== -1
+            ? <OrderDetails
+              showMe
+              orderInfo={this.state.orderInfo}
+              editable={this.state.editable}
+              handleOrderAccept={e => this.handleOrderAccept(e)}
+              handleOrderReject={e => this.handleOrderReject(e)}
+              handleModalCancel={e => this.handleModalCancel(e)}
+              customerView={false}
+              storeName={this.props.storeName}
+            />
+             : null
+          }
           <Card
             expanded={this.state.pendingOrders.length === 0 ? false : undefined}
             onMouseEnter={() => this.handleOnMouseEnter()}

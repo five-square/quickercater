@@ -51,7 +51,7 @@ class ItemCard extends Component {
       priceChip: {
         margin: 5,
         padding: 2,
-        backgroundColor: '#26C6DA',
+        // backgroundColor: '#26C6DA',
         position: 'absolute',
         right: -25,
         top: 10,
