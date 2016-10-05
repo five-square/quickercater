@@ -7,7 +7,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { PopoverAnimationVertical } from 'material-ui/Popover';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import ColorPicker2 from './ColorPicker2';
+import ColorPicker from './ColorPicker';
 // import NavigationClose from 'material-ui/svg-icons/navigation/close';
 // import EditColorScheme from './EditColorScheme';
 
@@ -45,6 +45,14 @@ export default class AppBarExampleIconMenu extends Component {
   // <EditColorScheme closeMenuOpenDialog={this.closeMenuOpenDialog} open={this.state.openDialog} />
 
   render() {
+    const style = {
+      dialog: {
+        position: 'relative',
+        height: 350,
+        width: '100%',
+      },
+    };
+
     const actions = [
       <FlatButton
         label="Cancel"
@@ -84,13 +92,18 @@ export default class AppBarExampleIconMenu extends Component {
           }
         />
         <Dialog
-          title="Dialog With Actions"
+          title="Color Schemer"
           actions={actions}
           modal={false}
           open={this.state.openDialog}
           onRequestClose={this.closeDialog}
         >
-          <ColorPicker2 />
+          <div style={style.dialog}>
+            <ColorPicker
+              colorTheme={this.props.colorTheme}
+              changeTheme={this.props.changeTheme}
+            />
+          </div>
         </Dialog>
       </div>
     );

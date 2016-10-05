@@ -59,6 +59,8 @@ export default class App extends Component {
     } else {
       console.log('Unauthenticated user.');
     }
+
+    document.getElementById('mainContainer').style.backgroundColor = 'rgba(241, 235, 218, 1)';
   }
 
   selectStore(storeObj) {

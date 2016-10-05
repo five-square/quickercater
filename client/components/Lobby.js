@@ -20,18 +20,38 @@ export default class Lobby extends Component {
 
   render() {
     const style = {
-      width: '60%',
-      flex: '50%',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
+      searchBar: {
+        width: '40%',
+        flex: '50%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        border: '2px solid black',
+        borderRadius: 4,
+        marginBottom: 10,
+        backgroundColor: 'white',
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 0,
+        paddingBottom: 2,
+      },
+      storeCards: {
+        width: '60%',
+        flex: '50%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
     };
     return (
       <div className="Lobby">
-        <div style={style}>
+        <div style={style.searchBar}>
           <TextField
+            fullWidth
             hintText="Search by Caterer"
             value={this.state.searchValue}
             onChange={this.changeSearchValue}
@@ -45,7 +65,7 @@ export default class Lobby extends Component {
               <StoreCard
                 key={i}
                 id={e._id}
-                style={style}
+                style={style.storeCards}
                 store={e.properties}
                 selectStore={this.props.selectStore}
               />
