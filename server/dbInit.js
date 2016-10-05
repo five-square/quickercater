@@ -450,7 +450,6 @@ dbInit.init = () => Node.cypherAsync({
     CREATE (danOrder1)-[:REQUEST {quantity: 50}]->(churrocoDessert3)
     CREATE (danOrder1)-[:REQUEST]->(churrocoTruck)
     CREATE (danOrder1)-[:VIEW]->(churroco)
-    CREATE (churroco)-[:CAN_EDIT]->(danOrder1)
     CREATE (carly)-[:CREATED {created_on: 'yesterday', expires: 'today'}]->(carlyOrder2)
     CREATE (carlyOrder2)-[:VIEW]->(carly)
     CREATE (carlyOrder2)-[:REQUEST {quantity: 25}]->(aliceDrink1)
