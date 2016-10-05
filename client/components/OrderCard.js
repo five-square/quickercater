@@ -4,6 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
+import TimePicker from 'material-ui/TimePicker';
 import OrderAPI from '../models/orderAPI';
 import Customer from '../models/CustomerAPI';
 import OrderConfirmation from './OrderConfirmation';
@@ -19,6 +20,8 @@ export default class OrderCard extends React.Component {
       newOrder: {},
       submitted: false,
       requestDate: '',
+      eventStart: '',
+      eventEnd: '',
       ownerId: this.props.ownerId,
       orderInfo: {},
       customerInfo: {},
@@ -120,6 +123,16 @@ export default class OrderCard extends React.Component {
     this.state.requestDate = JSON.stringify(date).slice(1, 11);
   }
 
+  handleStartTime(event, time) {
+    console.log('handleStartTime time: ', time);
+    this.state.eventStart = JSON.stringify(time).slice(1, 11);
+  }
+
+  handleEndTime(event, time) {
+    console.log('handleEndTime time: ', time);
+    this.state.eventEnd = JSON.stringify(time).slice(1, 11);
+  }
+
   handleModalCancel() {
     this.setState({ reviewOrder: false, open: false });
   }
@@ -130,6 +143,9 @@ export default class OrderCard extends React.Component {
         right: 30,
         bottom: 0,
         position: 'absolute',
+      },
+      textColor: {
+        color: 'black',
       },
       card: {
         margin: 1,
@@ -172,25 +188,29 @@ export default class OrderCard extends React.Component {
           modal={false}
           open={this.state.open}
           onRequestClose={(e) => this.handleClose(e)}
+          autoScrollBodyContent
         >
           <TextField
             ref="customerName"
             hintText="Your name"
             floatingLabelText="Your name"
+            floatingLabelStyle={style.textColor}
             floatingLabelFixed
           />
           <br />
           <TextField
             ref="customerEmail"
-            hintText="Email"
+            hintText="@email.com"
             floatingLabelText="Email"
+            floatingLabelStyle={style.textColor}
             floatingLabelFixed
           />
           <br />
           <TextField
             ref="customerPhone"
-            hintText="Phone"
+            hintText="xxx-xxx-xxxx"
             floatingLabelText="Phone"
+            floatingLabelStyle={style.textColor}
             floatingLabelFixed
             errorText={this.state.errorTextPhone}
             onChange={e => this.onChangePhone(e)}
@@ -200,21 +220,39 @@ export default class OrderCard extends React.Component {
             ref="ordername"
             hintText="Order name"
             floatingLabelText="Order name"
+            floatingLabelStyle={style.textColor}
             floatingLabelFixed
-          />
-          <br />
-          Request Date
-          <DatePicker
-            ref="requestDate"
-            hintText="Date Picker"
-            onChange={(e, date) => this.handleRequestDate(e, date)}
           />
           <br />
           <TextField
             ref="orderAddress"
             hintText="Order address"
             floatingLabelText="Address"
-            type="text"
+            floatingLabelStyle={style.textColor}
+            floatingLabelFixed
+          />
+          <br />
+          <DatePicker
+            ref="requestDate"
+            floatingLabelText="Request Date"
+            floatingLabelStyle={style.textColor}
+            floatingLabelFixed
+            hintText="Request Date"
+            onChange={(e, date) => this.handleRequestDate(e, date)}
+          />
+          <TimePicker
+            hintText="12hr Format"
+            floatingLabelText="Event start time"
+            floatingLabelStyle={style.textColor}
+            floatingLabelFixed
+            onChange={(e, date) => this.handleStartTime(e, date)}
+          />
+          <TimePicker
+            hintText="12hr Format"
+            floatingLabelText="Event end time"
+            floatingLabelStyle={style.textColor}
+            floatingLabelFixed
+            onChange={(e, date) => this.handleEndTime(e, date)}
           />
           <h4>{`Price: $${this.props.orderInfo.totalPrice}`}</h4>
         </Dialog>
