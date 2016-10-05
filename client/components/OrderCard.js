@@ -62,6 +62,8 @@ export default class OrderCard extends React.Component {
         name: this.refs.ordername.getValue(),
         created_on: new Date(), // populate this in Neo4J query??
         request_date: this.state.requestDate,
+        start_time: this.state.eventStart,
+        end_time: this.state.eventEnd,
         fulfilled: false,
         total_price: this.props.orderInfo.totalPrice,
         address: this.refs.orderAddress.getValue(),
@@ -120,21 +122,43 @@ export default class OrderCard extends React.Component {
   }
 
   handleRequestDate(event, date) {
-    this.state.requestDate = JSON.stringify(date).slice(1, 11);
+    // this.state.requestDate = JSON.stringify(date).slice(1, 11);
+    this.state.requestDate = `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
   }
 
   handleStartTime(event, time) {
-    console.log('handleStartTime time: ', time);
-    this.state.eventStart = JSON.stringify(time).slice(1, 11);
+    this.state.eventStart = this.formatTime(time);
   }
 
   handleEndTime(event, time) {
-    console.log('handleEndTime time: ', time);
-    this.state.eventEnd = JSON.stringify(time).slice(1, 11);
+    this.state.eventEnd = this.formatTime(time);
   }
 
   handleModalCancel() {
     this.setState({ reviewOrder: false, open: false });
+  }
+
+  formatTime(time) {
+    let hours = time.getHours();
+    let am = true;
+    if (hours > 12) {
+      am = false;
+      hours -= 12;
+    } else if (hours === 12) {
+      am = false;
+    } else if (hours === 0) {
+      hours = 12;
+    }
+    let minutes = time.getMinutes();
+    console.log('minutes: ', minutes);
+    // if (minutes.length === 1) minutes = `0${minutes}`;
+    if (minutes === 0) {
+      minutes = '00';
+    } else if (minutes < 10) {
+      minutes = `0${minutes}`;
+    }
+    const meridiem = (am ? 'a.m.' : 'p.m.');
+    return `${hours}:${minutes} ${meridiem}`;
   }
 
   renderComponent() {

@@ -253,6 +253,8 @@ export default class OrderDetails extends Component {
               <h4>Phone: {this.state.customer.phone}</h4>
               <h4>Address: {this.state.order.address}</h4>
               <h4>Request Date: {this.state.order.request_date}</h4>
+              <h4>Start time: {this.state.order.start_time}</h4>
+              <h4>End time: {this.state.order.end_time}</h4>
             </CardText>
           </Card>
           <div className="OrderTable">

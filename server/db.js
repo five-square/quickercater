@@ -174,6 +174,8 @@ db.createOrder = (order) => Node.cypherAsync({
       name: {name},
       created_on: {created_on},
       request_date: {request_date},
+      start_time: {start_time},
+      end_time: {end_time},
       fulfilled: {fulfilled},
       total_price: {total_price},
       address: {address}
@@ -183,6 +185,8 @@ db.createOrder = (order) => Node.cypherAsync({
     name: order.name,
     created_on: order.created_on,
     request_date: order.request_date,
+    start_time: order.start_time,
+    end_time: order.end_time,
     fulfilled: order.fulfilled,
     total_price: order.total_price,
     address: order.address,
