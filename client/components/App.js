@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import Badge from 'material-ui/Badge';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Lobby from './Lobby';
 import StoreFront from './StoreFront';
 import Server from '../models/serverAPI';
@@ -28,6 +26,9 @@ export default class App extends Component {
       myStore: null,
       showRegisterModal: false,
     };
+    this.selectStore = e => this.handleSelectStore(e);
+    this.myStoreClick = e => this.handleMyStoreClick(e);
+    this.unmountRegisterModal = e => this.handleUnmountRegisterModal(e);
   }
 
 
@@ -63,7 +64,7 @@ export default class App extends Component {
     document.getElementById('mainContainer').style.backgroundColor = 'rgba(241, 235, 218, 1)';
   }
 
-  selectStore(storeObj) {
+  handleSelectStore(storeObj) {
     console.log('Select store: ', storeObj);
     let id = storeObj.id;
     if (storeObj._id && id === undefined) {
@@ -78,7 +79,7 @@ export default class App extends Component {
         currentStoreName: `Welcome to ${storeObj.name}`,
         storeName: storeObj.name,
         showStore: true,
-        ownerIdOfCurrentStore: owner.id,
+        // ownerIdOfCurrentStore: owner.id,
       });
     });
   }
@@ -175,7 +176,7 @@ export default class App extends Component {
   }
 
   deleteOrderAfterSubmission(ownerId) {
-    console.log('deleteOrderAfterSubmission: ', ownerId)
+    console.log('deleteOrderAfterSubmission: ', ownerId);
     const tempOrder = Object.assign({}, this.state.globalOrder);
     delete tempOrder[ownerId];
     this.setState({
@@ -191,13 +192,13 @@ export default class App extends Component {
     });
   }
 
-  handleMyStoreClick(){ //used to show reg modal when no
-    this.setState({showRegisterModal: true});
-    console.log('setState in app')
+  handleMyStoreClick() { // used to show reg modal when no
+    this.setState({ showRegisterModal: true });
+    console.log('setState in app');
   }
 
-  handleUnmountRegisterModal(){
-    this.setState({showRegisterModal: false});
+  handleUnmountRegisterModal() {
+    this.setState({ showRegisterModal: false });
   }
 
   handleBackClick() {
@@ -221,14 +222,15 @@ export default class App extends Component {
               viewCart={e => this.viewCart(e)}
               showMyStore={this.state.myStore !== null}
               myStore={this.state.myStore}
-              goToMyStore={this.selectStore.bind(this)}
-              openRegisterModal={this.handleMyStoreClick.bind(this)}
+              goToMyStore={this.selectStore}
+              openRegisterModal={this.myStoreClick}
               loggedIn={!!this.state.currentOwnerId}
             />
             {this.state.showRegisterModal
               ? <RegisterModal
-                  handleUnmountRegisterModal={this.handleUnmountRegisterModal.bind(this)}
-                  ownerId={this.state.currentOwnerId} />
+                handleUnmountRegisterModal={this.unmountRegisterModal}
+                ownerId={this.state.currentOwnerId}
+              />
               : null
             }
             <div>
@@ -250,10 +252,12 @@ export default class App extends Component {
                 store={this.state.currentStore}
                 addItemToOrder={e => this.handleAddItemToOrder(e)}
                 updateTotalPrice={this.updateTotalPrice}
-                showDashboard={this.state.myStore && (this.state.myStore._id == this.state.currentStore.id) }
+                showDashboard={
+                  this.state.myStore && (this.state.myStore._id === this.state.currentStore.id)
+                }
                 ownerIdOfCurrentStore={this.state.ownerIdOfCurrentStore}
               />
-              : <Lobby stores={this.state.stores} selectStore={(id, name) => this.selectStore(id, name)} />
+              : <Lobby stores={this.state.stores} selectStore={this.selectStore} />
             }
           </div>
         </MuiThemeProvider>

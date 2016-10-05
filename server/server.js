@@ -130,22 +130,23 @@ routes.get('/api/store/:id', (req, res) => {
   });
 });
 
-routes.post('/api/store/create', (req,res) => {
-// name picture address description slogan 
-  console.log('Create Store Req.body',req.body);
+routes.post('/api/store/create', (req, res) => {
+// name picture address description slogan
+  console.log('Create Store Req.body', req.body);
   db.createStore(req.body.store)
-  .then(newStore =>{
-     console.log(newStore);
-     db.linkOwnerToStore(req.body.ownerId,newStore._id)
-     .then(link=> res.send(newStore));
+  .then(newStore => {
+    console.log(newStore);
+    db.linkOwnerToStore(req.body.ownerId, newStore._id)
+    .then(() => {
+      res.send(newStore);
+    });
   });
-
-})
+});
 
 routes.post('/api/store/update', (req, res) => {
-  db.updateStore(req.body.store)
+  db.updateStore(req.body.newStore)
   .then(store => {
-    res.send(store.properties);
+    res.send(store);
   });
 });
 
@@ -431,7 +432,7 @@ routes.get('/api/order/getAllAccepted/:ownerId', (req, res) => {
   });
 });
 
-routes.get('/api/order/getAllCompletedOrders/:ownerId', (req,res) => {
+routes.get('/api/order/getAllCompletedOrders/:ownerId', (req, res) => {
   db.fetchAllCompletedOrders(req.params.ownerId).then(completedOrders => {
     res.send(completedOrders);
   });

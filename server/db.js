@@ -662,7 +662,7 @@ db.updateStore = (store) => Node.cypherAsync({
     description: store.description,
   },
 })
-.then(stores => stores[0].store);
+.then(stores => stores[0]);
 
 db.linkOwnerToStore = (ownerId, storeId) => Node.cypherAsync({
   query: `MATCH (o:Owner) WHERE ID(o) = {ownerId}

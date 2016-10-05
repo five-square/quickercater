@@ -17,7 +17,7 @@ export default class StoreFront extends Component {
       editing: false,
       openItemBank: false,
       store: this.props.store,
-      packages:[],
+      packages: [],
       muiTheme: null,
       colorTheme: {
         palette: {
@@ -65,8 +65,10 @@ export default class StoreFront extends Component {
   }
 
   handleEditStore(setStore) {
-    Owner.updateStore(setStore)
+    console.log('in StoreFront handleEditStore before db call: ', setStore);
+    Owner.updateStore(setStore, this.props.ownerIdOfCurrentStore)
     .then((store) => {
+      console.log('in StoreFront handleEditStore after db call: ', store);
       this.setState({ store });
     });
   }
@@ -142,13 +144,6 @@ export default class StoreFront extends Component {
           /><br />
           <Paper zDepth={2} style={style.paper}>
             <Tabs style={style.tabs}>
-              <Tab label="Packages"><br />
-                <PackageContainer
-                ownerId={this.props.ownerIdOfCurrentStore}
-                  editing={this.state.editing}
-                  updatePackagesByOwner={e => this.updatePackagesByOwner(e)}
-                /><br />
-              </Tab>
               <Tab label="Menu"><br />
                 <MenuContainer
                   title={this.props.store.name}
@@ -158,6 +153,13 @@ export default class StoreFront extends Component {
                   editing={this.state.editing}
                   packages={this.state.packages}
                 />
+              </Tab>
+              <Tab label="Packages"><br />
+                <PackageContainer
+                  ownerId={this.props.ownerIdOfCurrentStore}
+                  editing={this.state.editing}
+                  updatePackagesByOwner={e => this.updatePackagesByOwner(e)}
+                /><br />
               </Tab>
             </Tabs>
           </Paper>
