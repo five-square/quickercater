@@ -62,7 +62,7 @@ export default class PackageSlider extends Component {
             ref={c => { this.reactSwipe = c; }}
             className="mySwipe"
             swipeOptions={swipeOptions}
-            key={this.props.packages.length - 1}
+            key={this.props.packages.length + 1}
           >
             {this.props.packages.map((pack, index) =>
               <div key={index} style={this.props.style.div}>

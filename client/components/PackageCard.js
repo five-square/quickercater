@@ -15,23 +15,23 @@ const style = {
     bottom: 0,
     position: 'absolute',
   },
-  // cardActions: {
-  //   marginTop: 30,
-  //   position: 'relative',
-  //   height: 30,
-  // },
+  cardMedia: {
+    height: 280,
+    fontSize: 18,
+  },
 };
 
 
 const PackageCard = (props) => (
   <Card style={props.style}>
-    <CardMedia
-      overlay={<CardTitle title={props.pack.description} />}
+     <CardMedia
+      
+      overlay={ <CardTitle title={props.pack.description} titleStyle={style.cardMedia}/>}
     >
       <img role="presentation" src={props.pack.picture} />
     </CardMedia>
     <Paper zDepth={2} style={props.style.paper}>
-    <h1>{props.pack.name}</h1>
+      <h1>{props.pack.name}</h1>
     </Paper>
     {props.editing
       ? <div style={style.floatingEditButton}>
