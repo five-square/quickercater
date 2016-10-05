@@ -11,7 +11,7 @@ import ColorPicker from './ColorPicker';
 // import NavigationClose from 'material-ui/svg-icons/navigation/close';
 // import EditColorScheme from './EditColorScheme';
 
-export default class AppBarExampleIconMenu extends Component {
+export default class DashboardNavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
