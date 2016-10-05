@@ -16,18 +16,8 @@ OwnerAPI.getMenus = (ownerId) =>
     description: element.menu.properties.description,
   })));
 
-OwnerAPI.createStore = (store, ownerId) => 
+OwnerAPI.createStore = (store, ownerId) =>
   fetch('/api/store/create', {
-    method: 'post',
-    headers: {
-      'Content-Type':'application/json',
-    },
-    body: JSON.stringify({store, ownerId}),
-  })
-  .then(data => data.json());
-
-OwnerAPI.updateStore = (store, ownerId) =>
-  fetch('/api/store/update', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -36,14 +26,36 @@ OwnerAPI.updateStore = (store, ownerId) =>
   })
   .then(data => data.json());
 
-OwnerAPI.getStoreAndOwnerByAuthKey = (sessionId) => 
+OwnerAPI.updateStore = (newStore, ownerId) =>
+  fetch('/api/store/update', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ newStore, ownerId }),
+  })
+  .then(data => data.json())
+  .then(store => ({
+    id: store.store._id,
+    name: store.store.properties.name,
+    address: store.store.properties.address,
+    description: store.store.properties.description,
+    slogan: store.store.properties.slogan,
+    picture: store.store.properties.picture,
+  }));
+
+OwnerAPI.getStoreAndOwnerByAuthKey = (sessionId) =>
   fetch('/api/owner/getStoreAndOwnerByAuthKey', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({authKey: sessionId}),
+    body: JSON.stringify({ authKey: sessionId }),
   })
-  .then( data => data.json())
-  .then( store => { console.log(store); return store});
+  .then(data => data.json())
+  .then(store => {
+    console.log(store);
+    return store;
+  });
+
 export default OwnerAPI;

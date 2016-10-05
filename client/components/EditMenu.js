@@ -12,9 +12,24 @@ export default class EditMenu extends Component {
     this.state = {
       open: false,
       hover: 2,
+      name: '',
+      description: '',
+    };
+    this.open = e => this.handleOpen(e);
+  }
+
+  componentWillMount() {
+    this.setState({
       name: this.props.name,
       description: this.props.description,
-    };
+    });
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({
+      name: props.name,
+      description: props.description,
+    });
   }
 
   handleOpen() {

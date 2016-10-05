@@ -8,7 +8,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 import EditItem from './EditItem';
 
-class ItemCard extends Component {
+export default class ItemCard extends Component {
 
   handleAddItemToOrder() {
     this.props.addItemToOrder({
@@ -25,7 +25,7 @@ class ItemCard extends Component {
       packages: this.props.packages,
     });
   }
-            // <EditButtons />
+
   render() {
     const style = {
       floatingEditButton: {
@@ -121,5 +121,3 @@ class ItemCard extends Component {
     );
   }
 }
-
-export default ItemCard;

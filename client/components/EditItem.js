@@ -12,15 +12,29 @@ export default class EditItem extends Component {
     this.state = {
       open: false,
       hover: 2,
+      name: '',
+      description: '',
+      price: null,
+      picture: '',
+    };
+  }
+
+  componentWillMount() {
+    this.setState({
       name: this.props.name,
       description: this.props.description,
       price: this.props.price,
       picture: this.props.picture,
-    };
+    });
   }
 
-  componentWillReceiveProps(newProps) {
-    this.setState({ newProps });
+  componentWillReceiveProps(props) {
+    this.setState({
+      name: props.name,
+      description: props.description,
+      price: props.price,
+      picture: props.price,
+    });
   }
 
   handleOpen() {
