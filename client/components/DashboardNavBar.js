@@ -70,7 +70,7 @@ export default class DashboardNavBar extends Component {
       <div>
         <AppBar
           title="My Dashboard"
-          titleStyle={{ alignItems: 'left' }}
+          titleStyle={{ textAlign: 'left' }}
           iconStyleLeft={{ display: 'none' }}
           iconElementRight={
             <IconMenu
@@ -92,7 +92,14 @@ export default class DashboardNavBar extends Component {
           }
         />
         <Dialog
-          title="Color Schemer"
+          title={
+            <AppBar
+              title="Color Schemer"
+              titleStyle={{ textAlign: 'left' }}
+              iconStyleLeft={{ display: 'none' }}
+            />
+          }
+          titleStyle={{ height: 70, paddingTop: 5 }}
           actions={actions}
           modal={false}
           open={this.state.openDialog}

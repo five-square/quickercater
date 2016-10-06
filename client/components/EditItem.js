@@ -33,7 +33,7 @@ export default class EditItem extends Component {
       name: props.name,
       description: props.description,
       price: props.price,
-      picture: props.price,
+      picture: props.picture,
     });
   }
 

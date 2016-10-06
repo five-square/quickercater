@@ -8,6 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
+import AppBar from 'material-ui/AppBar';
 import CartItemCard from './CartItemCard';
 import OrderCard from './OrderCard';
 
@@ -120,18 +121,17 @@ export default class Cart extends Component {
     return (
       <div>
         <Drawer width={300} openSecondary open={this.props.open} >
-          <Toolbar>
-            <ToolbarGroup>
-              <ToolbarTitle text="My Order" />
-            </ToolbarGroup>
-            <ToolbarGroup>
-              <FlatButton
-                primary
-                label="Close"
-                onTouchTap={e => this.handleToggle(e)}
-              />
-            </ToolbarGroup>
-          </Toolbar>
+          <AppBar
+            title="My Order"
+            titleStyle={{ textAlign: 'left' }}
+            iconStyleLeft={{ display: 'none' }}
+          >
+            <FlatButton
+              secondary
+              label="Close"
+              onTouchTap={e => this.handleToggle(e)}
+            />
+          </AppBar>
           <br />
           {cartItems}
         </Drawer>
