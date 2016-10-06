@@ -1,14 +1,23 @@
-
-//
-// Get all items and QTYs associated iwth a particular order
-// { order: {orderObj}, items: [ {item: itemObj, qty: rel.qty }, ... {...}] }
-// make sure to provide properties
-
-
 import fetch from 'isomorphic-fetch';
 
 const orderAPI = {};
-
+/**
+ * Get pending orders by ownerId (of store)
+ * (pending orders => (or:CustomerOrder)-[VIEW]->(ow:Owner))
+ *
+ * Order Object {
+ *                address: {string},
+ *                total_price: {number},
+ *                created_on: {string},
+ *                request_date: {string},
+ *                fulfilled: {boolean}
+ *                name: {string}
+ *              }
+ *
+ *
+ * @param  {number}
+ * @return {Array of Order Objects}
+ */
 orderAPI.fetchPendingOrders = (ownerId) =>
   fetch(`/api/order/getAllPending/${ownerId}`, {
     method: 'get',
@@ -51,11 +60,11 @@ orderAPI.fetchOrderDetails = (orderId) =>
     return result;
   });
 
-    orderAPI.fetchCompletedOrders = (ownerId) =>
+orderAPI.fetchCompletedOrders = (ownerId) =>
       fetch(`/api/order/getAllCompletedOrders/${ownerId}`, {
         method: 'get',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
       }).then(resp => resp.json());
 

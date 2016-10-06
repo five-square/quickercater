@@ -2,6 +2,19 @@ import fetch from 'isomorphic-fetch';
 
 const MenuAPI = {};
 
+/**
+ * Gets all items for a certain store menu
+ *
+ * ItemObj {
+ *          name: {string},
+ *          description: {string},
+ *          price: {string},
+ *          picture: {string},
+ *          }
+ *
+ * @param  {number} - Menu ID
+ * @return {Array of Item Objects}
+ */
 MenuAPI.getItems = (menuId) =>
   fetch(`/api/menu/items/${menuId}`, {
     method: 'get',
@@ -21,23 +34,17 @@ MenuAPI.getItems = (menuId) =>
     quantity: 1,
   })));
 
-MenuAPI.removeItem = (menuId, itemId) =>
-  fetch('/api/menu/item/remove', {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ menuId, itemId }),
-  })
-  .then(data => data.json())
-  .then(items => items.map(itemElement => ({
-    id: itemElement.item._id,
-    name: itemElement.item.properties.name,
-    price: itemElement.item.properties.price,
-    description: itemElement.item.properties.description,
-    picture: itemElement.item.properties.picture,
-  })));
-
+/**
+ * @param  {Menu Object}
+ *
+ * Menu Obj {
+ *             name: {string},
+ *             description: {string},
+ *             order: {number} - zero-index value
+ *          }
+ *
+ * @return {Menu Object}
+ */
 MenuAPI.create = (menuObj) =>
   fetch('/api/menu/create', {
     method: 'post',
@@ -51,12 +58,16 @@ MenuAPI.create = (menuObj) =>
     id: menu.menu._id,
   }));
 
-/*
-  {
-    menuId,
-    itemId,
-    order
-  }
+/**
+ * Add item to a store's particular menu
+ *
+ *   New Item Object {
+ *                    menuId,
+ *                    itemId,
+ *                    order
+ *                    }
+ * @param  {newItem Object}
+ * @return {number} - item Id
  */
 MenuAPI.addNewItem = (newObj) =>
   fetch('/api/menu/item/add_new', {
@@ -71,6 +82,20 @@ MenuAPI.addNewItem = (newObj) =>
     id: item._id,
   }));
 
+
+/**
+ * Add item from item bank to active menu
+ *
+ * ItemObj {
+ *          name: {string},
+ *          description: {string},
+ *          price: {string},
+ *          picture: {string},
+ *          }
+ *
+ * @param  {item Object}
+ * @return {<none>}
+ */
 MenuAPI.addExistingItem = (itemObj) =>
   fetch('/api/menu/item/add_existing', {
     method: 'post',
@@ -90,7 +115,14 @@ MenuAPI.addExistingItem = (itemObj) =>
     },
     quantity: 1,
   })));
-
+/**
+ * Detaches items from Menu, then deletes menu
+ * (for use with menus that ARE NOT empty)
+ *
+ * @param  {number}
+ * @param  {number}
+ * @return {<none>}
+ */
 MenuAPI.deleteWithItems = (menuId, ownerId) =>
   fetch('/api/menu/delete', {
     method: 'post',
@@ -105,7 +137,14 @@ MenuAPI.deleteWithItems = (menuId, ownerId) =>
     name: element.menu.properties.name,
     description: element.menu.properties.description,
   })));
-
+/**
+ * Detaches items from Menu, then deletes menu
+ * (for use with menus that ARE empty)
+ *
+ * @param  {number}
+ * @param  {number}
+ * @return {<none>}
+ */
 MenuAPI.deleteEmptyMenu = (menuId, ownerId) =>
   fetch('/api/menu/delete/empty', {
     method: 'post',
@@ -121,19 +160,19 @@ MenuAPI.deleteEmptyMenu = (menuId, ownerId) =>
     description: element.menu.properties.description,
   })));
 
-MenuAPI.move = (direction, menuId, ownerId) =>
-  fetch(`/api/menu/${ownerId}/reorder`, {
-    method: 'put',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      direction,
-      menuId,
-    }),
-  })
-  .then(data => data.json());
-
+/**
+ * Update menu with new menu information
+ *
+ * Menu Obj {
+ *             name: {string},
+ *             description: {string},
+ *             order: {number} - zero-index value
+ *          }
+ *
+ * @param  {Menu Object}
+ * @param  {number}
+ * @return {Menu Object}
+ */
 MenuAPI.edit = (newMenuInfo, ownerId) =>
   fetch(`/api/menu/${ownerId}/update`, {
     method: 'put',
@@ -143,7 +182,18 @@ MenuAPI.edit = (newMenuInfo, ownerId) =>
     body: JSON.stringify(newMenuInfo),
   })
   .then(data => data.json());
-
+/**
+ * Changes the view order of menus
+ *
+ * Menu Obj {
+ *             name: {string},
+ *             description: {string},
+ *             order: {number} - zero-index value
+ *          }
+ *
+ * @param  {Menu Array}
+ * @return {Menu Array}
+ */
 MenuAPI.updateOrder = (menuArray) =>
   fetch('/api/menu/reorder', {
     method: 'put',

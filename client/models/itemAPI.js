@@ -1,7 +1,20 @@
 import fetch from 'isomorphic-fetch';
-// Create, Read, Update, Delete
+
 const ItemAPI = {};
 
+/**
+ * Create a menu item in db
+ *
+ * ItemObj {
+ *          name: {string},
+ *          description: {string},
+ *          price: {string},
+ *          picture: {string},
+ *          }
+ *
+ * @param  {Item Object}
+ * @return { Object {id} }
+ */
 ItemAPI.create = (itemObj) =>
   fetch('/api/item/create', {
     method: 'post',
@@ -12,12 +25,26 @@ ItemAPI.create = (itemObj) =>
   })
   .then(data => data.json())
   .then(item => {
-    console.log('In Item create: ', item._id);
+    console.log('ItemAPI28--In Item create: ', item._id);
     return ({
       id: item._id,
     });
   });
 
+
+/**
+ * Fetch get details of menu item by menuItemId
+ *
+ * ItemObj {
+ *          name: {string},
+ *          description: {string},
+ *          price: {string},
+ *          picture: {string},
+ *          }
+ *
+ * @param  {number}
+ * @return {itemObj}
+ */
 ItemAPI.getItemsbyId = (itemId) =>
   fetch(`/api/item/${itemId}`, {
     method: 'get',
@@ -34,6 +61,20 @@ ItemAPI.getItemsbyId = (itemId) =>
     picture: element.item.properties.picture,
   })));
 
+
+/**
+ * Update menu item with new itemObj
+ *
+ * ItemObj {
+ *          name: {string},
+ *          description: {string},
+ *          price: {string},
+ *          picture: {string},
+ *          }
+ *
+ * @param  {item object}
+ * @return {item object}
+ */
 ItemAPI.edit = (itemObj) =>
   fetch('/api/item/update', {
     method: 'post',
@@ -54,6 +95,19 @@ ItemAPI.edit = (itemObj) =>
     quantity: 1,
   }));
 
+/**
+ * Delete item from database completely forever
+ *
+ * ItemObj {
+ *          name: {string},
+ *          description: {string},
+ *          price: {string},
+ *          picture: {string},
+ *          }
+ *
+ * @param  {number}
+ * @return { <none> }
+ */
 ItemAPI.delete = (itemId) =>
   fetch(`/api/item/${itemId}`, {
     method: 'delete',
@@ -63,6 +117,14 @@ ItemAPI.delete = (itemId) =>
   })
   .then(data => data.json());
 
+
+/**
+ * Unlink an item from a certain menu
+ *
+ * @param  {number}
+ * @param  {number}
+ * @return {<none>}
+ */
 ItemAPI.remove = (itemId, menuId) => // needs work
   fetch('/api/item/remove', {
     method: 'post',
@@ -86,19 +148,12 @@ ItemAPI.remove = (itemId, menuId) => // needs work
     quantity: 1,
   })));
 
-ItemAPI.move = (direction, itemId, menuId) =>
-  fetch(`/api/item/${menuId}/reorder`, {
-    method: 'put',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      direction,
-      itemId,
-    }),
-  })
-  .then(data => data.json());
-
+/**
+ * Update an order with a new list of items
+ *
+ * @param  {array of Item Objects}
+ * @return {array of item Objects}
+ */
 ItemAPI.updateOrder = (itemArray) =>
   fetch('/api/item/reorder', {
     method: 'put',
@@ -112,6 +167,20 @@ ItemAPI.updateOrder = (itemArray) =>
   })
   .then(data => data.json());
 
+/**
+ *  Get items not assigned to a menu for a Store
+ *  (these will show in "item bank")
+ *
+ * ItemObj {
+ *          name: {string},
+ *          description: {string},
+ *          price: {string},
+ *          picture: {string},
+ *          }
+ *
+ * @param  {number}
+ * @return {array of item Objects}
+ */
 ItemAPI.getUnassignedItems = (ownerId) =>
   fetch(`/api/item/unassigned/${ownerId}`, {
     method: 'get',
@@ -121,7 +190,7 @@ ItemAPI.getUnassignedItems = (ownerId) =>
   })
   .then(data => data.json())
   .then(items => {
-    console.log('in itemAPI: ', items);
+    console.log('ItemAPI193--in itemAPI: ', items);
     return items.map(item => ({
       id: item.item._id,
       name: item.item.properties.name,

@@ -272,7 +272,6 @@ routes.put('/api/menu/:ownerId/reorder', (req, res) => {
 });
 
 routes.put('/api/menu/reorder', (req, res) => {
-  console.log(req.body);
   db.updateMenuOrder(req.body)
   .then(menus => {
     res.status(201).send(menus);
@@ -280,7 +279,6 @@ routes.put('/api/menu/reorder', (req, res) => {
 });
 
 routes.put('/api/menu/:ownerId/update', (req, res) => {
-  console.log(req.body.menuId);
   db.updateMenu(req.body)
   .then(dbData => {
     res.status(201).send(dbData);
@@ -295,10 +293,8 @@ routes.get('/api/menu/items/:menuId', (req, res) => {
 });
 
 routes.post('/api/menu/create', (req, res) => {
-  console.log(req.body);
   db.createMenu(req.body)
   .then(newMenu => {
-    console.log('after DB call: ', newMenu);
     res.status(201).send(newMenu);
   });
 });
@@ -325,15 +321,12 @@ routes.post('/api/menu/item/add_existing', (req, res) => {
 });
 
 routes.post('/api/menu/delete', (req, res) => {
-  console.log('in server, before db: ', req.body.id);
   db.prepareMenuForDelete(req.body.id)
   .then(() => {
-    console.log('after db prepare call: ', req.body);
     db.deleteMenu(req.body.id)
     .then(() => {
       db.getMenuByOwnerId(req.body.ownerId)
       .then(menus => {
-        console.log('after db.getMenu call: ', menus);
         res.status(202).send(menus);
       })
       .catch(() => {

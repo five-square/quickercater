@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import Card from 'material-ui/Card';
 import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
-// import CardTitle from 'material-ui/Card/CardTitle';
-import Avatar from 'material-ui/Avatar';
 import FlatButton from 'material-ui/FlatButton';
 import Chip from 'material-ui/Chip';
 import FloatingActionButton from 'material-ui/FloatingActionButton';

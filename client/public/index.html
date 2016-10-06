@@ -9,10 +9,15 @@
     <div id="app"></div>
   </div>
  <script language="JavaScript">
+  const GLOBAL = {};
+  GLOBAL.stopNavigation = 'Are you sure you want to leave QuickerCater? Your data may not be saved';
   window.onbeforeunload = confirmExit;
   function confirmExit()
   {
-    return 'Are you sure you want to leave QuickerCater?™';
+    console.log(GLOBAL.stopNavigation);
+
+    return GLOBAL.stopNavigation;
+    //return 'Are you sure you want to leave QuickerCater?™';
   }
 </script>
   <script src="/bundle.js"></script>
