@@ -47,6 +47,7 @@ export default class App extends Component {
       owners: [],
       stores: [],
       currentOwnerId: false,
+      ownerIdOfCurrentStore: '',
       currentStore: {},
       currentStoreName: 'Welcome to QuickerCater',
       storeName: 'QuickerCater',
@@ -102,7 +103,7 @@ export default class App extends Component {
     }
     Server.getOwnerByStoreId(id)
     .then(owner => {
-      console.log('in select Store', storeObj);
+      console.log('in select Store:', storeObj);
       this.setState({
         ownerIdOfCurrentStore: owner.id,
         currentStore: storeObj,

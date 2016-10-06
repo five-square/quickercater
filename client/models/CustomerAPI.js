@@ -12,13 +12,13 @@ CustomerAPI.create = (customerInfo) =>
   })
   .then(data => data.json());
 
-CustomerAPI.sendEmail = (mailOptions) =>
+CustomerAPI.sendEmail = (mailOptions, ownerId) =>
   fetch('/api/customer/email', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(mailOptions),
+    body: JSON.stringify({ mailOptions, ownerId }),
   })
   .then(data => data.json());
 export default CustomerAPI;

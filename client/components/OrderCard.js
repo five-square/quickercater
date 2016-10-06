@@ -74,7 +74,7 @@ export default class OrderCard extends React.Component {
         name: this.state.orderName,
         created_on: new Date(), // populate this in Neo4J query??
         request_date: `${this.state.requestDate.getMonth() + 1}-
-                      ${this.state.requestDate.getDate()}-${this.state.requestDate.getFullYear()}`,
+                     ${this.state.requestDate.getDate()}-${this.state.requestDate.getFullYear()}`,
         start_time: this.formatTime(this.state.eventStartTime),
         end_time: this.formatTime(this.state.eventEndTime),
         fulfilled: false,
@@ -113,7 +113,7 @@ export default class OrderCard extends React.Component {
               generateTextFromHTML: true,
               html: Email.compose(this.state.orderInfo, this.props.storeName, 'pending'),
             };
-            Customer.sendEmail(mailOptions)
+            Customer.sendEmail(mailOptions, this.props.ownerId)
               .then(response => {
                 console.log('response after confirmation email sent: ', response);
               });
