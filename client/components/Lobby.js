@@ -38,6 +38,7 @@ export default class Lobby extends Component {
         paddingBottom: 2,
       },
       storeCards: {
+        height: 'inherit',
         width: '60%',
         flex: '50%',
         marginLeft: 'auto',
