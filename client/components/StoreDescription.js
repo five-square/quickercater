@@ -64,6 +64,7 @@ export default class StoreDescription extends React.Component {
         marginLeft: '19%',
         marginRight: '20%',
         marginBottom: 0,
+        height: 6,
       },
     };
     return (
