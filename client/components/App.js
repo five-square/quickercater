@@ -119,26 +119,30 @@ export default class App extends Component {
   }
 
   handleAddItemToOrder(itemObj) {
-    if (!this.state.globalOrder[itemObj.ownerId]) {
-      this.state.globalOrder[itemObj.ownerId] = {};
-      this.state.globalOrder[itemObj.ownerId].order = [];
-      this.state.globalOrder[itemObj.ownerId].totalPrice = 0;
-      this.state.globalOrder[itemObj.ownerId].storeName = this.state.storeName;
-      this.state.globalOrder[itemObj.ownerId].packages = itemObj.packages;
-      this.state.globalOrder[itemObj.ownerId].selectedPkgId = 0;
-      this.state.globalOrder[itemObj.ownerId].selectedPkgDesc = '';
-      this.state.globalOrder[itemObj.ownerId].selectedPkgCost = 0;
-    }
     const tempOrder = Object.assign({}, this.state.globalOrder);
+
+    // if the order for a store does not exist, initialize the order here..
+    if (!tempOrder[itemObj.ownerId]) {
+      tempOrder[itemObj.ownerId] = {};
+      tempOrder[itemObj.ownerId].order = [];
+      tempOrder[itemObj.ownerId].totalPrice = 0;
+      tempOrder[itemObj.ownerId].storeName = this.state.storeName;
+      tempOrder[itemObj.ownerId].packages = itemObj.packages;
+      tempOrder[itemObj.ownerId].selectedPkgId = 0;
+      tempOrder[itemObj.ownerId].selectedPkgDesc = '';
+      tempOrder[itemObj.ownerId].selectedPkgCost = 0;
+    }
     const itemPos = tempOrder[itemObj.ownerId].order
       .map(itemInfo => itemInfo.item.id).indexOf(itemObj.item.id);
-    // Check to see if the item is already in the list
+
+    /* Check to see if the item is already in the list
+       if not in the list add to the order and update
+        total price*/
     if (itemPos < 0) {
       tempOrder[itemObj.ownerId].order.push(itemObj);
       tempOrder[itemObj.ownerId].totalPrice =
             Number(parseFloat(tempOrder[itemObj.ownerId].totalPrice) +
-                        (parseFloat(itemObj.item.price)))
-                        .toFixed(2);
+                        (parseFloat(itemObj.item.price))).toFixed(2);
       this.setState({
         globalOrder: tempOrder,
         openCart: true,
