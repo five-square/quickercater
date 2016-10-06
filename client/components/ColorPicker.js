@@ -3,6 +3,13 @@ import { AlphaPicker, SwatchesPicker } from 'react-color';
 import Paper from 'material-ui/Paper';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
+import { Tabs, Tab } from 'material-ui/Tabs';
+import AppBar from 'material-ui/AppBar';
+import RaisedButton from 'material-ui/RaisedButton';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Card from 'material-ui/Card';
+import CardTitle from 'material-ui/Card/CardTitle';
 
 export default class ColorPicker extends React.Component {
   constructor(props) {
@@ -28,23 +35,20 @@ export default class ColorPicker extends React.Component {
         b: '',
         a: '',
       },
+      newColorTheme: this.props.colorTheme,
     };
     this.propertyKeys = {
       0: 'Primary 1',
       1: 'Accent 1',
-      2: 'Accent 2',
-      3: 'Accent 3',
-      4: 'Borders',
-      5: 'Canvas',
-      6: 'Shadows',
-      7: 'Primary Text',
-      8: 'Secondary Text',
-      9: 'Background',
+      2: 'Canvas',
+      3: 'Shadows',
+      4: 'Primary Text',
+      5: 'Secondary Text',
+      6: 'Background',
     };
 
     this.click = (e, i, v) => this.handleClick(e, i, v);
     this.change = e => this.handleChange(e);
-    console.log('in ColorPicker constructor: ', this.displayColor(1));
   }
 
   componentWillMount() {
@@ -63,10 +67,16 @@ export default class ColorPicker extends React.Component {
     });
   }
 
+  componentWillReceiveProps(props) {
+    this.setState({
+      newColorTheme: props.colorTheme,
+    });
+  }
+
   setColor() {
     const color = this.state.color;
     const colorRGBA = `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
-    const newTheme = this.props.colorTheme;
+    const newTheme = this.state.newColorTheme;
 
     // A wild switch appears...
     switch (this.state.colorToChange) {
@@ -79,34 +89,22 @@ export default class ColorPicker extends React.Component {
         this.props.changeTheme(newTheme);
         break;
       case 2:
-        newTheme.palette.accent2Color = this.hexify(colorRGBA);
-        this.props.changeTheme(newTheme);
-        break;
-      case 3:
-        newTheme.palette.accent3Color = this.hexify(colorRGBA);
-        this.props.changeTheme(newTheme);
-        break;
-      case 4:
-        newTheme.palette.borderColor = this.hexify(colorRGBA);
-        this.props.changeTheme(newTheme);
-        break;
-      case 5:
         newTheme.palette.canvasColor = this.hexify(colorRGBA);
         this.props.changeTheme(newTheme);
         break;
-      case 6:
+      case 3:
         newTheme.palette.shadowColor = this.hexify(colorRGBA);
         this.props.changeTheme(newTheme);
         break;
-      case 7:
+      case 4:
         newTheme.palette.textColor = this.hexify(colorRGBA);
         this.props.changeTheme(newTheme);
         break;
-      case 8:
+      case 5:
         newTheme.palette.alternateTextColor = this.hexify(colorRGBA);
         this.props.changeTheme(newTheme);
         break;
-      case 9:
+      case 6:
         document.getElementById('mainContainer').style.backgroundColor =
           `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
         this.setState({
@@ -140,27 +138,18 @@ export default class ColorPicker extends React.Component {
         color = this.rgbify(newTheme.palette.accent1Color.toUpperCase(), true);
         break;
       case 2:
-        color = this.rgbify(newTheme.palette.accent2Color.toUpperCase(), true);
-        break;
-      case 3:
-        color = this.rgbify(newTheme.palette.accent3Color.toUpperCase(), true);
-        break;
-      case 4:
-        color = this.rgbify(newTheme.palette.borderColor.toUpperCase(), true);
-        break;
-      case 5:
         color = this.rgbify(newTheme.palette.canvasColor.toUpperCase(), true);
         break;
-      case 6:
+      case 3:
         color = this.rgbify(newTheme.palette.shadowColor.toUpperCase(), true);
         break;
-      case 7:
+      case 4:
         color = this.rgbify(newTheme.palette.textColor.toUpperCase(), true);
         break;
-      case 8:
+      case 5:
         color = this.rgbify(newTheme.palette.alternateTextColor.toUpperCase(), true);
         break;
-      case 9:
+      case 6:
         color = `rgba(${r}, ${g}, ${b}, ${a})`;
         break;
       default:
@@ -244,52 +233,108 @@ export default class ColorPicker extends React.Component {
         backgroundColor: 'lightgray',
       },
       paper: {
-        height: 150,
-        width: '45%',
+        height: 70,
+        width: 100,
         marginLeft: 'auto',
         marginRight: 'auto',
-        marginTop: 50,
+        marginTop: 20,
         backgroundColor: this.displayColor(this.state.colorToChange),
       },
+      dropDown: {
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginTop: 40,
+        display: 'inline',
+      },
     };
-
+    console.log('in ColorPicker: ', this.props.colorTheme.palette.shadowColor)
     return (
       <div>
-        <div style={{ width: '50%', position: 'relative' }}>
-          <DropDownMenu
-            maxHeight={200}
-            value={this.state.colorToChange}
-            onChange={this.click}
-          >
-            <MenuItem key={0} value={0} primaryText="Primary 1" />
-            <MenuItem key={1} value={1} primaryText="Accent 1" />
-            <MenuItem key={2} value={2} primaryText="Accent 2" />
-            <MenuItem key={3} value={3} primaryText="Accent 3" />
-            <MenuItem key={4} value={4} primaryText="Borders" />
-            <MenuItem key={5} value={5} primaryText="Canvas" />
-            <MenuItem key={6} value={6} primaryText="Shadows" />
-            <MenuItem key={7} value={7} primaryText="Primary Text" />
-            <MenuItem key={8} value={8} primaryText="Secondary Text" />
-            <MenuItem key={9} value={9} primaryText="Background" />
-          </DropDownMenu>
-          <Paper
-            zDepth={2}
-            style={style.paper}
-          />
-        </div>
-        <div style={style.popover}>
-          <div style={style.cover} onTouchTap={this.click} />
-          <div style={{ backgroundColor: 'white' }}>
-            <AlphaPicker
-              color={this.state.colorToDisplay}
-              onChangeComplete={this.change}
-            />
-          </div><br />
-          <SwatchesPicker
-            color={this.state.colorToDisplay}
-            onChangeComplete={this.change}
-          />
-        </div>
+        <Tabs style={{ width: '100%' }}>
+          <Tab label="Choose a Theme">
+            <h1>Something goes here</h1>
+          </Tab>
+          <Tab label="Customize">
+            <div style={{ width: '50%', position: 'relative' }}>
+              <div style={{ position: 'relative', height: 110 }}>
+                <div style={{ width: '60%', position: 'absolute', display: 'inline-block' }}>
+                  <DropDownMenu
+                    maxHeight={200}
+                    value={this.state.colorToChange}
+                    onChange={this.click}
+                    style={style.dropDown}
+                  >
+                    <MenuItem key={0} value={0} primaryText="Buttons and Menus" />
+                    <MenuItem key={1} value={1} primaryText="Secondary Buttons" />
+                    <MenuItem key={2} value={2} primaryText="Canvas" />
+                    <MenuItem key={3} value={3} primaryText="Shadows" />
+                    <MenuItem key={4} value={4} primaryText="Primary Text" />
+                    <MenuItem key={5} value={5} primaryText="Secondary Text" />
+                    <MenuItem key={6} value={6} primaryText="Background" />
+                  </DropDownMenu>
+                </div>
+                <div
+                  style={{
+                    width: '40%',
+                    position: 'absolute',
+                    right: 0,
+                    display: 'inline-block',
+                  }}
+                >
+                  <Paper
+                    zDepth={2}
+                    style={style.paper}
+                  />
+                </div>
+              </div>
+              <MuiThemeProvider muiTheme={getMuiTheme(this.props.colorTheme)}>
+                <div>
+                  <Paper
+                    style={{
+                      margin: 20,
+                      position: 'relative',
+                      textAlign: 'center',
+                      marginTop: 0,
+                      paddingBottom: 5,
+                    }}
+                  >
+                    <AppBar
+                      title="Style Preview"
+                      titleStyle={{ fontSize: 20, height: 50, marginTop: -13 }}
+                      style={{ height: 40 }}
+                      iconStyleLeft={{ display: 'none' }}
+                    />
+                    <Card zDepth={2} style={{ margin: 10 }}>
+                      <CardTitle title="Primary Text" />
+                      <RaisedButton
+                        primary label="Primary"
+                        style={{ display: 'inline-block', margin: 15, width: '40%', marginTop: 0 }}
+                      />
+                      <RaisedButton
+                        secondary
+                        label="Secondary"
+                        style={{ display: 'inline-block', margin: 10, width: '40%', marginTop: 0 }}
+                      />
+                    </Card>
+                  </Paper>
+                </div>
+              </MuiThemeProvider>
+            </div>
+            <div style={style.popover}>
+              <div style={style.cover} onTouchTap={this.click} />
+              <div style={{ backgroundColor: 'white' }}>
+                <AlphaPicker
+                  color={this.state.colorToDisplay}
+                  onChangeComplete={this.change}
+                />
+              </div><br />
+              <SwatchesPicker
+                color={this.state.colorToDisplay}
+                onChangeComplete={this.change}
+              />
+            </div>
+          </Tab>
+        </Tabs>
       </div>
     );
   }

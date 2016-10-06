@@ -19,8 +19,8 @@ export default class StoreFront extends Component {
       store: this.props.store,
       packages: [],
       muiTheme: null,
-      // customMuiTheme: null,
       colorTheme: this.props.colorTheme,
+      currentColorTheme: null,
       // {
       //   palette: {
       //     primary1Color: '#af521c', // primary buttons and appbars
@@ -36,15 +36,12 @@ export default class StoreFront extends Component {
       //   },
       // },
     };
-    // this.muiTheme = null;
     this.toggleEditing = e => this.handleToggleEditing(e);
     this.changeTheme = e => this.handleChangeTheme(e);
   }
 
   componentWillMount() {
-    // this.muiTheme = getMuiTheme(this.state.colorTheme);
     this.setState({
-      // customMuiTheme: getMuiTheme(this.state.colorTheme),
       muiTheme: getMuiTheme(this.state.colorTheme),
     });
   }
@@ -82,8 +79,6 @@ export default class StoreFront extends Component {
   }
 
   handleChangeTheme(newTheme) {
-    console.log('in StoreFront handleChangeTheme: ', newTheme);
-    // this.muiTheme = getMuiTheme(newTheme);
     this.setState({
       muiTheme: getMuiTheme(newTheme),
       colorTheme: newTheme,
@@ -93,9 +88,9 @@ export default class StoreFront extends Component {
   render() {
     const style = {
       menuCards: {
-        width: '95%',
+        width: '85%',
         flex: '50%',
-        marginTop: '2%',
+        marginTop: '1%',
         marginBottom: '2%',
         marginLeft: 'auto',
         marginRight: 'auto',
@@ -126,52 +121,57 @@ export default class StoreFront extends Component {
       },
     };
 
+    console.log('in StoreFront: stateColorTheme: ', this.state.colorTheme);
+    console.log('in StoreFront: propsMuiTheme: ', this.props.masterMuiTheme);
+
     return (
-      <MuiThemeProvider muiTheme={this.state.muiTheme}>
-        <div className="StoreFront" >
-          {this.props.showDashboard
-          ?
-          // <MuiThemeProvider muiTheme={this.state.muiTheme}>
-            <Dashboard
-              style={style.dashboard}
-              ownerId={this.props.ownerIdOfCurrentStore}
-              storeName={this.props.store.name}
-              toggleEditing={this.toggleEditing}
-              colorTheme={this.state.colorTheme}
-              changeTheme={this.changeTheme}
-            />
-          // </MuiThemeProvider>
-          : null
-        }
-          <StoreDescription
-            ownerId={this.props.ownerId}
-            editing={this.state.editing}
-            store={this.state.store}
-            handleEditStore={e => this.handleEditStore(e)}
-          /><br />
-          <Paper zDepth={2} style={style.paper}>
-            <Tabs style={style.tabs}>
-              <Tab label="Menu"><br />
-                <MenuContainer
-                  title={this.props.store.name}
-                  style={style.menuCards}
-                  ownerId={this.props.ownerIdOfCurrentStore}
-                  addItemToOrder={this.props.addItemToOrder}
-                  editing={this.state.editing}
-                  packages={this.state.packages}
-                />
-              </Tab>
-              <Tab label="Packages"><br />
-                <PackageContainer
-                  ownerId={this.props.ownerIdOfCurrentStore}
-                  editing={this.state.editing}
-                  updatePackagesByOwner={e => this.updatePackagesByOwner(e)}
-                /><br />
-              </Tab>
-            </Tabs>
-          </Paper>
-        </div>
-      </MuiThemeProvider>
+      <div className="StoreFront" >
+        {this.props.showDashboard
+        ? <MuiThemeProvider muiTheme={this.props.masterMuiTheme}>
+          <Dashboard
+            style={style.dashboard}
+            ownerId={this.props.ownerIdOfCurrentStore}
+            storeName={this.props.store.name}
+            toggleEditing={this.toggleEditing}
+            colorTheme={this.state.colorTheme}
+            masterColorTheme={this.props.colorTheme}
+            changeTheme={this.changeTheme}
+          />
+        </MuiThemeProvider>
+        : null
+      }
+        <MuiThemeProvider muiTheme={getMuiTheme(this.state.colorTheme)}>
+          <div>
+            <StoreDescription
+              ownerId={this.props.ownerId}
+              editing={this.state.editing}
+              store={this.state.store}
+              handleEditStore={e => this.handleEditStore(e)}
+            /><br />
+            <Paper zDepth={2} style={style.paper}>
+              <Tabs style={style.tabs}>
+                <Tab label="Menu"><br />
+                  <MenuContainer
+                    title={this.props.store.name}
+                    style={style.menuCards}
+                    ownerId={this.props.ownerIdOfCurrentStore}
+                    addItemToOrder={this.props.addItemToOrder}
+                    editing={this.state.editing}
+                    packages={this.state.packages}
+                  />
+                </Tab>
+                <Tab label="Packages"><br />
+                  <PackageContainer
+                    ownerId={this.props.ownerIdOfCurrentStore}
+                    editing={this.state.editing}
+                    updatePackagesByOwner={e => this.updatePackagesByOwner(e)}
+                  /><br />
+                </Tab>
+              </Tabs>
+            </Paper>
+          </div>
+        </MuiThemeProvider>
+      </div>
     );
   }
 }

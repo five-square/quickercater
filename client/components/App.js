@@ -293,6 +293,8 @@ export default class App extends Component {
                 updatePackageOption={(e, x) => this.updatePackageOption(e, x)}
               />
             </div>
+          </div>
+        </MuiThemeProvider>
             { this.state.showStore
               ? <StoreFront
                 title={this.state.currentStoreName}
@@ -305,11 +307,12 @@ export default class App extends Component {
                 }
                 ownerIdOfCurrentStore={this.state.ownerIdOfCurrentStore}
                 colorTheme={colorTheme}
+                masterMuiTheme={muiTheme}
               />
-              : <Lobby stores={this.state.stores} selectStore={this.selectStore} />
+              : <MuiThemeProvider muiTheme={muiTheme}>
+                <Lobby stores={this.state.stores} selectStore={this.selectStore} />
+              </MuiThemeProvider>
             }
-          </div>
-        </MuiThemeProvider>
         <MuiThemeProvider>
           <div style={{ textAlign: 'center' }}>
             <Badge

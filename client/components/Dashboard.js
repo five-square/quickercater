@@ -149,7 +149,7 @@ export default class Dashboard extends Component {
     /* only mount orderdetails if we have a click. Then pass in correct orderObj
     via orderInfo prop(call with row number passed onClick) */
     return (
-      // <MuiThemeProvider muiTheme={this.props.masterColorTheme}>
+      // <MuiThemeProvider muiTheme={getMuiTheme(this.props.masterColorTheme)}>
         <div style={this.props.style}>
           <Paper zDepth={this.state.hover}>
             <DashboardNavBar
