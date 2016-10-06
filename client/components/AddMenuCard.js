@@ -68,7 +68,7 @@ export default class AddMenuCard extends Component {
   render() {
     const style = {
       floatingActionButton: {
-        right: 20,
+        right: 10,
         bottom: 20,
         position: 'absolute',
       },

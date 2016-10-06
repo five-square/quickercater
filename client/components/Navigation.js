@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
+import AppBar from 'material-ui/AppBar';
 
 export default class Navigation extends Component {
 
@@ -34,48 +35,87 @@ export default class Navigation extends Component {
     this.props.viewCart();
   }
 
+          // <ToolbarGroup>
+          //   <ToolbarTitle text={this.props.title} />
+          // </ToolbarGroup>
+          // <ToolbarGroup>
+          //   {this.props.inStore
+          //     ? <RaisedButton
+          //       label="Back to Lobby"
+          //       primary onClick={e => this.handleBackClick(e)}
+          //     />
+          //     : null
+          //   }
+          //   <RaisedButton label="View Cart" primary onClick={e => this.handleViewCart(e)} />
+          //   {this.props.loggedIn
+          //     ? this.props.myStore
+          //       ? <RaisedButton
+          //         label="MyStore"
+          //         primary
+          //         onClick={() => this.props.goToMyStore(
+          //         Object.assign({}, this.props.myStore.properties, { id: this.props.myStore._id })
+          //       )}
+          //       />
+          //       : <RaisedButton
+          //         label="MyStore"
+          //         primary
+          //         onClick={this.props.openRegisterModal}
+          //       />
+          //     : <RaisedButton
+          //       label="Login"
+          //       primary
+          //       onClick={e => this.signInWithGoogle(e)}
+          //     />
+          //   }
+          //   {this.props.loggedIn
+          // ? <RaisedButton label="Logout" primary onClick={e => this.signOut(e)} />
+          // : null
+          // }
+          // </ToolbarGroup>
+        // </AppBar>
   render() {
     return (
       <div id="Toolbar">
-        <Toolbar>
-          <ToolbarGroup>
-            <ToolbarTitle text={this.props.title} />
-          </ToolbarGroup>
-          <ToolbarGroup>
+        <AppBar
+          title={this.props.title}
+          titleStyle={{ textAlign: 'left' }}
+          iconStyleLeft={{ display: 'none' }}
+          // children={}
+        >
+          <div>
             {this.props.inStore
-              ? <RaisedButton
-                label="Back to Lobby"
-                primary onClick={e => this.handleBackClick(e)}
-              />
-              : null
-            }
+            ? <RaisedButton
+              label="Back to Lobby"
+              primary onClick={e => this.handleBackClick(e)}
+            />
+            : null}
             <RaisedButton label="View Cart" primary onClick={e => this.handleViewCart(e)} />
             {this.props.loggedIn
-              ? this.props.myStore
-                ? <RaisedButton
-                  label="MyStore"
-                  primary
-                  onClick={() => this.props.goToMyStore(
-                  Object.assign({}, this.props.myStore.properties, { id: this.props.myStore._id })
-                )}
-                />
-                : <RaisedButton
-                  label="MyStore"
-                  primary
-                  onClick={this.props.openRegisterModal}
-                />
-              : <RaisedButton
-                label="Login"
+            ? this.props.myStore
+              ? <RaisedButton
+                label="MyStore"
                 primary
-                onClick={e => this.signInWithGoogle(e)}
+                onClick={() => this.props.goToMyStore(
+                Object.assign({}, this.props.myStore.properties, { id: this.props.myStore._id })
+              )}
               />
+              : <RaisedButton
+                label="MyStore"
+                primary
+                onClick={this.props.openRegisterModal}
+              />
+            : <RaisedButton
+              label="Login"
+              primary
+              onClick={e => this.signInWithGoogle(e)}
+            />
             }
             {this.props.loggedIn
-          ? <RaisedButton label="Logout" primary onClick={e => this.signOut(e)} />
-          : null
-          }
-          </ToolbarGroup>
-        </Toolbar>
+            ? <RaisedButton label="Logout" primary onClick={e => this.signOut(e)} />
+            : null
+            }
+          </div>
+        </AppBar>
         <br />
       </div>
     );

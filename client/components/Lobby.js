@@ -45,6 +45,7 @@ export default class Lobby extends Component {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        cursor: 'pointer',
       },
     };
     return (
@@ -58,18 +59,21 @@ export default class Lobby extends Component {
           /><br />
         </div>
         { this.props.stores
-            .filter(store =>
-              store.properties.name.toLowerCase()
-                .includes(this.state.searchValue.toLowerCase()))
-            .map((e, i) =>
-              <StoreCard
-                key={i}
-                id={e._id}
-                style={style.storeCards}
-                store={e.properties}
-                selectStore={this.props.selectStore}
-              />
-        )}
+          .filter(store =>
+            store.properties.name.toLowerCase()
+              .includes(this.state.searchValue.toLowerCase()))
+          .sort((a, b) =>
+            (a.properties.name > b.properties.name ? 1 : -1))
+          .map((e, i) =>
+            <StoreCard
+              key={i}
+              id={e._id}
+              style={style.storeCards}
+              store={e.properties}
+              selectStore={this.props.selectStore}
+            />
+          )
+        }
       </div>
     );
   }

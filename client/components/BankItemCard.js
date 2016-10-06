@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 import Chip from 'material-ui/Chip';
+// import Paper from 'material-ui/Paper';
 import { ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import AddItemToMenu from './AddItemToMenu';
@@ -20,22 +21,24 @@ export default class BankItemCard extends Component {
   render() {
     const style = {
       floatingEditButton: {
-        right: 115,
-        bottom: 15,
+        right: -85,
+        bottom: 8,
         position: 'absolute',
       },
       floatingAddButton: {
-        right: 15,
-        bottom: 15,
+        right: -185,
+        bottom: 8,
         position: 'absolute',
       },
       floatingDeleteButton: {
-        right: 65,
-        bottom: 15,
+        right: -135,
+        bottom: 8,
         position: 'absolute',
       },
       listItem: {
         position: 'relative',
+        wordBreak: 'word-wrap',
+        width: '60%',
         paddingTop: 1,
       },
       addItem: {
@@ -53,8 +56,8 @@ export default class BankItemCard extends Component {
         padding: 2,
         backgroundColor: '#26C6DA',
         position: 'absolute',
-        right: 165,
-        bottom: 10,
+        right: -188,
+        bottom: 48,
       },
       priceText: {
         fontSize: '1.1em',
@@ -62,11 +65,16 @@ export default class BankItemCard extends Component {
       },
     };
 
+        // <Paper zDepth={1}>
+        //   <h2>{this.props.item.name}</h2>
+        //   <p>{this.props.item.description}</p>
+        // </Paper>
         // children={
     return (
       <ListItem
         primaryText={this.props.item.name}
         secondaryText={this.props.item.description}
+        secondaryTextLines={2}
         innerDivStyle={style.listItem}
         leftAvatar={
           <Avatar

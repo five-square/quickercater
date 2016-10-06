@@ -1,20 +1,26 @@
 import React from 'react';
 import { AlphaPicker, SwatchesPicker } from 'react-color';
-import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 
 export default class ColorPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       displayColorPicker: false,
-      colorToChange: null,
-      colorToDisplay: { r: 241, g: 112, b: 19, a: 1 },
+      colorToChange: 0,
+      colorToDisplay: {
+        r: '0',
+        g: '0',
+        b: '0',
+        a: '0',
+      },
       color: {
-        r: '241',
-        g: '112',
-        b: '19',
-        a: '1',
+        r: '0',
+        g: '0',
+        b: '0',
+        a: '0',
       },
       backgroundColor: {
         r: '',
@@ -23,9 +29,22 @@ export default class ColorPicker extends React.Component {
         a: '',
       },
     };
-    this.click = e => this.handleClick(e);
+    this.propertyKeys = {
+      0: 'Primary 1',
+      1: 'Accent 1',
+      2: 'Accent 2',
+      3: 'Accent 3',
+      4: 'Borders',
+      5: 'Canvas',
+      6: 'Shadows',
+      7: 'Primary Text',
+      8: 'Secondary Text',
+      9: 'Background',
+    };
+
+    this.click = (e, i, v) => this.handleClick(e, i, v);
     this.change = e => this.handleChange(e);
-    console.log('in ColorPicker constructor: ', this.props.colorTheme);
+    console.log('in ColorPicker constructor: ', this.displayColor(1));
   }
 
   componentWillMount() {
@@ -51,43 +70,43 @@ export default class ColorPicker extends React.Component {
 
     // A wild switch appears...
     switch (this.state.colorToChange) {
-      case '0':
+      case 0:
         newTheme.palette.primary1Color = this.hexify(colorRGBA);
         this.props.changeTheme(newTheme);
         break;
-      case '1':
+      case 1:
         newTheme.palette.accent1Color = this.hexify(colorRGBA);
         this.props.changeTheme(newTheme);
         break;
-      case '2':
+      case 2:
         newTheme.palette.accent2Color = this.hexify(colorRGBA);
         this.props.changeTheme(newTheme);
         break;
-      case '3':
+      case 3:
         newTheme.palette.accent3Color = this.hexify(colorRGBA);
         this.props.changeTheme(newTheme);
         break;
-      case '4':
+      case 4:
         newTheme.palette.borderColor = this.hexify(colorRGBA);
         this.props.changeTheme(newTheme);
         break;
-      case '5':
+      case 5:
         newTheme.palette.canvasColor = this.hexify(colorRGBA);
         this.props.changeTheme(newTheme);
         break;
-      case '6':
+      case 6:
         newTheme.palette.shadowColor = this.hexify(colorRGBA);
         this.props.changeTheme(newTheme);
         break;
-      case '7':
+      case 7:
         newTheme.palette.textColor = this.hexify(colorRGBA);
         this.props.changeTheme(newTheme);
         break;
-      case '8':
+      case 8:
         newTheme.palette.alternateTextColor = this.hexify(colorRGBA);
         this.props.changeTheme(newTheme);
         break;
-      case '9':
+      case 9:
         document.getElementById('mainContainer').style.backgroundColor =
           `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
         this.setState({
@@ -105,59 +124,73 @@ export default class ColorPicker extends React.Component {
   }
 
   displayColor(choice) {
-    // console.log('in setColor: color: ', this.state.color, 'colorToChange: ', this.state.colorToChange, this.props.colorTheme);
-    // const color = this.state.color;
-    // const colorRGBA = `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
     const newTheme = this.props.colorTheme;
-
+    let color = '';
+    const r = this.state.backgroundColor.r;
+    const g = this.state.backgroundColor.g;
+    const b = this.state.backgroundColor.b;
+    const a = this.state.backgroundColor.a;
     // A wild switch appears...
     switch (choice) {
-      case '0':
-        this.setState({ colorToDisplay: this.rgbify(newTheme.palette.primary1Color, true) });
+      case 0:
+        color = this.rgbify(newTheme.palette.primary1Color.toUpperCase(), true);
         break;
-      case '1':
-        this.setState({ colorToDisplay: this.rgbify(newTheme.palette.accent1Color, true) });
+      case 1:
+        color = this.rgbify(newTheme.palette.accent1Color.toUpperCase(), true);
         break;
-      case '2':
-        this.setState({ colorToDisplay: this.rgbify(newTheme.palette.accent2Color, true) });
+      case 2:
+        color = this.rgbify(newTheme.palette.accent2Color.toUpperCase(), true);
         break;
-      case '3':
-        this.setState({ colorToDisplay: this.rgbify(newTheme.palette.accent3Color, true) });
+      case 3:
+        color = this.rgbify(newTheme.palette.accent3Color.toUpperCase(), true);
         break;
-      case '4':
-        this.setState({ colorToDisplay: this.rgbify(newTheme.palette.borderColor, true) });
+      case 4:
+        color = this.rgbify(newTheme.palette.borderColor.toUpperCase(), true);
         break;
-      case '5':
-        this.setState({ colorToDisplay: this.rgbify(newTheme.palette.canvasColor, true) });
+      case 5:
+        color = this.rgbify(newTheme.palette.canvasColor.toUpperCase(), true);
         break;
-      case '6':
-        this.setState({ colorToDisplay: this.rgbify(newTheme.palette.shadowColor, true) });
+      case 6:
+        color = this.rgbify(newTheme.palette.shadowColor.toUpperCase(), true);
         break;
-      case '7':
-        this.setState({ colorToDisplay: this.rgbify(newTheme.palette.textColor, true) });
+      case 7:
+        color = this.rgbify(newTheme.palette.textColor.toUpperCase(), true);
         break;
-      case '8':
-        this.setState({ colorToDisplay: this.rgbify(newTheme.palette.alternateTextColor, true) });
+      case 8:
+        color = this.rgbify(newTheme.palette.alternateTextColor.toUpperCase(), true);
         break;
-      case '9':
-        this.setState({ colorToDisplay: this.state.backgroundColor });
+      case 9:
+        color = `rgba(${r}, ${g}, ${b}, ${a})`;
         break;
       default:
-        return;
+        break;
     }
+    return color;
   }
 
   rgbify(hex, alphaYes) {
-    console.log('in ColorPicker rgbify: ', hex);
     const h = '0123456789ABCDEF';
     const r = (h.indexOf(hex[1]) * 16) + h.indexOf(hex[2]);
     const g = (h.indexOf(hex[3]) * 16) + h.indexOf(hex[4]);
     const b = (h.indexOf(hex[5]) * 16) + h.indexOf(hex[6]);
     if (alphaYes) {
-      // return `rgba(${r}, ${g}, ${b}, 1)`;
-      return { r, g, b, a: 1 };
+      return `rgba(${r}, ${g}, ${b}, 1)`;
     }
-    return { r, g, b };
+    return `rgba(${r}, ${g}, ${b})`;
+  }
+
+  rgbObjectify(rgba) {
+    const values = rgba
+      .replace(/rgba?\(/, '')
+      .replace(/\)/, '')
+      .replace(/[\s+]/g, '')
+      .split(',');
+    return {
+      r: values[0],
+      g: values[1],
+      b: values[2],
+      a: values[3],
+    };
   }
 
   // Function to convert hex format to a rgb color
@@ -178,11 +211,10 @@ export default class ColorPicker extends React.Component {
     return hex;
   }
 
-  handleClick(e) {
-    console.log('in ColorPicker handleClick: ', e.currentTarget.value, this.state.colorToChange);
+  handleClick(e, i, v) {
     this.setState({
-      colorToDisplay: this.displayColor(e.currentTarget.value),
-      colorToChange: e.currentTarget.value,
+      colorToDisplay: this.rgbObjectify(this.displayColor(v)),
+      colorToChange: v,
     });
   }
 
@@ -195,43 +227,57 @@ export default class ColorPicker extends React.Component {
   }
 
   render() {
-    const popover = {
-      position: 'absolute',
-      right: 20,
-      top: 20,
-      zIndex: '2',
-    };
-    const cover = {
-      position: 'relative',
-      top: '0px',
-      right: '0px',
-      bottom: '0px',
-      left: '0px',
-      backgroundColor: 'lightgray',
+    const style = {
+      popover: {
+        position: 'absolute',
+        right: 20,
+        top: 20,
+        zIndex: '2',
+      },
+      cover: {
+        position: 'relative',
+        top: '0px',
+        right: '0px',
+        bottom: '0px',
+        left: '0px',
+        backgroundColor: 'lightgray',
+      },
+      paper: {
+        height: 150,
+        width: '45%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginTop: 50,
+        backgroundColor: this.displayColor(this.state.colorToChange),
+      },
     };
 
     return (
       <div>
-        <Paper
-          zDepth={2}
-          style={{
-            height: 40,
-            width: 40,
-            backgroundColor: this.state.colorToDisplay,
-          }}
-        />
-        <RaisedButton primary value={0} label="Primary 1" onTouchTap={this.click} /><br />
-        <RaisedButton primary value={1} label="Accent 1" onTouchTap={this.click} /><br />
-        <RaisedButton primary value={2} label="Accent 2" onTouchTap={this.click} /><br />
-        <RaisedButton primary value={3} label="Accent 3" onTouchTap={this.click} /><br />
-        <RaisedButton primary value={4} label="Borders" onTouchTap={this.click} /><br />
-        <RaisedButton primary value={5} label="Canvas" onTouchTap={this.click} /><br />
-        <RaisedButton primary value={6} label="Shadows" onTouchTap={this.click} /><br />
-        <RaisedButton primary value={7} label="Primary Text" onTouchTap={this.click} /><br />
-        <RaisedButton primary value={8} label="Secondary Text" onTouchTap={this.click} /><br />
-        <RaisedButton primary value={9} label="Background" onTouchTap={this.click} /><br />
-        <div style={popover}>
-          <div style={cover} onTouchTap={this.click} />
+        <div style={{ width: '50%', position: 'relative' }}>
+          <DropDownMenu
+            maxHeight={200}
+            value={this.state.colorToChange}
+            onChange={this.click}
+          >
+            <MenuItem key={0} value={0} primaryText="Primary 1" />
+            <MenuItem key={1} value={1} primaryText="Accent 1" />
+            <MenuItem key={2} value={2} primaryText="Accent 2" />
+            <MenuItem key={3} value={3} primaryText="Accent 3" />
+            <MenuItem key={4} value={4} primaryText="Borders" />
+            <MenuItem key={5} value={5} primaryText="Canvas" />
+            <MenuItem key={6} value={6} primaryText="Shadows" />
+            <MenuItem key={7} value={7} primaryText="Primary Text" />
+            <MenuItem key={8} value={8} primaryText="Secondary Text" />
+            <MenuItem key={9} value={9} primaryText="Background" />
+          </DropDownMenu>
+          <Paper
+            zDepth={2}
+            style={style.paper}
+          />
+        </div>
+        <div style={style.popover}>
+          <div style={style.cover} onTouchTap={this.click} />
           <div style={{ backgroundColor: 'white' }}>
             <AlphaPicker
               color={this.state.colorToDisplay}

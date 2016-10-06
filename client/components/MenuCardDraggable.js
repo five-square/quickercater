@@ -139,12 +139,12 @@ export default class MenuCardDraggable extends React.Component {
   render() {
     const style = {
       floatingEditButton: {
-        right: 70,
+        right: 60,
         bottom: 20,
         position: 'absolute',
       },
       floatingDeleteButton: {
-        right: 20,
+        right: 10,
         bottom: 20,
         position: 'absolute',
       },

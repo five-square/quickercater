@@ -19,19 +19,21 @@ export default class StoreFront extends Component {
       store: this.props.store,
       packages: [],
       muiTheme: null,
-      colorTheme: {
-        palette: {
-          primary1Color: '#673AB7', // primary buttons and appbars
-          accent1Color: '#827717', // secondary buttons and slider indicators
-          accent2Color: '#827717', // toolbars, table highlight color
-          accent3Color: '#F44336', // table header text color
-          borderColor: '#827717', // dividers
-          canvasColor: '#D7CCC8', // all paper and cards
-          shadowColor: '#F44336', // hover shadows
-          textColor: '#000000', // text color
-          alternateTextColor: '#ffffff', // text color in app/tab bars, buttons, and chips
-        },
-      },
+      colorTheme: this.props.colorTheme,
+      // {
+      //   palette: {
+      //     primary1Color: '#af521c', // primary buttons and appbars
+      //     primary2Color: '#622806',
+      //     accent1Color: '#5cffff', // secondary buttons and slider indicators
+      //     accent2Color: '#006262', // toolbars, table highlight color
+      //     accent3Color: '#fb8641', // table header text color
+      //     borderColor: '#622806', // dividers
+      //     canvasColor: '#006262', // all paper and cards
+      //     shadowColor: '#000000', // hover shadows
+      //     textColor: '#000000', // text color
+      //     alternateTextColor: '#006262', // text color in app/tab bars, buttons, and chips
+      //   },
+      // },
     };
     // this.muiTheme = null;
     this.toggleEditing = e => this.handleToggleEditing(e);
