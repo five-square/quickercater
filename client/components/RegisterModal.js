@@ -90,9 +90,19 @@ export default class RegisterModal extends React.Component {
     });
   }
 
+  handleMaxLength(e) {
+    let disabled = false;
+    if (e.currentTarget.value.length > 220) {
+      disabled = true;
+    }
+    return disabled;
+  }
+
   handleStoreDescriptionChange(e) {
     this.setState({
-      newStoreDescription: e.currentTarget.value,
+      description: e.currentTarget.value,
+      disabled: this.handleMaxLength(e),
+      available: (220 - e.currentTarget.value.length),
     });
   }
 
@@ -332,11 +342,12 @@ export default class RegisterModal extends React.Component {
                 Tell us about your store.
               </p>
               <TextField
+                hintText="Description"
                 multiLine
-                style={style.textField}
                 rows={2}
-                rowsMax={4}
-                floatingLabelText="Enter Store Description"
+                floatingLabelText={`Characters left: ${this.state.available || 0}`}
+                errorText={this.state.available >= 0 ? '' : 'Exceeds Maximum Character Count'}
+                value={this.state.description}
                 onChange={e => this.handleStoreDescriptionChange(e)}
               />
             </div>

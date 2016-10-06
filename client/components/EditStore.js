@@ -48,9 +48,19 @@ export default class EditStoreInfo extends Component {
     });
   }
 
+  handleMaxLength(e) {
+    let disabled = false;
+    if (e.currentTarget.value.length > 220) {
+      disabled = true;
+    }
+    return disabled;
+  }
+
   handleStoreDescriptionChange(e) {
     this.setState({
       description: e.currentTarget.value,
+      disabled: this.handleMaxLength(e),
+      available: (220 - e.currentTarget.value.length),
     });
   }
 
@@ -158,8 +168,8 @@ export default class EditStoreInfo extends Component {
       },
       editBtn: {
         position: 'absolute',
-        left: '48%',
-        marginTop: '-1%',
+        left: '84%',
+        top: '64%',
       },
     };
     // action buttons for Modal
@@ -173,6 +183,7 @@ export default class EditStoreInfo extends Component {
         label="Submit"
         primary
         keyboardFocused
+        disabled={this.state.disabled}
         onTouchTap={e => this.handleSubmitEdit(e)}
       />,
     ];
@@ -204,7 +215,10 @@ export default class EditStoreInfo extends Component {
             /><br />
             <TextField
               hintText="Description"
-              floatingLabelText="Enter Store Description"
+              multiLine
+              rows={2}
+              floatingLabelText={`Characters left: ${this.state.available || 0}`}
+              errorText={this.state.available >= 0 ? '' : 'Exceeds Maximum Character Count'}
               value={this.state.description}
               onChange={e => this.handleStoreDescriptionChange(e)}
             /><br />
