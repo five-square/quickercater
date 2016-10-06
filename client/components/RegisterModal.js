@@ -16,6 +16,7 @@ export default class RegisterModal extends React.Component {
       loading: false,
       dialogOpen: true,
       finished: false,
+      available: 200,
       stepIndex: 0,
       newStoreName: '',
       newStoreDescription: '',
@@ -90,9 +91,19 @@ export default class RegisterModal extends React.Component {
     });
   }
 
+  handleMaxLength(e) {
+    let disabled = false;
+    if (e.currentTarget.value.length > 200) {
+      disabled = true;
+    }
+    return disabled;
+  }
+
   handleStoreDescriptionChange(e) {
     this.setState({
-      newStoreDescription: e.currentTarget.value,
+      description: e.currentTarget.value,
+      disabled: this.handleMaxLength(e),
+      available: (200 - e.currentTarget.value.length),
     });
   }
 
@@ -332,11 +343,12 @@ export default class RegisterModal extends React.Component {
                 Tell us about your store.
               </p>
               <TextField
+                hintText="Description"
                 multiLine
-                style={style.textField}
-                rows={2}
-                rowsMax={4}
-                floatingLabelText="Enter Store Description"
+                rows={1}
+                floatingLabelText={`Characters left: ${this.state.available}`}
+                errorText={this.state.available <= -1 ? 'Exceeds Maximum Character Count' : ''}
+                value={this.state.description}
                 onChange={e => this.handleStoreDescriptionChange(e)}
               />
             </div>
@@ -411,6 +423,7 @@ export default class RegisterModal extends React.Component {
           <RaisedButton
             primary
             label={'Next'}
+            disabled={this.state.disabled}
             onTouchTap={e => this.handleNext(e)}
           />
         }
