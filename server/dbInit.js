@@ -368,6 +368,8 @@ dbInit.init = () => Node.cypherAsync({
       name: 'Churro Delivery',
       created_on: 'yesterday',
       request_date: 'tomorrow',
+      start_time: '10:00 am',
+      end_time: '1:00 pm',
       fulfilled: false,
       total_price: 0,
       address: '321 RightBehindYou Ln.'
@@ -376,6 +378,8 @@ dbInit.init = () => Node.cypherAsync({
       name: 'Burger Delivery',
       created_on: 'yesterday',
       request_date: 'tomorrow',
+      start_time: '10:00 am',
+      end_time: '1:00 pm',
       fulfilled: false,
       total_price: 0,
       address: '321 RightBehindYou Ln.'
@@ -384,6 +388,8 @@ dbInit.init = () => Node.cypherAsync({
       name: 'Mexican Delivery',
       created_on: 'yesterday',
       request_date: 'tomorrow after tomorrow',
+      start_time: '10:00 am',
+      end_time: '1:00 pm',
       fulfilled: false,
       total_price: 0,
       address: '321 RightBehindYou Ln.'

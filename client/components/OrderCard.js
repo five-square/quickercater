@@ -4,6 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
+import TimePicker from 'material-ui/TimePicker';
 import OrderAPI from '../models/orderAPI';
 import Customer from '../models/CustomerAPI';
 import OrderConfirmation from './OrderConfirmation';
@@ -19,6 +20,8 @@ export default class OrderCard extends React.Component {
       newOrder: {},
       submitted: false,
       requestDate: '',
+      eventStart: '',
+      eventEnd: '',
       ownerId: this.props.ownerId,
       orderInfo: {},
       customerInfo: {},
@@ -59,6 +62,8 @@ export default class OrderCard extends React.Component {
         name: this.refs.ordername.getValue(),
         created_on: new Date(), // populate this in Neo4J query??
         request_date: this.state.requestDate,
+        start_time: this.state.eventStart,
+        end_time: this.state.eventEnd,
         fulfilled: false,
         total_price: this.props.orderInfo.totalPrice,
         address: this.refs.orderAddress.getValue(),
@@ -117,11 +122,43 @@ export default class OrderCard extends React.Component {
   }
 
   handleRequestDate(event, date) {
-    this.state.requestDate = JSON.stringify(date).slice(1, 11);
+    // this.state.requestDate = JSON.stringify(date).slice(1, 11);
+    this.state.requestDate = `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
+  }
+
+  handleStartTime(event, time) {
+    this.state.eventStart = this.formatTime(time);
+  }
+
+  handleEndTime(event, time) {
+    this.state.eventEnd = this.formatTime(time);
   }
 
   handleModalCancel() {
     this.setState({ reviewOrder: false, open: false });
+  }
+
+  formatTime(time) {
+    let hours = time.getHours();
+    let am = true;
+    if (hours > 12) {
+      am = false;
+      hours -= 12;
+    } else if (hours === 12) {
+      am = false;
+    } else if (hours === 0) {
+      hours = 12;
+    }
+    let minutes = time.getMinutes();
+    console.log('minutes: ', minutes);
+    // if (minutes.length === 1) minutes = `0${minutes}`;
+    if (minutes === 0) {
+      minutes = '00';
+    } else if (minutes < 10) {
+      minutes = `0${minutes}`;
+    }
+    const meridiem = (am ? 'a.m.' : 'p.m.');
+    return `${hours}:${minutes} ${meridiem}`;
   }
 
   renderComponent() {
@@ -130,6 +167,9 @@ export default class OrderCard extends React.Component {
         right: 30,
         bottom: 0,
         position: 'absolute',
+      },
+      textColor: {
+        color: 'black',
       },
       card: {
         margin: 1,
@@ -172,25 +212,29 @@ export default class OrderCard extends React.Component {
           modal={false}
           open={this.state.open}
           onRequestClose={(e) => this.handleClose(e)}
+          autoScrollBodyContent
         >
           <TextField
             ref="customerName"
             hintText="Your name"
             floatingLabelText="Your name"
+            floatingLabelStyle={style.textColor}
             floatingLabelFixed
           />
           <br />
           <TextField
             ref="customerEmail"
-            hintText="Email"
+            hintText="@email.com"
             floatingLabelText="Email"
+            floatingLabelStyle={style.textColor}
             floatingLabelFixed
           />
           <br />
           <TextField
             ref="customerPhone"
-            hintText="Phone"
+            hintText="xxx-xxx-xxxx"
             floatingLabelText="Phone"
+            floatingLabelStyle={style.textColor}
             floatingLabelFixed
             errorText={this.state.errorTextPhone}
             onChange={e => this.onChangePhone(e)}
@@ -200,21 +244,39 @@ export default class OrderCard extends React.Component {
             ref="ordername"
             hintText="Order name"
             floatingLabelText="Order name"
+            floatingLabelStyle={style.textColor}
             floatingLabelFixed
-          />
-          <br />
-          Request Date
-          <DatePicker
-            ref="requestDate"
-            hintText="Date Picker"
-            onChange={(e, date) => this.handleRequestDate(e, date)}
           />
           <br />
           <TextField
             ref="orderAddress"
             hintText="Order address"
             floatingLabelText="Address"
-            type="text"
+            floatingLabelStyle={style.textColor}
+            floatingLabelFixed
+          />
+          <br />
+          <DatePicker
+            ref="requestDate"
+            floatingLabelText="Request Date"
+            floatingLabelStyle={style.textColor}
+            floatingLabelFixed
+            hintText="Request Date"
+            onChange={(e, date) => this.handleRequestDate(e, date)}
+          />
+          <TimePicker
+            hintText="12hr Format"
+            floatingLabelText="Event start time"
+            floatingLabelStyle={style.textColor}
+            floatingLabelFixed
+            onChange={(e, date) => this.handleStartTime(e, date)}
+          />
+          <TimePicker
+            hintText="12hr Format"
+            floatingLabelText="Event end time"
+            floatingLabelStyle={style.textColor}
+            floatingLabelFixed
+            onChange={(e, date) => this.handleEndTime(e, date)}
           />
           <h4>{`Price: $${this.props.orderInfo.totalPrice}`}</h4>
         </Dialog>
