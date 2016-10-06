@@ -27,11 +27,23 @@ export default class OrderCard extends React.Component {
       customerInfo: {},
       reviewOrder: false,
       errorTextPhone: '',
+      errorTextEmail: '',
+      errorTextPhoneReq: '* Required',
+      errorTextName: '* Required',
+      errorTextEmailReq: '* Required',
+      errorTextReqdate: '* Required',
+      customerName: '',
+      customerEmail: '',
+      customerPhone: '',
+      eventAddress: '',
+      orderName: '',
     };
   }
 
   onChangePhone(event) {
     const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+    this.state.customerPhone = event.target.value;
+    this.setState({ errorTextPhoneReq: '' });
     if (event.target.value.match(phoneRegex)) {
       this.setState({ errorTextPhone: '' });
     } else {
@@ -51,22 +63,22 @@ export default class OrderCard extends React.Component {
     // this.setState({ open: false });
     const customerInfo = {
       id: '',
-      name: this.refs.customerName.getValue(),
-      phone: this.refs.customerPhone.getValue(),
-      email: this.refs.customerEmail.getValue(),
+      name: this.state.customerName,
+      phone: this.state.customerPhone,
+      email: this.state.customerEmail,
       auth_key: true,
     };
     const orderInfo = {
       order: {
         id: '',
-        name: this.refs.ordername.getValue(),
+        name: this.state.orderName,
         created_on: new Date(), // populate this in Neo4J query??
         request_date: this.state.requestDate,
         start_time: this.state.eventStart,
         end_time: this.state.eventEnd,
         fulfilled: false,
         total_price: this.props.orderInfo.totalPrice,
-        address: this.refs.orderAddress.getValue(),
+        address: this.state.eventAddress,
       },
       items: this.props.orderInfo.order.map(itemInfo =>
         Object.assign({}, itemInfo.item,
@@ -79,7 +91,6 @@ export default class OrderCard extends React.Component {
                   cost: this.props.orderInfo.selectedPkgCost,
                   expires: '10/10/2016' },
     };
- // var result = { items: items, order: orderObj, customer: orderItemRel[0].customer.properties };
     this.state.customerInfo = customerInfo;
     this.state.orderInfo = orderInfo;
     this.setState({ reviewOrder: true });
@@ -91,7 +102,6 @@ export default class OrderCard extends React.Component {
         this.state.orderInfo.customer.id = customer._id;
         OrderAPI.create(this.state.orderInfo)
           .then(orderDb => {
-            console.log('handleOrderAccept orderDb: ', orderDb);
             this.state.orderInfo.order.id = orderDb.order._id;
             this.setState({ newOrder: orderDb.order._id,
                             submitted: true });
@@ -121,8 +131,28 @@ export default class OrderCard extends React.Component {
     this.setState({ open: false });
   }
 
+  handlecustomerName(e) {
+    this.state.customerName = e.currentTarget.value;
+    if (e.currentTarget.value) {
+      this.setState({ errorTextName: '' });
+    } else {
+      this.setState({ errorTextName: '* Required' });
+    }
+  }
+
+  handlecustomerEmail(e) {
+    const emailRegex = /\S+@\S+\.\S+/;
+    this.setState({ errorTextEmailReq: '' });
+    this.state.customerEmail = e.currentTarget.value;
+    if (e.currentTarget.value.match(emailRegex)) {
+      this.setState({ errorTextEmail: '' });
+    } else {
+      this.setState({ errorTextEmail: 'Invalid format' });
+    }
+  }
+
   handleRequestDate(event, date) {
-    // this.state.requestDate = JSON.stringify(date).slice(1, 11);
+    this.setState({ errorTextReqdate: '' });
     this.state.requestDate = `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
   }
 
@@ -132,6 +162,14 @@ export default class OrderCard extends React.Component {
 
   handleEndTime(event, time) {
     this.state.eventEnd = this.formatTime(time);
+  }
+
+  handleeventAddress(e) {
+    this.state.eventAddress = e.currentTarget.value;
+  }
+
+  handleOrderName(e) {
+    this.state.orderName = e.currentTarget.value;
   }
 
   handleModalCancel() {
@@ -150,8 +188,6 @@ export default class OrderCard extends React.Component {
       hours = 12;
     }
     let minutes = time.getMinutes();
-    console.log('minutes: ', minutes);
-    // if (minutes.length === 1) minutes = `0${minutes}`;
     if (minutes === 0) {
       minutes = '00';
     } else if (minutes < 10) {
@@ -192,6 +228,13 @@ export default class OrderCard extends React.Component {
         onTouchTap={e => this.handleSubmit(e)}
       />,
     ];
+    const actionsDefault = [
+      <FlatButton
+        label="Cancel"
+        primary
+        onTouchTap={e => this.handleCancel(e)}
+      />,
+    ];
     if (this.state.reviewOrder === false) {
       return (<div>
         {this.props.orderInfo.selectedPkgId > 0
@@ -208,71 +251,83 @@ export default class OrderCard extends React.Component {
         />
         <Dialog
           title="Please enter your information"
-          actions={actions}
+          actions={this.state.errorTextName === '' && this.state.errorTextEmail === ''
+                    && this.state.errorTextReqdate === '' && this.state.errorTextPhoneReq === ''
+                    && this.state.errorTextPhone === '' && this.state.errorTextEmailReq === ''
+                    ? actions
+                    : actionsDefault}
           modal={false}
           open={this.state.open}
           onRequestClose={(e) => this.handleClose(e)}
           autoScrollBodyContent
         >
           <TextField
-            ref="customerName"
             hintText="Your name"
             floatingLabelText="Your name"
             floatingLabelStyle={style.textColor}
+            errorText={this.state.errorTextName}
             floatingLabelFixed
+            value={this.state.customerName}
+            onChange={e => this.handlecustomerName(e)}
           />
           <br />
           <TextField
-            ref="customerEmail"
             hintText="@email.com"
+            type="email"
             floatingLabelText="Email"
             floatingLabelStyle={style.textColor}
             floatingLabelFixed
+            errorText={this.state.errorTextEmail === ''
+                        ? this.state.errorTextEmailReq
+                        : this.state.errorTextEmail}
+            value={this.state.customerEmail}
+            onChange={e => this.handlecustomerEmail(e)}
           />
           <br />
           <TextField
-            ref="customerPhone"
             hintText="xxx-xxx-xxxx"
             floatingLabelText="Phone"
             floatingLabelStyle={style.textColor}
             floatingLabelFixed
-            errorText={this.state.errorTextPhone}
+            errorText={this.state.errorTextPhone === ''
+                        ? this.state.errorTextPhoneReq
+                        : this.state.errorTextPhone}
             onChange={e => this.onChangePhone(e)}
           />
           <br />
           <TextField
-            ref="ordername"
             hintText="Order name"
             floatingLabelText="Order name"
             floatingLabelStyle={style.textColor}
             floatingLabelFixed
+            onChange={e => this.handleOrderName(e)}
           />
           <br />
           <TextField
-            ref="orderAddress"
             hintText="Order address"
             floatingLabelText="Address"
             floatingLabelStyle={style.textColor}
             floatingLabelFixed
+            onChange={e => this.handleeventAddress(e)}
           />
           <br />
           <DatePicker
-            ref="requestDate"
             floatingLabelText="Request Date"
             floatingLabelStyle={style.textColor}
             floatingLabelFixed
             hintText="Request Date"
+            errorText={this.state.errorTextReqdate}
             onChange={(e, date) => this.handleRequestDate(e, date)}
           />
           <TimePicker
-            hintText="12hr Format"
+            hintText="Start time"
             floatingLabelText="Event start time"
             floatingLabelStyle={style.textColor}
             floatingLabelFixed
             onChange={(e, date) => this.handleStartTime(e, date)}
           />
           <TimePicker
-            hintText="12hr Format"
+            hintText="End time"
             floatingLabelText="Event end time"
             floatingLabelStyle={style.textColor}
             floatingLabelFixed
