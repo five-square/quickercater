@@ -115,7 +115,7 @@ export default class OrderDetails extends Component {
                 generateTextFromHTML: true,
                 html: Email.compose(order, this.props.storeName, 'updated'),
               };
-              Customer.sendEmail(mailOptions)
+              Customer.sendEmail(mailOptions, this.props.ownerId)
                 .then(response => {
                   console.log('response after confirmation email sent: ', response);
                 });

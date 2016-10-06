@@ -102,7 +102,7 @@ export default class Dashboard extends Component {
           generateTextFromHTML: true,
           html: Email.compose(this.state.orderInfo, this.props.storeName, 'accepted'),
         };
-        Customer.sendEmail(mailOptions)
+        Customer.sendEmail(mailOptions, this.props.ownerId)
           .then(response => {
             console.log('response after confirmation email sent: ', response);
           });
@@ -170,6 +170,7 @@ export default class Dashboard extends Component {
                 handleOrderFulfilled={e => this.handleOrderFulfilled(e)}
                 orderState={this.state.orderState}
                 storeName={this.props.storeName}
+                ownerId={this.props.ownerId}
               />
             // {this.state.showOrderDetails !== -1
             //   ? <OrderDetails

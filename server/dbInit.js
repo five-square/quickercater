@@ -21,21 +21,21 @@ dbInit.init = () => Node.cypherAsync({
     CREATE (churroco:Owner {
       name: 'Walter',
       phone: '512-456-789',
-      email: 'walter@churrocoaustin.com',
+      email: 'fivesquare43@gmail.com',
       description: 'I love Mexican food',
       auth_key: true
     })
     CREATE (alice:Owner {
       name: 'Alice',
       phone: '555-444-3333',
-      email: 'alice@window.com',
+      email: 'fivesquare43@gmail.com',
       description: 'I love Mexican food',
       auth_key: true
     })
     CREATE (bob:Owner {
       name: 'Bob',
       phone: '555-444-5555',
-      email: 'bob@window.com',
+      email: 'fivesquare43@gmail.com',
       description: 'I love American food',
       auth_key: 'ya29.Ci9qAxZIA7hXRvO68DYxb45faKUCweuu2YrGawMJzrH1LZ_U8ia_8GCw52jdmgS8CQ'
     })

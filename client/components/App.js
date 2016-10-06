@@ -47,6 +47,7 @@ export default class App extends Component {
       owners: [],
       stores: [],
       currentOwnerId: false,
+      ownerIdOfCurrentStore: '',
       currentStore: {},
       currentStoreName: 'Welcome to QuickerCater',
       storeName: 'QuickerCater',
@@ -102,7 +103,7 @@ export default class App extends Component {
     }
     Server.getOwnerByStoreId(id)
     .then(owner => {
-      console.log('in select Store', storeObj);
+      console.log('in select Store:', storeObj);
       this.setState({
         ownerIdOfCurrentStore: owner.id,
         currentStore: storeObj,
@@ -119,26 +120,32 @@ export default class App extends Component {
   }
 
   handleAddItemToOrder(itemObj) {
-    if (!this.state.globalOrder[itemObj.ownerId]) {
-      this.state.globalOrder[itemObj.ownerId] = {};
-      this.state.globalOrder[itemObj.ownerId].order = [];
-      this.state.globalOrder[itemObj.ownerId].totalPrice = 0;
-      this.state.globalOrder[itemObj.ownerId].storeName = this.state.storeName;
-      this.state.globalOrder[itemObj.ownerId].packages = itemObj.packages;
-      this.state.globalOrder[itemObj.ownerId].selectedPkgId = 0;
-      this.state.globalOrder[itemObj.ownerId].selectedPkgDesc = '';
-      this.state.globalOrder[itemObj.ownerId].selectedPkgCost = 0;
-    }
     const tempOrder = Object.assign({}, this.state.globalOrder);
-    const itemPos = tempOrder[itemObj.ownerId].order
+    const tempOwnerId = itemObj.ownerId;
+
+    // if the order for a store does not exist, initialize the order here..
+    if (!tempOrder[tempOwnerId]) {
+      tempOrder[tempOwnerId] = {};
+      tempOrder[tempOwnerId].order = [];
+      tempOrder[tempOwnerId].totalPrice = 0;
+      tempOrder[tempOwnerId].storeName = this.state.storeName;
+      tempOrder[tempOwnerId].packages = itemObj.packages;
+      tempOrder[tempOwnerId].selectedPkgId = 0;
+      tempOrder[tempOwnerId].selectedPkgDesc = '';
+      tempOrder[tempOwnerId].selectedPkgCost = 0;
+    }
+   // find the item position in the global order array for that store
+    const itemPos = tempOrder[tempOwnerId].order
       .map(itemInfo => itemInfo.item.id).indexOf(itemObj.item.id);
-    // Check to see if the item is already in the list
+
+    /* Check to see if the item is already in the list
+       if not in the list add to the order and update the total price*/
     if (itemPos < 0) {
-      tempOrder[itemObj.ownerId].order.push(itemObj);
-      tempOrder[itemObj.ownerId].totalPrice =
-            Number(parseFloat(tempOrder[itemObj.ownerId].totalPrice) +
-                        (parseFloat(itemObj.item.price)))
-                        .toFixed(2);
+      tempOrder[tempOwnerId].order.push(itemObj);
+      tempOrder[tempOwnerId].totalPrice =
+            Number(parseFloat(tempOrder[tempOwnerId].totalPrice) +
+            (parseFloat(itemObj.item.price))).toFixed(2);
+
       this.setState({
         globalOrder: tempOrder,
         openCart: true,
@@ -148,21 +155,26 @@ export default class App extends Component {
 
   updateItemToOrder(itemObj) {
     const tempOrder = Object.assign({}, this.state.globalOrder);
-    const itemPos = tempOrder[itemObj.ownerId].order
+    const tempOwnerId = itemObj.ownerId;
+
+    // find the item position in the global order array for that store
+    const itemPos = tempOrder[tempOwnerId].order
       .map(itemInfo => itemInfo.item.id).indexOf(itemObj.item.id);
-    tempOrder[itemObj.ownerId].order[itemPos] = itemObj;
-    if (tempOrder[itemObj.ownerId].order.length > 1) {
-      tempOrder[itemObj.ownerId].totalPrice =
-        Number(tempOrder[itemObj.ownerId].selectedPkgCost + tempOrder[itemObj.ownerId].order
-        .reduce((a, b) => a + (b.item.price * parseInt(b.quantity, 10)), 0))
-        .toFixed(2);
-    } else if (tempOrder[itemObj.ownerId].order.length === 1) {
-      tempOrder[itemObj.ownerId].totalPrice =
-          Number(tempOrder[itemObj.ownerId].selectedPkgCost +
-            (tempOrder[itemObj.ownerId].order[0].item.price
-          * tempOrder[itemObj.ownerId].order[0].quantity))
-          .toFixed(2);
+    tempOrder[tempOwnerId].order[itemPos] = itemObj;
+
+    /* recalculate the total price of order for the updated quantity or
+    updated package option*/
+    if (tempOrder[tempOwnerId].order.length > 1) {
+      tempOrder[tempOwnerId].totalPrice =
+        Number(tempOrder[tempOwnerId].selectedPkgCost + tempOrder[tempOwnerId].order
+        .reduce((a, b) => a + (b.item.price * parseInt(b.quantity, 10)), 0)).toFixed(2);
+    } else if (tempOrder[tempOwnerId].order.length === 1) {
+      tempOrder[tempOwnerId].totalPrice =
+          Number(tempOrder[tempOwnerId].selectedPkgCost +
+            (tempOrder[tempOwnerId].order[0].item.price
+          * tempOrder[tempOwnerId].order[0].quantity)).toFixed(2);
     }
+
     this.setState({
       globalOrder: tempOrder,
       openCart: true,
@@ -170,19 +182,21 @@ export default class App extends Component {
   }
 
   updatePackageOption(ownerId, packageId) {
-    console.log('ownerId: ', ownerId, 'packageId: ', packageId);
     let prevPkgCost = 0;
     const tempOrder = Object.assign({}, this.state.globalOrder);
     const pkgPos = tempOrder[ownerId].packages
       .map(pack => pack.id).indexOf(packageId);
+
     if (tempOrder[ownerId].selectedPkgId > 0) {
       prevPkgCost = parseFloat(tempOrder[ownerId].selectedPkgCost);
     }
+
     tempOrder[ownerId].selectedPkgId = packageId;
     tempOrder[ownerId].selectedPkgDesc = tempOrder[ownerId].packages[pkgPos].name;
     tempOrder[ownerId].selectedPkgCost = tempOrder[ownerId].packages[pkgPos].cost;
     tempOrder[ownerId].totalPrice = Number((parseFloat(tempOrder[ownerId].totalPrice)
       + parseFloat(tempOrder[ownerId].packages[pkgPos].cost)) - prevPkgCost).toFixed(2);
+
     this.setState({
       globalOrder: tempOrder,
       openCart: true,
@@ -191,14 +205,20 @@ export default class App extends Component {
 
   removeItemFromOrder(ownerId, itemId) {
     const tempOrder = Object.assign({}, this.state.globalOrder);
+
+    // find the item position in the global order array for that store
     const itemPos = tempOrder[ownerId].order
       .map(itemInfo => itemInfo.item.id).indexOf(itemId);
+
+    // update total price by removing the price for the deleted item
     tempOrder[ownerId].totalPrice =
           (tempOrder[ownerId].totalPrice -
           (tempOrder[ownerId].order[itemPos].item.price
-          * tempOrder[ownerId].order[itemPos].quantity))
-          .toFixed(2);
+          * tempOrder[ownerId].order[itemPos].quantity)).toFixed(2);
+
+    // delete the item from the global order array
     tempOrder[ownerId].order.splice(itemPos, 1);
+
     this.setState({
       globalOrder: tempOrder,
       openCart: true,
@@ -206,9 +226,9 @@ export default class App extends Component {
   }
 
   deleteOrderAfterSubmission(ownerId) {
-    console.log('deleteOrderAfterSubmission: ', ownerId);
     const tempOrder = Object.assign({}, this.state.globalOrder);
     delete tempOrder[ownerId];
+
     this.setState({
       globalOrder: tempOrder,
       openCart: true,
