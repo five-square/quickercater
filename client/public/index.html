@@ -8,6 +8,13 @@
   <div id="mainContainer">
     <div id="app"></div>
   </div>
+ <script language="JavaScript">
+  window.onbeforeunload = confirmExit;
+  function confirmExit()
+  {
+    return 'Are you sure you want to leave QuickerCater?™';
+  }
+</script>
   <script src="/bundle.js"></script>
 </body>
 </html>
