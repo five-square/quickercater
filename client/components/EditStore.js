@@ -50,7 +50,7 @@ export default class EditStoreInfo extends Component {
 
   handleMaxLength(e) {
     let disabled = false;
-    if (e.currentTarget.value.length > 220) {
+    if (e.currentTarget.value.length > 200) {
       disabled = true;
     }
     return disabled;
@@ -60,7 +60,7 @@ export default class EditStoreInfo extends Component {
     this.setState({
       description: e.currentTarget.value,
       disabled: this.handleMaxLength(e),
-      available: (220 - e.currentTarget.value.length),
+      available: (200 - e.currentTarget.value.length),
     });
   }
 
