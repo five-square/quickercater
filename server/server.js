@@ -138,7 +138,7 @@ routes.post('/api/store/create', (req, res) => {
     console.log(newStore);
     db.linkOwnerToStore(req.body.ownerId, newStore._id)
     .then(() => {
-      res.send(newStore);
+      res.status(201).send(newStore);
     });
   });
 });
@@ -146,7 +146,14 @@ routes.post('/api/store/create', (req, res) => {
 routes.post('/api/store/update', (req, res) => {
   db.updateStore(req.body.newStore)
   .then(store => {
-    res.send(store);
+    res.status(201).send(store);
+  });
+});
+
+routes.put('/api/store/update/color', (req, res) => {
+  db.updateStoreColors(req.body.colors)
+  .then(store => {
+    res.status(201).send(store);
   });
 });
 
