@@ -120,29 +120,30 @@ export default class App extends Component {
 
   handleAddItemToOrder(itemObj) {
     const tempOrder = Object.assign({}, this.state.globalOrder);
+    const tempOwnerId = itemObj.ownerId;
 
     // if the order for a store does not exist, initialize the order here..
-    if (!tempOrder[itemObj.ownerId]) {
-      tempOrder[itemObj.ownerId] = {};
-      tempOrder[itemObj.ownerId].order = [];
-      tempOrder[itemObj.ownerId].totalPrice = 0;
-      tempOrder[itemObj.ownerId].storeName = this.state.storeName;
-      tempOrder[itemObj.ownerId].packages = itemObj.packages;
-      tempOrder[itemObj.ownerId].selectedPkgId = 0;
-      tempOrder[itemObj.ownerId].selectedPkgDesc = '';
-      tempOrder[itemObj.ownerId].selectedPkgCost = 0;
+    if (!tempOrder[tempOwnerId]) {
+      tempOrder[tempOwnerId] = {};
+      tempOrder[tempOwnerId].order = [];
+      tempOrder[tempOwnerId].totalPrice = 0;
+      tempOrder[tempOwnerId].storeName = this.state.storeName;
+      tempOrder[tempOwnerId].packages = itemObj.packages;
+      tempOrder[tempOwnerId].selectedPkgId = 0;
+      tempOrder[tempOwnerId].selectedPkgDesc = '';
+      tempOrder[tempOwnerId].selectedPkgCost = 0;
     }
-    const itemPos = tempOrder[itemObj.ownerId].order
+    const itemPos = tempOrder[tempOwnerId].order
       .map(itemInfo => itemInfo.item.id).indexOf(itemObj.item.id);
 
     /* Check to see if the item is already in the list
        if not in the list add to the order and update
         total price*/
     if (itemPos < 0) {
-      tempOrder[itemObj.ownerId].order.push(itemObj);
-      tempOrder[itemObj.ownerId].totalPrice =
-            Number(parseFloat(tempOrder[itemObj.ownerId].totalPrice) +
-                        (parseFloat(itemObj.item.price))).toFixed(2);
+      tempOrder[tempOwnerId].order.push(itemObj);
+      tempOrder[tempOwnerId].totalPrice =
+            Number(parseFloat(tempOrder[tempOwnerId].totalPrice) +
+            (parseFloat(itemObj.item.price))).toFixed(2);
       this.setState({
         globalOrder: tempOrder,
         openCart: true,
@@ -152,20 +153,21 @@ export default class App extends Component {
 
   updateItemToOrder(itemObj) {
     const tempOrder = Object.assign({}, this.state.globalOrder);
-    const itemPos = tempOrder[itemObj.ownerId].order
+    const tempOwnerId = itemObj.ownerId;
+    // find the item position in the global order array for that store
+    const itemPos = tempOrder[tempOwnerId].order
       .map(itemInfo => itemInfo.item.id).indexOf(itemObj.item.id);
-    tempOrder[itemObj.ownerId].order[itemPos] = itemObj;
-    if (tempOrder[itemObj.ownerId].order.length > 1) {
-      tempOrder[itemObj.ownerId].totalPrice =
-        Number(tempOrder[itemObj.ownerId].selectedPkgCost + tempOrder[itemObj.ownerId].order
-        .reduce((a, b) => a + (b.item.price * parseInt(b.quantity, 10)), 0))
-        .toFixed(2);
-    } else if (tempOrder[itemObj.ownerId].order.length === 1) {
-      tempOrder[itemObj.ownerId].totalPrice =
-          Number(tempOrder[itemObj.ownerId].selectedPkgCost +
-            (tempOrder[itemObj.ownerId].order[0].item.price
-          * tempOrder[itemObj.ownerId].order[0].quantity))
-          .toFixed(2);
+    tempOrder[tempOwnerId].order[itemPos] = itemObj;
+
+    if (tempOrder[tempOwnerId].order.length > 1) {
+      tempOrder[tempOwnerId].totalPrice =
+        Number(tempOrder[tempOwnerId].selectedPkgCost + tempOrder[tempOwnerId].order
+        .reduce((a, b) => a + (b.item.price * parseInt(b.quantity, 10)), 0)).toFixed(2);
+    } else if (tempOrder[tempOwnerId].order.length === 1) {
+      tempOrder[tempOwnerId].totalPrice =
+          Number(tempOrder[tempOwnerId].selectedPkgCost +
+            (tempOrder[tempOwnerId].order[0].item.price
+          * tempOrder[tempOwnerId].order[0].quantity)).toFixed(2);
     }
     this.setState({
       globalOrder: tempOrder,
