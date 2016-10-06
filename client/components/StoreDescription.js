@@ -23,7 +23,7 @@ export default class StoreDescription extends React.Component {
         fontSize: 50,
         position: 'relative',
         left: 20,
-        bottom: 83,
+        bottom: 70,
       },
     };
     let logo = this.props.store.picture;
