@@ -80,7 +80,9 @@ export default class OrderDetails extends Component {
       tempItems[itemPos].quantity * tempItems[itemPos].price;
     tempItems[itemPos].total =
       Math.round((tempItems[itemPos].total + 0.00001) * 100) / 100;
-    tempOrder.total_price = tempItems
+
+
+    tempOrder.total_price = this.state.package.cost + tempItems
       .reduce((a, b) => a + parseInt(b.total, 10), 0);
     this.setState({ items: tempItems, order: tempOrder, orderUpdated: true });
   }
