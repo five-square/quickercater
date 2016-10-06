@@ -133,17 +133,18 @@ export default class App extends Component {
       tempOrder[tempOwnerId].selectedPkgDesc = '';
       tempOrder[tempOwnerId].selectedPkgCost = 0;
     }
+   // find the item position in the global order array for that store
     const itemPos = tempOrder[tempOwnerId].order
       .map(itemInfo => itemInfo.item.id).indexOf(itemObj.item.id);
 
     /* Check to see if the item is already in the list
-       if not in the list add to the order and update
-        total price*/
+       if not in the list add to the order and update the total price*/
     if (itemPos < 0) {
       tempOrder[tempOwnerId].order.push(itemObj);
       tempOrder[tempOwnerId].totalPrice =
             Number(parseFloat(tempOrder[tempOwnerId].totalPrice) +
             (parseFloat(itemObj.item.price))).toFixed(2);
+
       this.setState({
         globalOrder: tempOrder,
         openCart: true,
@@ -154,11 +155,14 @@ export default class App extends Component {
   updateItemToOrder(itemObj) {
     const tempOrder = Object.assign({}, this.state.globalOrder);
     const tempOwnerId = itemObj.ownerId;
+
     // find the item position in the global order array for that store
     const itemPos = tempOrder[tempOwnerId].order
       .map(itemInfo => itemInfo.item.id).indexOf(itemObj.item.id);
     tempOrder[tempOwnerId].order[itemPos] = itemObj;
 
+    /* recalculate the total price of order for the updated quantity or
+    updated package option*/
     if (tempOrder[tempOwnerId].order.length > 1) {
       tempOrder[tempOwnerId].totalPrice =
         Number(tempOrder[tempOwnerId].selectedPkgCost + tempOrder[tempOwnerId].order
@@ -169,6 +173,7 @@ export default class App extends Component {
             (tempOrder[tempOwnerId].order[0].item.price
           * tempOrder[tempOwnerId].order[0].quantity)).toFixed(2);
     }
+
     this.setState({
       globalOrder: tempOrder,
       openCart: true,
@@ -176,19 +181,21 @@ export default class App extends Component {
   }
 
   updatePackageOption(ownerId, packageId) {
-    console.log('ownerId: ', ownerId, 'packageId: ', packageId);
     let prevPkgCost = 0;
     const tempOrder = Object.assign({}, this.state.globalOrder);
     const pkgPos = tempOrder[ownerId].packages
       .map(pack => pack.id).indexOf(packageId);
+
     if (tempOrder[ownerId].selectedPkgId > 0) {
       prevPkgCost = parseFloat(tempOrder[ownerId].selectedPkgCost);
     }
+
     tempOrder[ownerId].selectedPkgId = packageId;
     tempOrder[ownerId].selectedPkgDesc = tempOrder[ownerId].packages[pkgPos].name;
     tempOrder[ownerId].selectedPkgCost = tempOrder[ownerId].packages[pkgPos].cost;
     tempOrder[ownerId].totalPrice = Number((parseFloat(tempOrder[ownerId].totalPrice)
       + parseFloat(tempOrder[ownerId].packages[pkgPos].cost)) - prevPkgCost).toFixed(2);
+
     this.setState({
       globalOrder: tempOrder,
       openCart: true,
@@ -197,14 +204,20 @@ export default class App extends Component {
 
   removeItemFromOrder(ownerId, itemId) {
     const tempOrder = Object.assign({}, this.state.globalOrder);
+
+    // find the item position in the global order array for that store
     const itemPos = tempOrder[ownerId].order
       .map(itemInfo => itemInfo.item.id).indexOf(itemId);
+
+    // update total price by removing the price for the deleted item
     tempOrder[ownerId].totalPrice =
           (tempOrder[ownerId].totalPrice -
           (tempOrder[ownerId].order[itemPos].item.price
-          * tempOrder[ownerId].order[itemPos].quantity))
-          .toFixed(2);
+          * tempOrder[ownerId].order[itemPos].quantity)).toFixed(2);
+
+    // delete the item from the global order array
     tempOrder[ownerId].order.splice(itemPos, 1);
+
     this.setState({
       globalOrder: tempOrder,
       openCart: true,
@@ -212,9 +225,9 @@ export default class App extends Component {
   }
 
   deleteOrderAfterSubmission(ownerId) {
-    console.log('deleteOrderAfterSubmission: ', ownerId);
     const tempOrder = Object.assign({}, this.state.globalOrder);
     delete tempOrder[ownerId];
+
     this.setState({
       globalOrder: tempOrder,
       openCart: true,
