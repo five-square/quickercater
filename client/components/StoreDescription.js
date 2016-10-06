@@ -13,22 +13,26 @@ export default class StoreDescription extends React.Component {
   handleStoreLogo() {
     const style = {
       position: 'relative',
-      left: 18,
-      bottom: 69,
+      top: 25,
+      left: 25,
       height: 100,
-      width: 100,
+      width: '15%',
       letter: {
+        position: 'relative',
+        right: 25,
+        top: 25,
         height: 100,
         width: 100,
-        fontSize: 50,
-        position: 'relative',
-        left: 20,
-        bottom: 70,
+        display: 'inline-block',
       },
     };
     let logo = this.props.store.picture;
     if (logo === '' || logo === false) {
-      logo = (<Avatar style={style.letter} children={this.props.store.name.charAt(0)} />);
+      logo = (
+        <div style={style.letter}>
+          <Avatar children={this.props.store.name.charAt(0)} />
+        </div>
+      );
     } else {
       logo = (<img alt="logo" style={style} src={this.props.store.picture} />);
     }
@@ -38,7 +42,7 @@ export default class StoreDescription extends React.Component {
   render() {
     const style = {
       width: '80%',
-      height: 130,
+      height: 150,
       paddingTop: '0%',
       paddingBottom: 0,
       marginTop: '2%',
@@ -52,27 +56,28 @@ export default class StoreDescription extends React.Component {
       wordWrap: 'break-word',
       img: {
         position: 'relative',
-        left: 18,
-        bottom: 100,
+        right: 15,
+        top: 15,
         height: 100,
         width: 100,
+        display: 'inline-block',
       },
       name: {
-        marginTop: 20,
+        display: 'inline-block',
+        margin: 40,
       },
       desc: {
-        marginLeft: '19%',
-        marginRight: '20%',
-        marginBottom: 0,
-        height: 6,
+        display: 'inline-block',
+        width: '49%',
+        textAlign: 'left',
       },
     };
     return (
       <div>
         <Paper style={style} zDepth={1} rounded={false}>
-          <h1 style={style.name}>{this.props.store.name}</h1>
-          <h3 style={style.desc}>{this.props.store.description}</h3>
           {this.handleStoreLogo()}
+          <h1 style={style.name}>{this.props.store.name}</h1>
+          <p style={style.desc}>{this.props.store.description}</p>
           {this.props.editing ?
             <EditStore
               edit={this.props.editing}
