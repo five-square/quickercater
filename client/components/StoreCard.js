@@ -2,6 +2,7 @@ import React from 'react';
 import Card from 'material-ui/Card';
 import CardHeader from 'material-ui/Card/CardHeader';
 import Paper from 'material-ui/Paper';
+import Avatar from 'material-ui/Avatar';
 
 export default class StoreCard extends React.Component {
 
@@ -9,7 +10,6 @@ export default class StoreCard extends React.Component {
     super(props);
     this.state = {
       hover: 2,
-      banner: 'http://i.imgur.com/QdDcUFY.jpg',
     };
   }
 
@@ -25,14 +25,18 @@ export default class StoreCard extends React.Component {
     this.props.selectStore(Object.assign({}, this.props.store, { id: this.props.id }));
   }
 
-  render() {
-    let pic = 'http://i.imgur.com/TTnNPph.png';
+  handleAvatar() {
+    let pic = (<Avatar children={this.props.store.name.charAt(0)} />);
     if (this.props.store.picture !== false) {
       pic = this.props.store.picture;
     }
+    return pic;
+  }
+
+  render() {
     let background = null; // { backgroundColor: 'white' };
     if (this.state.banner !== false) {
-      background = { backgroundImage: `url(${this.state.banner})` };
+      background = { backgroundImage: `url(${this.props.store.banner})` };
     }
     return (
       <div style={this.props.style}>
@@ -49,7 +53,7 @@ export default class StoreCard extends React.Component {
             <CardHeader
               title={this.props.store.name}
               subtitle={this.props.store.slogan}
-              avatar={pic}
+              avatar={this.handleAvatar()}
 
             />
           </Card>
