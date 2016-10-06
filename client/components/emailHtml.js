@@ -38,11 +38,9 @@ Email.compose = (orderInfo, storeName, context) => {
     </tr>`)
   ).join(''));
   emailHtml.push('</tbody></table></div>');
-  if (context === 'pending') {
-    emailHtml.push(`<div>
-    <h4>${orderInfo.package.name}: $${orderInfo.package.cost}</h4>
-    </div>`);
-  }
+  emailHtml.push(`<div>
+  <h4>${orderInfo.package.name}: $${orderInfo.package.cost}</h4>
+  </div>`);
   emailHtml.push(`<div>
     <h4>Total price: $${orderInfo.order.total_price}</h4>
     </div>`);
