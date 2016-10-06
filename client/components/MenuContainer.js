@@ -192,23 +192,43 @@ export default class MenuContainer extends Component {
   }
 
   render() {
-    const style = {
-      paper: {
-        width: '75%',
-        flex: '50%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      menuToolbar: {
-        width: '100%',
-      },
-    };
+    // const style = {
+    //   paper: {
+    //     width: '75%',
+    //     flex: '50%',
+    //     marginLeft: 'auto',
+    //     marginRight: 'auto',
+    //     flexDirection: 'column',
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //   },
+    //   menuToolbar: {
+    //     width: '100%',
+    //   },
+    // };
     this.getDraggableMenus();
     this.getStaticMenus();
 
+        // <Paper zDepth={2} style={style.paper}>
+        //   <Toolbar style={style.menuToolbar}>
+        //     <ToolbarGroup>
+        //       <ToolbarTitle text={`${this.props.title}'s Menu`} />
+        //     </ToolbarGroup>
+        //     <ToolbarGroup>
+        //       { this.props.editing
+        //         ? <ItemBank
+        //           open={this.state.openItemBank}
+        //           items={this.state.itemBank}
+        //           menus={this.state.menus}
+        //           editItemInBank={this.editItemInBank}
+        //           deleteItemInBank={this.deleteItemInBank}
+        //           addItemToMenu={this.addItemToMenu}
+        //         />
+        //         : null
+        //       }
+        //     </ToolbarGroup>
+        //   </Toolbar>
+        // </Paper>
     return (
       <div className="menu-container">
         <Paper
@@ -224,50 +244,30 @@ export default class MenuContainer extends Component {
         >
           <span>{this.props.ownerId}</span>
         </Paper>
-        <Paper zDepth={2} style={style.paper}>
-          <Toolbar style={style.menuToolbar}>
-            <ToolbarGroup>
-              <ToolbarTitle text={`${this.props.title}'s Menu`} />
-            </ToolbarGroup>
-            <ToolbarGroup>
-              { this.props.editing
-                ? <ItemBank
-                  open={this.state.openItemBank}
-                  items={this.state.itemBank}
-                  menus={this.state.menus}
-                  editItemInBank={this.editItemInBank}
-                  deleteItemInBank={this.deleteItemInBank}
-                  addItemToMenu={this.addItemToMenu}
-                />
-                : null
-              }
-            </ToolbarGroup>
-          </Toolbar>
-          <div className="list">
-            {this.props.editing
-              ? this.menuCardsDraggable.map((menuCardDraggable, index) => (
-                <SortableListItem
-                  key={index}
-                  updateState={this.handleUpdateState}
-                  draggingIndex={this.state.draggingIndex}
-                  items={this.state.menus}
-                  sortId={index}
-                  outline="list"
-                >{menuCardDraggable}</SortableListItem>
-                )
-              )
-              : this.menuCards
-            }
-          </div>
+        <div className="list">
           {this.props.editing
-            ? <AddMenuCard
-              key={this.state.menus.length + 1}
-              addMenu={this.addMenu}
-              style={this.state.style}
-            />
-            : null
+            ? this.menuCardsDraggable.map((menuCardDraggable, index) => (
+              <SortableListItem
+                key={index}
+                updateState={this.handleUpdateState}
+                draggingIndex={this.state.draggingIndex}
+                items={this.state.menus}
+                sortId={index}
+                outline="list"
+              >{menuCardDraggable}</SortableListItem>
+              )
+            )
+            : this.menuCards
           }
-        </Paper>
+        </div>
+        {this.props.editing
+          ? <AddMenuCard
+            key={this.state.menus.length + 1}
+            addMenu={this.addMenu}
+            style={this.state.style}
+          />
+          : null
+          }
       </div>
     );
   }

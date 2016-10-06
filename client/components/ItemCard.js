@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Card from 'material-ui/Card';
 import CardActions from 'material-ui/Card/CardActions';
 import CardHeader from 'material-ui/Card/CardHeader';
-import CardTitle from 'material-ui/Card/CardTitle';
+// import CardTitle from 'material-ui/Card/CardTitle';
 import Avatar from 'material-ui/Avatar';
 import FlatButton from 'material-ui/FlatButton';
 import Chip from 'material-ui/Chip';
@@ -73,17 +73,17 @@ export default class ItemCard extends Component {
       },
     };
 
+                // <Avatar src={this.props.picture} />
     return (
       <div style={{ position: 'relative' }}>
         <Card>
-          <CardTitle
+          <CardHeader
             title={this.props.item.name}
             subtitle={this.props.item.description}
-            // avatar={this.props.picture}
+            avatar={this.props.picture}
             style={{ width: '95%' }}
             children={
               <div>
-                <Avatar src={this.props.picture} />
                 <Chip style={style.priceChip}>
                   <span style={style.priceText}>{`$${(+this.props.item.price).toFixed(2)}`}</span>
                 </Chip>

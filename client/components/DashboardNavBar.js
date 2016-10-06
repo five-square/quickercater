@@ -8,8 +8,6 @@ import { PopoverAnimationVertical } from 'material-ui/Popover';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import ColorPicker from './ColorPicker';
-// import NavigationClose from 'material-ui/svg-icons/navigation/close';
-// import EditColorScheme from './EditColorScheme';
 
 export default class DashboardNavBar extends Component {
   constructor(props) {
@@ -17,11 +15,18 @@ export default class DashboardNavBar extends Component {
     this.state = {
       open: false,
       openDialog: false,
+      colorTheme: this.props.colorTheme,
     };
     this.openMenu = e => this.handleOpenMenu(e);
     this.closeMenu = e => this.handleCloseMenu(e);
     this.closeMenuOpenDialog = e => this.handleCloseMenuOpenDialog(e);
     this.closeDialog = e => this.handleCloseDialog(e);
+  }
+
+  componentWillMount() {
+    // this.setState({
+    //   currentColorTheme: this.props.colorTheme,
+    // });
   }
 
   handleOpenMenu() {
@@ -42,7 +47,11 @@ export default class DashboardNavBar extends Component {
   handleCloseDialog() {
     this.setState({ openDialog: false });
   }
-  // <EditColorScheme closeMenuOpenDialog={this.closeMenuOpenDialog} open={this.state.openDialog} />
+
+  handleCancelChange() {
+    this.setState({ openDialog: false });
+    this.props.cancelChangeTheme();
+  }
 
   render() {
     const style = {
@@ -92,14 +101,7 @@ export default class DashboardNavBar extends Component {
           }
         />
         <Dialog
-          title={
-            <AppBar
-              title="Color Schemer"
-              titleStyle={{ textAlign: 'left' }}
-              iconStyleLeft={{ display: 'none' }}
-            />
-          }
-          titleStyle={{ height: 70, paddingTop: 5 }}
+          title="Color Schemer"
           actions={actions}
           modal={false}
           open={this.state.openDialog}
