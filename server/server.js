@@ -674,7 +674,9 @@ if (process.env.NODE_ENV !== 'test') {
   const app = express();
 
   // Parse incoming request bodies as JSON
-  app.use(bodyParser.json());
+  //
+  app.use(bodyParser.json({ limit: '16mb' }));
+  app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
 
   // Mount our main router
