@@ -19,6 +19,7 @@ export default class StoreFront extends Component {
       store: this.props.store,
       packages: [],
       muiTheme: null,
+      // customMuiTheme: null,
       colorTheme: this.props.colorTheme,
       // {
       //   palette: {
@@ -43,6 +44,7 @@ export default class StoreFront extends Component {
   componentWillMount() {
     // this.muiTheme = getMuiTheme(this.state.colorTheme);
     this.setState({
+      // customMuiTheme: getMuiTheme(this.state.colorTheme),
       muiTheme: getMuiTheme(this.state.colorTheme),
     });
   }
@@ -128,14 +130,17 @@ export default class StoreFront extends Component {
       <MuiThemeProvider muiTheme={this.state.muiTheme}>
         <div className="StoreFront" >
           {this.props.showDashboard
-          ? <Dashboard
-            style={style.dashboard}
-            ownerId={this.props.ownerIdOfCurrentStore}
-            storeName={this.props.store.name}
-            toggleEditing={this.toggleEditing}
-            colorTheme={this.state.colorTheme}
-            changeTheme={this.changeTheme}
-          />
+          ?
+          // <MuiThemeProvider muiTheme={this.state.muiTheme}>
+            <Dashboard
+              style={style.dashboard}
+              ownerId={this.props.ownerIdOfCurrentStore}
+              storeName={this.props.store.name}
+              toggleEditing={this.toggleEditing}
+              colorTheme={this.state.colorTheme}
+              changeTheme={this.changeTheme}
+            />
+          // </MuiThemeProvider>
           : null
         }
           <StoreDescription

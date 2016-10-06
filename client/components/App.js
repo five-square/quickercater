@@ -237,10 +237,8 @@ export default class App extends Component {
       currentStoreName: 'Welcome to QuickerCater',
     });
   }
-        // muiTheme={getMuiTheme(darkBaseTheme)}>
 
   render() {
-    // console.log(this.state.currentOwnerId);
     return (
       <div>
         <MuiThemeProvider muiTheme={muiTheme}>
@@ -301,7 +299,7 @@ export default class App extends Component {
           </div>
         </MuiThemeProvider>
       </div>
-  );
+    );
   }
 }
 

@@ -130,6 +130,7 @@ export default class ColorPicker extends React.Component {
     const g = this.state.backgroundColor.g;
     const b = this.state.backgroundColor.b;
     const a = this.state.backgroundColor.a;
+
     // A wild switch appears...
     switch (choice) {
       case 0:

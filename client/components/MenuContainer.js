@@ -211,6 +211,19 @@ export default class MenuContainer extends Component {
 
     return (
       <div className="menu-container">
+        <Paper
+          style={{
+            height: 40,
+            width: `${String(this.props.ownerId)}`.length * 15,
+            borderRadius: 18,
+            backgroundColor: 'blue',
+            color: 'white',
+            textAlign: 'center',
+            padding: 12,
+          }}
+        >
+          <span>{this.props.ownerId}</span>
+        </Paper>
         <Paper zDepth={2} style={style.paper}>
           <Toolbar style={style.menuToolbar}>
             <ToolbarGroup>
