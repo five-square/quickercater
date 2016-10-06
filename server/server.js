@@ -96,6 +96,21 @@ function getSignedInUser(req, res, next) {
   **********************************************************************************************
 */
 
+/**
+ * Shape of database object: (example: Menu)
+ * {
+      "menu": {
+        "_id": 2808,
+        "labels": [
+          "Menu"
+        ],
+        "properties": {
+          "name": "Drinks",
+          "description": "Tasty beverages"
+        }
+ * }
+ */
+
 routes.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/public/index.html'));
 });
@@ -221,6 +236,11 @@ routes.post('/api/owner/getStoreAndOwnerByAuthKey', (req, res) => {
 
   **********************************************************************************************
 */
+/**
+ * gets all menus for a specified owner
+ * @param  {parameter} '/api/menu/:ownerId' current owner ID
+ * @return {array} [array of Menu database objects]
+ */
 
 routes.get('/api/menu/:ownerId', (req, res) => {
   db.getMenuByOwnerId(req.params.ownerId)
@@ -228,6 +248,13 @@ routes.get('/api/menu/:ownerId', (req, res) => {
     res.status(200).send(dbData);
   });
 });
+
+/**
+ * updates the order of menus for a specified owner
+ * @param  {parameter} '/api/menu/:ownerId/reorder' current owner ID
+ * @param  {object} (req -> [array of objects: {id: menu id, index: index of menu in new array}]
+ * @return {array} [array of Menu database objects]
+ */
 
 routes.put('/api/menu/:ownerId/reorder', (req, res) => {
   console.log(req.body.menuId);
