@@ -34,24 +34,52 @@ export default class StoreCard extends React.Component {
   }
 
   render() {
-    let background = null; // { backgroundColor: 'white' };
-    if (this.state.banner !== false) {
-      background = { backgroundImage: `url(${this.props.store.banner})` };
+    const style = {
+      title: {
+        color: 'white',
+        fontSize: 20,
+        textShadow: `1px 1px 0 #000,
+          -1px 1px 0 #000,
+          1px -1px 0 #000,
+          -1px -1px 0 #000,
+          0px 1px 0 #000,
+          0px -1px 0 #000,
+          -1px 0px 0 #000,
+          1px 0px 0 #000`,
+      },
+      subTitle: {
+        color: 'white',
+        textShadow: `1px 1px 0 #000,
+          -1px 1px 0 #000,
+          1px -1px 0 #000,
+          -1px -1px 0 #000,
+          0px 1px 0 #000,
+          0px -1px 0 #000,
+          -1px 0px 0 #000,
+          1px 0px 0 #000`,
+      },
+    };
+    let background = { backgroundColor: 'white' };
+    if (this.state.banner !== '') {
+      background = { backgroundImage: `url(http://cinemaonline.kg/templates/modern/img/bgny.jpg)` };
+        // ${this.props.store.banner}
     }
     return (
       <div style={this.props.style}>
         <Paper
           zDepth={this.state.hover}
-          // style={background}
+          style={background}
         >
           <Card
-            // style={{ backgroundColor: 'rgba(255, 255, 255, .89)' }}
+            style={{ backgroundColor: 'rgba(255, 255, 255, .10)' }}
             onMouseEnter={e => this.handleOnMouseEnter(e)}
             onMouseLeave={e => this.handleOnMouseLeave(e)}
             onTouchTap={e => this.handleClick(e)}
           >
             <CardHeader
+              titleStyle={style.title}
               title={this.props.store.name}
+              subtitleStyle={style.subTitle}
               subtitle={this.props.store.slogan}
               avatar={this.handleAvatar()}
 
