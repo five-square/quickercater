@@ -16,21 +16,26 @@ export default class StoreDescription extends React.Component {
       top: 25,
       left: 25,
       height: 100,
-      width: '15%',
+      width: 100,
       letter: {
         position: 'relative',
-        right: 25,
-        top: 25,
+        left: 15,
+        top: 15,
         height: 100,
         width: 100,
         display: 'inline-block',
+      },
+      char: {
+        height: 100,
+        width: 100,
+        fontSize: 50,
       },
     };
     let logo = this.props.store.picture;
     if (logo === '' || logo === false) {
       logo = (
         <div style={style.letter}>
-          <Avatar children={this.props.store.name.charAt(0)} />
+          <Avatar style={style.char}children={this.props.store.name.charAt(0)} />
         </div>
       );
     } else {
