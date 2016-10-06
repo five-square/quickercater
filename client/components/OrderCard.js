@@ -19,9 +19,9 @@ export default class OrderCard extends React.Component {
       open: false,
       newOrder: {},
       submitted: false,
-      requestDate: '',
-      eventStart: '',
-      eventEnd: '',
+      requestDate: {},
+      eventStartTime: {},
+      eventEndTime: {},
       ownerId: this.props.ownerId,
       orderInfo: {},
       customerInfo: {},
@@ -73,9 +73,10 @@ export default class OrderCard extends React.Component {
         id: '',
         name: this.state.orderName,
         created_on: new Date(), // populate this in Neo4J query??
-        request_date: this.state.requestDate,
-        start_time: this.state.eventStart,
-        end_time: this.state.eventEnd,
+        request_date: `${this.state.requestDate.getMonth() + 1}-
+                      ${this.state.requestDate.getDate()}-${this.state.requestDate.getFullYear()}`,
+        start_time: this.formatTime(this.state.eventStartTime),
+        end_time: this.formatTime(this.state.eventEndTime),
         fulfilled: false,
         total_price: this.props.orderInfo.totalPrice,
         address: this.state.eventAddress,
@@ -152,28 +153,31 @@ export default class OrderCard extends React.Component {
   }
 
   handleRequestDate(event, date) {
-    this.setState({ errorTextReqdate: '' });
-    this.state.requestDate = `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
+    this.setState({
+      requestDate: date,
+      errorTextReqdate: '' });
   }
 
   handleStartTime(event, time) {
-    this.state.eventStart = this.formatTime(time);
+    this.setState({ eventStartTime: time });
   }
 
   handleEndTime(event, time) {
-    this.state.eventEnd = this.formatTime(time);
+    this.setState({ eventEndTime: time });
   }
 
   handleeventAddress(e) {
     this.state.eventAddress = e.currentTarget.value;
+    this.setState({ eventAddress: e.currentTarget.value });
   }
 
   handleOrderName(e) {
     this.state.orderName = e.currentTarget.value;
+    this.setState({ orderName: e.currentTarget.value });
   }
 
   handleModalCancel() {
-    this.setState({ reviewOrder: false, open: false });
+    this.setState({ reviewOrder: false });
   }
 
   formatTime(time) {
@@ -292,6 +296,7 @@ export default class OrderCard extends React.Component {
             errorText={this.state.errorTextPhone === ''
                         ? this.state.errorTextPhoneReq
                         : this.state.errorTextPhone}
+            value={this.state.customerPhone}
             onChange={e => this.onChangePhone(e)}
           />
           <br />
@@ -300,6 +305,7 @@ export default class OrderCard extends React.Component {
             floatingLabelText="Order name"
             floatingLabelStyle={style.textColor}
             floatingLabelFixed
+            value={this.state.orderName}
             onChange={e => this.handleOrderName(e)}
           />
           <br />
@@ -308,6 +314,7 @@ export default class OrderCard extends React.Component {
             floatingLabelText="Address"
             floatingLabelStyle={style.textColor}
             floatingLabelFixed
+            value={this.state.eventAddress}
             onChange={e => this.handleeventAddress(e)}
           />
           <br />
@@ -317,6 +324,7 @@ export default class OrderCard extends React.Component {
             floatingLabelFixed
             hintText="Request Date"
             errorText={this.state.errorTextReqdate}
+            value={this.state.requestDate}
             onChange={(e, date) => this.handleRequestDate(e, date)}
           />
           <TimePicker
@@ -324,6 +332,7 @@ export default class OrderCard extends React.Component {
             floatingLabelText="Event start time"
             floatingLabelStyle={style.textColor}
             floatingLabelFixed
+            value={this.state.eventStartTime}
             onChange={(e, date) => this.handleStartTime(e, date)}
           />
           <TimePicker
@@ -331,6 +340,7 @@ export default class OrderCard extends React.Component {
             floatingLabelText="Event end time"
             floatingLabelStyle={style.textColor}
             floatingLabelFixed
+            value={this.state.eventEndTime}
             onChange={(e, date) => this.handleEndTime(e, date)}
           />
           <h4>{`Price: $${this.props.orderInfo.totalPrice}`}</h4>
