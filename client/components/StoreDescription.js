@@ -14,7 +14,7 @@ export default class StoreDescription extends React.Component {
     const style = {
       position: 'relative',
       left: 18,
-      bottom: 150,
+      bottom: 69,
       height: 100,
       width: 100,
       letter: {
@@ -53,7 +53,7 @@ export default class StoreDescription extends React.Component {
       img: {
         position: 'relative',
         left: 18,
-        bottom: 150,
+        bottom: 100,
         height: 100,
         width: 100,
       },
