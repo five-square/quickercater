@@ -10,6 +10,7 @@ export default class StoreCard extends React.Component {
     super(props);
     this.state = {
       hover: 2,
+      banner: 'http://cinemaonline.kg/templates/modern/img/bgny.jpg',
     };
   }
 
@@ -26,18 +27,33 @@ export default class StoreCard extends React.Component {
   }
 
   handleAvatar() {
-    let pic = (<Avatar children={this.props.store.name.charAt(0)} />);
+    let pic = (
+      <Avatar
+        style={{ height: 60, width: 60 }}
+        children={this.props.store.name.charAt(0)}
+      />
+    );
     if (this.props.store.picture !== false) {
-      pic = this.props.store.picture;
+      pic = (
+        <Avatar
+          style={{ height: 60, width: 60 }}
+          src={this.props.store.picture}
+        />
+      );
     }
     return pic;
   }
 
   render() {
     const style = {
+      header: {
+        position: 'relative',
+        top: '9%',
+        height: 134,
+      },
       title: {
         color: 'white',
-        fontSize: 20,
+        fontSize: 30,
         textShadow: `1px 1px 0 #000,
           -1px 1px 0 #000,
           1px -1px 0 #000,
@@ -48,6 +64,7 @@ export default class StoreCard extends React.Component {
           1px 0px 0 #000`,
       },
       subTitle: {
+        fontSize: 17,
         color: 'white',
         textShadow: `1px 1px 0 #000,
           -1px 1px 0 #000,
@@ -61,8 +78,7 @@ export default class StoreCard extends React.Component {
     };
     let background = { backgroundColor: 'white' };
     if (this.state.banner !== '') {
-      background = { backgroundImage: `url(http://cinemaonline.kg/templates/modern/img/bgny.jpg)` };
-        // ${this.props.store.banner}
+      background = { height: 134, backgroundImage: `url(${this.state.banner})` };
     }
     return (
       <div style={this.props.style}>
@@ -77,6 +93,7 @@ export default class StoreCard extends React.Component {
             onTouchTap={e => this.handleClick(e)}
           >
             <CardHeader
+              style={style.header}
               titleStyle={style.title}
               title={this.props.store.name}
               subtitleStyle={style.subTitle}
