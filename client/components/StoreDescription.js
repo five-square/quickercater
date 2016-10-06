@@ -2,7 +2,7 @@ import React from 'react';
 import Paper from 'material-ui/Paper';
 import Avatar from 'material-ui/Avatar';
 import EditStore from './EditStore';
-// change two buttons together
+
 export default class StoreDescription extends React.Component {
 
   constructor(props) {
