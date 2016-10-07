@@ -192,32 +192,8 @@ export default class MenuContainer extends Component {
   }
 
   render() {
-    // const style = {
-    //   paper: {
-    //     width: '75%',
-    //     flex: '50%',
-    //     marginLeft: 'auto',
-    //     marginRight: 'auto',
-    //     flexDirection: 'column',
-    //     alignItems: 'center',
-    //     justifyContent: 'center',
-    //   },
-    //   menuToolbar: {
-    //     width: '100%',
-    //   },
-    // };
     this.getDraggableMenus();
     this.getStaticMenus();
-
-        // <Paper zDepth={2} style={style.paper}>
-        //   <Toolbar style={style.menuToolbar}>
-        //     <ToolbarGroup>
-        //       <ToolbarTitle text={`${this.props.title}'s Menu`} />
-        //     </ToolbarGroup>
-        //     <ToolbarGroup>
-        //     </ToolbarGroup>
-        //   </Toolbar>
-        // </Paper>
     return (
       <div className="menu-container" style={{ position: 'relative' }}>
         <div style={{ position: 'absolute', right: 20, top: -60 }}>

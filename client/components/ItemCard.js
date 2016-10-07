@@ -53,7 +53,7 @@ export default class ItemCard extends Component {
         padding: 2,
         // backgroundColor: '#26C6DA',
         position: 'absolute',
-        right: '-3%',
+        right: '-4%',
         top: '22%',
       },
       priceText: {
@@ -73,12 +73,14 @@ export default class ItemCard extends Component {
                 // <Avatar src={this.props.picture} />
     return (
       <div style={{ position: 'relative' }}>
-        <Card zDepth={2} style={{ borderRadius: 30 }}>
+        <Card zDepth={2} style={{ borderRadius: 20 }}>
           <CardHeader
             title={this.props.item.name}
             subtitle={this.props.item.description}
             avatar={this.props.picture}
-            style={{ width: '95%' }}
+            style={{ width: '95%', height: 50 }}
+            titleStyle={{ fontSize: 20 }}
+            subtitleStyle={{ marginTop: 10 }}
             children={
               <div>
                 <Chip style={style.priceChip}>
