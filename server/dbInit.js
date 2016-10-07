@@ -345,7 +345,20 @@ dbInit.init = () => Node.cypherAsync({
       address: '1620 E. Riverside Dr.',
       slogan: "Smile, it's Churro time!",
       description: 'Sweet stuff',
-      type: 'Dessert'
+      type: 'Dessert',
+      banner: 'http://i.imgur.com/LWHERKH.jpg',
+      primary1Color: '#2196F3',
+      primary2Color: '#1976D2',
+      primary3Color: '#BBDEFB',
+      accent1Color: '#009688',
+      accent2Color: '#00796B',
+      accent3Color: '#000000',
+      borderColor: '#BDBDBD',
+      canvasColor: '#EEEEEE',
+      shadowColor: '#000000',
+      textColor: '#212121',
+      alternateTextColor: '#F5F5F5',
+      pickerHeaderColor: '#2196F3'
     })
     CREATE (aliceStore:Store {
       name: 'Casa de Alice',
@@ -353,7 +366,20 @@ dbInit.init = () => Node.cypherAsync({
       address: '123 YourMom Rd.',
       slogan: "I'll make all your wildest dreams come true",
       description: 'We have nice chicharrones.',
-      type: 'Mexican'
+      type: 'Mexican',
+      banner: 'http://i.imgur.com/LWHERKH.jpg',
+      primary1Color: '#2196F3',
+      primary2Color: '#1976D2',
+      primary3Color: '#BBDEFB',
+      accent1Color: '#009688',
+      accent2Color: '#00796B',
+      accent3Color: '#000000',
+      borderColor: '#BDBDBD',
+      canvasColor: '#EEEEEE',
+      shadowColor: '#000000',
+      textColor: '#212121',
+      alternateTextColor: '#F5F5F5',
+      pickerHeaderColor: '#2196F3'
     })
     CREATE (bobStore:Store {
       name: "Bob's Burger Hole",
@@ -361,7 +387,20 @@ dbInit.init = () => Node.cypherAsync({
       address: '123 YourMom Blvd.',
       slogan: 'Fill up those buns and put a burger in your hole!',
       description: 'Big, juicy burgers for your enjoyment',
-      type: 'American'
+      type: 'American',
+      banner: 'http://i.imgur.com/LWHERKH.jpg',
+      primary1Color: '#2196F3',
+      primary2Color: '#1976D2',
+      primary3Color: '#BBDEFB',
+      accent1Color: '#009688',
+      accent2Color: '#00796B',
+      accent3Color: '#000000',
+      borderColor: '#BDBDBD',
+      canvasColor: '#EEEEEE',
+      shadowColor: '#000000',
+      textColor: '#212121',
+      alternateTextColor: '#F5F5F5',
+      pickerHeaderColor: '#2196F3'
     })
 
     CREATE (danOrder1:CustomerOrder {
