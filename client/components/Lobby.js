@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 import StoreCard from './StoreCard';
 // import Server from '../models/serverAPI';
 
@@ -8,14 +10,29 @@ export default class Lobby extends Component {
     super(props);
     this.state = {
       searchValue: '',
+      searchBy: 'name',
+      searchHint: 'Caterer',
     };
     this.changeSearchValue = e => this.handleChangeSearchValue(e);
+    this.selectType = (e, i, v) => this.handleSearchType(e, i, v);
   }
 
   handleChangeSearchValue(e) {
     this.setState({
       searchValue: e.currentTarget.value,
     });
+  }
+
+  handleSearchType(e, i, v) {
+    let hint = 'Caterer';
+    if (v === 'type') {
+      hint = 'Category';
+    }
+    this.setState({
+      searchBy: v,
+      searchHint: hint,
+    });
+    console.log('This state name test: ', this.state.searchBy);
   }
 
   render() {
@@ -48,23 +65,39 @@ export default class Lobby extends Component {
         justifyContent: 'center',
         cursor: 'pointer',
       },
+      searchDrop: {
+        height: 4,
+      },
+      searchText: {
+        width: '50%',
+      },
     };
     return (
       <div className="Lobby">
         <div style={style.searchBar}>
           <TextField
-            fullWidth
-            hintText="Search by Caterer"
+            style={{ width: '50%' }}
+            inputStyle={style.searchText}
+            hintText={`Search by ${this.state.searchHint}`}
             value={this.state.searchValue}
             onChange={this.changeSearchValue}
-          /><br />
+          />
+          <DropDownMenu
+            autoWidth
+            value={this.state.searchBy}
+            onChange={this.selectType}
+            underlineStyle={style.searchDrop}
+          >
+            <MenuItem key={1} value={'name'} primaryText="Search By Name" />
+            <MenuItem key={2} value={'type'} primaryText="Search By Category" />
+          </DropDownMenu>
         </div>
         { this.props.stores
           .filter(store =>
-            store.name.toLowerCase()
+            store.properties[this.state.searchBy].toLowerCase()
               .includes(this.state.searchValue.toLowerCase()))
           .sort((a, b) =>
-            (a.name > b.name ? 1 : -1))
+            (a.properties[this.state.searchBy] > b.properties[this.state.searchBy] ? 1 : -1))
           .map((e, i) =>
             <StoreCard
               key={i}
