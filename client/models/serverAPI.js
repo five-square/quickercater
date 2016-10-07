@@ -14,7 +14,33 @@ ServerAPI.getAllStores = () =>
       'Content-Type': 'application/json',
     },
   })
-  .then(data => data.json());
+  .then(data => data.json())
+  .then(stores => stores.map(store => ({
+    id: store._id,
+    name: store.properties.name,
+    address: store.properties.address,
+    description: store.properties.description,
+    slogan: store.properties.slogan,
+    picture: store.properties.picture,
+    banner: store.properties.banner,
+    type: store.properties.type,
+    colors: {
+      palette: {
+        primary1Color: store.properties.primary1Color,
+        primary2Color: store.properties.primary2Color,
+        primary3Color: store.properties.primary3Color,
+        accent1Color: store.properties.accent1Color,
+        accent2Color: store.properties.accent2Color,
+        accent3Color: store.properties.accent3Color,
+        borderColor: store.properties.borderColor,
+        canvasColor: store.properties.canvasColor,
+        shadowColor: store.properties.shadowColor,
+        textColor: store.properties.textColor,
+        alternateTextColor: store.properties.alternateTextColor,
+        pickerHeaderColor: store.properties.pickerHeaderColor,
+      },
+    },
+  })));
 
 ServerAPI.getStoreByOwner = (ownerId) =>
   fetch(`/api/store/${ownerId}`, {
@@ -68,13 +94,13 @@ ServerAPI.getOwnerByStoreId = (storeId) =>
     name: owner.owner.properties.name,
   }));
 
-  ServerAPI.getAllStoresAndOwners = () =>
-    fetch('/api/storesAndOwners', {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    .then(data => data.json());
+ServerAPI.getAllStoresAndOwners = () =>
+  fetch('/api/storesAndOwners', {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(data => data.json());
 
 export default ServerAPI;

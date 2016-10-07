@@ -49,7 +49,7 @@ export default class App extends Component {
     if (sessId !== undefined && sessId !== '') {
       OwnerAPI.getStoreAndOwnerByAuthKey(sessId).then(storeAndOwner => {
         if (storeAndOwner && storeAndOwner.length > 0 && storeAndOwner[0].store) {
-          console.log('Owner of storeAndOwner:', storeAndOwner);
+          // console.log('Owner of storeAndOwner:', storeAndOwner);
           this.setState({
             myStore: storeAndOwner[0].store,
             currentOwnerId: storeAndOwner[0].owner._id,
@@ -70,14 +70,14 @@ export default class App extends Component {
   }
 
   handleSelectStore(storeObj) {
-    console.log('Select store: ', storeObj);
+    // console.log('Select store: ', storeObj);
     let id = storeObj.id;
     if (storeObj._id && id === undefined) {
       id = storeObj._id;
     }
     Server.getOwnerByStoreId(id)
     .then(owner => {
-      console.log('in select Store:', storeObj);
+      // console.log('in select Store:', storeObj);
       this.setState({
         ownerIdOfCurrentStore: owner.id,
         currentStore: storeObj,
@@ -209,7 +209,7 @@ export default class App extends Component {
   }
 
   viewCart() {
-    console.log('trying to view cart');
+    // console.log('trying to view cart');
     this.setState({
       openCart: !this.state.openCart,
     });
@@ -217,7 +217,7 @@ export default class App extends Component {
 
   handleMyStoreClick() { // used to show reg modal when no
     this.setState({ showRegisterModal: true });
-    console.log('setState in app');
+    // console.log('setState in app');
   }
 
   handleUnmountRegisterModal() {

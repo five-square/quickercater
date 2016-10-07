@@ -19,7 +19,7 @@ export default class StoreFront extends Component {
       store: this.props.store,
       packages: [],
       muiTheme: null,
-      colorTheme: this.props.colorTheme,
+      colorTheme: null,
     };
 
     this.toggleEditing = e => this.handleToggleEditing(e);
@@ -27,8 +27,10 @@ export default class StoreFront extends Component {
   }
 
   componentWillMount() {
+    console.log('in StoreFront: colors: ', this.props.store.colors);
     this.setState({
       muiTheme: getMuiTheme(this.state.colorTheme),
+      colorTheme: this.props.store.colors,
     });
   }
 
@@ -52,10 +54,10 @@ export default class StoreFront extends Component {
   }
 
   handleEditStore(setStore) {
-    console.log('in StoreFront handleEditStore before db call: ', setStore);
+    // console.log('in StoreFront handleEditStore before db call: ', setStore);
     Owner.updateStore(setStore, this.props.ownerIdOfCurrentStore)
     .then((store) => {
-      console.log('in StoreFront handleEditStore after db call: ', store);
+      // console.log('in StoreFront handleEditStore after db call: ', store);
       this.setState({ store });
     });
   }
@@ -65,9 +67,16 @@ export default class StoreFront extends Component {
   }
 
   handleChangeTheme(newTheme) {
-    this.setState({
-      muiTheme: getMuiTheme(newTheme),
-      colorTheme: newTheme,
+    console.log('in StoreFront: handleChangeTheme: ', newTheme);
+    Owner.updateStoreColors({
+      storeId: this.props.store.id,
+      colors: newTheme.palette,
+    })
+    .then(store => {
+      this.setState({
+        muiTheme: getMuiTheme(store.colors),
+        colorTheme: store.colors,
+      });
     });
   }
 
@@ -106,9 +115,6 @@ export default class StoreFront extends Component {
         justifyContent: 'center',
       },
     };
-
-    console.log('in StoreFront: stateColorTheme: ', this.state.colorTheme);
-    console.log('in StoreFront: propsMuiTheme: ', this.props.masterMuiTheme);
 
     return (
       <div className="StoreFront" >
