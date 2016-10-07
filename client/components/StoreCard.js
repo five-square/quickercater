@@ -10,7 +10,7 @@ export default class StoreCard extends React.Component {
     super(props);
     this.state = {
       hover: 2,
-      banner: this.props.store.banner || 'http://i.imgur.com/LWHERKH.jpg',
+      //banner: this.props.store.banner || 'http://i.imgur.com/LWHERKH.jpg',
     };
   }
 
@@ -77,8 +77,8 @@ export default class StoreCard extends React.Component {
       },
     };
     let background = { backgroundColor: 'white' };
-    if (this.state.banner !== '') {
-      background = { height: 134, backgroundImage: `url(${this.state.banner})` };
+    if (this.props.store.banner !== '') {
+      background = { height: 134, backgroundImage: `url(${this.props.store.banner})` };
     }
     return (
       <div style={this.props.style}>
