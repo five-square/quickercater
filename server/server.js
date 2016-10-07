@@ -653,7 +653,6 @@ routes.post('/api/package/create', (req, res) => {
 });
 
 routes.delete('/api/package/delete/:packId', (req, res) => {
-  console.log('req', req.params.packId);
   db.deletePack(req.params.packId)
   .then((response) => {
     res.status(202).send(response);
