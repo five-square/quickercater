@@ -94,10 +94,10 @@ export default class Lobby extends Component {
         </div>
         { this.props.stores
           .filter(store =>
-            store.properties[this.state.searchBy].toLowerCase()
+            store[this.state.searchBy].toLowerCase()
               .includes(this.state.searchValue.toLowerCase()))
           .sort((a, b) =>
-            (a.properties[this.state.searchBy] > b.properties[this.state.searchBy] ? 1 : -1))
+            (a[this.state.searchBy] > b[this.state.searchBy] ? 1 : -1))
           .map((e, i) =>
             <StoreCard
               key={i}
