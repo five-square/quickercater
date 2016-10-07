@@ -53,8 +53,8 @@ export default class ItemCard extends Component {
         padding: 2,
         // backgroundColor: '#26C6DA',
         position: 'absolute',
-        right: -25,
-        top: 10,
+        right: '-3%',
+        top: '22%',
       },
       priceText: {
         fontSize: '1.1em',
@@ -73,7 +73,7 @@ export default class ItemCard extends Component {
                 // <Avatar src={this.props.picture} />
     return (
       <div style={{ position: 'relative' }}>
-        <Card>
+        <Card style={{ borderRadius: 30 }}>
           <CardHeader
             title={this.props.item.name}
             subtitle={this.props.item.description}
