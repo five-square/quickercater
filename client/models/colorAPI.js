@@ -1,7 +1,6 @@
 const ColorAPI = {};
 
 ColorAPI.defaultTheme = {
-  fontFamily: 'Arial, sans-serif',
   palette: {
     primary1Color: '#2196F3', // primary buttons and appbars
     primary2Color: '#1976D2',

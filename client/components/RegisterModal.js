@@ -7,6 +7,7 @@ import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
 
 import OwnerAPI from '../models/ownerAPI';
+import Colors from '../models/colorAPI';
 
 export default class RegisterModal extends React.Component {
 
@@ -41,6 +42,7 @@ export default class RegisterModal extends React.Component {
       description: this.state.newStoreDescription,
       type: this.state.newStoreType,
       banner: this.state.newStoreBanner,
+      colors: Colors.defaultTheme.palette,
     };
     this.setState({ dialogOpen: false });
     OwnerAPI.createStore(newStoreInfo, this.props.ownerId).then(x => x);

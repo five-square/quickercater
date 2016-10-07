@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
 import CardText from 'material-ui/Card/CardText';
-import Paper from 'material-ui/Paper';
 import ItemCard from './ItemCard';
 import Menu from '../models/menuAPI';
 
@@ -51,42 +50,44 @@ export default class MenuCard extends Component {
   render() {
     return (
       <div style={this.props.style}>
-        <Paper zDepth={this.state.hover}>
-          <Card
-            onMouseEnter={this.onMouseEnter}
-            onMouseLeave={this.onMouseLeave}
-            // containerStyle={{ backgroundColor: '#e0e0e0' }}
-          >
-            <CardTitle
-              title={this.props.menu.name}
-              subtitle={this.props.menu.description}
-              actAsExpander
-              showExpandableButton={false}
-            />
-            <CardText expandable={false}>
-              {this.state.items.map((item, index) => {
-                let pic = item.item.picture;
-                if (item.item.picture.length < 5 || item.item.picture === false) {
-                  pic = 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png';
-                }
-                return (<ItemCard
-                  key={index}
-                  editing={this.props.editing}
-                  item={item.item}
-                  picture={pic}
-                  addItemToOrder={this.props.addItemToOrder}
-                  updateTotalPrice={this.props.updateTotalPrice}
-                  ownerId={this.props.ownerId}
-                  removeItem={this.removeItem}
-                  editItem={this.editItem}
-                  packages={this.props.packages}
-                />);
-              })}
-            </CardText>
-          </Card>
-        </Paper>
+        <Card
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+          containerStyle={{ borderRadius: 20 }}
+          style={{ borderRadius: 20 }}
+          zDepth={this.state.hover}
+        >
+          <CardTitle
+            title={this.props.menu.name}
+            subtitle={this.props.menu.description}
+            titleStyle={{ fontSize: 30 }}
+            actAsExpander
+            showExpandableButton={false}
+          />
+          <CardText expandable={false}>
+            {this.state.items.map((item, index) => {
+              let pic = item.item.picture;
+              if (item.item.picture.length < 5 || item.item.picture === false) {
+                pic = 'https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png';
+              }
+              return (<ItemCard
+                key={index}
+                editing={this.props.editing}
+                item={item.item}
+                picture={pic}
+                addItemToOrder={this.props.addItemToOrder}
+                updateTotalPrice={this.props.updateTotalPrice}
+                ownerId={this.props.ownerId}
+                removeItem={this.removeItem}
+                editItem={this.editItem}
+                packages={this.props.packages}
+              />);
+            })}
+          </CardText>
+        </Card>
         <br />
       </div>
     );
   }
 }
+        // </Paper>

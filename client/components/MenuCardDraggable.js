@@ -189,7 +189,8 @@ export default class MenuCardDraggable extends React.Component {
           <Card
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
-            // containerStyle={{ backgroundColor: '#e0e0e0' }}
+            containerStyle={{ borderRadius: 20 }}
+            style={{ borderRadius: 20 }}
           >
             <CardTitle
               title={this.props.menu.name}
