@@ -215,35 +215,24 @@ export default class MenuContainer extends Component {
         //       <ToolbarTitle text={`${this.props.title}'s Menu`} />
         //     </ToolbarGroup>
         //     <ToolbarGroup>
-        //       { this.props.editing
-        //         ? <ItemBank
-        //           open={this.state.openItemBank}
-        //           items={this.state.itemBank}
-        //           menus={this.state.menus}
-        //           editItemInBank={this.editItemInBank}
-        //           deleteItemInBank={this.deleteItemInBank}
-        //           addItemToMenu={this.addItemToMenu}
-        //         />
-        //         : null
-        //       }
         //     </ToolbarGroup>
         //   </Toolbar>
         // </Paper>
     return (
-      <div className="menu-container">
-        <Paper
-          style={{
-            height: 40,
-            width: `${String(this.props.ownerId)}`.length * 15,
-            borderRadius: 18,
-            backgroundColor: 'blue',
-            color: 'white',
-            textAlign: 'center',
-            padding: 12,
-          }}
-        >
-          <span>{this.props.ownerId}</span>
-        </Paper>
+      <div className="menu-container" style={{ position: 'relative' }}>
+        <div style={{ position: 'absolute', right: 20, top: -60 }}>
+          { this.props.editing
+            ? <ItemBank
+              open={this.state.openItemBank}
+              items={this.state.itemBank}
+              menus={this.state.menus}
+              editItemInBank={this.editItemInBank}
+              deleteItemInBank={this.deleteItemInBank}
+              addItemToMenu={this.addItemToMenu}
+            />
+            : null
+          }
+        </div>
         <div className="list">
           {this.props.editing
             ? this.menuCardsDraggable.map((menuCardDraggable, index) => (

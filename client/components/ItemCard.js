@@ -58,7 +58,6 @@ export default class ItemCard extends Component {
       },
       priceText: {
         fontSize: '1.1em',
-        color: 'white',
       },
       addItem: {
         width: '60%',

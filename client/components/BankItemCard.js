@@ -54,14 +54,12 @@ export default class BankItemCard extends Component {
       priceChip: {
         margin: 5,
         padding: 2,
-        backgroundColor: '#26C6DA',
         position: 'absolute',
         right: -188,
         bottom: 48,
       },
       priceText: {
         fontSize: '1.1em',
-        color: 'white',
       },
     };
 

@@ -90,7 +90,7 @@ export default class StoreFront extends Component {
       menuCards: {
         width: '85%',
         flex: '50%',
-        marginTop: '1%',
+        marginTop: '4%',
         marginBottom: '2%',
         marginLeft: 'auto',
         marginRight: 'auto',

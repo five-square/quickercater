@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import AppBar from 'material-ui/AppBar';
 
 export default class Navigation extends Component {
@@ -39,44 +38,6 @@ export default class Navigation extends Component {
     this.props.viewCart();
   }
 
-          // <ToolbarGroup>
-          //   <ToolbarTitle text={this.props.title} />
-          // </ToolbarGroup>
-          // <ToolbarGroup>
-          //   {this.props.inStore
-          //     ? <RaisedButton
-          //       label="Back to Lobby"
-          //       primary onClick={e => this.handleBackClick(e)}
-          //     />
-          //     : null
-          //   }
-          //   <RaisedButton label="View Cart" primary onClick={e => this.handleViewCart(e)} />
-          //   {this.props.loggedIn
-          //     ? this.props.myStore
-          //       ? <RaisedButton
-          //         label="MyStore"
-          //         primary
-          //         onClick={() => this.props.goToMyStore(
-          //         Object.assign({}, this.props.myStore.properties, { id: this.props.myStore._id })
-          //       )}
-          //       />
-          //       : <RaisedButton
-          //         label="MyStore"
-          //         primary
-          //         onClick={this.props.openRegisterModal}
-          //       />
-          //     : <RaisedButton
-          //       label="Login"
-          //       primary
-          //       onClick={e => this.signInWithGoogle(e)}
-          //     />
-          //   }
-          //   {this.props.loggedIn
-          // ? <RaisedButton label="Logout" primary onClick={e => this.signOut(e)} />
-          // : null
-          // }
-          // </ToolbarGroup>
-        // </AppBar>
   render() {
     const style = {
       raisedButton: {
@@ -90,7 +51,6 @@ export default class Navigation extends Component {
           style={{ height: 64 }}
           titleStyle={{ textAlign: 'left' }}
           iconStyleLeft={{ display: 'none' }}
-          // children={}
         >
           <div>
             {this.props.inStore
