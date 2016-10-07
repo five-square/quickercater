@@ -35,6 +35,7 @@ export default class ColorPicker extends React.Component {
         b: '',
         a: '',
       },
+      // oldColorTheme: Object.assign({}, this.props.colorTheme),
       newColorTheme: this.props.colorTheme,
     };
     this.propertyKeys = {
@@ -247,7 +248,9 @@ export default class ColorPicker extends React.Component {
         display: 'inline',
       },
     };
-    console.log('in ColorPicker: ', this.props.colorTheme.palette.shadowColor)
+
+    console.log('in ColorPicker: ', this.props.colorTheme.palette.shadowColor);
+
     return (
       <div>
         <Tabs style={{ width: '100%' }}>

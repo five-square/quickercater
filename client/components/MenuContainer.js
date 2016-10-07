@@ -233,7 +233,7 @@ export default class MenuContainer extends Component {
             : null
           }
         </div>
-        <div className="list">
+        <div className="list" style={{ marginTop: '4%' }}>
           {this.props.editing
             ? this.menuCardsDraggable.map((menuCardDraggable, index) => (
               <SortableListItem

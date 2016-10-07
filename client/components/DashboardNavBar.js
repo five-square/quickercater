@@ -15,18 +15,20 @@ export default class DashboardNavBar extends Component {
     this.state = {
       open: false,
       openDialog: false,
+      oldColorTheme: null,
       colorTheme: this.props.colorTheme,
     };
     this.openMenu = e => this.handleOpenMenu(e);
     this.closeMenu = e => this.handleCloseMenu(e);
     this.closeMenuOpenDialog = e => this.handleCloseMenuOpenDialog(e);
     this.closeDialog = e => this.handleCloseDialog(e);
+    this.cancelChange = e => this.handleCancelChange(e);
   }
 
   componentWillMount() {
-    // this.setState({
-    //   currentColorTheme: this.props.colorTheme,
-    // });
+    this.setState({
+      oldColorTheme: Object.assign({}, this.props.colorTheme),
+    });
   }
 
   handleOpenMenu() {
@@ -49,8 +51,10 @@ export default class DashboardNavBar extends Component {
   }
 
   handleCancelChange() {
+    console.log('in DashboardNavBar: colorTheme', this.state.colorTheme);
+    console.log('in DashboardNavBar: oldColorTheme', this.state.oldColorTheme);
     this.setState({ openDialog: false });
-    this.props.cancelChangeTheme();
+    this.props.changeTheme(this.state.oldColorTheme);
   }
 
   render() {
@@ -66,7 +70,7 @@ export default class DashboardNavBar extends Component {
       <FlatButton
         label="Cancel"
         primary
-        onTouchTap={this.closeDialog}
+        onTouchTap={this.cancelChange}
       />,
       <FlatButton
         label="Submit"
