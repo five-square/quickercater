@@ -117,8 +117,8 @@ export default class App extends Component {
     if (itemPos < 0) {
       tempOrder[tempOwnerId].order.push(itemObj);
       tempOrder[tempOwnerId].totalPrice =
-            Number(parseFloat(tempOrder[tempOwnerId].totalPrice) +
-            (parseFloat(itemObj.item.price))).toFixed(2);
+            Number((parseFloat(tempOrder[tempOwnerId].totalPrice) +
+            (parseFloat(itemObj.item.price))).toFixed(2));
 
       this.setState({
         globalOrder: tempOrder,
@@ -140,13 +140,13 @@ export default class App extends Component {
     updated package option*/
     if (tempOrder[tempOwnerId].order.length > 1) {
       tempOrder[tempOwnerId].totalPrice =
-        Number(tempOrder[tempOwnerId].selectedPkgCost + tempOrder[tempOwnerId].order
-        .reduce((a, b) => a + (b.item.price * parseInt(b.quantity, 10)), 0)).toFixed(2);
+        Number((tempOrder[tempOwnerId].selectedPkgCost + tempOrder[tempOwnerId].order
+        .reduce((a, b) => a + (b.item.price * parseInt(b.quantity, 10)), 0)).toFixed(2));
     } else if (tempOrder[tempOwnerId].order.length === 1) {
       tempOrder[tempOwnerId].totalPrice =
-          Number(tempOrder[tempOwnerId].selectedPkgCost +
+          Number((tempOrder[tempOwnerId].selectedPkgCost +
             (tempOrder[tempOwnerId].order[0].item.price
-          * tempOrder[tempOwnerId].order[0].quantity)).toFixed(2);
+          * tempOrder[tempOwnerId].order[0].quantity)).toFixed(2));
     }
 
     this.setState({
@@ -168,8 +168,8 @@ export default class App extends Component {
     tempOrder[ownerId].selectedPkgId = packageId;
     tempOrder[ownerId].selectedPkgDesc = tempOrder[ownerId].packages[pkgPos].name;
     tempOrder[ownerId].selectedPkgCost = tempOrder[ownerId].packages[pkgPos].cost;
-    tempOrder[ownerId].totalPrice = Number((parseFloat(tempOrder[ownerId].totalPrice)
-      + parseFloat(tempOrder[ownerId].packages[pkgPos].cost)) - prevPkgCost).toFixed(2);
+    tempOrder[ownerId].totalPrice = Number(((parseFloat(tempOrder[ownerId].totalPrice)
+      + parseFloat(tempOrder[ownerId].packages[pkgPos].cost)) - prevPkgCost).toFixed(2));
 
     this.setState({
       globalOrder: tempOrder,
@@ -186,9 +186,8 @@ export default class App extends Component {
 
     // update total price by removing the price for the deleted item
     tempOrder[ownerId].totalPrice =
-          (tempOrder[ownerId].totalPrice -
-          (tempOrder[ownerId].order[itemPos].item.price
-          * tempOrder[ownerId].order[itemPos].quantity)).toFixed(2);
+          Number((tempOrder[ownerId].totalPrice - (tempOrder[ownerId].order[itemPos].item.price *
+                  tempOrder[ownerId].order[itemPos].quantity)).toFixed(2));
 
     // delete the item from the global order array
     tempOrder[ownerId].order.splice(itemPos, 1);
