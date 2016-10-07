@@ -247,6 +247,8 @@ export default class EditStoreInfo extends Component {
         onTouchTap={e => this.handleSubmitEdit(e)}
       />,
     ];
+    // handle character count
+    const count = (200 - this.props.store.description.length);
     // This is the actual modal
     return (
       <div style={style.editBtn}>
@@ -278,8 +280,8 @@ export default class EditStoreInfo extends Component {
               hintText="Description"
               multiLine
               rows={2}
-              floatingLabelText={`Characters left: ${this.state.available || 0}`}
-              errorText={this.state.available >= 0 ? '' : 'Exceeds Maximum Character Count'}
+              floatingLabelText={`Characters left: ${(this.state.available || count)}`}
+              errorText={'' || this.state.available <= -1 ? 'Exceeds Maximum Character Count' : ''}
               value={this.state.description}
               onChange={e => this.handleStoreDescriptionChange(e)}
             /><br />
