@@ -129,11 +129,11 @@ export default class ColorPicker extends React.Component {
         newTheme.palette = Colors.defaultTheme.palette;
         this.props.changeTheme(newTheme);
         break;
-      case 'light':
+      case 'Light':
         newTheme.palette = lightBaseTheme.palette;
         this.props.changeTheme(newTheme);
         break;
-      case 'dark':
+      case 'Dark':
         newTheme.palette = darkBaseTheme.palette;
         this.props.changeTheme(newTheme);
         break;
@@ -293,8 +293,8 @@ export default class ColorPicker extends React.Component {
                   style={style.dropDown}
                 >
                   <MenuItem key={7} value={'QuickerCater'} primaryText="QuickerCater" />
-                  <MenuItem key={8} value={'light'} primaryText="Light" />
-                  <MenuItem key={9} value={'dark'} primaryText="Dark" />
+                  <MenuItem key={8} value={'Light'} primaryText="Light" />
+                  <MenuItem key={9} value={'Dark'} primaryText="Dark" />
                 </DropDownMenu>
               </div>
               <div

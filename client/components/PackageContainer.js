@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PackageAPI from '../models/packageAPI';
 import PackageSlider from './PackageSlider';
-import EditPackage from './EditPackage';
 import AddPackageCard from './AddPackageCard';
+// import EditPackage from './EditPackage';
 
 export default class PackageContainer extends Component {
   constructor(props) {
@@ -14,10 +14,10 @@ export default class PackageContainer extends Component {
   }
 
   componentWillMount() {
-    console.log('cwmPKG,',this.props.ownerId);
+    // console.log('cwmPKG,',this.props.ownerId);
     PackageAPI.getAllPackages(this.props.ownerId)
     .then(packages => {
-      console.log('in PackageContainer: packages: ', packages);
+      // console.log('in PackageContainer: packages: ', packages);
       this.props.updatePackagesByOwner(packages);
       this.setState({
         packages,
@@ -47,7 +47,7 @@ export default class PackageContainer extends Component {
   }
 
   handleEditPackage(pack) {
-    console.log('Pack to update and pack', pack);
+    // console.log('Pack to update and pack', pack);
     PackageAPI.update(pack, pack.id)
     .then(() => {
       this.showPackages();
@@ -104,7 +104,7 @@ export default class PackageContainer extends Component {
         height: 175,
         overflowY: 'auto',
         flex: '50%',
-        marginLeft: 'auto', 
+        marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: 20,
         marginBottom: 20,
@@ -119,7 +119,6 @@ export default class PackageContainer extends Component {
           ? <AddPackageCard
             addPackage={e => this.handleAddPackage(e)}
             ownerId={this.state.ownerId}
-            
           />
           : <PackageSlider
             style={style}

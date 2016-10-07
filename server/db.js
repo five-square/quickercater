@@ -670,22 +670,23 @@ db.updateStore = (store) => Node.cypherAsync({
 })
 .then(stores => stores[0]);
 
+// db.getStoreColors = (storeId) => Node.cypherAsync({
+//   query: `
+//     MATCH (store:Store) WHERE ID(store) = ${storeId}
+//     RETURN store`,
+//   params: {
+//     storeId,
+//   },
+// })
+// .then(stores => stores[0]);
+
 db.updateStoreColors = (store) => Node.cypherAsync({
   query: `
-    MATCH (store:Store) WHERE ID(store) = ${store.id}
-    SET store += {
-      name: {name}, 
-      description: {description}, 
-      slogan: {slogan}, 
-      picture: {picture}, 
-      address: {address}}
+    MATCH (store:Store) WHERE ID(store) = ${store.storeId}
+    SET store += {colors}
     RETURN store`,
   params: {
-    name: store.name,
-    picture: store.picture,
-    address: store.address,
-    slogan: store.slogan,
-    description: store.description,
+    colors: store.colors,
   },
 })
 .then(stores => stores[0]);

@@ -73,7 +73,7 @@ export default class ItemCard extends Component {
                 // <Avatar src={this.props.picture} />
     return (
       <div style={{ position: 'relative' }}>
-        <Card style={{ borderRadius: 30 }}>
+        <Card zDepth={2} style={{ borderRadius: 30 }}>
           <CardHeader
             title={this.props.item.name}
             subtitle={this.props.item.description}

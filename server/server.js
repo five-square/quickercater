@@ -165,11 +165,13 @@ routes.post('/api/store/update', (req, res) => {
   });
 });
 
-routes.put('/api/store/update/color', (req, res) => {
-  db.updateStoreColors(req.body.colors)
+routes.put('/api/store/update/colors', (req, res) => {
+  console.log(req.body);
+  db.updateStoreColors(req.body)
   .then(store => {
     res.status(201).send(store);
   });
+  // res.status(201).send(req.body);
 });
 
 /*
