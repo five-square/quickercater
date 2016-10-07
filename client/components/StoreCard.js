@@ -10,7 +10,7 @@ export default class StoreCard extends React.Component {
     super(props);
     this.state = {
       hover: 2,
-      banner: 'http://cinemaonline.kg/templates/modern/img/bgny.jpg',
+      banner: this.props.store.banner || 'http://i.imgur.com/LWHERKH.jpg',
     };
   }
 

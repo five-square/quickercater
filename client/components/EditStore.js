@@ -17,6 +17,7 @@ export default class EditStoreInfo extends Component {
       slogan: this.props.store.slogan,
       picture: this.props.store.picture,
       address: this.props.store.address,
+      banner: this.props.store.banner || 'http://i.imgur.com/LWHERKH.jpg',
     };
   }
 
@@ -36,6 +37,7 @@ export default class EditStoreInfo extends Component {
       slogan: this.state.slogan,
       picture: this.state.picture,
       address: this.state.address,
+      banner: this.state.banner,
     });
     this.setState({
       open: false,
@@ -87,6 +89,17 @@ export default class EditStoreInfo extends Component {
     reader.readAsDataURL(file);
   }
 
+  handleStoreBannerChange(e) {
+    const reader = new FileReader();
+    const file = e.currentTarget.files[0];
+    reader.onload = (a) => {
+      this.setState({
+        banner: a.target.result,
+      });
+    };
+    reader.readAsDataURL(file);
+  }
+
   handleCancelEdit() {
     this.setState({ open: false });
   }
@@ -95,27 +108,20 @@ export default class EditStoreInfo extends Component {
     let divToRender = '';
     const style = {
       imgPrev: {
-        float: 'right',
-        marginTop: '8%',
-        marginRight: '3%',
-        height: '25%',
-        width: '25%',
+        position: 'absolute',
+        height: '30%',
+        width: '22%',
+        left: '40%',
+        top: '35%',
       },
       imageInput: {
+        top: '0%',
+        opacity: 0,
+        left: '38%',
+        width: '25%',
+        height: '100%',
         cursor: 'pointer',
         position: 'absolute',
-        top: '35%',
-        left: '72%',
-        height: '50%',
-        width: '25%',
-        opacity: 0,
-      },
-      imgButton: {
-        float: 'right',
-        marginTop: '8%',
-        marginRight: '3%',
-        height: '25%',
-        width: '25%',
       },
     };
     if (this.state.picture !== false) {
@@ -127,7 +133,7 @@ export default class EditStoreInfo extends Component {
             style={style.imgPrev}
           />
           <input
-            title="Drag and drop to replace image or Click to Add new"
+            title="Drag and drop or Click to replace Logo"
             type="file"
             style={style.imageInput}
             onChange={e => this.handleStorePictureChange(e)}
@@ -144,6 +150,60 @@ export default class EditStoreInfo extends Component {
           <img
             role="presentation"
             src={this.props.store.picture}
+            style={style.imgPrev}
+          />
+        </div>);
+    }
+    return divToRender;
+  }
+
+  renderBannerPreview() {
+    let divToRender = '';
+    const banner = this.props.store.banner;
+    const style = {
+      imgPrev: {
+        position: 'absolute', //
+        height: '25%',
+        width: '25%',
+        left: '70%',
+        top: '38%',
+      },
+      imageInput: { // // // // // ///// /// //
+        top: '5%',
+        opacity: 0,
+        left: '70%',
+        width: '25%',
+        height: '81%',
+        cursor: 'pointer',
+        position: 'absolute', //
+      },
+    };
+    if (banner !== false && banner !== '') {
+      divToRender = (
+        <div>
+          <img
+            role="presentation"
+            src={this.state.banner}
+            style={style.imgPrev}
+          />
+          <input
+            title="Drag and drop or Click to replace Banner"
+            type="file"
+            style={style.imageInput}
+            onChange={e => this.handleStoreBannerChange(e)}
+          />
+        </div>);
+    } else {
+      divToRender = (
+        <div>
+          <input
+            type="file"
+            style={style.imageInput}
+            onChange={e => this.handleStoreBannerChange(e)}
+          />
+          <img
+            role="presentation"
+            src={this.props.store.banner}
             style={style.imgPrev}
           />
         </div>);
@@ -207,6 +267,7 @@ export default class EditStoreInfo extends Component {
         >
           <div>
             { this.renderPreview() }
+            { this.renderBannerPreview() }
             <TextField
               hintText="Name"
               floatingLabelText="Enter store Name"
