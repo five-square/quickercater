@@ -12,15 +12,17 @@ export default class StoreDescription extends React.Component {
 
   handleStoreLogo() {
     const style = {
-      position: 'relative',
-      top: 25,
-      left: 25,
-      height: 100,
-      width: 100,
+      img: {
+        position: 'relative',
+        top: 25,
+        left: 25,
+        height: 100,
+        width: 100,
+      },
       letter: {
         position: 'relative',
-        left: 15,
-        top: 15,
+        left: '2%',
+        top: '13%',
         height: 100,
         width: 100,
         display: 'inline-block',
@@ -39,7 +41,7 @@ export default class StoreDescription extends React.Component {
         </div>
       );
     } else {
-      logo = (<img alt="logo" style={style} src={this.props.store.picture} />);
+      logo = (<img alt="logo" style={style.img} src={this.props.store.picture} />);
     }
     return logo;
   }
@@ -55,25 +57,34 @@ export default class StoreDescription extends React.Component {
       marginBottom: '2%',
       marginLeft: 'auto',
       alignItems: 'center',
-      postion: 'absoulte',
+      postion: 'absolute',
       left: '10%',
       overflowY: 'auto',
       wordWrap: 'break-word',
       img: {
         position: 'relative',
-        right: 15,
-        top: 15,
+        right: '2%',
+        top: '13%',
         height: 100,
         width: 100,
         display: 'inline-block',
       },
       name: {
         display: 'inline-block',
+        position: 'absolute',
+        bottom: '61%',
+        left: '19%',
+        width: '20%',
+        marginLeft: '6%',
+        marginRight: '5%',
         margin: 40,
       },
       desc: {
         display: 'inline-block',
-        width: '49%',
+        position: 'absolute',
+        top: '22%',
+        left: '44%',
+        width: '45%',
         textAlign: 'left',
       },
     };
