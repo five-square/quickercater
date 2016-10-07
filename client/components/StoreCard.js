@@ -29,7 +29,7 @@ export default class StoreCard extends React.Component {
   handleAvatar() {
     let pic = (
       <Avatar
-        style={{ height: 60, width: 60 }}
+        style={{ height: 60, width: 60, fontSize: 30 }}
         children={this.props.store.name.charAt(0)}
       />
     );

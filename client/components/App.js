@@ -252,9 +252,12 @@ export default class App extends Component {
   }
 
   handleBackClick() {
-    this.setState({
-      showStore: false,
-      currentStoreName: 'Welcome to QuickerCater',
+    Server.getAllStores().then(stores => {
+      this.setState({
+        stores,
+        showStore: false,
+        currentStoreName: 'Welcome to QuickerCater',
+      });
     });
   }
 
@@ -262,7 +265,7 @@ export default class App extends Component {
     return (
       <div>
         <MuiThemeProvider muiTheme={muiTheme}>
-          <div>
+          <div style={{ marginBottom: '6%' }}>
             <Navigation
               title="QuickerCater"
               inStore={this.state.showStore}
