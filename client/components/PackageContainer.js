@@ -115,12 +115,8 @@ export default class PackageContainer extends Component {
 
     return (
       <div>
-        {this.state.packages.length === 0
-          ? <AddPackageCard
-            addPackage={e => this.handleAddPackage(e)}
-            ownerId={this.state.ownerId}
-          />
-          : <PackageSlider
+        {this.state.packages.length !== 0
+          ? <PackageSlider
             style={style}
             ownerId={this.state.ownerId}
             packages={this.state.packages}
@@ -129,6 +125,11 @@ export default class PackageContainer extends Component {
             edit={e => this.handleEditPackage(e)}
             delete={e => this.handleDeletePackage(e)}
           />
+          : this.props.editing ? <AddPackageCard
+            addPackage={e => this.handleAddPackage(e)}
+            ownerId={this.state.ownerId}
+          />
+          : null
         }
 
       </div>

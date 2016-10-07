@@ -2,8 +2,8 @@ import React from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 import { Card, CardMedia, CardTitle } from 'material-ui/Card';
-import EditPackage from './EditPackage';
 import Paper from 'material-ui/Paper';
+import EditPackage from './EditPackage';
 
 
 import AddPackageCard from './AddPackageCard';
@@ -24,9 +24,10 @@ const style = {
 
 const PackageCard = (props) => (
   <Card style={props.style}>
-     <CardMedia
-      
-      overlay={ <CardTitle title={props.pack.description} titleStyle={style.cardMedia}/>}
+    <CardMedia
+      overlay={
+        <CardTitle title={props.pack.description} titleStyle={style.cardMedia} />
+      }
     >
       <img role="presentation" src={props.pack.picture} />
     </CardMedia>
@@ -52,7 +53,7 @@ const PackageCard = (props) => (
           zDepth={props.secondary ? 0 : 2}
           onTouchTap={e => {
             e.preventDefault();
-            console.log('props in onTouchTap del pack', props);
+            // console.log('props in onTouchTap del pack', props);
             props.delete(props.pack.id, props.pack.ownerId);
           }}
         >

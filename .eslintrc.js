@@ -23,6 +23,6 @@ module.exports = {
         "new-cap": ["error", {"capIsNew": false}],
         "react/no-string-refs": 1,
         "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
-        "react/no-string-refs": 1
+        "no-nested-ternary": "off"
     }
 };
