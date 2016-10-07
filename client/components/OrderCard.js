@@ -181,24 +181,27 @@ export default class OrderCard extends React.Component {
   }
 
   formatTime(time) {
-    let hours = time.getHours();
-    let am = true;
-    if (hours > 12) {
-      am = false;
-      hours -= 12;
-    } else if (hours === 12) {
-      am = false;
-    } else if (hours === 0) {
-      hours = 12;
+    if (Object.prototype.toString.call(time) === '[object Date]') {
+      let hours = time.getHours();
+      let am = true;
+      if (hours > 12) {
+        am = false;
+        hours -= 12;
+      } else if (hours === 12) {
+        am = false;
+      } else if (hours === 0) {
+        hours = 12;
+      }
+      let minutes = time.getMinutes();
+      if (minutes === 0) {
+        minutes = '00';
+      } else if (minutes < 10) {
+        minutes = `0${minutes}`;
+      }
+      const meridiem = (am ? 'a.m.' : 'p.m.');
+      return `${hours}:${minutes} ${meridiem}`;
     }
-    let minutes = time.getMinutes();
-    if (minutes === 0) {
-      minutes = '00';
-    } else if (minutes < 10) {
-      minutes = `0${minutes}`;
-    }
-    const meridiem = (am ? 'a.m.' : 'p.m.');
-    return `${hours}:${minutes} ${meridiem}`;
+    return '';
   }
 
   renderComponent() {
