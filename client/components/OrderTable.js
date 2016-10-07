@@ -33,6 +33,11 @@ export default class OrderTable extends Component {
   }
 
   render() {
+    const style = {
+      text: {
+        color: 'black',
+      },
+    };
     let orders = [];
     orders = this.props.AnyOrders.map(x => x.order);
     return (
@@ -40,9 +45,9 @@ export default class OrderTable extends Component {
         <Table onCellClick={this.state.onClickMethod}>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
-              <TableHeaderColumn>Order Number</TableHeaderColumn>
-              <TableHeaderColumn>Customer Name</TableHeaderColumn>
-              <TableHeaderColumn>Total Order Price</TableHeaderColumn>
+              <TableHeaderColumn style={style.text}>Order Number</TableHeaderColumn>
+              <TableHeaderColumn style={style.text}>Order Name</TableHeaderColumn>
+              <TableHeaderColumn style={style.text}>Total Order Price</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false} showRowHover >
