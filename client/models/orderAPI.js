@@ -26,6 +26,24 @@ orderAPI.fetchPendingOrders = (ownerId) =>
     },
   }).then(resp => resp.json());
 
+
+/**
+ * Get accepted orders by ownerId (of store)
+ * (accepted orders => (or:CustomerOrder)<-[CAN_EDIT]-(ow:Owner))
+ *
+ * Order Object {
+ *                address: {string},
+ *                total_price: {number},
+ *                created_on: {string},
+ *                request_date: {string},
+ *                fulfilled: {boolean}
+ *                name: {string}
+ *              }
+ *
+ *
+ * @param  {number}
+ * @return {Array of Order Objects}
+ */
 orderAPI.fetchAcceptedOrders = (ownerId) =>
 fetch(`/api/order/getAllAccepted/${ownerId}`, {
   method: 'get',
@@ -34,6 +52,30 @@ fetch(`/api/order/getAllAccepted/${ownerId}`, {
   },
 }).then(resp => resp.json()).catch(e => console.error(e));
 
+/**
+ * Get custom 'Order Details' object which includes:
+ *        1) List of items
+ *        2) Customer details
+ *        3) Package selected
+ *
+ * Order Details Object {
+ *                        items: {array of items},
+ *                        customer: {Customer Object},
+ *                        package: package object (extended with 'id')
+ *                      }
+ *
+ * Order Object {
+ *                address: {string},
+ *                total_price: {number},
+ *                created_on: {string},
+ *                request_date: {string},
+ *                fulfilled: {boolean}
+ *                name: {string}
+ *              }
+ *
+ * @param  {number} - Order ID
+ * @return {Order Details Object}
+ */
 orderAPI.fetchOrderDetails = (orderId) =>
   fetch(`/api/order/${orderId}`, {
     method: 'get',
@@ -41,7 +83,7 @@ orderAPI.fetchOrderDetails = (orderId) =>
       'Content-Type': 'application/json',
     },
   }).then(resp => resp.json()).then(orderItemRel => {
-    console.log('fetchOrderDetails orderItemRel: ', orderItemRel);
+    //console.log('fetchOrderDetails orderItemRel: ', orderItemRel);
     const orderObj = Object.assign({}, orderItemRel[0].order.properties,
                                   { id: orderItemRel[0].order._id });
     const items = orderItemRel.map(dbObj =>
@@ -56,10 +98,27 @@ orderAPI.fetchOrderDetails = (orderId) =>
                     order: orderObj,
                     customer: orderItemRel[0].customer.properties,
                     package: pack };
-    console.log(result);
+    //console.log(result);
     return result;
   });
 
+/**
+ * Get completed orders by ownerId (of store)
+ * (completed orders => (or:CustomerOrder)-[COMPLETE]-(ow:Owner))
+ *
+ * Order Object {
+ *                address: {string},
+ *                total_price: {number},
+ *                created_on: {string},
+ *                request_date: {string},
+ *                fulfilled: {boolean}
+ *                name: {string}
+ *              }
+ *
+ *
+ * @param  {number}
+ * @return {Array of Order Objects}
+ */
 orderAPI.fetchCompletedOrders = (ownerId) =>
       fetch(`/api/order/getAllCompletedOrders/${ownerId}`, {
         method: 'get',
@@ -69,6 +128,12 @@ orderAPI.fetchCompletedOrders = (ownerId) =>
       }).then(resp => resp.json());
 
 
+/**
+ * Set an order to 'accepted' in db by order Id
+ *
+ * @param  {number}
+ * @return {<none>}
+ */
 orderAPI.createAcceptOrderRelationship = (acceptedOrderId) =>
   fetch('/api/order/accepted/', {
     method: 'post',
@@ -79,6 +144,12 @@ orderAPI.createAcceptOrderRelationship = (acceptedOrderId) =>
   })
   .then(resp => resp.json());
 
+/**
+ * Set an order to 'completed' in db by order Id
+ *
+ * @param  {number}
+ * @return {<none>}
+ */
 orderAPI.createFulfilledOrderRelationship = (fulfilledOrderId) =>
   fetch('/api/order/fulfilled/', {
     method: 'post',
@@ -88,7 +159,12 @@ orderAPI.createFulfilledOrderRelationship = (fulfilledOrderId) =>
     body: JSON.stringify({ orderId: fulfilledOrderId }),
   })
   .then(resp => resp.json());
-
+/**
+ * Delete an order that is rejected by Store owner
+ *
+ * @param  {number}
+ * @return {<none>}
+ */
 orderAPI.deleteRejectedOrder = (rejectedOrderId) =>
   fetch('/api/order/delete/', {
     method: 'post',
@@ -99,6 +175,14 @@ orderAPI.deleteRejectedOrder = (rejectedOrderId) =>
   })
   .then(resp => resp.json());
 
+/**
+ * Change details of an accepted order
+ *
+ * @param  {Order Object}
+ * @param  {List of Item Objects}
+ * @param  {List of Item Objects}
+ * @return {Order Object}
+ */
 orderAPI.updateOrder = (order, items, removedItems) =>
   fetch('/api/order/update/', {
     method: 'post',
@@ -109,8 +193,23 @@ orderAPI.updateOrder = (order, items, removedItems) =>
   })
   .then(resp => resp.json());
 
+/**
+ * Create new order in db
+ *
+ * Order Object {
+ *                address: {string},
+ *                total_price: {number},
+ *                created_on: {string},
+ *                request_date: {string},
+ *                fulfilled: {boolean}
+ *                name: {string}
+ *              }
+ *
+ * @param  {Order Object}
+ * @return {Order Object}
+ */
 orderAPI.create = (orderInfo) => {
-  console.log('CreateOrderAPI orderInfo: ', orderInfo);
+  //console.log('CreateOrderAPI orderInfo: ', orderInfo);
   return fetch('/api/order/create', {
     method: 'POST',
     headers: {
