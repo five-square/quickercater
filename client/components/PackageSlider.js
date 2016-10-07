@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import ReactSwipe from 'react-swipe';
-import { Card, CardTitle, CardText } from 'material-ui/Card';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Paper from 'material-ui/Paper';
 import KeyLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import KeyRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import PackageCard from './PackageCard';
-// import AddPackageCard from './AddPackageCard';
 
 export default class PackageSlider extends Component {
   constructor(props) {
@@ -18,19 +16,15 @@ export default class PackageSlider extends Component {
 
   next() {
     this.reactSwipe.next();
-    console.log('slide changed', this.reactSwipe.getPos());
     this.setState({ slidePosition: this.reactSwipe.getPos() });
   }
 
   prev() {
     this.reactSwipe.prev();
-    console.log('slide changed', this.reactSwipe.getPos());
     this.setState({ slidePosition: this.reactSwipe.getPos() });
   }
 
   render() {
-    console.log('Current slidePosition in render: ', this.props.packages, this.state.slidePosition);
-
     const swipeOptions = {
       startSlide: 0,
       auto: 0,
@@ -92,7 +86,6 @@ export default class PackageSlider extends Component {
             <KeyRight />
           </FloatingActionButton>
         </div>
-       
       </Paper>
     );
   }

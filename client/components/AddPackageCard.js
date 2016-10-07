@@ -4,10 +4,6 @@ import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
-import Card from 'material-ui/Card';
-import CardTitle from 'material-ui/Card/CardTitle';
-import ContentRemove from 'material-ui/svg-icons/content/remove';
 
 export default class AddPackageCard extends React.Component {
 
@@ -41,7 +37,6 @@ export default class AddPackageCard extends React.Component {
   }
 
   handleAddPackage() {
-    console.log('handleAddPackage props: ', this.props);
     this.setState({
       open: false,
     });
@@ -165,37 +160,6 @@ export default class AddPackageCard extends React.Component {
   }
 
   render() {
-    const style = {
-      // floatingActionButton: {
-      //   top: 15,
-      //   right: 50,
-      //   bottom: 80,
-      //   position: 'absolute',
-      // },
-      // cardActions: {
-      //   position: 'relative',
-      //   height: 30,
-      // },
-      // card: {
-      //   marginBottom: '5%',
-      //   width: 250,
-      // },
-      imageInput: {
-        cursor: 'pointer',
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        right: 0,
-        left: 0,
-        width: '100%',
-        opacity: 0,
-      },
-      // floatingDeleteButton: {
-      //   right: 20,
-      //   bottom: 20,
-      //   position: 'absolute',
-      // },
-    };
     // action buttons for Modal
     const actions = [
       <FlatButton

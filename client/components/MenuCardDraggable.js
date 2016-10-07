@@ -61,7 +61,6 @@ export default class MenuCardDraggable extends React.Component {
   }
 
   updateDatabase() {
-    console.log('in updateDatabase', this.state.items);
     Item.updateOrder(this.state.items);
   }
 

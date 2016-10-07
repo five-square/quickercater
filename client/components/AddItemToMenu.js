@@ -34,7 +34,6 @@ export default class AddItemToMenu extends React.Component {
   }
 
   handlePickMenu(menuId) {
-    console.log(`You picked menu id: ${menuId}, ${this.props.item.id}`);
     this.handleRequestClose();
     this.props.addItemToMenu(this.props.item.id, menuId);
   }

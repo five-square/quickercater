@@ -50,7 +50,7 @@ fetch(`/api/order/getAllAccepted/${ownerId}`, {
   headers: {
     'Content-Type': 'application/json',
   },
-}).then(resp => resp.json()).catch(e => console.error(e));
+}).then(resp => resp.json());
 
 /**
  * Get custom 'Order Details' object which includes:
@@ -83,7 +83,6 @@ orderAPI.fetchOrderDetails = (orderId) =>
       'Content-Type': 'application/json',
     },
   }).then(resp => resp.json()).then(orderItemRel => {
-    //console.log('fetchOrderDetails orderItemRel: ', orderItemRel);
     const orderObj = Object.assign({}, orderItemRel[0].order.properties,
                                   { id: orderItemRel[0].order._id });
     const items = orderItemRel.map(dbObj =>
@@ -98,7 +97,6 @@ orderAPI.fetchOrderDetails = (orderId) =>
                     order: orderObj,
                     customer: orderItemRel[0].customer.properties,
                     package: pack };
-    //console.log(result);
     return result;
   });
 
@@ -208,9 +206,8 @@ orderAPI.updateOrder = (order, items, removedItems) =>
  * @param  {Order Object}
  * @return {Order Object}
  */
-orderAPI.create = (orderInfo) => {
-  //console.log('CreateOrderAPI orderInfo: ', orderInfo);
-  return fetch('/api/order/create', {
+orderAPI.create = (orderInfo) =>
+  fetch('/api/order/create', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -218,6 +215,5 @@ orderAPI.create = (orderInfo) => {
     body: JSON.stringify(orderInfo),
   })
   .then(data => data.json());
-};
 
 export default orderAPI;

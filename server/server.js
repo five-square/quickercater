@@ -68,25 +68,25 @@ AuthPort.on('auth', (req, res, profile) => {
 
 /* This is the middleware that would ensure the authentication*/
 
-function getSignedInUser(req, res, next) {
-  const sessionId = req.cookies && req.cookies.sessionId;
-  if (!sessionId) {
-    // res.status(403).send('Not Authotized');
-    res.redirect('/'); // Right now redirects to root, but should do the above
-  } else {
-    db.findOwnerByAuthKey(sessionId)
-    .then(ownerInfo => {
-      if (ownerInfo.length === 0) {
-        console.log('Invalid Session - no owner found');
-        // res.status(403).send('Not Authotized');
-        res.redirect('/'); // Right now redirects to root, but should do the above
-      } else {
-        req.user = ownerInfo;
-        next();
-      }
-    });
-  }
-}
+// function getSignedInUser(req, res, next) {
+//   const sessionId = req.cookies && req.cookies.sessionId;
+//   if (!sessionId) {
+//     // res.status(403).send('Not Authotized');
+//     res.redirect('/'); // Right now redirects to root, but should do the above
+//   } else {
+//     db.findOwnerByAuthKey(sessionId)
+//     .then(ownerInfo => {
+//       if (ownerInfo.length === 0) {
+//         console.log('Invalid Session - no owner found');
+//         // res.status(403).send('Not Authotized');
+//         res.redirect('/'); // Right now redirects to root, but should do the above
+//       } else {
+//         req.user = ownerInfo;
+//         next();
+//       }
+//     });
+//   }
+// }
 
 /*
   **********************************************************************************************
@@ -214,10 +214,8 @@ routes.get('/api/store/:id', (req, res) => {
  */
 routes.post('/api/store/create', (req, res) => {
 // name picture address description slogan
-  console.log('Create Store Req.body', req.body);
   db.createStore(req.body.store)
   .then(newStore => {
-    console.log(newStore);
     db.linkOwnerToStore(req.body.ownerId, newStore._id)
     .then(() => {
       res.status(201).send(newStore);
@@ -239,7 +237,6 @@ routes.post('/api/store/update', (req, res) => {
 
 
 routes.put('/api/store/update/colors', (req, res) => {
-  console.log(req.body);
   db.updateStoreColors(req.body)
   .then(store => {
     res.status(201).send(store);
@@ -404,7 +401,6 @@ routes.get('/api/menu/:ownerId', (req, res) => {
  */
 
 routes.put('/api/menu/:ownerId/reorder', (req, res) => {
-  console.log(req.body.menuId);
   if (req.body.direction === 'UP') {
     db.moveMenuUp(req.body.menuId)
     .then(dbData => {
@@ -533,15 +529,12 @@ routes.post('/api/menu/delete', (req, res) => {
 });
 
 routes.post('/api/menu/delete/empty', (req, res) => {
-  console.log('in server, before db: ', req.body.id);
   db.prepareMenuForDelete(req.body.id)
   .then(() => {
-    console.log('after db prepare call: ', req.body);
     db.deleteEmptyMenu(req.body.id)
     .then(() => {
       db.getMenuByOwnerId(req.body.ownerId)
       .then(menus => {
-        console.log('after db.getMenu call: ', menus);
         res.status(202).send(menus);
       })
       .catch(() => {
@@ -569,7 +562,6 @@ routes.post('/api/relationship/', (req, res) => {
   const nodeId = [req.body.node_id];
   db.findRelationship(parentLabel, parentId, relLabel, nodeLabel, nodeId)
   .then(dbData => {
-    console.log(dbData);
     res.status(200).send(dbData[0]);
   });
 });
@@ -774,7 +766,6 @@ routes.get('/api/item/:id', (req, res) => {
  */
 routes.delete('/api/item/:id', (req, res) => {
   const id = +req.params.id;
-  console.log('in server, before db call: id: ', id, ', req.params.id: ', req.params.id);
   if (id) {
     db.deleteItemById(id)
     .then(resp => {
@@ -794,7 +785,6 @@ routes.delete('/api/item/:id', (req, res) => {
  * @return {array} [array of Menu database objects]
  */
 routes.put('/api/item/reorder', (req, res) => {
-  console.log(req.body);
   db.updateItemOrder(req.body)
   .then(items => {
     res.status(201).send(items);
@@ -836,7 +826,6 @@ routes.post('/api/item/remove', (req, res) => {
       .then(() => {
         db.getItemsByMenuId(req.body.menuId)
         .then(menus => {
-          console.log(`Item ${id} Removed`);
           res.status(202).send(menus);
         });
       });
@@ -853,7 +842,6 @@ routes.post('/api/item/remove', (req, res) => {
  * @return {array of item Objects}
  */
 routes.put('/api/item/:menuId/reorder', (req, res) => {
-  console.log(req.body.itemId);
   if (req.body.direction === 'UP') {
     db.moveItemUp(req.body.itemId)
     .then(dbData => {

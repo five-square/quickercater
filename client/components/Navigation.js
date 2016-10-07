@@ -23,9 +23,7 @@ export default class Navigation extends Component {
   }
 
   signInWithGoogle() {
-    console.log(GLOBAL.stopNavigation);
     GLOBAL.stopNavigation = undefined;
-
     window.location.href = '/auth/google';
   }
 

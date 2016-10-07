@@ -274,7 +274,7 @@ db.createOrderOwnerRelationship = (ownerId, orderId) => Node.cypherAsync({
 .then(response => response);
 
 db.createOrderAndRelationships = (orderInfo) => {
-  var saveOrder = {};
+  let saveOrder = {};
   return db.createOrder(orderInfo.order)
     .then((orderCreated) => {
       saveOrder = Object.assign({}, orderCreated);
@@ -396,18 +396,6 @@ db.deleteOrder = (orderId) => Node.cypherAsync({
 })
 .then(response => response);
 
-// db.fetchAllCompletedOrders = (ownerId) => Node.cypherAsync({
-//   query: `
-//     MATCH (owner:Owner) WHERE ID(owner) = {ownerId}
-//     MATCH (order:CustomerOrder)-[rel:VIEW]->(owner)
-//     WHERE order.fulfilled = true
-//     RETURN order`,
-//   params: {
-//     ownerId,
-//   },
-// })
-// .then(response => response);
-
 db.updateOrderStatus = (orderId, status) => Node.cypherAsync({
   query: `
     MATCH (order:CustomerOrder) WHERE ID(order) = {orderId}
@@ -448,16 +436,17 @@ db.updateOrderTotalPrice = (order) => Node.cypherAsync({
 .then(response => response);
 
 db.updateOrder = (order, items, removedItems) =>
-   Promise.all([db.updateOrderTotalPrice(order)]
-    .concat(items.map(item => db.updateItemQtyOnOrder(order.id, item.id, item.quantity))))
-    .then(response => {
-      if (removedItems.length > 0) {
-        Promise.all(removedItems
-          .map(itemId => db.deleteRelationship('CustomerOrder', order.id, 'REQUEST', 'Item', itemId)
-        ));
-      }
-      return response;
-    });
+  Promise.all([db.updateOrderTotalPrice(order)]
+    .concat(items.map(item => db.updateItemQtyOnOrder(order.id, item.id, item.quantity)))
+  )
+  .then(response => {
+    if (removedItems.length > 0) {
+      Promise.all(removedItems
+        .map(itemId => db.deleteRelationship('CustomerOrder', order.id, 'REQUEST', 'Item', itemId)
+      ));
+    }
+    return response;
+  });
 
 /*
   **********************************************************************************************
@@ -567,34 +556,6 @@ db.prepareMenuForDelete = (menuId) => Node.cypherAsync({
 })
 .then(data => data);
 
-db.moveMenuUp = (menuId) => Node.cypherAsync({
-  query: `
-    MATCH (owner:Owner)-[r1:CAN_EDIT]->(menu:Menu) WHERE ID(menu) = ${menuId}
-    MATCH (owner)-[r2:CAN_EDIT]->(menu2:Menu)
-    WHERE r2.order = r1.order  - 1
-    SET r1.order = r1.order - 1
-    SET r2.order = r2.order + 1
-    return owner`,
-  params: {
-    menuId,
-  },
-})
-.then(data => data);
-
-db.moveMenuDown = (menuId) => Node.cypherAsync({
-  query: `
-    MATCH (owner:Owner)-[r1:CAN_EDIT]->(menu:Menu) WHERE ID(menu) = ${menuId}
-    MATCH (owner)-[r2:CAN_EDIT]->(menu2:Menu)
-    WHERE r2.order = r1.order + 1
-    SET r1.order = r1.order + 1
-    SET r2.order = r2.order - 1
-    return owner`,
-  params: {
-    menuId,
-  },
-})
-.then(data => data);
-
 db.updateMenu = (menuObj) => Node.cypherAsync({
   query: `
     MATCH (menu:Menu) WHERE ID(menu) = ${menuObj.id}
@@ -673,16 +634,6 @@ db.updateStore = (store) => Node.cypherAsync({
   },
 })
 .then(stores => stores[0]);
-
-// db.getStoreColors = (storeId) => Node.cypherAsync({
-//   query: `
-//     MATCH (store:Store) WHERE ID(store) = ${storeId}
-//     RETURN store`,
-//   params: {
-//     storeId,
-//   },
-// })
-// .then(stores => stores[0]);
 
 db.updateStoreColors = (store) => Node.cypherAsync({
   query: `
@@ -775,16 +726,6 @@ db.getItemById = (itemId) => {
   }
 };
 
-db.getItemByPicture = (picture) => Node.cypherAsync({
-  query: `
-    MATCH (item:Item)
-    WHERE item.picture = {picture}
-    RETURN item`,
-  params: {
-    picture,
-  },
-}).then(resp => resp[0].item);
-
 db.updateItem = (itemObj) => Node.cypherAsync({
   query: `
     MATCH (item:Item) WHERE ID(item) = ${itemObj.id}
@@ -839,34 +780,6 @@ db.prepareItemForRemove = (itemId) => Node.cypherAsync({
     MATCH (menu)-[rels:CAN_EDIT]->(item2:Item) WHERE rels.order > r1.order
     SET rels.order = rels.order - 1
     RETURN r1, item`,
-  params: {
-    itemId,
-  },
-})
-.then(data => data);
-
-db.moveItemUp = (itemId) => Node.cypherAsync({
-  query: `
-    MATCH (menu:Menu)-[r1:CAN_EDIT]->(item:Item) WHERE ID(item) = ${itemId}
-    MATCH (menu)-[r2:CAN_EDIT]->(item2:Item)
-    WHERE r2.order = r1.order  - 1
-    SET r1.order = r1.order - 1
-    SET r2.order = r2.order + 1
-    return menu`,
-  params: {
-    itemId,
-  },
-})
-.then(data => data);
-
-db.moveItemDown = (itemId) => Node.cypherAsync({
-  query: `
-    MATCH (menu:Menu)-[r1:CAN_EDIT]->(item:Item) WHERE ID(item) = ${itemId}
-    MATCH (menu)-[r2:CAN_EDIT]->(item2:Item)
-    WHERE r2.order = r1.order + 1
-    SET r1.order = r1.order + 1
-    SET r2.order = r2.order - 1
-    return menu`,
   params: {
     itemId,
   },

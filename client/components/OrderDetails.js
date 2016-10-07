@@ -46,7 +46,7 @@ export default class OrderDetails extends Component {
   }
 
   handleClose() {
-    console.log('clickaway');
+    this.setState({ open: false });
   }
 
   handleAccept() {
@@ -130,10 +130,7 @@ export default class OrderDetails extends Component {
                 generateTextFromHTML: true,
                 html: Email.compose(order, this.props.storeName, 'updated'),
               };
-              Customer.sendEmail(mailOptions, this.props.ownerId)
-                .then(response => {
-                  console.log('response after confirmation email sent: ', response);
-                });
+              Customer.sendEmail(mailOptions, this.props.ownerId);
             });
         });
       this.setState({ open: false });
@@ -150,7 +147,6 @@ export default class OrderDetails extends Component {
   }
 
   buttonsToRender() {
-    console.log('orderDetails this.props.orderState: ', this.props.orderState);
     const pendingActions = [
       <FlatButton
         label="Accept"
@@ -240,7 +236,7 @@ export default class OrderDetails extends Component {
         {
           this.state.rejectAlert
           ? <AlertOrderReject
-            showMe={true}
+            showMe
             orderId={this.state.order.id}
             handleReject={e => this.handleReject(e)}
             handleRejectNo={e => this.handleRejectNo(e)}
