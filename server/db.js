@@ -656,7 +656,8 @@ db.updateStore = (store) => Node.cypherAsync({
       description: {description}, 
       slogan: {slogan}, 
       picture: {picture}, 
-      address: {address}}
+      address: {address},
+      banner: {banner}}
     RETURN store`,
   params: {
     name: store.name,
@@ -664,6 +665,7 @@ db.updateStore = (store) => Node.cypherAsync({
     address: store.address,
     slogan: store.slogan,
     description: store.description,
+    banner: store.banner,
   },
 })
 .then(stores => stores[0]);
