@@ -15,7 +15,6 @@ export default class DashboardNavBar extends Component {
     this.state = {
       open: false,
       openDialog: false,
-      oldColorTheme: null,
       colorTheme: this.props.colorTheme,
     };
     this.openMenu = e => this.handleOpenMenu(e);
@@ -23,16 +22,20 @@ export default class DashboardNavBar extends Component {
     this.closeMenuOpenDialog = e => this.handleCloseMenuOpenDialog(e);
     this.closeDialog = e => this.handleCloseDialog(e);
     this.cancelChange = e => this.handleCancelChange(e);
+    this.submitChanges = e => this.handleSubmitChanges(e);
+    this.changeTheme = e => this.handleChangeTheme(e);
   }
 
-  componentWillMount() {
-    this.setState({
-      oldColorTheme: Object.assign({}, this.props.colorTheme),
-    });
-  }
+  // componentWillMount() {
+  //   this.setState({
+  //   });
+  // }
 
   handleOpenMenu() {
-    this.setState({ open: true });
+    this.setState({
+      open: true,
+      colorTheme: Object.assign({}, this.props.colorTheme),
+    });
   }
 
   handleCloseMenu() {
@@ -46,15 +49,28 @@ export default class DashboardNavBar extends Component {
     });
   }
 
-  handleCloseDialog() {
-    this.setState({ openDialog: false });
+  handleChangeTheme(newTheme) {
+    this.setState({
+      colorTheme: newTheme,
+    });
+  }
+
+  handleSubmitChanges() {
+    this.props.changeTheme(this.state.colorTheme);
+    this.closeDialog();
   }
 
   handleCancelChange() {
     console.log('in DashboardNavBar: colorTheme', this.state.colorTheme);
     console.log('in DashboardNavBar: oldColorTheme', this.state.oldColorTheme);
+    this.setState({
+      openDialog: false,
+      colorTheme: this.props.colorTheme,
+    });
+  }
+
+  handleCloseDialog() {
     this.setState({ openDialog: false });
-    this.props.changeTheme(this.state.oldColorTheme);
   }
 
   render() {
@@ -76,7 +92,7 @@ export default class DashboardNavBar extends Component {
         label="Submit"
         primary
         keyboardFocused
-        onTouchTap={this.closeDialog}
+        onTouchTap={this.submitChanges}
       />,
     ];
     return (
@@ -115,7 +131,7 @@ export default class DashboardNavBar extends Component {
           <div style={style.dialog}>
             <ColorPicker
               colorTheme={this.props.colorTheme}
-              changeTheme={this.props.changeTheme}
+              changeTheme={this.changeTheme}
             />
           </div>
         </Dialog>
