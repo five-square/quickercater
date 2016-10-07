@@ -96,20 +96,7 @@ function getSignedInUser(req, res, next) {
   **********************************************************************************************
 */
 
-/**
- * Shape of database object: (example: Menu)
- * {
-      "menu": {
-        "_id": 2808,
-        "labels": [
-          "Menu"
-        ],
-        "properties": {
-          "name": "Drinks",
-          "description": "Tasty beverages"
-        }
- * }
- */
+
 
 routes.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/public/index.html'));
@@ -125,12 +112,81 @@ routes.get('/', (req, res) => {
   **********************************************************************************************
 */
 
+/**
+ * Shape of Store object in database: (example: Store)
+ *   {
+    "store": {
+      "_id": 3116,
+      "labels": [
+        "Store"
+      ],
+      "properties": {
+        "address": "1620 E. Riverside Dr.",
+        "name": "Churro Co.",
+        "description": "Sweet stuff",
+        "type": "Dessert",
+        "slogan": "Smile, it's Churro time!",
+        "picture": "http://churrocoaustin.com/wp-content/uploads/2014/12/ChurrCoLogoSalmon144x144.png"
+      }
+    },
+    "owner": {
+      "_id": 3066,
+      "labels": [
+        "Owner"
+      ],
+      "properties": {
+        "phone": "512-456-789",
+        "name": "Walter",
+        "description": "I love Mexican food",
+        "auth_key": true,
+        "email": "fivesquare43@gmail.com"
+      }
+    }
+  },
+ */
+
+/**
+
+
+ * Gets all store and owner objects in database
+ * Store object:
+ *    {
+        address: {string},
+        name: {string},
+        description: {string},
+        type: {string},
+        slogan: {string},
+        picture: {urlstring}
+      }
+ * Owner Object:
+ *    {
+        phone: {number},
+        name: {string},
+        description: {string},
+        auth_key: {boolean},
+        email: {string}
+      }
+ * @return {Array of store and owner objects}
+ */
 routes.get('/api/storesAndOwners', (req, res) => {
   db.getAllStoresAndOwners().then(ownerAndStores => {
     res.status(200).send(ownerAndStores);
   });
 });
 
+/**
+ * Gets all stores in database
+ *  Store object:
+ *    {
+        address: {string},
+        name: {string},
+        description: {string},
+        type: {string},
+        slogan: {string},
+        picture: {urlstring}
+      }
+ * @return {array of store objects}
+ */
 routes.get('/api/stores/all', (req, res) => {
   db.findAllStores()
   .then(stores => {
@@ -138,6 +194,11 @@ routes.get('/api/stores/all', (req, res) => {
   });
 });
 
+/**
+ * Gets store by owner ID
+ * @param  {number} '/api/store/:id' owner ID
+ * @return {array of store object}
+ */
 routes.get('/api/store/:id', (req, res) => {
   db.findStoreByOwnerId(req.params.id)
   .then(dbData => {
@@ -145,6 +206,12 @@ routes.get('/api/store/:id', (req, res) => {
   });
 });
 
+/**
+ * Creates store object in database and relationship to owner
+ * @param  {object} store object
+ * @param  {number} owner ID
+ * @return {Array of store object}
+ */
 routes.post('/api/store/create', (req, res) => {
 // name picture address description slogan
   console.log('Create Store Req.body', req.body);
@@ -158,12 +225,18 @@ routes.post('/api/store/create', (req, res) => {
   });
 });
 
+/**
+ * Updates store object with new property values
+ * @param  {object} store object
+ * @return {array of store object}
+ */
 routes.post('/api/store/update', (req, res) => {
   db.updateStore(req.body.newStore)
   .then(store => {
     res.status(201).send(store);
   });
 });
+
 
 routes.put('/api/store/update/colors', (req, res) => {
   console.log(req.body);
@@ -184,6 +257,27 @@ routes.put('/api/store/update/colors', (req, res) => {
   **********************************************************************************************
 */
 
+/**
+* Shape of Owner object in database: (example: Owner)
+  {
+    "_id": 3066,
+    "labels": [
+      "Owner"
+    ],
+    "properties": {
+      "phone": "512-456-789",
+      "name": "Walter",
+      "description": "I love Mexican food",
+      "auth_key": true,
+      "email": "fivesquare43@gmail.com"
+    }
+  },
+ */
+
+/**
+ * Gets all owner objects in database
+ * @return {Array of owner objects}
+ */
 routes.get('/api/owner/all', (req, res) => {
   db.findAllOwners()
   .then(dbData => {
@@ -191,6 +285,11 @@ routes.get('/api/owner/all', (req, res) => {
   });
 });
 
+/**
+ * Gets owner object by specified store id
+ * @param  {number} store id
+ * @return {Array of owner object}
+ */
 routes.get('/api/owner/store/:id', (req, res) => {
   db.findOwnerByStoreId(req.params.id)
   .then(owner => {
@@ -198,6 +297,12 @@ routes.get('/api/owner/store/:id', (req, res) => {
   });
 });
 
+/**
+ * Finds owner object by owner and owner ID
+ * @param  {string} owner
+ * @param  {number} owner ID
+ * @return {Array of owner object}
+ */
 routes.get('/api/owner/:id', (req, res) => {
   db.findNode('Owner', req.params.id)
   .then(dbData => {
@@ -209,6 +314,19 @@ routes.get('/api/owner/:id', (req, res) => {
   });
 });
 
+/**
+ * Creates owner object in database
+ * owner object:
+ * {
+      phone: {number},
+      name: {string},
+      description: {string},
+      auth_key: {boolean},
+      email: {string}
+    }
+ * @param  {object}
+ * @return {owner object}
+ */
 routes.post('/api/owner/create', (req, res) => {
   db.createOwner(req.body)
   .then((dbData) => {
@@ -216,6 +334,12 @@ routes.post('/api/owner/create', (req, res) => {
   });
 });
 
+/**
+ * Deletes owner object and relationship from database
+ * @param  {string} owner
+ * @param  {number} owner ID
+ * @return {<none>}
+ */
 routes.delete('/api/owner/:id', (req, res) => {
   db.deleteNode('Owner', req.params.id)
   .then((response) => {
@@ -223,6 +347,11 @@ routes.delete('/api/owner/:id', (req, res) => {
   });
 });
 
+/**
+ * Gets store object and owner object by authkey
+ * @param  {string} authKey
+ * @return {Array of store and owner objects}
+ */
 routes.post('/api/owner/getStoreAndOwnerByAuthKey', (req, res) => {
   db.findStoreAndOwnerByAuthKey(req.body)
   .then(resp => {
@@ -238,6 +367,22 @@ routes.post('/api/owner/getStoreAndOwnerByAuthKey', (req, res) => {
 
   **********************************************************************************************
 */
+
+/**
+ * Shape of database object: (example: Menu)
+ * {
+      "menu": {
+        "_id": 2808,
+        "labels": [
+          "Menu"
+        ],
+        "properties": {
+          "name": "Drinks",
+          "description": "Tasty beverages"
+        }
+ * }
+ */
+
 /**
  * gets all menus for a specified owner
  * @param  {parameter} '/api/menu/:ownerId' current owner ID
@@ -253,7 +398,7 @@ routes.get('/api/menu/:ownerId', (req, res) => {
 
 /**
  * updates the order of menus for a specified owner
- * @param  {parameter} '/api/menu/:ownerId/reorder' current owner ID
+ * @param  {number} '/api/menu/:ownerId/reorder' current owner ID
  * @param  {object} (req -> [array of objects: {id: menu id, index: index of menu in new array}]
  * @return {array} [array of Menu database objects]
  */
@@ -273,6 +418,11 @@ routes.put('/api/menu/:ownerId/reorder', (req, res) => {
   }
 });
 
+/**
+ *Reorders menu objects
+ * @param  {object} '/api/menu/reorder' menu object
+ * @return {array of menu objects}
+ */
 routes.put('/api/menu/reorder', (req, res) => {
   db.updateMenuOrder(req.body)
   .then(menus => {
@@ -280,6 +430,11 @@ routes.put('/api/menu/reorder', (req, res) => {
   });
 });
 
+/**
+ *Update menu object with new property values
+ * @param  {object} menu object
+ * @return {array of menu object}
+ */
 routes.put('/api/menu/:ownerId/update', (req, res) => {
   db.updateMenu(req.body)
   .then(dbData => {
@@ -287,6 +442,11 @@ routes.put('/api/menu/:ownerId/update', (req, res) => {
   });
 });
 
+/**
+ * Get item object by specified menu Id
+ * @param  {number} menu Id
+ * @return {item object}
+ */
 routes.get('/api/menu/items/:menuId', (req, res) => {
   db.getItemsByMenuId(req.params.menuId)
   .then(dbData => {
@@ -294,6 +454,16 @@ routes.get('/api/menu/items/:menuId', (req, res) => {
   });
 });
 
+/**
+ * Create menu object in database
+ * menu object:
+ *      {
+          name: {string},
+          description: {string}
+        }
+ * @param  {object} menu object
+ * @return {array of menu object}
+ */
 routes.post('/api/menu/create', (req, res) => {
   db.createMenu(req.body)
   .then(newMenu => {
@@ -301,6 +471,18 @@ routes.post('/api/menu/create', (req, res) => {
   });
 });
 
+/**
+ * Adds new item object to database
+ * Request object:
+ *     {
+ *      price: {number},
+        name: {string},
+        description: {string},
+        picture: {imgUrl}
+       }
+ * @param  {item object}
+ * @return {item object}
+ */
 routes.post('/api/menu/item/add_new', (req, res) => {
   db.addNewItemToMenu(req.body)
   .then(item => {
@@ -315,6 +497,12 @@ routes.post('/api/menu/item/add_new', (req, res) => {
   order
 }
  */
+
+/**
+ * Adds existing item in database to speified menu
+ * @param  {object} menu object
+ * @return {object}
+ */
 routes.post('/api/menu/item/add_existing', (req, res) => {
   db.addExistingItemToMenu(req.body)
   .then(items => {
@@ -322,6 +510,12 @@ routes.post('/api/menu/item/add_existing', (req, res) => {
   });
 });
 
+/**
+ * Delete menu object by specified menu id and owner id
+ * @param  {number} menu object id
+ * @param  {number} owner object id
+ * @return {<none>}
+ */
 routes.post('/api/menu/delete', (req, res) => {
   db.prepareMenuForDelete(req.body.id)
   .then(() => {
@@ -517,6 +711,34 @@ routes.post('/api/customer/email', (req, res) => {
   **********************************************************************************************
 */
 
+/**
+ *Shape of item object in database: (example: item)
+   {
+  "_id": 3108,
+  "labels": [
+    "Item"
+  ],
+  "properties": {
+    "price": 1.75,
+    "name": "Lemonade",
+    "description": "Fresh squeezed",
+    "picture": false
+  }
+}
+ */
+
+/**
+ * Creates an item object in database
+ * Request object:
+ *     {
+ *      price: {number},
+        name: {string},
+        description: {string},
+        picture: {imgUrl}
+       }
+ * @param {item object}
+ * @return {item object}
+ */
 routes.post('/api/item/create', (req, res) => {
   if (req.body.menuId !== null) {
     db.createItem(req.body).then(item => {
@@ -527,6 +749,11 @@ routes.post('/api/item/create', (req, res) => {
   }
 });
 
+/**
+ * gets items for a specified id
+ * @param  {number} '/api/item/:id' item ID
+ * @return {object} [database item object]
+ */
 routes.get('/api/item/:id', (req, res) => {
   const id = req.params.id;
   if (id) {
@@ -540,6 +767,11 @@ routes.get('/api/item/:id', (req, res) => {
   }
 });
 
+/**
+ * Deletes item from database based on item object id
+ * @param  {number} '/api/item/:id' current item id
+ * @return {<none>}
+ */
 routes.delete('/api/item/:id', (req, res) => {
   const id = +req.params.id;
   console.log('in server, before db call: id: ', id, ', req.params.id: ', req.params.id);
@@ -555,6 +787,12 @@ routes.delete('/api/item/:id', (req, res) => {
   }
 });
 
+/**
+ * updates the order of items for a specified owner
+ * @param  {number} '/api/menu/:ownerId/reorder' current owner ID
+ * @param  {object} (req -> [array of objects: {id: menu id, index: index of menu in new array}]
+ * @return {array} [array of Menu database objects]
+ */
 routes.put('/api/item/reorder', (req, res) => {
   console.log(req.body);
   db.updateItemOrder(req.body)
@@ -563,6 +801,18 @@ routes.put('/api/item/reorder', (req, res) => {
   });
 });
 
+
+/**
+ *Updates item object with new property values
+ *Request object:
+ *     {
+ *      price: {number},
+        name: {string},
+        description: {string},
+        picture: {imgUrl}
+       }
+ * @return {item object}
+ */
 routes.post('/api/item/update', (req, res) => {
   db.updateItem(req.body)
   .then(item => {
@@ -570,6 +820,13 @@ routes.post('/api/item/update', (req, res) => {
   });
 });
 
+/**
+ * Removes item object from a menu by item ID 
+ *
+ * @param  {number} '/api/item/remove' item ID
+ * @param  {number} menu ID
+ * @return {<none>}
+ */
 routes.post('/api/item/remove', (req, res) => {
   const id = parseInt(req.body.itemId, 10);
   db.prepareItemForRemove(id)
@@ -589,6 +846,12 @@ routes.post('/api/item/remove', (req, res) => {
   });
 });
 
+/**
+ *Reorders item object in database based on direction(UP or DOWN)
+ *and item ID
+ * @param  {number} '/api/item/:menuId/reorder' current item ID
+ * @return {array of item Objects}
+ */
 routes.put('/api/item/:menuId/reorder', (req, res) => {
   console.log(req.body.itemId);
   if (req.body.direction === 'UP') {
@@ -604,6 +867,11 @@ routes.put('/api/item/:menuId/reorder', (req, res) => {
   }
 });
 
+/**
+ * Gets items objects by owner ID that are unassigned to a menu
+ * @param  {number} '/api/item/unassigned/:ownerId' current owner ID
+ * @return {array of item objects}
+ */
 routes.get('/api/item/unassigned/:ownerId', (req, res) => {
   db.getUnassignedItems(req.params.ownerId)
   .then(items => {
@@ -620,6 +888,9 @@ routes.get('/api/item/unassigned/:ownerId', (req, res) => {
   **********************************************************************************************
 */
 
+/**
+ * Resets database to original values
+ */
 routes.get('/db_reset', (req, res) => {
   dbInit.reset()
   .then(() => {
@@ -639,13 +910,50 @@ routes.get('/db_reset', (req, res) => {
 
   **********************************************************************************************
 */
+/**
+ *Shape of package object in database: (example: package)
+  {
+    "pack": {
+      "_id": 3076,
+      "labels": [
+        "Package"
+      ],
+      "properties": {
+        "cost": 75,
+        "name": "On-site",
+        "description": "The whole enchilada",
+        "type": "onSite",
+        "picture": "http://placehold.it/500x500"
+      }
+    }
+  }
+ */
 
+/**
+ * Gets all packages for a specific owner
+ * @param  {number} '/api/package/:ownerId' current owner id
+ * @return {array} [array of package database objects]
+ */
 routes.get('/api/package/:ownerId', (req, res) => {
   db.getAllPackages(req.params.ownerId)
   .then((dbData) => {
     res.status(201).send(dbData);
   });
 });
+
+/**
+ * Creates a package object in database for a specific owner
+ * Request object:
+ *     {
+ *      cost: {number},
+        name: {string},
+        description: {string},
+        type: {string},
+        picture: {imgUrl}
+       }
+   @param {object}
+ * @return {package object}
+ */
 
 routes.post('/api/package/create', (req, res) => {
   db.createPackage(req.body)
@@ -654,6 +962,12 @@ routes.post('/api/package/create', (req, res) => {
  });
 });
 
+
+/**
+ * Deletes package from database based on package object id
+ * @param  {number} '/api/package/delete/:packId' current package id
+ * @return {empty array}
+ */
 routes.delete('/api/package/delete/:packId', (req, res) => {
   db.deletePack(req.params.packId)
   .then((response) => {
@@ -661,6 +975,19 @@ routes.delete('/api/package/delete/:packId', (req, res) => {
   });
 });
 
+/**
+ * Updates database package object information with new properties
+ * Request Object (from client):
+ *    {
+ *      cost: {number},
+        name: {string},
+        description: {string},
+        type: {string},
+        picture: {imgUrl}
+       }
+ * @param  {object} '/api/package/update' new properties object
+ * @return {updated package object}
+ */
 routes.post('/api/package/update', (req, res) => {
   db.updatePackage(req.body)
   .then(data => {
