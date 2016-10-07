@@ -76,12 +76,13 @@ export default class OrderDetails extends Component {
     } else {
       tempItems[itemPos].quantity = e.currentTarget.value;
     }
+
     tempItems[itemPos].total =
-      tempItems[itemPos].quantity * tempItems[itemPos].price;
-    tempItems[itemPos].total =
-      Math.round((tempItems[itemPos].total + 0.00001) * 100) / 100;
-    tempOrder.total_price = tempItems
-      .reduce((a, b) => a + parseInt(b.total, 10), 0);
+      Number(tempItems[itemPos].quantity * tempItems[itemPos].price).toFixed(2);
+
+    tempOrder.total_price = Number(this.state.package.cost + tempItems
+          .reduce((a, b) => a + parseFloat(b.total), 0)).toFixed(2);
+
     this.setState({ items: tempItems, order: tempOrder, orderUpdated: true });
   }
 
@@ -90,7 +91,8 @@ export default class OrderDetails extends Component {
     const tempOrder = Object.assign({}, this.state.order);
     const itemPos = tempItems.map(item => item.id).indexOf(itemId);
     if (tempOrder.total_price > 0) {
-      tempOrder.total_price -= (tempItems[itemPos].price * tempItems[itemPos].quantity);
+      tempOrder.total_price = Number(tempOrder.total_price -
+        (tempItems[itemPos].price * tempItems[itemPos].quantity)).toFixed(2);
     }
     tempItems.splice(itemPos, 1);
     this.state.removedItems.push(itemId);
