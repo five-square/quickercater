@@ -1,35 +1,22 @@
 import React, { Component } from 'react';
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn }
-  from 'material-ui/Table';
-
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-// import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
-// import Server from '../models/serverAPI';
-// import Paper from 'material-ui/Paper';
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
+} from 'material-ui/Table';
 
 
 export default class OrderTable extends Component {
   constructor(props) {
     super(props);
-
-    // var orders = [];
-    // if (this.props.acceptedOrders === undefined) {
-    //   if(this.props.pendingOrders === undefined) {
-    //     //throw new Error('No orders passed to via either acceptedOrders/pendingOrders');
-    //   } else {
-    //     orders = this.props.pendingOrders.map(x=>x.order);
-    //   }
-    // } else {
-    //   orders = this.props.acceptedOrders.map(x=>x.order);
-    // }
     this.state = {
-      // orders,
-      onClickMethod: (this.props.onRowClick  == undefined) ? (r) => console.log('default row click action on row: ',r) : this.props.onRowClick,
+      onClickMethod: this.props.onRowClick,
       showCheckboxes: false,
       buttonLabel: this.props.buttonLabel,
     };
-    // console.log('Order Table:',this.state.orders);
   }
 
   render() {

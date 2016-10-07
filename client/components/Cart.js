@@ -3,8 +3,6 @@ import Drawer from 'material-ui/Drawer';
 import Card from 'material-ui/Card';
 import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
-import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
-import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -20,7 +18,6 @@ export default class Cart extends Component {
     this.state = {
       style: this.props.style,
       order: this.props.globalOrder,
-      //currentOwnerId: this.props.ownerId,
       classname: 'hidden',
     };
   }
@@ -40,7 +37,6 @@ export default class Cart extends Component {
   handleChoosePkg(event, value, ownerId) {
     if (value > 0) {
       const packId = this.props.globalOrder[ownerId].packages[value - 1].id;
-      console.log('packId: ', packId);
       this.props.updatePackageOption(ownerId, packId);
     }
   }

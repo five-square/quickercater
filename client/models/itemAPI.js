@@ -24,12 +24,9 @@ ItemAPI.create = (itemObj) =>
     body: JSON.stringify(itemObj),
   })
   .then(data => data.json())
-  .then(item => {
-    console.log('ItemAPI28--In Item create: ', item._id);
-    return ({
-      id: item._id,
-    });
-  });
+  .then(item => ({
+    id: item._id,
+  }));
 
 
 /**
@@ -189,15 +186,12 @@ ItemAPI.getUnassignedItems = (ownerId) =>
     },
   })
   .then(data => data.json())
-  .then(items => {
-    console.log('ItemAPI193--in itemAPI: ', items);
-    return items.map(item => ({
-      id: item.item._id,
-      name: item.item.properties.name,
-      price: item.item.properties.price,
-      description: item.item.properties.description,
-      picture: item.item.properties.picture,
-    }));
-  });
+  .then(items => items.map(item => ({
+    id: item.item._id,
+    name: item.item.properties.name,
+    price: item.item.properties.price,
+    description: item.item.properties.description,
+    picture: item.item.properties.picture,
+  })));
 
 export default ItemAPI;

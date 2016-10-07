@@ -2,7 +2,7 @@ import React from 'react';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
-import ModeEdit from 'material-ui/svg-icons/editor/mode-edit';
+import ContentRemove from 'material-ui/svg-icons/content/remove';
 
 
 const EditPackageButtons = (props) => {
@@ -28,7 +28,7 @@ const EditPackageButtons = (props) => {
         zDepth={props.secondary ? 0 : 2}
         onTouchTap={e => {
           e.preventDefault();
-          props.addNewPackage;
+          props.addNewPackage();
         }}
       >
         <ContentAdd />

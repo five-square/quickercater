@@ -27,7 +27,6 @@ export default class StoreFront extends Component {
   }
 
   componentWillMount() {
-    console.log('in StoreFront: colors: ', this.props.store.colors);
     this.setState({
       muiTheme: getMuiTheme(this.state.colorTheme),
       colorTheme: this.props.store.colors,
@@ -67,7 +66,6 @@ export default class StoreFront extends Component {
   }
 
   handleChangeTheme(newTheme) {
-    console.log('in StoreFront: handleChangeTheme: ', newTheme);
     Owner.updateStoreColors({
       storeId: this.props.store.id,
       colors: newTheme.palette,

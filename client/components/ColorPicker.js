@@ -75,7 +75,6 @@ export default class ColorPicker extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    console.log('in ColorPicker: receiving new props...', props.colorTheme);
     this.setState({
       newColorTheme: props.colorTheme,
     });
@@ -85,7 +84,6 @@ export default class ColorPicker extends React.Component {
     const color = this.state.color;
     const colorRGBA = `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
     const newTheme = this.props.colorTheme;
-    console.log('in ColorPicker: setColor: ', this.state.colorToChange);
 
     // A wild switch appears...
     switch (this.state.colorToChange) {
@@ -230,9 +228,7 @@ export default class ColorPicker extends React.Component {
   }
 
   handlePredefinedClick(e, i, v) {
-    console.log('in ColorPicker handlePredefinedClick: ', e, ', ', i, ', ', v);
     this.setState({
-      // colorToDisplay: this.rgbObjectify(this.displayColor(v)),
       predefinedTheme: v,
       colorToChange: v,
     }, this.setColor);
@@ -278,14 +274,20 @@ export default class ColorPicker extends React.Component {
       },
     };
 
-    console.log('in ColorPicker: ', this.state.predefinedTheme);
-
     return (
       <div>
         <Tabs style={{ width: '100%' }}>
           <Tab label="Choose a Theme">
             <div style={{ position: 'relative', height: 110 }}>
-              <div style={{ width: '50%', position: 'absolute', display: 'inline-block', left: 0, top: 20 }}>
+              <div
+                style={{
+                  width: '50%',
+                  position: 'absolute',
+                  display: 'inline-block',
+                  left: 0,
+                  top: 20,
+                }}
+              >
                 <DropDownMenu
                   maxHeight={200}
                   value={this.state.predefinedTheme}
@@ -327,12 +329,22 @@ export default class ColorPicker extends React.Component {
                         <CardTitle title="Primary Text" />
                         <RaisedButton
                           primary label="Primary"
-                          style={{ display: 'inline-block', margin: 15, width: '40%', marginTop: 0 }}
+                          style={{
+                            display: 'inline-block',
+                            margin: 15,
+                            width: '40%',
+                            marginTop: 0,
+                          }}
                         />
                         <RaisedButton
                           secondary
                           label="Secondary"
-                          style={{ display: 'inline-block', margin: 10, width: '40%', marginTop: 0 }}
+                          style={{
+                            display: 'inline-block',
+                            margin: 10,
+                            width: '40%',
+                            marginTop: 0
+                          }}
                         />
                       </Card>
                     </Paper>

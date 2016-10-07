@@ -119,7 +119,7 @@ export default class CartItemCard extends Component {
           />
           <CardText key={this.props.passKey + 3}>
             <TextField
-            key={this.props.passKey + 4}
+              key={this.props.passKey + 4}
               ref="quantity"
               hintText="0"
               type="number"

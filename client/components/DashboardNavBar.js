@@ -26,11 +26,6 @@ export default class DashboardNavBar extends Component {
     this.changeTheme = e => this.handleChangeTheme(e);
   }
 
-  // componentWillMount() {
-  //   this.setState({
-  //   });
-  // }
-
   handleOpenMenu() {
     this.setState({
       open: true,
@@ -61,8 +56,6 @@ export default class DashboardNavBar extends Component {
   }
 
   handleCancelChange() {
-    console.log('in DashboardNavBar: colorTheme', this.state.colorTheme);
-    console.log('in DashboardNavBar: oldColorTheme', this.state.oldColorTheme);
     this.setState({
       openDialog: false,
       colorTheme: this.props.colorTheme,

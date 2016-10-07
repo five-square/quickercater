@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import Paper from 'material-ui/Paper';
-import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
-// import RaisedButton from 'material-ui/RaisedButton';
 
 import SortableListItem from './SortableListItem';
 import MenuCardDraggable from './MenuCardDraggable';
@@ -107,7 +104,6 @@ export default class MenuContainer extends Component {
   updateDatabase() {
     Menu.updateOrder(this.state.menus)
     .then(menus => {
-      console.log('in MenuContainer updateDatabase: ', menus);
       this.setState({ menus });
     });
   }
@@ -165,7 +161,6 @@ export default class MenuContainer extends Component {
   }
 
   handleDeleteItemInBank(itemId) {
-    console.log('in MenuContainer: ', itemId);
     const newItemBank = this.state.itemBank.filter(item => item.id !== itemId);
     Item.delete(itemId);
     this.setState({ itemBank: newItemBank });
