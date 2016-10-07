@@ -65,10 +65,6 @@ export default class Dashboard extends Component {
   handleOnRowClick(pendingOrder, completedOrder, row) {
   // pendingOrder is bool whether click came from pendingOrder list
     console.log('pendingOrder: ', pendingOrder, 'completedOrder: ', completedOrder);
-    // let orderId = pendingOrder ? this.state.pendingOrders[row].order._id
-    //                             : completedOrder
-    //                               ? this.state.completedOrders[row].order._id
-    //                               : this.state.acceptedOrders[row].order._id;
     let orderId;
     let orderType;
     if (pendingOrder) {
@@ -149,106 +145,93 @@ export default class Dashboard extends Component {
     /* only mount orderdetails if we have a click. Then pass in correct orderObj
     via orderInfo prop(call with row number passed onClick) */
     return (
-      // <MuiThemeProvider muiTheme={getMuiTheme(this.props.masterColorTheme)}>
-        <div style={this.props.style}>
-          <Paper zDepth={this.state.hover}>
-            <DashboardNavBar
-              toggleEditing={this.props.toggleEditing}
-              open={this.state.viewMenu}
-              openMenu={this.openMenu}
-              closeMenu={this.closeMenu}
-              colorTheme={this.props.colorTheme}
-              changeTheme={this.props.changeTheme}
+      <div style={this.props.style}>
+        <Paper zDepth={this.state.hover}>
+          <DashboardNavBar
+            toggleEditing={this.props.toggleEditing}
+            open={this.state.viewMenu}
+            openMenu={this.openMenu}
+            closeMenu={this.closeMenu}
+            colorTheme={this.props.colorTheme}
+            changeTheme={this.props.changeTheme}
+          />
+          {this.state.showOrderDetails !== -1
+            ? <OrderDetails
+              showMe
+              orderInfo={this.state.orderInfo}
+              handleOrderAccept={e => this.handleOrderAccept(e)}
+              handleOrderReject={e => this.handleOrderReject(e)}
+              handleModalCancel={e => this.handleModalCancel(e)}
+              handleOrderFulfilled={e => this.handleOrderFulfilled(e)}
+              orderState={this.state.orderState}
+              storeName={this.props.storeName}
+              ownerId={this.props.ownerId}
             />
-            {this.state.showOrderDetails !== -1
-              ? <OrderDetails
-                showMe
-                orderInfo={this.state.orderInfo}
-                handleOrderAccept={e => this.handleOrderAccept(e)}
-                handleOrderReject={e => this.handleOrderReject(e)}
-                handleModalCancel={e => this.handleModalCancel(e)}
-                handleOrderFulfilled={e => this.handleOrderFulfilled(e)}
-                orderState={this.state.orderState}
-                storeName={this.props.storeName}
-                ownerId={this.props.ownerId}
+             : null
+          }
+          <Card
+            expanded={this.state.pendingOrders.length === 0 ? false : undefined}
+            onMouseEnter={() => this.handleOnMouseEnter()}
+            onMouseLeave={() => this.handleOnMouseLeave()}
+          >
+            <CardHeader
+              title="Pending Orders"
+              subtitle={this.state.pendingOrders === undefined ? '0'
+                        : this.state.pendingOrders.length}
+              actAsExpander={(Array.isArray(this.state.pendingOrders)
+                && this.state.pendingOrders.length > 0)}
+              showExpandableButton={(Array.isArray(this.state.pendingOrders)
+                && this.state.pendingOrders.length > 0)}
+            />
+            <CardText expandable>
+              <OrderTable
+                AnyOrders={this.state.pendingOrders}
+                onRowClick={this.handleOnRowClick.bind(this, true, false)}
               />
-            // {this.state.showOrderDetails !== -1
-            //   ? <OrderDetails
-            //     showMe
-            //     orderInfo={this.state.orderInfo}
-            //     editable={this.state.editable}
-            //     handleOrderAccept={e => this.handleOrderAccept(e)}
-            //     handleOrderReject={e => this.handleOrderReject(e)}
-            //     handleModalCancel={e => this.handleModalCancel(e)}
-            //     customerView={false}
-            //     storeName={this.props.storeName}
-            //   />
-               : null
-            }
-            <Card
-              expanded={this.state.pendingOrders.length === 0 ? false : undefined}
-              onMouseEnter={() => this.handleOnMouseEnter()}
-              onMouseLeave={() => this.handleOnMouseLeave()}
-            >
-              <CardHeader
-                title="Pending Orders"
-                subtitle={this.state.pendingOrders === undefined ? '0'
-                          : this.state.pendingOrders.length}
-                actAsExpander={(Array.isArray(this.state.pendingOrders)
-                  && this.state.pendingOrders.length > 0)}
-                showExpandableButton={(Array.isArray(this.state.pendingOrders)
-                  && this.state.pendingOrders.length > 0)}
+            </CardText>
+          </Card>
+          <Card
+            onMouseEnter={() => this.handleOnMouseEnter()}
+            onMouseLeave={() => this.handleOnMouseLeave()}
+          >
+            <CardHeader
+              title="Approved Orders"
+              subtitle={this.state.acceptedOrders === undefined ? '0'
+                        : this.state.acceptedOrders.length}
+              actAsExpander={(Array.isArray(this.state.acceptedOrders)
+                              && this.state.acceptedOrders.length > 0)}
+              showExpandableButton={(Array.isArray(this.state.acceptedOrders)
+                              && this.state.acceptedOrders.length > 0)}
+            />
+            <CardText expandable >
+              <OrderTable
+                onRowClick={this.handleOnRowClick.bind(this, false, false)}
+                AnyOrders={this.state.acceptedOrders}
               />
-              <CardText expandable>
-                <OrderTable
-                  AnyOrders={this.state.pendingOrders}
-                  onRowClick={this.handleOnRowClick.bind(this, true, false)}
-                />
-              </CardText>
-            </Card>
-            <Card
-              onMouseEnter={() => this.handleOnMouseEnter()}
-              onMouseLeave={() => this.handleOnMouseLeave()}
-            >
-              <CardHeader
-                title="Approved Orders"
-                subtitle={this.state.acceptedOrders === undefined ? '0'
-                          : this.state.acceptedOrders.length}
-                actAsExpander={(Array.isArray(this.state.acceptedOrders)
-                                && this.state.acceptedOrders.length > 0)}
-                showExpandableButton={(Array.isArray(this.state.acceptedOrders)
-                                && this.state.acceptedOrders.length > 0)}
+            </CardText>
+          </Card>
+          <Card
+            onMouseEnter={() => this.handleOnMouseEnter()}
+            onMouseLeave={() => this.handleOnMouseLeave()}
+          >
+            <CardHeader
+              title="Completed Orders"
+              subtitle={this.state.completedOrders === undefined ? '0'
+                        : this.state.completedOrders.length}
+              actAsExpander={(Array.isArray(this.state.completedOrders)
+                              && this.state.completedOrders.length > 0)}
+              showExpandableButton={(Array.isArray(this.state.completedOrders)
+                              && this.state.completedOrders.length > 0)}
+            />
+            <CardText expandable >
+              <OrderTable
+                onRowClick={this.handleOnRowClick.bind(this, false, true)}
+                AnyOrders={this.state.completedOrders}
               />
-              <CardText expandable >
-                <OrderTable
-                  onRowClick={this.handleOnRowClick.bind(this, false, false)}
-                  AnyOrders={this.state.acceptedOrders}
-                />
-              </CardText>
-            </Card>
-            <Card
-              onMouseEnter={() => this.handleOnMouseEnter()}
-              onMouseLeave={() => this.handleOnMouseLeave()}
-            >
-              <CardHeader
-                title="Completed Orders"
-                subtitle={this.state.completedOrders === undefined ? '0'
-                          : this.state.completedOrders.length}
-                actAsExpander={(Array.isArray(this.state.completedOrders)
-                                && this.state.completedOrders.length > 0)}
-                showExpandableButton={(Array.isArray(this.state.completedOrders)
-                                && this.state.completedOrders.length > 0)}
-              />
-              <CardText expandable >
-                <OrderTable
-                  onRowClick={this.handleOnRowClick.bind(this, false, true)}
-                  AnyOrders={this.state.completedOrders}
-                />
-              </CardText>
-            </Card>
-          </Paper>
-        </div>
-      // </MuiThemeProvider>
+            </CardText>
+          </Card>
+        </Paper>
+      </div>
     );
   }
 }

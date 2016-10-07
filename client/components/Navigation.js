@@ -47,7 +47,8 @@ export default class Navigation extends Component {
         position: 'fixed',
         top: 0,
         left: 0,
-        zIndex: 9999,
+        zIndex: 100,
+        zDepth: 3,
         width: '100%',
       },
     };

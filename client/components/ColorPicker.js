@@ -8,8 +8,11 @@ import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
+import Colors from '../models/colorAPI';
 
 export default class ColorPicker extends React.Component {
   constructor(props) {
@@ -17,6 +20,7 @@ export default class ColorPicker extends React.Component {
     this.state = {
       displayColorPicker: false,
       colorToChange: 0,
+      predefinedTheme: 'QuickerCater',
       colorToDisplay: {
         r: '0',
         g: '0',
@@ -48,7 +52,8 @@ export default class ColorPicker extends React.Component {
       6: 'Background',
     };
 
-    this.click = (e, i, v) => this.handleClick(e, i, v);
+    this.customClick = (e, i, v) => this.handleCustomClick(e, i, v);
+    this.predefinedClick = (e, i, v) => this.handlePredefinedClick(e, i, v);
     this.change = e => this.handleChange(e);
   }
 
@@ -65,10 +70,12 @@ export default class ColorPicker extends React.Component {
         b: background[2],
         a: background[3] || 1,
       },
+      newColorTheme: this.props.colorTheme,
     });
   }
 
   componentWillReceiveProps(props) {
+    console.log('in ColorPicker: receiving new props...', props.colorTheme);
     this.setState({
       newColorTheme: props.colorTheme,
     });
@@ -77,7 +84,8 @@ export default class ColorPicker extends React.Component {
   setColor() {
     const color = this.state.color;
     const colorRGBA = `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
-    const newTheme = this.state.newColorTheme;
+    const newTheme = this.props.colorTheme;
+    console.log('in ColorPicker: setColor: ', this.state.colorToChange);
 
     // A wild switch appears...
     switch (this.state.colorToChange) {
@@ -116,6 +124,18 @@ export default class ColorPicker extends React.Component {
             a: color.a || 1,
           },
         });
+        break;
+      case 'QuickerCater':
+        newTheme.palette = Colors.defaultTheme.palette;
+        this.props.changeTheme(newTheme);
+        break;
+      case 'light':
+        newTheme.palette = lightBaseTheme.palette;
+        this.props.changeTheme(newTheme);
+        break;
+      case 'dark':
+        newTheme.palette = darkBaseTheme.palette;
+        this.props.changeTheme(newTheme);
         break;
       default:
         return;
@@ -202,11 +222,20 @@ export default class ColorPicker extends React.Component {
     return hex;
   }
 
-  handleClick(e, i, v) {
+  handleCustomClick(e, i, v) {
     this.setState({
       colorToDisplay: this.rgbObjectify(this.displayColor(v)),
       colorToChange: v,
     });
+  }
+
+  handlePredefinedClick(e, i, v) {
+    console.log('in ColorPicker handlePredefinedClick: ', e, ', ', i, ', ', v);
+    this.setState({
+      // colorToDisplay: this.rgbObjectify(this.displayColor(v)),
+      predefinedTheme: v,
+      colorToChange: v,
+    }, this.setColor);
   }
 
   handleClose() {
@@ -249,13 +278,68 @@ export default class ColorPicker extends React.Component {
       },
     };
 
-    console.log('in ColorPicker: ', this.props.colorTheme.palette.shadowColor);
+    console.log('in ColorPicker: ', this.state.predefinedTheme);
 
     return (
       <div>
         <Tabs style={{ width: '100%' }}>
           <Tab label="Choose a Theme">
-            <h1>Something goes here</h1>
+            <div style={{ position: 'relative', height: 110 }}>
+              <div style={{ width: '50%', position: 'absolute', display: 'inline-block', left: 0, top: 20 }}>
+                <DropDownMenu
+                  maxHeight={200}
+                  value={this.state.predefinedTheme}
+                  onChange={this.predefinedClick}
+                  style={style.dropDown}
+                >
+                  <MenuItem key={7} value={'QuickerCater'} primaryText="QuickerCater" />
+                  <MenuItem key={8} value={'light'} primaryText="Light" />
+                  <MenuItem key={9} value={'dark'} primaryText="Dark" />
+                </DropDownMenu>
+              </div>
+              <div
+                style={{
+                  width: '50%',
+                  position: 'absolute',
+                  display: 'inline-block',
+                  top: 30,
+                  right: 0,
+                }}
+              >
+                <MuiThemeProvider muiTheme={getMuiTheme(this.props.colorTheme)}>
+                  <div>
+                    <Paper
+                      style={{
+                        margin: 20,
+                        position: 'relative',
+                        textAlign: 'center',
+                        marginTop: 0,
+                        paddingBottom: 5,
+                      }}
+                    >
+                      <AppBar
+                        title="Style Preview"
+                        titleStyle={{ fontSize: 20, height: 50, marginTop: -13 }}
+                        style={{ height: 40 }}
+                        iconStyleLeft={{ display: 'none' }}
+                      />
+                      <Card zDepth={2} style={{ margin: 10 }}>
+                        <CardTitle title="Primary Text" />
+                        <RaisedButton
+                          primary label="Primary"
+                          style={{ display: 'inline-block', margin: 15, width: '40%', marginTop: 0 }}
+                        />
+                        <RaisedButton
+                          secondary
+                          label="Secondary"
+                          style={{ display: 'inline-block', margin: 10, width: '40%', marginTop: 0 }}
+                        />
+                      </Card>
+                    </Paper>
+                  </div>
+                </MuiThemeProvider>
+              </div>
+            </div>
           </Tab>
           <Tab label="Customize">
             <div style={{ width: '50%', position: 'relative' }}>
@@ -264,7 +348,7 @@ export default class ColorPicker extends React.Component {
                   <DropDownMenu
                     maxHeight={200}
                     value={this.state.colorToChange}
-                    onChange={this.click}
+                    onChange={this.customClick}
                     style={style.dropDown}
                   >
                     <MenuItem key={0} value={0} primaryText="Buttons and Menus" />
