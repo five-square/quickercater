@@ -265,7 +265,7 @@ export default class App extends Component {
     return (
       <div>
         <MuiThemeProvider muiTheme={muiTheme}>
-          <div style={{ marginBottom: '6%' }}>
+          <div style={{ marginBottom: '6%', zIndex: 100 }}>
             <Navigation
               title="QuickerCater"
               inStore={this.state.showStore}

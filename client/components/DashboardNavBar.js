@@ -84,6 +84,7 @@ export default class DashboardNavBar extends Component {
         <AppBar
           title="My Dashboard"
           titleStyle={{ textAlign: 'left' }}
+          style={{ zIndex: 90 }}
           iconStyleLeft={{ display: 'none' }}
           iconElementRight={
             <IconMenu

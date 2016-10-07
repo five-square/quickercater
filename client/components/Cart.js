@@ -120,7 +120,7 @@ export default class Cart extends Component {
     const cartItems = this.createCartItemsArray();
     return (
       <div>
-        <Drawer width={300} openSecondary open={this.props.open} >
+        <Drawer width={300} openSecondary open={this.props.open} style={{ zIndex: 200 }} >
           <AppBar
             title="My Order"
             titleStyle={{ textAlign: 'left' }}
