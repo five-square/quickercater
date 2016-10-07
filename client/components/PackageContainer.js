@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PackageAPI from '../models/packageAPI';
 import PackageSlider from './PackageSlider';
 import AddPackageCard from './AddPackageCard';
-// import EditPackage from './EditPackage';
 
 export default class PackageContainer extends Component {
   constructor(props) {
@@ -64,7 +63,6 @@ export default class PackageContainer extends Component {
         marginRight: 'auto',
         textAlign: 'center',
         position: 'relative',
-        // display: 'block',
       },
       div: {
         paddingLeft: 50,
