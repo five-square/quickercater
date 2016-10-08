@@ -63,9 +63,6 @@ export default class OrderCard extends React.Component {
   }
 
   handleSubmit() {
-    // this.setState({ open: false });
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'];
     const customerInfo = {
       id: '',
       name: this.state.customerName,
@@ -76,7 +73,6 @@ export default class OrderCard extends React.Component {
     const taxes = Number(((parseFloat(this.props.orderInfo.totalPrice) -
                   this.props.orderInfo.selectedPkgCost) * Taxes.texas.sales).toFixed(2));
     const totalPrice = Number((parseFloat(this.props.orderInfo.totalPrice) + taxes).toFixed(2));
-    const newline = '';
     const orderInfo = {
       order: {
         id: '',
