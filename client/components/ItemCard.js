@@ -114,7 +114,7 @@ export default class ItemCard extends Component {
               </div>
               : <FlatButton
                 style={style.addToOrderButton}
-                primary
+                secondary
                 label="Add To Order"
                 onClick={e => this.handleAddItemToOrder(e)}
               />
