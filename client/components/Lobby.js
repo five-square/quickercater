@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import DropDownMenu from 'material-ui/DropDownMenu';
+import Popover from 'material-ui/Popover';
 import MenuItem from 'material-ui/MenuItem';
 
 import StoreCard from './StoreCard';
