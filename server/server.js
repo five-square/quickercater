@@ -841,7 +841,6 @@ routes.post('/api/customer/create', (req, res) => {
  * @return {email object}
  */
 routes.post('/api/customer/email', (req, res) => {
-  console.log('REQ', req.body)
   nodemailer.sendConfirmation(req.body)
     .then((resp) => {
       res.status(201).send(resp);

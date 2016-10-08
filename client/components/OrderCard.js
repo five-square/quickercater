@@ -365,7 +365,7 @@ export default class OrderCard extends React.Component {
     } else if (this.state.submitted) {
       return (<OrderConfirmation
         orderId={this.state.newOrder}
-        storeName={this.props.storeName}
+        store={this.props.store}
         showMe
         ownerId={this.props.ownerId}
         resetAfterConfirmation={e => this.resetAfterConfirmation(e)}

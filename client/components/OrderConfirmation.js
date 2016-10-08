@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-export default class OrderDetails extends Component {
+export default class OrderConfirmation extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,7 +32,7 @@ export default class OrderDetails extends Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          Order #{this.props.orderId} submitted to {this.props.storeName}
+          Order #{this.props.orderId} submitted to {this.props.store.name}
         </Dialog>
       </div>
     );
