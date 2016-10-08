@@ -50,7 +50,7 @@ export default class Cart extends Component {
       return Object.keys(this.props.globalOrder).map((owner, orderIndex) =>
         <Card key={orderIndex * 6} initiallyExpanded >
           <CardHeader
-            title={this.props.globalOrder[owner].storeName}
+            title={this.props.globalOrder[owner].store.name}
             actAsExpander
             showExpandableButton
             onClick={e => this.handleShowHide(e)}

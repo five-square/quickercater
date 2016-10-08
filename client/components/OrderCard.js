@@ -76,13 +76,13 @@ export default class OrderCard extends React.Component {
     const taxes = Number(((parseFloat(this.props.orderInfo.totalPrice) -
                   this.props.orderInfo.selectedPkgCost) * Taxes.texas.sales).toFixed(2));
     const totalPrice = Number((parseFloat(this.props.orderInfo.totalPrice) + taxes).toFixed(2));
+    const newline = '';
     const orderInfo = {
       order: {
         id: '',
         name: this.state.orderName,
         created_on: new Date(), // populate this in Neo4J query??
-        request_date: `${monthNames[this.state.requestDate.getMonth()]} 
-        ${this.state.requestDate.getDate()}th, ${this.state.requestDate.getFullYear()}`,
+        request_date: this.state.requestDate.toDateString(),
         start_time: this.formatTime(this.state.eventStartTime),
         end_time: this.formatTime(this.state.eventEndTime),
         fulfilled: false,
@@ -297,7 +297,7 @@ export default class OrderCard extends React.Component {
           <br />
           <TextField
             hintText="@email.com"
-            type="email"
+            type="text"
             floatingLabelText="Email"
             floatingLabelStyle={style.textColor}
             floatingLabelFixed
