@@ -526,6 +526,12 @@ routes.post('/api/menu/delete', (req, res) => {
   });
 });
 
+/**
+ * Unassigns item from menu then deletes menu
+ * @param  {number} menuId
+ * @param  {number} ownerId
+ * @return {<none>}
+ */
 routes.post('/api/menu/delete/empty', (req, res) => {
   db.prepareMenuForDelete(req.body.id)
   .then(() => {
@@ -598,6 +604,74 @@ routes.post('/api/relationship/delete', (req, res) => {
   **********************************************************************************************
 */
 
+/**
+ * Shape of order object relationship: (example: order)
+ * {
+    "order": {
+      "_id": 3177,
+      "labels": [
+        "CustomerOrder"
+      ],
+      "properties": {
+        "start_time": "10:00 am",
+        "address": "321 RightBehindYou Ln.",
+        "total_price": 0,
+        "created_on": "yesterday",
+        "request_date": "tomorrow after tomorrow",
+        "fulfilled": false,
+        "end_time": "1:00 pm",
+        "name": "Mexican Delivery"
+      }
+    },
+    "item": {
+      "_id": 3171,
+      "labels": [
+        "Item"
+      ],
+      "properties": {
+        "price": 3.99,
+        "name": "Churro",
+        "description": "Order me",
+        "picture": false
+      }
+    },
+    "relA": {
+      "_id": 4228,
+      "type": "REQUEST",
+      "properties": {
+        "quantity": 50
+      },
+      "_fromId": 3177,
+      "_toId": 3171
+    },
+    "customer": {
+      "_id": 3125,
+      "labels": [
+        "Customer"
+      ],
+      "properties": {
+        "phone": "555-333-5555",
+        "name": "Carly",
+        "auth_key": true,
+        "email": "carly@window.com"
+      }
+    },
+    "package": {
+      "_id": 3130,
+      "labels": [
+        "Package"
+      ],
+      "properties": {
+        "cost": 25,
+        "name": "Delivery",
+        "description": "Fast and easy",
+        "type": "delivery",
+        "picture": "http://placehold.it/500x500"
+      }
+    }
+  }
+ */
+
 // routes.get('/api/order/:id', (req, res) => {
 //   db.findNode('CustomerOrder', req.params.id)
 //   .then(dbData => {
@@ -612,6 +686,11 @@ routes.post('/api/relationship/delete', (req, res) => {
 //   });
 // });
 
+/**
+ * Gets order object with relationships to customer, package & item
+ * @param  {number} orderId
+ * @return {Array of order object}
+ */
 routes.get('/api/order/:orderId', (req, res) => {
   // get order info with all req relationships
   db.fetchOrderDetail(req.params.orderId).then(resp => {
@@ -619,6 +698,12 @@ routes.get('/api/order/:orderId', (req, res) => {
   });
 });
 
+/**
+ * Sets an order to accepted in database
+ * Request object: { orderId: {number} }
+ * @param  {object} orderid object
+ * @return {<none>}
+ */
 routes.post('/api/order/accepted', (req, res) => {
   // get order info with all req relationships
   db.addAcceptedOrder(req.body).then(resp => {
@@ -626,6 +711,12 @@ routes.post('/api/order/accepted', (req, res) => {
   });
 });
 
+/**
+ * Sets an order to fullfilled in database
+ * Request object: { orderId: {number} }
+ * @param  {object} orderid object
+ * @return {<none>}
+ */
 routes.post('/api/order/fulfilled', (req, res) => {
   // get order info with all req relationships
   db.changeOrderToFulfilled(req.body).then(resp => {
@@ -633,24 +724,55 @@ routes.post('/api/order/fulfilled', (req, res) => {
   });
 });
 
+/**
+ * Gets all pending orders object for a specified owner
+ * @param  {number} ownerId
+ * @return {Array of pending order objects}
+ */
 routes.get('/api/order/getAllPending/:ownerId', (req, res) => {
   db.fetchAllPendingOrders(req.params.ownerId).then(pendingOrders => {
     res.send(pendingOrders);
   });
 });
 
+/**
+ * Gets all accepted order objects by owner Id
+ * @param  {number} ownerId
+ * @return {Array of accepted order objects}
+ */
 routes.get('/api/order/getAllAccepted/:ownerId', (req, res) => {
   db.fetchAllAcceptedOrders(req.params.ownerId).then(acceptedOrders => {
     res.send(acceptedOrders);
   });
 });
 
+/**
+ * Gets all completed order objects by owner Id
+ * @param  {number} ownerId
+ * @return {Array of completed order objects}
+ */
 routes.get('/api/order/getAllCompletedOrders/:ownerId', (req, res) => {
   db.fetchAllCompletedOrders(req.params.ownerId).then(completedOrders => {
     res.send(completedOrders);
   });
 });
 
+/**
+ * Creates order object relationship to owner, customer and items.
+ * Reobject
+ *    {
+        start_time: {string},
+        address: {string},
+        total_price: {number},
+        created_on: {string},
+        request_date: {string},
+        fulfilled: {boolean},
+        end_time: {string},
+        name: {string}
+      }
+ * @param  {object}
+ * @return {Array of objects with relationships}
+ */
 routes.post('/api/order/create', (req, res) => {
   db.createOrderAndRelationships(req.body)
   .then((dbData) => {
@@ -659,6 +781,11 @@ routes.post('/api/order/create', (req, res) => {
   .catch(err => res.status(500).send(err));
 });
 
+/**
+ * Deletes order by orderId
+ * @param  {number} orderId
+ * @return {<none>}
+ */
 routes.post('/api/order/delete', (req, res) => {
   db.deleteOrder(req.body.orderId)
   .then((dbData) => {
@@ -666,6 +793,13 @@ routes.post('/api/order/delete', (req, res) => {
   });
 });
 
+/**
+ * Updates order object based on items added or removed
+ * @param  {object} order Object
+ * @param  {object} item object
+ * @param  {object} removed item object
+ * @return {Array of order object}
+ */
 routes.post('/api/order/update', (req, res) => {
   db.updateOrder(req.body.order, req.body.items, req.body.removedItems)
   .then((dbData) => {
@@ -674,6 +808,19 @@ routes.post('/api/order/update', (req, res) => {
 });
 
 /* Create customer end point*/
+
+/**
+ * Creates customer object in database
+ * Request object:
+ *    {
+        phone: {string},
+        name: {string},
+        auth_key: {string},
+        email: {string}
+      }
+ * @param  {object} customer object
+ * @return {customer object}
+ */
 routes.post('/api/customer/create', (req, res) => {
   db.createNewCustomer(req.body)
   .then((dbData) => {
@@ -682,7 +829,19 @@ routes.post('/api/customer/create', (req, res) => {
   .catch(err => res.status(500).send(err));
 });
 
+/**
+ * Creates email object in database
+ * { from: {string},
+     to: {string},
+     subject: {string},
+     generateTextFromHTML: {boolean},
+     html: {html}
+   }
+ * @param  {object} email object
+ * @return {email object}
+ */
 routes.post('/api/customer/email', (req, res) => {
+  console.log('REQ', req.body)
   nodemailer.sendConfirmation(req.body)
     .then((resp) => {
       res.status(201).send(resp);
