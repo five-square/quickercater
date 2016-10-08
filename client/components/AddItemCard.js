@@ -183,6 +183,16 @@ export default class AddItemCard extends React.Component {
       card: {
         marginBottom: '5%',
       },
+      addItem: {
+        width: '90%',
+        flex: '50%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        borderRadius: 20,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
     };
     // action buttons for Modal
     const actions = [
@@ -201,25 +211,24 @@ export default class AddItemCard extends React.Component {
     // This is the actual modal
     return (
       <div style={style.card}>
-        <Paper zDepth={this.state.hover} >
-          <Card
-            onMouseEnter={e => this.handleOnMouseEnter(e)}
-            onMouseLeave={e => this.handleOnMouseLeave(e)}
-            style={style.card}
-          >
-            <CardTitle title={'Add Item'} style={style.cardActions}>
-              <FloatingActionButton
-                mini
-                secondary
-                onTouchTap={e => this.handleOpen(e)}
-                style={style.floatingActionButton}
-                zDepth={0}
-              >
-                <ContentAdd />
-              </FloatingActionButton>
-            </CardTitle>
-          </Card>
-        </Paper>
+        <Card
+          onMouseEnter={e => this.handleOnMouseEnter(e)}
+          onMouseLeave={e => this.handleOnMouseLeave(e)}
+          style={style.addItem}
+          zDepth={this.state.hover}
+        >
+          <CardTitle title={'Add Item'} style={style.cardActions}>
+            <FloatingActionButton
+              mini
+              secondary
+              onTouchTap={e => this.handleOpen(e)}
+              style={style.floatingActionButton}
+              zDepth={0}
+            >
+              <ContentAdd />
+            </FloatingActionButton>
+          </CardTitle>
+        </Card>
         <Dialog
           title="Add Item"
           actions={actions}

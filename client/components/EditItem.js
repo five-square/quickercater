@@ -46,7 +46,7 @@ export default class EditItem extends Component {
       id: this.props.id,
       name: this.state.name,
       description: this.state.description,
-      price: this.state.price,
+      price: +this.state.price,
       picture: this.state.picture,
     });
     this.setState({

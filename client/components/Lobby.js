@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
-import DropDownMenu from 'material-ui/DropDownMenu';
+// import DropDownMenu from 'material-ui/DropDownMenu';
+import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import MenuItem from 'material-ui/MenuItem';
 
@@ -16,6 +17,25 @@ export default class Lobby extends Component {
     };
     this.changeSearchValue = e => this.handleChangeSearchValue(e);
     this.selectType = (e, i, v) => this.handleSearchType(e, i, v);
+    this.openMenu = (e) => this.handleOpenMenu(e);
+    this.closeMenu = () => this.handleCloseMenu();
+    this.selectSearchOption = (e) => this.handleSelectSearchOption(e);
+  }
+
+  handleOpenMenu(event) {
+    // This prevents ghost click.
+    event.preventDefault();
+
+    this.setState({
+      open: true,
+      anchorEl: event.currentTarget,
+    });
+  }
+
+  handleCloseMenu() {
+    this.setState({
+      open: false,
+    });
   }
 
   handleChangeSearchValue(e) {
@@ -24,13 +44,14 @@ export default class Lobby extends Component {
     });
   }
 
-  handleSearchType(e, i, v) {
+  handleSelectSearchOption(choice) {
     let hint = 'Caterer';
-    if (v === 'type') {
+    console.log('in Lobby: ', choice);
+    if (choice === 'type') {
       hint = 'Category';
     }
     this.setState({
-      searchBy: v,
+      searchBy: choice,
       searchHint: hint,
     });
     console.log('This state name test: ', this.state.searchBy);
@@ -71,28 +92,45 @@ export default class Lobby extends Component {
         align: 'right',
       },
       searchText: {
-        width: '50%',
+        width: '100%',
       },
     };
     return (
       <div className="Lobby">
         <div style={style.searchBar}>
           <TextField
-            style={{ width: '50%' }}
+            style={{ width: '78%', marginRight: '2%' }}
             inputStyle={style.searchText}
             hintText={`Search by ${this.state.searchHint}`}
             value={this.state.searchValue}
             onChange={this.changeSearchValue}
           />
-          <DropDownMenu
-            autoWidth
-            value={this.state.searchBy}
-            onChange={this.selectType}
-            underlineStyle={style.searchDrop}
+          <RaisedButton
+            style={{ width: '20%' }}
+            primary
+            onTouchTap={this.openMenu}
+            label="Options"
+          />
+          <Popover
+            open={this.state.open}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+            targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+            onRequestClose={this.closeMenu}
           >
-            <MenuItem key={1} value={'name'} primaryText="Search By Name" />
-            <MenuItem key={2} value={'type'} primaryText="Search By Category" />
-          </DropDownMenu>
+            <MenuItem
+              key={1}
+              value={'name'}
+              primaryText="Search by Name"
+              onTouchTap={() => this.selectSearchOption('name')}
+            />
+            <MenuItem
+              key={2}
+              value={'type'}
+              primaryText="Search by Category"
+              onTouchTap={() => this.selectSearchOption('type')}
+            />
+          </Popover>
         </div>
         { this.props.stores
           .filter(store =>
