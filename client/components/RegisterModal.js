@@ -45,7 +45,10 @@ export default class RegisterModal extends React.Component {
       colors: Colors.defaultTheme.palette,
     };
     this.setState({ dialogOpen: false });
-    OwnerAPI.createStore(newStoreInfo, this.props.ownerId).then(x => x);
+    OwnerAPI.createStore(newStoreInfo, this.props.ownerId).then(x =>{
+      this.props.getAllStores();
+    });
+
   }
 
   handleClose() {
@@ -346,7 +349,6 @@ export default class RegisterModal extends React.Component {
                 Tell us about your store.
               </p>
               <TextField
-                hintText="Description"
                 multiLine
                 rows={1}
                 floatingLabelText={`Characters left: ${this.state.available}`}
@@ -487,7 +489,6 @@ export default class RegisterModal extends React.Component {
     return (
       <div style={style}>
         <div>
-          <RaisedButton primary label="Register" onTouchTap={e => this.handleOpen(e)} />
           <Dialog
             title="Register"
             actions={actions}
