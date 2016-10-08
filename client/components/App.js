@@ -69,7 +69,7 @@ export default class App extends Component {
     document.getElementById('mainContainer').style.backgroundColor = 'rgba(245, 245, 245, 1)';
   }
 
-  getAllStores(){
+  getAllStores() {
     Server.getAllStores().then(stores => {
       this.setState({ stores });
     });
@@ -77,21 +77,18 @@ export default class App extends Component {
 
 
   handleSelectStore(storeObj) {
-    // console.log('Select store: ', storeObj);
     let id = storeObj.id;
     if (storeObj._id && id === undefined) {
       id = storeObj._id;
     }
     Server.getOwnerByStoreId(id)
     .then(owner => {
-      // console.log('in select Store:', storeObj);
       this.setState({
         ownerIdOfCurrentStore: owner.id,
         currentStore: storeObj,
         currentStoreName: `Welcome to ${storeObj.name}`,
         storeName: storeObj.name,
         showStore: true,
-        // ownerIdOfCurrentStore: owner.id,
       });
     });
   }
@@ -217,7 +214,6 @@ export default class App extends Component {
   }
 
   viewCart() {
-    // console.log('trying to view cart');
     this.setState({
       openCart: !this.state.openCart,
     });
@@ -225,7 +221,6 @@ export default class App extends Component {
 
   handleMyStoreClick() { // used to show reg modal when no
     this.setState({ showRegisterModal: true });
-    // console.log('setState in app');
   }
 
   handleUnmountRegisterModal() {
