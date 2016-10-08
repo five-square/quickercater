@@ -16,8 +16,8 @@ Email.compose = (orderInfo, storeName, context) => {
 
   emailHtml.push('<div><p>Below are your order details:</p></div>');
   emailHtml.push(`<div><h3>Order number: ${orderInfo.order.id}</h3></div>`);
-  emailHtml.push(`<div><h4>Event time & date: ${orderInfo.order.start_time} 
-                  ${orderInfo.order.request_date}</h4></div>`);
+  emailHtml.push(`<div><h4>Event time & date: <font color="blue"><i>${orderInfo.order.start_time} 
+                  ${orderInfo.order.request_date}</i></font></h4></div>`);
   emailHtml.push(`<div>
                   <table>
                   <thead>
