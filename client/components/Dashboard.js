@@ -28,6 +28,9 @@ export default class Dashboard extends Component {
     };
     this.openMenu = e => this.handleOpenMenu(e);
     this.closeMenu = e => this.handleCloseMenu(e);
+    this.onRowClickTF = this.handleOnRowClick.bind(this, true, false);
+    this.onRowClickFF = this.handleOnRowClick.bind(this, false, false);
+    this.onRowClickFT = this.handleOnRowClick.bind(this, false, true);
   }
 
   componentWillMount() {
@@ -64,7 +67,7 @@ export default class Dashboard extends Component {
 
   handleOnRowClick(pendingOrder, completedOrder, row) {
   // pendingOrder is bool whether click came from pendingOrder list
-    console.log('pendingOrder: ', pendingOrder, 'completedOrder: ', completedOrder);
+    // console.log('pendingOrder: ', pendingOrder, 'completedOrder: ', completedOrder);
     let orderId;
     let orderType;
     if (pendingOrder) {
@@ -77,9 +80,9 @@ export default class Dashboard extends Component {
       orderId = this.state.acceptedOrders[row].order._id;
       orderType = 'accepted';
     }
-    console.log('handleOnRowClick orderType: ', orderType);
+    // console.log('handleOnRowClick orderType: ', orderType);
     OrderAPI.fetchOrderDetails(orderId).then(resp => {
-      console.log(resp);
+      // console.log(resp);
       this.setState({ showOrderDetails: orderId,
         orderInfo: resp,
         orderState: orderType,
@@ -89,8 +92,9 @@ export default class Dashboard extends Component {
 
   handleOrderAccept(orderId) {
     OrderAPI.createAcceptOrderRelationship(orderId)
-      .then(resp => {
-        console.log('handleOrderAccept resp: ', resp);
+      .then(() => {
+      // .then(resp => {
+        // console.log('handleOrderAccept resp: ', resp);
         const mailOptions = {
           from: 'fivesquare43@gmail.com',
           to: `${this.state.orderInfo.customer.email}`,
@@ -99,8 +103,9 @@ export default class Dashboard extends Component {
           html: Email.compose(this.state.orderInfo, this.props.storeName, 'accepted'),
         };
         Customer.sendEmail(mailOptions, this.props.ownerId)
-          .then(response => {
-            console.log('response after confirmation email sent: ', response);
+          .then(() => {
+          // .then(response => {
+            // console.log('response after confirmation email sent: ', response);
           });
         this.fetchPendingOrders(this.props.ownerId);
         this.fetchAcceptedOrders(this.props.ownerId);
@@ -110,8 +115,9 @@ export default class Dashboard extends Component {
 
   handleOrderFulfilled(orderId) {
     OrderAPI.createFulfilledOrderRelationship(orderId)
-      .then(response => {
-        console.log('handleOrderFulfilled response: ', response);
+      .then(() => {
+      // .then(response => {
+        // console.log('handleOrderFulfilled response: ', response);
         this.fetchPendingOrders(this.props.ownerId);
         this.fetchAcceptedOrders(this.props.ownerId);
         this.fetchCompletedOrders(this.props.ownerId);
@@ -124,10 +130,11 @@ export default class Dashboard extends Component {
   }
 
   handleOrderReject(orderId) {
-    console.log('handleOrderReject orderId: ', orderId);
+    // console.log('handleOrderReject orderId: ', orderId);
     OrderAPI.deleteRejectedOrder(orderId)
-      .then(resp => {
-        console.log('handleOrderReject resp: ', resp);
+      .then(() => {
+      // .then(resp => {
+        // console.log('handleOrderReject resp: ', resp);
         this.fetchPendingOrders(this.props.ownerId);
         this.fetchAcceptedOrders(this.props.ownerId);
       });
@@ -186,7 +193,7 @@ export default class Dashboard extends Component {
             <CardText expandable>
               <OrderTable
                 AnyOrders={this.state.pendingOrders}
-                onRowClick={this.handleOnRowClick.bind(this, true, false)}
+                onRowClick={this.onRowClickTF}
               />
             </CardText>
           </Card>
@@ -205,7 +212,7 @@ export default class Dashboard extends Component {
             />
             <CardText expandable >
               <OrderTable
-                onRowClick={this.handleOnRowClick.bind(this, false, false)}
+                onRowClick={this.onRowClickFF}
                 AnyOrders={this.state.acceptedOrders}
               />
             </CardText>
@@ -225,7 +232,7 @@ export default class Dashboard extends Component {
             />
             <CardText expandable >
               <OrderTable
-                onRowClick={this.handleOnRowClick.bind(this, false, true)}
+                onRowClick={this.onRowClickFT}
                 AnyOrders={this.state.completedOrders}
               />
             </CardText>
