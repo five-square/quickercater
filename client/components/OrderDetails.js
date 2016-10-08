@@ -322,7 +322,7 @@ export default class OrderDetails extends Component {
                   )}
               </TableBody>
             </Table>
-            {this.state.package
+            {this.state.package && this.state.package.id > 0
               ? <h5>{this.state.package.name}: ${this.state.package.cost}</h5>
               : null
             }
