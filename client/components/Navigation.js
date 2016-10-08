@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import AppBar from 'material-ui/AppBar';
+import GoogleSignInNormal from '../public/btn_google_dark_normal_mine';
+// import GoogleSignInPressed from '../public/btn_google_dark_pressed_ios.svg';
 
 export default class Navigation extends Component {
 
@@ -40,6 +42,10 @@ export default class Navigation extends Component {
     const style = {
       raisedButton: {
         margin: 14,
+      },
+      signInButton: {
+        margin: 14,
+        backgroundColor: 'white',
       },
       navBar: {
         position: 'fixed',
@@ -89,9 +95,9 @@ export default class Navigation extends Component {
                 onClick={this.props.openRegisterModal}
               />
             : <RaisedButton
-              style={style.raisedButton}
-              label="Login"
-              secondary
+              style={style.signInButton}
+              icon={<GoogleSignInNormal />}
+              label="Sign in with Google"
               onClick={e => this.signInWithGoogle(e)}
             />
             }

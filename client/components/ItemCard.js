@@ -40,8 +40,9 @@ export default class ItemCard extends Component {
         position: 'absolute',
       },
       addToOrderButton: {
-        right: 10,
-        bottom: 20,
+        right: 50,
+        bottom: 10,
+        marginTop: 10,
         position: 'absolute',
       },
       cardActions: {
@@ -61,10 +62,11 @@ export default class ItemCard extends Component {
         fontSize: '1.1em',
       },
       addItem: {
-        width: '60%',
+        width: '90%',
         flex: '50%',
         marginLeft: 'auto',
         marginRight: 'auto',
+        borderRadius: 20,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
@@ -74,7 +76,7 @@ export default class ItemCard extends Component {
                 // <Avatar src={this.props.picture} />
     return (
       <div style={{ position: 'relative' }}>
-        <Card zDepth={2} style={{ borderRadius: 20 }}>
+        <Card zDepth={2} style={style.addItem}>
           <CardHeader
             title={this.props.item.name}
             subtitle={this.props.item.description}
