@@ -88,7 +88,7 @@ export default class StoreDescription extends React.Component {
           style={background}
         >
           <Card
-            style={{ backgroundColor: 'rgba(255, 255, 255, .10)' }}
+            style={{ backgroundColor: 'rgba(255, 255, 255, .01)' }}
             onMouseEnter={e => this.handleOnMouseEnter(e)}
             onMouseLeave={e => this.handleOnMouseLeave(e)}
             onTouchTap={e => this.handleClick(e)}
@@ -98,7 +98,7 @@ export default class StoreDescription extends React.Component {
               titleStyle={style.title}
               title={this.props.store.name}
               subtitleStyle={style.subTitle}
-              subtitle={this.props.store.slogan}
+              subtitle={this.props.store.description}
               avatar={this.handleAvatar()}
 
             />
