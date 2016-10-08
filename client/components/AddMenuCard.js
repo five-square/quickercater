@@ -91,28 +91,28 @@ export default class AddMenuCard extends Component {
     ];
     return (
       <div style={this.state.style}>
-        <Paper zDepth={this.state.hover}>
-          <Card
-            onMouseEnter={e => this.handleOnMouseEnter(e)}
-            onMouseLeave={e => this.handleOnMouseLeave(e)}
-            // containerStyle={{ backgroundColor: '#e0e0e0' }}
-          >
-            <CardTitle
-              title={'Add Menu'}
-              actAsExpander
-              showExpandableButton={false}
-            />
-            <CardActions style={style.cardActions}>
-              <FloatingActionButton
-                mini
-                style={style.floatingActionButton}
-                onTouchTap={e => this.handleOpen(e)}
-              >
-                <ContentAdd />
-              </FloatingActionButton>
-            </CardActions>
-          </Card>
-        </Paper>
+        <Card
+          onMouseEnter={e => this.handleOnMouseEnter(e)}
+          onMouseLeave={e => this.handleOnMouseLeave(e)}
+          containerStyle={{ borderRadius: 20 }}
+          style={{ borderRadius: 20 }}
+          zDepth={this.state.hover}
+        >
+          <CardTitle
+            title={'Add Menu'}
+            actAsExpander
+            showExpandableButton={false}
+          />
+          <CardActions style={style.cardActions}>
+            <FloatingActionButton
+              mini
+              style={style.floatingActionButton}
+              onTouchTap={e => this.handleOpen(e)}
+            >
+              <ContentAdd />
+            </FloatingActionButton>
+          </CardActions>
+        </Card>
         <div>
           <Dialog
             title="Add Menu"
