@@ -10,6 +10,7 @@ import Customer from '../models/CustomerAPI';
 import OrderConfirmation from './OrderConfirmation';
 import OrderDetails from './OrderDetails';
 import Email from './emailHtml';
+import Taxes from '../config/Taxes';
 
 export default class OrderCard extends React.Component {
 
@@ -68,6 +69,9 @@ export default class OrderCard extends React.Component {
       email: this.state.customerEmail,
       auth_key: true,
     };
+    const taxes = Number(((this.props.orderInfo.totalPrice - this.props.orderInfo.selectedPkgCost) *
+                  Taxes.texas.sales).toFixed(2));// Defaulted to Texas state for now..
+    const totalPrice = Number((this.props.orderInfo.totalPrice + taxes).toFixed(2));
     const orderInfo = {
       order: {
         id: '',
@@ -78,8 +82,9 @@ export default class OrderCard extends React.Component {
         start_time: this.formatTime(this.state.eventStartTime),
         end_time: this.formatTime(this.state.eventEndTime),
         fulfilled: false,
-        total_price: this.props.orderInfo.totalPrice,
+        total_price: totalPrice,
         address: this.state.eventAddress,
+        taxes,
       },
       items: this.props.orderInfo.order.map(itemInfo =>
         Object.assign({}, itemInfo.item,
@@ -111,7 +116,7 @@ export default class OrderCard extends React.Component {
               to: `${this.state.customerInfo.email}`,
               subject: 'Hello from QuickerCater',
               generateTextFromHTML: true,
-              html: Email.compose(this.state.orderInfo, this.props.storeName, 'pending'),
+              html: Email.compose(this.state.orderInfo, this.props.store.name, 'pending'),
             };
             Customer.sendEmail(mailOptions, this.props.ownerId)
               .then(response => {

@@ -410,6 +410,7 @@ dbInit.init = () => Node.cypherAsync({
       start_time: '10:00 am',
       end_time: '1:00 pm',
       fulfilled: false,
+      taxes: 0,
       total_price: 0,
       address: '321 RightBehindYou Ln.'
     })
@@ -420,6 +421,7 @@ dbInit.init = () => Node.cypherAsync({
       start_time: '10:00 am',
       end_time: '1:00 pm',
       fulfilled: false,
+      taxes: 0,
       total_price: 0,
       address: '321 RightBehindYou Ln.'
     })
@@ -430,6 +432,7 @@ dbInit.init = () => Node.cypherAsync({
       start_time: '10:00 am',
       end_time: '1:00 pm',
       fulfilled: false,
+      taxes: 0,
       total_price: 0,
       address: '321 RightBehindYou Ln.'
     })

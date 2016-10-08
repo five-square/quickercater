@@ -10,6 +10,8 @@ import AlertOrderReject from './AlertOrderReject';
 import OrderAPI from '../models/orderAPI';
 import Customer from '../models/CustomerAPI';
 import Email from './emailHtml';
+import Taxes from '../config/Taxes';
+
 
 export default class OrderDetails extends Component {
   constructor(props) {
@@ -24,16 +26,7 @@ export default class OrderDetails extends Component {
       package: this.props.orderInfo.package,
       removedItems: [],
       orderUpdated: false,
-      salesTax: 0.0825,
-      taxes: 0,
     };
-  }
-
-  componentWillMount() {
-    this.state.taxes = Number((this.props.orderInfo.items
-        .reduce((a, b) => a + (b.total), 0) * this.state.salesTax).toFixed(2));
-    this.state.order.total_price = Number((this.state.order.total_price +
-                                  this.state.taxes).toFixed(2));
   }
 
   handleOpen() {
@@ -87,14 +80,14 @@ export default class OrderDetails extends Component {
     }
 
     tempItems[itemPos].total =
-      Number((tempItems[itemPos].quantity * tempItems[itemPos].price).toFixed(2));
+      Number(tempItems[itemPos].quantity * tempItems[itemPos].price).toFixed(2);
 
-    tempOrder.total_price = tempItems.reduce((a, b) => a + parseFloat(b.total), 0);
+    const totalPrice = tempItems.reduce((a, b) => a + parseFloat(b.total), 0);
 
-    this.state.taxes = Number((tempOrder.total_price * this.state.salesTax).toFixed(2));
+    tempOrder.taxes = Number((totalPrice * Taxes.texas.sales).toFixed(2));
 
-    tempOrder.total_price = Number((tempOrder.total_price + (this.state.package.cost +
-                                    this.state.taxes)).toFixed(2));
+    tempOrder.total_price = Number(this.state.package.cost + tempOrder.taxes +
+          tempItems.reduce((a, b) => a + parseFloat(b.total), 0)).toFixed(2);
 
     this.setState({ items: tempItems, order: tempOrder, orderUpdated: true });
   }
@@ -104,9 +97,10 @@ export default class OrderDetails extends Component {
     const tempOrder = Object.assign({}, this.state.order);
     const itemPos = tempItems.map(item => item.id).indexOf(itemId);
     if (tempOrder.total_price > 0) {
-      tempOrder.total_price = Number((tempOrder.total_price -
-        (tempItems[itemPos].price * tempItems[itemPos].quantity *
-        (1 + this.state.salesTax))).toFixed(2));
+      tempOrder.taxes = Number((tempOrder.taxes - (tempItems[itemPos].price *
+                        tempItems[itemPos].quantity * (Taxes.texas.sales))).toFixed(2));
+      tempOrder.total_price = Number(tempOrder.total_price - (tempItems[itemPos].price *
+                      tempItems[itemPos].quantity * (1 + Taxes.texas.sales))).toFixed(2);
     }
     tempItems.splice(itemPos, 1);
     this.state.removedItems.push(itemId);
@@ -256,16 +250,16 @@ export default class OrderDetails extends Component {
           <Card>
             <CardText>
               {this.props.orderState === 'customerView'
-                ? <h4>Your Information: </h4>
-                : <h4>Customer Information: </h4>
+                ? <h3>Your Information: </h3>
+                : <h3>Customer Information: </h3>
               }
-              <h5>Name: {this.state.customer.name}</h5>
-              <h5>Email: {this.state.customer.email} </h5>
-              <h5>Phone: {this.state.customer.phone}</h5>
-              <h5>Address: {this.state.order.address}</h5>
-              <h5>Request Date: {this.state.order.request_date}</h5>
-              <h5>Start time: {this.state.order.start_time}</h5>
-              <h5>End time: {this.state.order.end_time}</h5>
+              <h4>Name: {this.state.customer.name}</h4>
+              <h4>Email: {this.state.customer.email} </h4>
+              <h4>Phone: {this.state.customer.phone}</h4>
+              <h4>Address: {this.state.order.address}</h4>
+              <h4>Request Date: {this.state.order.request_date}</h4>
+              <h4>Start time: {this.state.order.start_time}</h4>
+              <h4>End time: {this.state.order.end_time}</h4>
             </CardText>
           </Card>
           <div className="OrderTable">
@@ -294,7 +288,6 @@ export default class OrderDetails extends Component {
                     <TableRowColumn>
                       {this.props.orderState === 'accepted'
                         ? <TextField
-                          ref="quantity"
                           id={item.id.toString()}
                           type="number"
                           style={{ width: 50 }}
@@ -323,7 +316,7 @@ export default class OrderDetails extends Component {
               </TableBody>
             </Table>
             <h5>{this.state.package.name}: ${this.state.package.cost}</h5>
-            <h5>Taxes: ${this.state.taxes}</h5>
+            <h5>Taxes: ${this.state.order.taxes}</h5>
             <h4>Total Price ${this.state.order.total_price}</h4>
           </div>
         </Dialog>
