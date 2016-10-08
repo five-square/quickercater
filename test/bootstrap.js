@@ -4,6 +4,5 @@
 //
 // e.g. require(TEST_HELPER)
 // const path = require('path');
-console.log(`${__dirname}/test-helper.js`);
 
 global.TEST_HELPER = `${__dirname}/test-helper.js`;

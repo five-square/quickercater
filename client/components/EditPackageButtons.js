@@ -2,7 +2,6 @@ import React from 'react';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
-import ContentRemove from 'material-ui/svg-icons/content/remove';
 
 
 const EditPackageButtons = (props) => {

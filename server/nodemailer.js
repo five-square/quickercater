@@ -25,7 +25,7 @@ const smtpTransport = nodemailer.createTransport('SMTP', {
 });
 
 nm.sendConfirmation = (mailInfo) => {
-  var info = Object.assign({}, mailInfo);
+  const info = Object.assign({}, mailInfo);
   return db.findNode('Owner', info.ownerId)
     .then(ownerInfo => {
       info.mailOptions.cc = ownerInfo.properties.email;
@@ -33,18 +33,13 @@ nm.sendConfirmation = (mailInfo) => {
         smtpTransport.sendMail(info.mailOptions, (error, response) => {
           smtpTransport.close();
           if (error) {
-            console.log(error);
+            // console.log(error);
             reject(error);
           } else {
-            console.log(response);
+            // console.log(response);
             resolve(response);
           }
         });
       });
     });
 };
-
-
-
-
-
