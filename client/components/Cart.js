@@ -118,7 +118,6 @@ export default class Cart extends Component {
       <div>
         <Drawer
           width={350}
-          docked={false}
           openSecondary
           open={this.props.open}
           onRequestChange={e => this.handleToggle(e)}
