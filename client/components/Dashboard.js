@@ -128,6 +128,9 @@ export default class Dashboard extends Component {
   }
 
   handleModalCancel() {
+    this.fetchPendingOrders(this.props.ownerId);
+    this.fetchAcceptedOrders(this.props.ownerId);
+    this.fetchCompletedOrders(this.props.ownerId);
     this.setState({ showOrderDetails: -1 });
   }
 
@@ -139,6 +142,7 @@ export default class Dashboard extends Component {
         // console.log('handleOrderReject resp: ', resp);
         this.fetchPendingOrders(this.props.ownerId);
         this.fetchAcceptedOrders(this.props.ownerId);
+        this.fetchCompletedOrders(this.props.ownerId);
       });
   }
 

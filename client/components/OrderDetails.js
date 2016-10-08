@@ -133,9 +133,9 @@ export default class OrderDetails extends Component {
               };
               Customer.sendEmail(mailOptions, this.props.ownerId);
             });
+          this.setState({ open: false });
+          this.props.handleModalCancel();
         });
-      this.setState({ open: false });
-      this.props.handleModalCancel();
     }
   }
 
