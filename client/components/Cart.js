@@ -3,10 +3,11 @@ import Drawer from 'material-ui/Drawer';
 import Card from 'material-ui/Card';
 import CardHeader from 'material-ui/Card/CardHeader';
 import CardText from 'material-ui/Card/CardText';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import AppBar from 'material-ui/AppBar';
+
 import CartItemCard from './CartItemCard';
 import OrderCard from './OrderCard';
 
@@ -115,18 +116,27 @@ export default class Cart extends Component {
     const cartItems = this.createCartItemsArray();
     return (
       <div>
-        <Drawer width={300} openSecondary open={this.props.open} style={{ zIndex: 200 }} >
+        <Drawer
+          width={350}
+          docked={false}
+          openSecondary
+          open={this.props.open}
+          onRequestChange={e => this.handleToggle(e)}
+          style={{ zIndex: 200 }}
+        >
           <AppBar
             title="My Order"
             titleStyle={{ textAlign: 'left' }}
             iconStyleLeft={{ display: 'none' }}
-          >
-            <FlatButton
-              secondary
-              label="Close"
-              onTouchTap={e => this.handleToggle(e)}
-            />
-          </AppBar>
+            iconStyleRight={{ marginTop: 14 }}
+            iconElementRight={
+              <RaisedButton
+                secondary
+                label="Close"
+                onTouchTap={e => this.handleToggle(e)}
+              />
+            }
+          />
           <br />
           {cartItems}
         </Drawer>

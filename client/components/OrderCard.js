@@ -216,9 +216,14 @@ export default class OrderCard extends React.Component {
   renderComponent() {
     const style = {
       cancelBtn: {
-        right: 30,
+        right: 15,
         bottom: 0,
         position: 'absolute',
+      },
+      checkOutBtn: {
+        left: 15,
+        bottom: 0,
+        position: 'relative',
       },
       textColor: {
         color: 'black',
@@ -255,13 +260,16 @@ export default class OrderCard extends React.Component {
       return (<div>
         {this.props.orderInfo.selectedPkgId > 0
           ? <RaisedButton
-            primary label="Check out"
+            primary
+            label="Check out"
+            style={style.checkOutBtn}
             onTouchTap={e => this.handleOpen(e)}
           />
           : null
         }
         <FlatButton
-          primary label="Cancel"
+          primary
+          label="Cancel"
           style={style.cancelBtn}
           onTouchTap={e => this.handleRemoveOrder(e)}
         />

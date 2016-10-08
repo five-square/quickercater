@@ -7,6 +7,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { PopoverAnimationVertical } from 'material-ui/Popover';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+
 import ColorPicker from './ColorPicker';
 
 export default class DashboardNavBar extends Component {
@@ -110,7 +111,6 @@ export default class DashboardNavBar extends Component {
                 onTouchTap={this.props.toggleEditing}
               />
               <MenuItem primaryText="Edit Color Scheme" onTouchTap={this.closeMenuOpenDialog} />
-              <MenuItem primaryText="Edit Owner Profile" />
             </IconMenu>
           }
         />

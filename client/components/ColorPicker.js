@@ -12,6 +12,7 @@ import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
+
 import Colors from '../models/colorAPI';
 
 export default class ColorPicker extends React.Component {

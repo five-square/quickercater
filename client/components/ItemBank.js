@@ -4,6 +4,7 @@ import Card from 'material-ui/Card';
 import CardHeader from 'material-ui/Card/CardHeader';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+
 import BankItemList from './BankItemList';
 
 export default class ItemBank extends Component {
