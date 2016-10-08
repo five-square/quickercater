@@ -102,7 +102,7 @@ export default class RegisterModal extends React.Component {
 
   handleStoreDescriptionChange(e) {
     this.setState({
-      description: e.currentTarget.value,
+      newStoreDescription: e.currentTarget.value,
       disabled: this.handleMaxLength(e),
       available: (200 - e.currentTarget.value.length),
     });
@@ -290,6 +290,8 @@ export default class RegisterModal extends React.Component {
       },
       cursor: 'pointer',
     };
+
+    // A wild switch appears...
     switch (this.state.stepIndex) {
       case 0:
         return (

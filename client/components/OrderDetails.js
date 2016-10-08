@@ -6,10 +6,12 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Card from 'material-ui/Card';
 import CardText from 'material-ui/Card/CardText';
+
 import AlertOrderReject from './AlertOrderReject';
+
 import OrderAPI from '../models/orderAPI';
-import Customer from '../models/CustomerAPI';
-import Email from './emailHtml';
+import Customer from '../models/customerAPI';
+import Email from '../models/emailHtml';
 import Taxes from '../config/Taxes';
 
 

@@ -67,6 +67,7 @@ export default class Lobby extends Component {
       },
       searchDrop: {
         height: 4,
+        align: 'right',
       },
       searchText: {
         width: '50%',
