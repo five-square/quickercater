@@ -8,11 +8,12 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 
 import SortableListItem from './SortableListItem';
-import Menu from '../models/menuAPI';
 import AddItemCard from './AddItemCard';
-import Item from '../models/itemAPI';
 import EditMenu from './EditMenu';
 import ItemCard from './ItemCard';
+
+import Menu from '../models/menuAPI';
+import Item from '../models/itemAPI';
 
 export default class MenuCardDraggable extends React.Component {
 

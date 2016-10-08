@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
 import CardText from 'material-ui/Card/CardText';
+
 import ItemCard from './ItemCard';
+
 import Menu from '../models/menuAPI';
 
 export default class MenuCard extends Component {

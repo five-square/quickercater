@@ -6,9 +6,6 @@ import CardText from 'material-ui/Card/CardText';
 import TextField from 'material-ui/TextField';
 import Chip from 'material-ui/Chip';
 
-// import CardActions from 'material-ui/Card/CardActions';
-// import FlatButton from 'material-ui/FlatButton';
-
 export default class CartItemCard extends Component {
 
   constructor(props) {

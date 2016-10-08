@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import Badge from 'material-ui/Badge';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
 import Lobby from './Lobby';
 import StoreFront from './StoreFront';
-import Server from '../models/serverAPI';
 import Navigation from './Navigation';
 import Cart from './Cart';
+import RegisterModal from './RegisterModal';
+
+import Server from '../models/serverAPI';
 import cookieAPI from '../models/cookieAPI';
 import OwnerAPI from '../models/ownerAPI';
-import RegisterModal from './RegisterModal';
 import Colors from '../models/colorAPI';
 
 const muiTheme = getMuiTheme(Colors.defaultTheme);
@@ -66,7 +68,7 @@ export default class App extends Component {
       console.log('Unauthenticated user.');
     }
 
-    document.getElementById('mainContainer').style.backgroundColor = 'rgba(241, 235, 218, 1)';
+    document.getElementById('mainContainer').style.backgroundColor = 'rgba(245, 245, 245, 1)';
   }
 
   handleSelectStore(storeObj) {

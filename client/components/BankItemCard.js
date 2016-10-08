@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 import Chip from 'material-ui/Chip';
-// import Paper from 'material-ui/Paper';
 import { ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
+
 import AddItemToMenu from './AddItemToMenu';
 import EditItem from './EditItem';
 

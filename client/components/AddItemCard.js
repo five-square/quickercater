@@ -8,7 +8,9 @@ import Paper from 'material-ui/Paper';
 import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
 import { Tabs, Tab } from 'material-ui/Tabs';
+
 import AddItemList from './AddItemList';
+
 import Item from '../models/itemAPI';
 
 export default class AddItemCard extends React.Component {

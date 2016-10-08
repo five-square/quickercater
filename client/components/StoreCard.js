@@ -3,6 +3,7 @@ import Card from 'material-ui/Card';
 import CardHeader from 'material-ui/Card/CardHeader';
 import Paper from 'material-ui/Paper';
 import Avatar from 'material-ui/Avatar';
+
 import EditStore from './EditStore';
 
 export default class StoreCard extends React.Component {
@@ -11,7 +12,6 @@ export default class StoreCard extends React.Component {
     super(props);
     this.state = {
       hover: 2,
-      //banner: this.props.store.banner || 'http://i.imgur.com/LWHERKH.jpg',
     };
   }
 

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import PackageAPI from '../models/packageAPI';
+
 import PackageSlider from './PackageSlider';
 import AddPackageCard from './AddPackageCard';
+
+import PackageAPI from '../models/packageAPI';
 
 export default class PackageContainer extends Component {
   constructor(props) {
@@ -13,10 +15,8 @@ export default class PackageContainer extends Component {
   }
 
   componentWillMount() {
-    // console.log('cwmPKG,',this.props.ownerId);
     PackageAPI.getAllPackages(this.props.ownerId)
     .then(packages => {
-      // console.log('in PackageContainer: packages: ', packages);
       this.props.updatePackagesByOwner(packages);
       this.setState({
         packages,

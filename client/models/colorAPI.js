@@ -12,9 +12,13 @@ ColorAPI.defaultTheme = {
     canvasColor: '#EEEEEE', // all paper and cards
     shadowColor: '#000000', // hover shadows
     textColor: '#212121', // text color
-    alternateTextColor: '#F5F5F5', // text color in app/tab bars, buttons, and chips
+    alternateTextColor: '#FFFFFF', // text color in app/tab bars, buttons, and chips
     pickerHeaderColor: '#2196F3', // text color in app/tab bars, buttons, and chips
   },
+};
+
+ColorAPI.background = {
+  defaultColor: 'rgba(241, 235, 218, 1)',
 };
 
 export default ColorAPI;

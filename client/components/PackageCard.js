@@ -1,39 +1,38 @@
 import React from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
-import { Card, CardMedia, CardTitle } from 'material-ui/Card';
-import Paper from 'material-ui/Paper';
+import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+
 import EditPackage from './EditPackage';
-
-
 import AddPackageCard from './AddPackageCard';
 
 const style = {
   floatingEditButton: {
-
     right: 5,
     bottom: 0,
     position: 'absolute',
   },
   cardMedia: {
     height: 280,
-    fontSize: 18,
+  },
+  cardText: {
+    height: 40,
+    overflowY: 'auto',
   },
 };
-
 
 const PackageCard = (props) => (
   <Card style={props.style}>
     <CardMedia
       overlay={
-        <CardTitle title={props.pack.description} titleStyle={style.cardMedia} />
+        <CardTitle title={props.pack.name} />
       }
     >
       <img role="presentation" src={props.pack.picture} />
     </CardMedia>
-    <Paper zDepth={2} style={props.style.paper}>
-      <h1>{props.pack.name}</h1>
-    </Paper>
+    <CardText style={style.cardText}>
+      {props.pack.description}
+    </CardText>
     {props.editing
       ? <div style={style.floatingEditButton}>
         <EditPackage

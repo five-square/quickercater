@@ -6,6 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Chip from 'material-ui/Chip';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
+
 import EditItem from './EditItem';
 
 export default class ItemCard extends Component {

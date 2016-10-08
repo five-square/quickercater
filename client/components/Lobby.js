@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
+
 import StoreCard from './StoreCard';
-// import Server from '../models/serverAPI';
 
 export default class Lobby extends Component {
   constructor(props) {

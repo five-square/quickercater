@@ -3,12 +3,14 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import Paper from 'material-ui/Paper';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
 import MenuContainer from './MenuContainer';
-import OrderAPI from '../models/orderAPI';
-import Owner from '../models/ownerAPI';
 import Dashboard from './Dashboard';
 import PackageContainer from './PackageContainer';
 import StoreDescription from './StoreDescription';
+
+import OrderAPI from '../models/orderAPI';
+import Owner from '../models/ownerAPI';
 
 export default class StoreFront extends Component {
   constructor(props) {
@@ -53,10 +55,8 @@ export default class StoreFront extends Component {
   }
 
   handleEditStore(setStore) {
-    // console.log('in StoreFront handleEditStore before db call: ', setStore);
     Owner.updateStore(setStore, this.props.ownerIdOfCurrentStore)
     .then((store) => {
-      // console.log('in StoreFront handleEditStore after db call: ', store);
       this.setState({ store });
     });
   }

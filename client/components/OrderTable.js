@@ -8,7 +8,6 @@ import {
   TableRowColumn,
 } from 'material-ui/Table';
 
-
 export default class OrderTable extends Component {
   constructor(props) {
     super(props);
