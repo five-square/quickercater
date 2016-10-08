@@ -5,11 +5,13 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
-import OrderAPI from '../models/orderAPI';
-import Customer from '../models/CustomerAPI';
+
 import OrderConfirmation from './OrderConfirmation';
 import OrderDetails from './OrderDetails';
-import Email from './emailHtml';
+
+import OrderAPI from '../models/orderAPI';
+import Customer from '../models/customerAPI';
+import Email from '../models/emailHtml';
 import Taxes from '../config/Taxes';
 
 export default class OrderCard extends React.Component {

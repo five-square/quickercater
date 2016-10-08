@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
+
 import OrderTable from './OrderTable';
-import OrderAPI from './../models/orderAPI';
 import OrderDetails from './OrderDetails';
-import Customer from '../models/CustomerAPI';
-import Email from './emailHtml';
 import DashboardNavBar from './DashboardNavBar';
+
+import OrderAPI from './../models/orderAPI';
+import Customer from '../models/customerAPI';
+import Email from '../models/emailHtml';
 
 // Implement:
 // 1. fetchCompletedOrders - API, endpoint, db call
