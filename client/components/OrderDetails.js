@@ -88,7 +88,12 @@ export default class OrderDetails extends Component {
 
     tempOrder.taxes = (totalPrice * Taxes.texas.sales).toFixed(2);
 
-    tempOrder.total_price = (this.state.package.cost + parseFloat(tempOrder.taxes) +
+    let packCost = 0;
+    if (this.state.package) {
+      packCost = this.state.package.cost;
+    }
+
+    tempOrder.total_price = (packCost + parseFloat(tempOrder.taxes) +
           tempItems.reduce((a, b) => a + parseFloat(b.total), 0)).toFixed(2);
 
     this.setState({ items: tempItems, order: tempOrder, orderUpdated: true });
@@ -317,7 +322,10 @@ export default class OrderDetails extends Component {
                   )}
               </TableBody>
             </Table>
-            <h5>{this.state.package.name}: ${this.state.package.cost}</h5>
+            {this.state.package && this.state.package.id > 0
+              ? <h5>{this.state.package.name}: ${this.state.package.cost}</h5>
+              : null
+            }
             <h5>Taxes: ${this.state.order.taxes}</h5>
             <h4>Total Price ${this.state.order.total_price}</h4>
           </div>

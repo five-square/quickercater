@@ -71,32 +71,36 @@ export default class Cart extends Component {
               />
             )}
           </CardText>
-          <DropDownMenu
-            value={this.props.globalOrder[owner].selectedPkgId}
-            autoWidth
-            onChange={(e, value) => {
-              const tempOwner = owner;
-              this.handleChoosePkg(e, value, tempOwner);
-            }}
-            labelStyle={this.props.globalOrder[owner].selectedPkgId > 0
-              ? null
-              : style.defaultPkgText}
-          >
-            <MenuItem
-              key={0}
-              value={0}
-              primaryText="Choose a package"
-            />
-            {this.props.globalOrder[owner].packages.map((pack, index) => {
-              const pkgDesc = `${pack.name} : $ ${pack.cost}`;
-              const indexPack = index + 1;
-              return (<MenuItem
-                key={indexPack}
-                value={pack.id}
-                primaryText={pkgDesc}
-              />);
-            })}
-          </DropDownMenu>
+          {this.props.globalOrder[owner].packages.length > 0
+            ? <DropDownMenu
+              value={this.props.globalOrder[owner].selectedPkgId}
+              autoWidth
+              onChange={(e, value) => {
+                const tempOwner = owner;
+                this.handleChoosePkg(e, value, tempOwner);
+              }}
+              labelStyle={this.props.globalOrder[owner].selectedPkgId > 0
+                ? null
+                : style.defaultPkgText}
+            >
+              <MenuItem
+                key={0}
+                value={0}
+                primaryText="Choose a package"
+              />
+              {this.props.globalOrder[owner].packages.map((pack, index) => {
+                const pkgDesc = `${pack.name} : $ ${pack.cost}`;
+                const indexPack = index + 1;
+                return (<MenuItem
+                  key={indexPack}
+                  value={pack.id}
+                  primaryText={pkgDesc}
+                />);
+              })}
+            </DropDownMenu>
+            : null
+          }
+
           <CardText>
             Total Price = ${this.props.globalOrder[owner].totalPrice}
           </CardText>

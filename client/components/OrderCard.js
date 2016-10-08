@@ -63,9 +63,6 @@ export default class OrderCard extends React.Component {
   }
 
   handleSubmit() {
-    // this.setState({ open: false });
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'];
     const customerInfo = {
       id: '',
       name: this.state.customerName,
@@ -76,7 +73,6 @@ export default class OrderCard extends React.Component {
     const taxes = Number(((parseFloat(this.props.orderInfo.totalPrice) -
                   this.props.orderInfo.selectedPkgCost) * Taxes.texas.sales).toFixed(2));
     const totalPrice = Number((parseFloat(this.props.orderInfo.totalPrice) + taxes).toFixed(2));
-    const newline = '';
     const orderInfo = {
       order: {
         id: '',
@@ -258,7 +254,7 @@ export default class OrderCard extends React.Component {
     ];
     if (this.state.reviewOrder === false) {
       return (<div>
-        {this.props.orderInfo.selectedPkgId > 0
+        {this.props.orderInfo.selectedPkgId > 0 || this.props.orderInfo.packages.length === 0
           ? <RaisedButton
             primary
             label="Check out"
@@ -369,7 +365,7 @@ export default class OrderCard extends React.Component {
     } else if (this.state.submitted) {
       return (<OrderConfirmation
         orderId={this.state.newOrder}
-        storeName={this.props.storeName}
+        store={this.props.store}
         showMe
         ownerId={this.props.ownerId}
         resetAfterConfirmation={e => this.resetAfterConfirmation(e)}
