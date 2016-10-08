@@ -3,6 +3,7 @@ import Card from 'material-ui/Card';
 import CardHeader from 'material-ui/Card/CardHeader';
 import Paper from 'material-ui/Paper';
 import Avatar from 'material-ui/Avatar';
+import EditStore from './EditStore';
 
 export default class StoreCard extends React.Component {
 
@@ -101,6 +102,14 @@ export default class StoreCard extends React.Component {
               avatar={this.handleAvatar()}
 
             />
+            {this.props.editing ?
+              <EditStore
+                edit={this.props.editing}
+                store={this.props.store}
+                editStore={e => this.props.handleEditStore(e)}
+              />
+              : null
+            }
           </Card>
         </Paper>
         <br />
