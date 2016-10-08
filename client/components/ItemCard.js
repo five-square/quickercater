@@ -15,13 +15,13 @@ export default class ItemCard extends Component {
       item: {
         id: this.props.item.id,
         name: this.props.item.name,
-        price: this.props.item.price,
+        price: parseFloat(this.props.item.price),
         description: this.props.item.description,
         picture: this.props.picture,
       },
       ownerId: this.props.ownerId,
       quantity: 1,
-      priceToShow: this.props.item.price,
+      priceToShow: (this.props.item.price).toFixed(2),
       packages: this.props.packages,
     });
   }

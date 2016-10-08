@@ -86,9 +86,9 @@ export default class OrderDetails extends Component {
 
     const totalPrice = tempItems.reduce((a, b) => a + parseFloat(b.total), 0);
 
-    tempOrder.taxes = Number((totalPrice * Taxes.texas.sales).toFixed(2));
+    tempOrder.taxes = (totalPrice * Taxes.texas.sales).toFixed(2);
 
-    tempOrder.total_price = Number(this.state.package.cost + tempOrder.taxes +
+    tempOrder.total_price = (this.state.package.cost + parseFloat(tempOrder.taxes) +
           tempItems.reduce((a, b) => a + parseFloat(b.total), 0)).toFixed(2);
 
     this.setState({ items: tempItems, order: tempOrder, orderUpdated: true });
@@ -98,10 +98,10 @@ export default class OrderDetails extends Component {
     const tempItems = this.state.items.slice();
     const tempOrder = Object.assign({}, this.state.order);
     const itemPos = tempItems.map(item => item.id).indexOf(itemId);
-    if (tempOrder.total_price > 0) {
-      tempOrder.taxes = Number((tempOrder.taxes - (tempItems[itemPos].price *
+    if (parseFloat(tempOrder.total_price) > 0) {
+      tempOrder.taxes = ((parseFloat(tempOrder.taxes) - (tempItems[itemPos].price *
                         tempItems[itemPos].quantity * (Taxes.texas.sales))).toFixed(2));
-      tempOrder.total_price = Number(tempOrder.total_price - (tempItems[itemPos].price *
+      tempOrder.total_price = (parseFloat(tempOrder.total_price) - (tempItems[itemPos].price *
                       tempItems[itemPos].quantity * (1 + Taxes.texas.sales))).toFixed(2);
     }
     tempItems.splice(itemPos, 1);
