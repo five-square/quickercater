@@ -343,7 +343,7 @@ export default class ColorPicker extends React.Component {
                             display: 'inline-block',
                             margin: 10,
                             width: '40%',
-                            marginTop: 0
+                            marginTop: 0,
                           }}
                         />
                       </Card>

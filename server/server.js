@@ -96,8 +96,6 @@ AuthPort.on('auth', (req, res, profile) => {
   **********************************************************************************************
 */
 
-
-
 routes.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/public/index.html'));
 });
@@ -811,7 +809,7 @@ routes.post('/api/item/update', (req, res) => {
 });
 
 /**
- * Removes item object from a menu by item ID 
+ * Removes item object from a menu by item ID
  *
  * @param  {number} '/api/item/remove' item ID
  * @param  {number} menu ID

@@ -17,16 +17,16 @@ const db = require(`${global.__server}/db.js`);
   **********************************************************************************************
 */
 
-global.describe('The Function', () => {
-  const app = global.TestHelper.createApp();
-  app.use('/', routes);
-  app.testReady();
+// global.describe('The Function', () => {
+//   const app = global.TestHelper.createApp();
+//   app.use('/', routes);
+//   app.testReady();
 
-  global.it_('db.getMenuByOwnerId exists and is a function', function* anon() {
-    console.log('yep');
-    return db.getMenuByOwnerId.should.be.a('function');
-  });
-});
+//   global.it_('db.getMenuByOwnerId exists and is a function', function* anon() {
+//     console.log('yep');
+//     return db.getMenuByOwnerId.should.be.a('function');
+//   });
+// });
 
 /*
   **********************************************************************************************

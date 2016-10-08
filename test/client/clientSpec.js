@@ -8,7 +8,6 @@ import CateringOptions from '../../client/components/PackageCard';
 import Dashboard from '../../client/components/Dashboard';
 import ItemCard from '../../client/components/ItemCard';
 import Lobby from '../../client/components/Lobby';
-import Login from '../../client/components/Login';
 import MenuCard from '../../client/components/MenuCard';
 import Navigation from '../../client/components/Navigation';
 import OrderTable from '../../client/components/OrderTable';
@@ -136,12 +135,6 @@ global.describe('Component: Lobby', () => {
   });
 });
 
-global.describe('Component: Login', () => {
-  global.it('renders without exploding', () => {
-    expect(shallow(<Login />).length).to.be.above(0);
-  });
-});
-
 global.describe('Component: MenuCard', () => {
   global.it('renders without exploding', () => {
     expect(shallow(<MenuCard />).length).to.be.above(0);
@@ -223,12 +216,6 @@ global.describe('Component: ItemCard', () => {
 global.describe('Component: Lobby', () => {
   global.it('renders without exploding', () => {
     expect(shallow(<Lobby />).length).to.be.above(0);
-  });
-});
-
-global.describe('Component: Login', () => {
-  global.it('renders without exploding', () => {
-    expect(shallow(<Login />).length).to.be.above(0);
   });
 });
 
