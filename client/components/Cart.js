@@ -103,7 +103,7 @@ export default class Cart extends Component {
             orderInfo={this.props.globalOrder[owner]}
             deleteOrderAfterSubmission={this.props.deleteOrderAfterSubmission}
             ownerId={owner}
-            storeName={this.props.globalOrder[owner].storeName}
+            store={this.props.globalOrder[owner].store}
           />
         </Card>
       );

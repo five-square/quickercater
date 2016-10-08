@@ -39,6 +39,9 @@ Email.compose = (orderInfo, storeName, context) => {
   ).join(''));
   emailHtml.push('</tbody></table></div>');
   emailHtml.push(`<div>
+  <h4>Taxes: $${orderInfo.order.taxes}</h4>
+  </div>`);
+  emailHtml.push(`<div>
   <h4>${orderInfo.package.name}: $${orderInfo.package.cost}</h4>
   </div>`);
   emailHtml.push(`<div>

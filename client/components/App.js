@@ -102,11 +102,12 @@ export default class App extends Component {
       tempOrder[tempOwnerId] = {};
       tempOrder[tempOwnerId].order = [];
       tempOrder[tempOwnerId].totalPrice = 0;
-      tempOrder[tempOwnerId].storeName = this.state.storeName;
+      tempOrder[tempOwnerId].store = this.state.currentStore;
       tempOrder[tempOwnerId].packages = itemObj.packages;
       tempOrder[tempOwnerId].selectedPkgId = 0;
       tempOrder[tempOwnerId].selectedPkgDesc = '';
       tempOrder[tempOwnerId].selectedPkgCost = 0;
+      tempOrder[tempOwnerId].taxes = 0;
     }
    // find the item position in the global order array for that store
     const itemPos = tempOrder[tempOwnerId].order

@@ -177,6 +177,7 @@ db.createOrder = (order) => Node.cypherAsync({
       start_time: {start_time},
       end_time: {end_time},
       fulfilled: {fulfilled},
+      taxes: {taxes},
       total_price: {total_price},
       address: {address}
     }) 
@@ -188,6 +189,7 @@ db.createOrder = (order) => Node.cypherAsync({
     start_time: order.start_time,
     end_time: order.end_time,
     fulfilled: order.fulfilled,
+    taxes: order.taxes,
     total_price: order.total_price,
     address: order.address,
   },
@@ -427,10 +429,12 @@ db.updateOrderTotalPrice = (order) => Node.cypherAsync({
   query: `
     MATCH (order:CustomerOrder) WHERE ID(order) = {orderId}
     SET order.total_price = {total_price}
+    SET order.taxes = {taxes}
     RETURN order`,
   params: {
     orderId: order.id,
     total_price: order.total_price,
+    taxes: order.taxes,
   },
 })
 .then(response => response);

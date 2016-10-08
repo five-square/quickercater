@@ -33,10 +33,8 @@ nm.sendConfirmation = (mailInfo) => {
         smtpTransport.sendMail(info.mailOptions, (error, response) => {
           smtpTransport.close();
           if (error) {
-            // console.log(error);
             reject(error);
           } else {
-            // console.log(response);
             resolve(response);
           }
         });
