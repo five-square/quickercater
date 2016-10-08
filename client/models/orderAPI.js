@@ -91,8 +91,13 @@ orderAPI.fetchOrderDetails = (orderId) =>
          quantity: dbObj.relA.properties.quantity,
          total: dbObj.relA.properties.quantity * dbObj.item.properties.price })
     );
-    const pack = Object.assign({}, orderItemRel[0].package.properties,
-                              { id: orderItemRel[0].package._id });
+    console.log('orderItemRel: ', orderItemRel);
+    let pack = null;
+    if (orderItemRel[0].package) {
+      pack = Object.assign({}, orderItemRel[0].package.properties,
+                                { id: orderItemRel[0].package._id });
+    }
+
     const result = { items,
                     order: orderObj,
                     customer: orderItemRel[0].customer.properties,

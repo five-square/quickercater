@@ -258,7 +258,7 @@ export default class OrderCard extends React.Component {
     ];
     if (this.state.reviewOrder === false) {
       return (<div>
-        {this.props.orderInfo.selectedPkgId > 0
+        {this.props.orderInfo.selectedPkgId > 0 || this.props.orderInfo.packages.length === 0
           ? <RaisedButton
             primary
             label="Check out"
