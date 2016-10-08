@@ -121,7 +121,7 @@ export default class CartItemCard extends Component {
               hintText="0"
               type="number"
               style={style.quantityText}
-              floatingLabelText="Quanity"
+              floatingLabelText="Quantity"
               value={this.props.quantity}
               onChange={e => this.handleQuantityChange(e)}
               floatingLabelFixed

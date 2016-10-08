@@ -45,6 +45,11 @@ export default class Cart extends Component {
   createCartItemsArray() {
     const style = {
       defaultPkgText: { color: 'red' },
+      titleText: { 'font-weight': 'bold',
+                    fontSize: '1.5em',
+                    'text-decoration': 'underline' },
+      totalPriceText: { 'font-weight': 'bold',
+                    fontSize: '1.0em' },
     };
     if (this.props.globalOrder) {
       return Object.keys(this.props.globalOrder).map((owner, orderIndex) =>
@@ -53,6 +58,7 @@ export default class Cart extends Component {
             title={this.props.globalOrder[owner].store.name}
             actAsExpander
             showExpandableButton
+            titleStyle={style.titleText}
             onClick={e => this.handleShowHide(e)}
           />
           <CardText expandable>
@@ -101,7 +107,7 @@ export default class Cart extends Component {
             : null
           }
 
-          <CardText>
+          <CardText style={style.totalPriceText}>
             Total Price = ${this.props.globalOrder[owner].totalPrice}
           </CardText>
           <OrderCard
