@@ -44,9 +44,7 @@ export default class App extends Component {
     const sessId = cookieAPI.getCookie('sessionId');
 
     // sessId = 'ya29.Ci9qAxZIA7hXRvO68DYxb45faKUCweuu2YrGawMJzrH1LZ_U8ia_8GCw52jdmgS8CQ';
-    Server.getAllStores().then(stores => {
-      this.setState({ stores });
-    });
+    this.getAllStores();
 
     if (sessId !== undefined && sessId !== '') {
       OwnerAPI.getStoreAndOwnerByAuthKey(sessId).then(storeAndOwner => {
@@ -70,6 +68,13 @@ export default class App extends Component {
 
     document.getElementById('mainContainer').style.backgroundColor = 'rgba(245, 245, 245, 1)';
   }
+
+  getAllStores(){
+    Server.getAllStores().then(stores => {
+      this.setState({ stores });
+    });
+  }
+
 
   handleSelectStore(storeObj) {
     // console.log('Select store: ', storeObj);
@@ -257,6 +262,7 @@ export default class App extends Component {
               ? <RegisterModal
                 handleUnmountRegisterModal={this.unmountRegisterModal}
                 ownerId={this.state.currentOwnerId}
+                getAllStores={() => this.getAllStores.call(this)}
               />
               : null
             }
