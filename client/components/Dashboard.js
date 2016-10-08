@@ -198,6 +198,7 @@ export default class Dashboard extends Component {
             </CardText>
           </Card>
           <Card
+            expanded={this.state.acceptedOrders.length === 0 ? false : undefined}
             onMouseEnter={() => this.handleOnMouseEnter()}
             onMouseLeave={() => this.handleOnMouseLeave()}
           >
