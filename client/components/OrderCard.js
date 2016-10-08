@@ -64,6 +64,8 @@ export default class OrderCard extends React.Component {
 
   handleSubmit() {
     // this.setState({ open: false });
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'];
     const customerInfo = {
       id: '',
       name: this.state.customerName,
@@ -71,16 +73,16 @@ export default class OrderCard extends React.Component {
       email: this.state.customerEmail,
       auth_key: true,
     };
-    const taxes = Number(((this.props.orderInfo.totalPrice - this.props.orderInfo.selectedPkgCost) *
-                  Taxes.texas.sales).toFixed(2));// Defaulted to Texas state for now..
-    const totalPrice = Number((this.props.orderInfo.totalPrice + taxes).toFixed(2));
+    const taxes = Number(((parseFloat(this.props.orderInfo.totalPrice) -
+                  this.props.orderInfo.selectedPkgCost) * Taxes.texas.sales).toFixed(2));
+    const totalPrice = Number((parseFloat(this.props.orderInfo.totalPrice) + taxes).toFixed(2));
     const orderInfo = {
       order: {
         id: '',
         name: this.state.orderName,
         created_on: new Date(), // populate this in Neo4J query??
-        request_date: `${this.state.requestDate.getMonth() + 1}-
-                     ${this.state.requestDate.getDate()}-${this.state.requestDate.getFullYear()}`,
+        request_date: `${monthNames[this.state.requestDate.getMonth()]} 
+        ${this.state.requestDate.getDate()}th, ${this.state.requestDate.getFullYear()}`,
         start_time: this.formatTime(this.state.eventStartTime),
         end_time: this.formatTime(this.state.eventEndTime),
         fulfilled: false,

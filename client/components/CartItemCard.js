@@ -37,7 +37,7 @@ export default class CartItemCard extends Component {
       },
       quantity: this.state.quantity,
       ownerId: this.props.ownerId,
-      priceToShow: Number(this.props.item.price * this.state.quantity).toFixed(2),
+      priceToShow: (this.props.item.price * this.state.quantity).toFixed(2),
     });
   }
 
