@@ -89,3 +89,42 @@ h1, h2, .user-input {
   top: 0;
   left: 295px;
 }
+
+.orderDetailsCard{
+    box-shadow: 1px 1px 8px 1px rgba(0,0,0,0.2);
+    transition: 0.3s;
+    height: 190px;
+    position: relative;
+}
+
+.orderDetailsContainer {
+    padding: 2px 16px;
+}
+
+.orderDetailsCstmInfo {
+  float:left;
+  width:60%;
+  overflow:hidden;
+}
+
+.orderDetailsEvtInfo {
+  float:left;
+  width:40%;
+  overflow:hidden;
+}
+
+.orderDetailsTable {
+  float:left;
+  width: 100%;
+  overflow:hidden;
+}
+
+.orderDetailsTotalCost {
+  float:left;
+  width: 100%;
+}
+
+.orderDetailsInfotext{
+   font-size: .85em;
+  font-weight: 600;
+}
