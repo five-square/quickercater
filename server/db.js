@@ -28,6 +28,20 @@ const db = module.exports;
  * @param  {number} nodeId
  * @return {node object}
  */
+
+db.deleteRelationship = (parentLabel, parentId, relLabel, destLabel, destId) =>
+  Node.cypherAsync({
+    query: `
+      MATCH (parent:${parentLabel}) WHERE ID(parent) = {parentId}
+      MATCH (dest:${destLabel}) WHERE ID(dest) = {destId}
+      MATCH (parent)-[rel:${relLabel}]-(dest)
+      DELETE rel`,
+    params: {
+      parentId,
+      destId,
+    },
+  });
+
 db.findNode = (nodeLabel, nodeId) => Node.cypherAsync({
   query: `
     MATCH (node:${nodeLabel}) WHERE ID(node) = ${nodeId}
