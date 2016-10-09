@@ -16,57 +16,18 @@ const db = module.exports;
   **********************************************************************************************
 */
 
-db.createRelationship = (parentLabel, parentId, relLabel, destLabel, destIdArray) =>
-  Node.cypherAsync({
-    query: `
-      WITH {destIdArray} AS destIds
-      UNWIND destIds AS destId
-      MATCH (parent:${parentLabel}) WHERE ID(parent) = {parentId}
-      MATCH (dest:${destLabel}) WHERE ID(dest) = destId
-      MERGE (parent)-[rel:${relLabel}]->(dest)
-      RETURN parent, rel, dest`,
-    params: {
-      parentId,
-      destIdArray,
-    },
-  });
-
-db.findRelationship = (parentLabel, parentId, relLabel, destLabel, destId) =>
-  Node.cypherAsync({
-    query: `
-      MATCH (parent:${parentLabel}) WHERE ID(parent) = {parentId}
-      MATCH (dest:${destLabel}) WHERE ID(dest) = {destId}
-      MATCH (parent)-[rel:${relLabel}]-(dest)
-      RETURN rel`,
-    params: {
-      parentId,
-      destId,
-    },
-  });
-
-db.findRelationshipById = (relId) =>
-  Node.cypherAsync({
-    query: `
-      MATCH (rel) WHERE ID(rel) = {id}
-      RETURN rel`,
-    params: {
-      id: relId,
-    },
-  });
-
-db.deleteRelationship = (parentLabel, parentId, relLabel, destLabel, destId) =>
-  Node.cypherAsync({
-    query: `
-      MATCH (parent:${parentLabel}) WHERE ID(parent) = {parentId}
-      MATCH (dest:${destLabel}) WHERE ID(dest) = {destId}
-      MATCH (parent)-[rel:${relLabel}]-(dest)
-      DELETE rel`,
-    params: {
-      parentId,
-      destId,
-    },
-  });
-
+/**
+ * Finds node in db by label and id
+ * node object :
+ *       {
+ *        label: {string},
+ *         _id: {number},
+ *         properties: {object}
+ *       }
+ * @param  {string} nodelabel
+ * @param  {number} nodeId
+ * @return {node object}
+ */
 db.findNode = (nodeLabel, nodeId) => Node.cypherAsync({
   query: `
     MATCH (node:${nodeLabel}) WHERE ID(node) = ${nodeId}
@@ -84,6 +45,12 @@ db.findNode = (nodeLabel, nodeId) => Node.cypherAsync({
 })
 .catch(err => err);
 
+/**
+ * Deletes node by label and id
+ * @param  {string} node label
+ * @param  {number} node id
+ * @return {<none>}
+ */
 db.deleteNode = (nodeLabel, nodeId) => Node.cypherAsync({
   query: `
     MATCH (node:${nodeLabel}) WHERE ID(node) = ${nodeId}
@@ -104,8 +71,29 @@ db.deleteNode = (nodeLabel, nodeId) => Node.cypherAsync({
 
   **********************************************************************************************
 */
+/**
+ * Shape of owner node object:
+ * {
+  "_id": 3124,
+  "labels": [
+    "Owner"
+  ],
+  "properties": {
+    "phone": "555-444-5555",
+    "name": "Bob",
+    "description": "I love American food",
+    "auth_key": "ya29.Ci9qAxZIA7hXRvO68DYxb45faKUCweuu2YrGawMJzrH1LZ_U8ia_8GCw52jdmgS8CQ",
+    "email": "fivesquare43@gmail.com"
+  }
+}
+ */
 
 // !!! STILL NEEDS TO IMPLEMENT VALIDATION TO AVOID DUPLICATING DATA !!!
+/**
+ * Creates owner node in db
+ * @param  {object} owner object
+ * @return {owner node}
+ */
 db.createOwner = (owner) => Node.cypherAsync({
   query: `
     MERGE (owner:Owner {
@@ -126,11 +114,20 @@ db.createOwner = (owner) => Node.cypherAsync({
 })
 .then(response => response[0].owner);
 
+/**
+ * Finds all Owner nodes in database
+ * @return {owner node objects}
+ */
 db.findAllOwners = () => Node.cypherAsync({
   query: 'MATCH (owner:Owner) RETURN owner',
 })
 .then(response => response.map(e => e.owner));
 
+/**
+ * Finds owner node ny store Id
+ * @param  {number} storeid
+ * @return {owner node object}
+ */
 db.findOwnerByStoreId = (storeId) => Node.cypherAsync({
   query: `
     MATCH (store:Store) WHERE ID(store) = ${storeId}
@@ -142,6 +139,11 @@ db.findOwnerByStoreId = (storeId) => Node.cypherAsync({
 })
 .then(store => store[0]);
 
+/**
+ * Finds owner by Authkey
+ * @param  {string} authKey
+ * @return {owner node object}
+ */
 db.findOwnerByAuthKey = (authKey) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner) WHERE owner.auth_key = ${authKey}
@@ -151,6 +153,12 @@ db.findOwnerByAuthKey = (authKey) => Node.cypherAsync({
   },
 });
 
+/**
+ * Updates authKey by a specified ownerid
+ * @param  {number} ownerId
+ * @param  {string} new authKey
+ * @return {owner node object}
+ */
 db.updateOwnerAuthKey = (ownerId, authKey) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
@@ -168,6 +176,31 @@ db.updateOwnerAuthKey = (ownerId, authKey) => Node.cypherAsync({
 
   **********************************************************************************************
 */
+
+/**
+ * Shape of order node object:
+ * "order": {
+      "_id": 3177,
+      "labels": [
+        "CustomerOrder"
+      ],
+      "properties": {
+        "start_time": "10:00 am",
+        "address": "321 RightBehindYou Ln.",
+        "total_price": 0,
+        "created_on": "yesterday",
+        "request_date": "tomorrow after tomorrow",
+        "fulfilled": false,
+        "end_time": "1:00 pm",
+        "name": "Mexican Delivery"
+      }
+ */
+
+/**
+ * Creates order object node in db
+ * @param  {object} 
+ * @return {order node object}
+ */
 db.createOrder = (order) => Node.cypherAsync({
   query: `
     MERGE (order:CustomerOrder {
@@ -196,6 +229,13 @@ db.createOrder = (order) => Node.cypherAsync({
 })
 .then(response => response[0].order);
 
+
+
+/**
+ * Creates new customer node in db
+ * @param  {object} customerInfo
+ * @return {customer object node}
+ */
 db.createNewCustomer = (customerInfo) => Node.cypherAsync({
   query: `
     MERGE (customer:Customer {
@@ -216,6 +256,14 @@ db.createNewCustomer = (customerInfo) => Node.cypherAsync({
 
 /* Assumption here is that an array of item objects [{itemId: , quantity: },..]
 is passed in to add to the order*/
+
+/**
+ * Adds items to order relationship by orderId, ownerId & items
+ * @param  {number} orderId
+ * @param  {number} ownerId
+ * @param  {array} items
+ * @return {node object relationship between order, owner & items}
+ */
 db.addItemsToOrder = (orderId, items, ownerId) => Node.cypherAsync({
   query: `
     WITH {items} AS itemArray
@@ -234,47 +282,11 @@ db.addItemsToOrder = (orderId, items, ownerId) => Node.cypherAsync({
 .then(response => response);
 
 // Remember to add this {expires: {orderExpiry}}
-db.createOrderCustomerRelationship = (orderId, customerId, orderExpiry) => Node.cypherAsync({
-  query: `
-    MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
-    MATCH (customer:Customer) WHERE ID(customer) = ${customerId}
-    MERGE (order)<-[relA:CREATED {expires: {orderExpiry}}]-(customer)
-    MERGE (order)-[relB:VIEW]->(customer)
-    RETURN relA, relB`,
-  params: {
-    orderId,
-    orderExpiry,
-    customerId,
-  },
-})
-.then(response => response);
-
-db.createOrderPackageRelationship = (orderId, packageId) => Node.cypherAsync({
-  query: `
-    MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
-    MATCH (pkg:Package) WHERE ID(pkg) = ${packageId}
-    MERGE (order)-[rel:REQUEST]->(pkg)
-    RETURN rel`,
-  params: {
-    orderId,
-    packageId,
-  },
-})
-.then(response => response);
-
-db.createOrderOwnerRelationship = (ownerId, orderId) => Node.cypherAsync({
-  query: `
-    MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
-    MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
-    MERGE (owner)<-[relB:VIEW]-(order)
-    RETURN relB`,
-  params: {
-    orderId,
-    ownerId,
-  },
-})
-.then(response => response);
-
+/**
+ * Creates order relationship with customer, package & owner
+ * @param  {object} orderInfo
+ * @return {node object relationship between order, customer & package}
+ */
 db.createOrderAndRelationships = (orderInfo) => {
   let saveOrder = {};
   return db.createOrder(orderInfo.order)
@@ -292,6 +304,11 @@ db.createOrderAndRelationships = (orderInfo) => {
     .then(response => ({ order: saveOrder, relationships: response }));
 };
 
+/**
+ * Finds order node in db
+ * @param  {number} orderId
+ * @return {order node object}
+ */
 db.fetchOrder = (orderId) => Node.cypherAsync({
   query: `
     MATCH (order:CustomerOrder) WHERE ID(order) = {orderId}
@@ -312,6 +329,11 @@ db.fetchOrder = (orderId) => Node.cypherAsync({
 })
 .catch(err => err);
 
+/**
+ * Gets all pending order nodes by ownerId
+ * @param  {number} ownerId
+ * @return {order node object}
+ */
 db.fetchAllPendingOrders = (ownerId) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
@@ -325,6 +347,11 @@ db.fetchAllPendingOrders = (ownerId) => Node.cypherAsync({
 })
 .then(response => response);
 
+/**
+ * Finds accepted orders node by ownerId in db
+ * @param  {number} ownerId
+ * @return {order node object}
+ */
 db.fetchAllAcceptedOrders = (ownerId) =>
   Node.cypherAsync({
     query: `
@@ -336,6 +363,11 @@ db.fetchAllAcceptedOrders = (ownerId) =>
     },
   }).then(response => response);
 
+/**
+ * Assign
+ * @param  {[type]}
+ * @return {[type]}
+ */
 db.fetchAllCompletedOrders = (ownerId) =>
   Node.cypherAsync({
     query: `
@@ -347,6 +379,11 @@ db.fetchAllCompletedOrders = (ownerId) =>
     },
   }).then(response => response);
 
+/**
+ * 
+ * @param  {[type]}
+ * @return {[type]}
+ */
 db.changeOrderToFulfilled = (orderInfo) =>
   Node.cypherAsync({
     query: `
@@ -459,7 +496,27 @@ db.updateOrder = (order, items, removedItems) =>
 
   **********************************************************************************************
 */
+/**
+ * Shape of menu node object: (example:menu node object)
+ * {
+    "menu": {
+      "_id": 3142,
+      "labels": [
+        "Menu"
+      ],
+      "properties": {
+        "name": "Drinks",
+        "description": "Tasty beverages"
+      }
+    }
+  },
+ */
 
+/**
+ * Gets menu node by ownerId
+ * @param  {number} ownerId
+ * @return {menu node object}
+ */
 db.getMenuByOwnerId = (ownerId) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
@@ -470,6 +527,11 @@ db.getMenuByOwnerId = (ownerId) => Node.cypherAsync({
   },
 });
 
+/**
+ * Gets item nodes by menuId
+ * @param  {number} menuId
+ * @return {item node object}
+ */
 db.getItemsByMenuId = (menuId) => Node.cypherAsync({
   query: `
     MATCH (menu:Menu) WHERE ID(menu) = ${menuId}
@@ -480,6 +542,11 @@ db.getItemsByMenuId = (menuId) => Node.cypherAsync({
   },
 });
 
+/**
+ * Adds new item to menu based on menuId
+ * @param  {object} obj
+ * @return {item array}
+ */
 db.addNewItemToMenu = (obj) => Node.cypherAsync({
   query: `
     MATCH (menu:Menu) WHERE ID(menu) = ${obj.menuId}
@@ -492,6 +559,11 @@ db.addNewItemToMenu = (obj) => Node.cypherAsync({
 })
 .then(item => item[0]);
 
+/**
+ * Adds relationship of existing item node to menu
+ * @param  {object} object
+ * @return {items}
+ */
 db.addExistingItemToMenu = (obj) => Node.cypherAsync({
   query: `
     MATCH (menu:Menu) WHERE ID(menu) = ${obj.menuId}
@@ -592,7 +664,69 @@ db.updateMenuOrder = (menuArray) => Node.cypherAsync({
 
   **********************************************************************************************
 */
-
+/**
+ * Shape of store node object : (example:store node object)
+ *   {
+    "_id": 3172,
+    "labels": [
+      "Store"
+    ],
+    "properties": {
+      "primary3Color": "#BBDEFB",
+      "accent1Color": "#009688",
+      "borderColor": "#BDBDBD",
+      "address": "1620 E. Riverside Dr.",
+      "banner": "http://i.imgur.com/LWHERKH.jpg",
+      "accent2Color": "#00796B",
+      "description": "Sweet stuff",
+      "type": "Dessert",
+      "textColor": "#212121",
+      "picture": "http://churrocoaustin.com/wp-content/uploads/2014/12/ChurrCoLogoSalmon144x144.png",
+      "primary2Color": "#1976D2",
+      "name": "Churro Co.",
+      "pickerHeaderColor": "#2196F3",
+      "accent3Color": "#000000",
+      "primary1Color": "#2196F3",
+      "alternateTextColor": "#F5F5F5",
+      "slogan": "Smile, it's Churro time!",
+      "shadowColor": "#000000",
+      "canvasColor": "#EEEEEE"
+    }
+  },
+ */
+/**
+ * Creates a store node object in db
+ * @param  {object}
+ * store node object:
+   {
+    _id: {number},
+    labels: [
+       Store
+    ],
+    properties: {
+      primary3Color: {string},
+      accent1Color: {string},
+      borderColor: {string},
+      address: {string},
+      banner: {urlstring},
+      accent2Color: {string},
+      description: {string},
+      type: {string},
+      textColor: {string},
+      picture: {string},
+      primary2Color: {string},
+      name: {string},
+      pickerHeaderColor: {string},
+      accent3Color: {string},
+      primary1Color: {string},
+      alternateTextColor: {string},
+      slogan: {string},
+      shadowColor: {string},
+      canvasColor: {string}
+    }
+  },
+ * @return {store object node}
+ */
 db.createStore = (store) => Node.cypherAsync({
   query: `
     MERGE (store:Store {
@@ -617,6 +751,11 @@ db.createStore = (store) => Node.cypherAsync({
 })
 .then(response => response[0].store);
 
+/**
+ * Updates store node object information by store id
+ * @param  {object} store
+ * @return {updated store node object}
+ */
 db.updateStore = (store) => Node.cypherAsync({
   query: `
     MATCH (store:Store) WHERE ID(store) = ${store.id}
@@ -639,6 +778,11 @@ db.updateStore = (store) => Node.cypherAsync({
 })
 .then(stores => stores[0]);
 
+/**
+ * Updates colors properties in store node by storeId 
+ * @param  {object} store
+ * @return {store node object}
+ */
 db.updateStoreColors = (store) => Node.cypherAsync({
   query: `
     MATCH (store:Store) WHERE ID(store) = ${store.storeId}
@@ -650,6 +794,12 @@ db.updateStoreColors = (store) => Node.cypherAsync({
 })
 .then(stores => stores[0]);
 
+/**
+ * Links owner node to store node by ownerId & storeId
+ * @param  {number} ownerId
+ * @param  {number} storeId
+ * @return {array of store and owner node objects}
+ */
 db.linkOwnerToStore = (ownerId, storeId) => Node.cypherAsync({
   query: `MATCH (o:Owner) WHERE ID(o) = {ownerId}
           MATCH (s:Store) WHERE ID(s) = {storeId}
@@ -662,17 +812,30 @@ db.linkOwnerToStore = (ownerId, storeId) => Node.cypherAsync({
 })
 .then(resp => resp);
 
+/**
+ * Return all store nodes
+ * @return {store node objects}
+ */
 db.findAllStores = () => Node.cypherAsync({
   query: 'MATCH (stores:Store) RETURN stores',
 })
 .then(response => response.map(e => e.stores));
 
+/**
+ * Gets all store and owner node objects
+ * @return {Array of store and owner objects}
+ */
 db.getAllStoresAndOwners = () => Node.cypherAsync({
   query: `
     MATCH (owner:Owner)-[rel:CAN_EDIT]->(store:Store)
     RETURN store,owner`,
 }).then(resp => resp);
 
+/**
+ * Finds store node by owner Id
+ * @param  {number} ownerId
+ * @return {store node object}
+ */
 db.findStoreByOwnerId = (ownerId) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
@@ -683,6 +846,11 @@ db.findStoreByOwnerId = (ownerId) => Node.cypherAsync({
   },
 });
 
+/**
+ * Finds store and owner nodes by authKey
+ * @param  {string} authKey
+ * @return {Array of store and owner objects}
+ */
 db.findStoreAndOwnerByAuthKey = (authKey) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner) WHERE owner.auth_key = {authKey}
@@ -692,7 +860,31 @@ db.findStoreAndOwnerByAuthKey = (authKey) => Node.cypherAsync({
     authKey: authKey.authKey,
   },
 });
+/*****************************************************************
+These functions will service the GET, POST, UPDATE, and DELETE
+endpoints for items
+******************************************************************/
+/**
+ * Shape of item node object: (example: item node object)
+ * {
 
+  "_id": 3167,
+  "labels": [
+    "Item"
+  ],
+  "properties": {
+    "price": 6.99,
+    "name": "Quesadillas",
+    "description": "Fresh grilled",
+    "picture": false
+  }
+}
+ */
+/**
+ * Creates an item node object in db
+ * @param  {object} itemObj
+ * @return {item node object}
+ */
 db.createItem = (itemObj) => Node.cypherAsync({
   query: `
     MERGE (item:Item {
@@ -711,6 +903,11 @@ db.createItem = (itemObj) => Node.cypherAsync({
 })
 .then(response => response[0].item);
 
+/**
+ * Gets item node by itemId
+ * @param  {number} itemId
+ * @return {item node object}
+ */
 db.getItemById = (itemId) => {
   if (itemId === undefined) {
     throw new Error('Id is undefined');
@@ -730,6 +927,11 @@ db.getItemById = (itemId) => {
   }
 };
 
+/**
+ * Updates item node information by itemId
+ * @param  {object} itemObj
+ * @return {item node array}
+ */
 db.updateItem = (itemObj) => Node.cypherAsync({
   query: `
     MATCH (item:Item) WHERE ID(item) = ${itemObj.id}
@@ -744,6 +946,11 @@ db.updateItem = (itemObj) => Node.cypherAsync({
 })
 .then(item => item[0]);
 
+/**
+ * Deletes item node relationship by itemId then deletes node
+ * @param  {number} itemId
+ * @return {<none>}
+ */
 db.deleteItemById = (itemId) => Node.cypherAsync({
   query: `
     MATCH (item:Item)<-[r:CAN_EDIT]-(owner:Owner) WHERE ID(item) = ${itemId}
@@ -756,6 +963,11 @@ db.deleteItemById = (itemId) => Node.cypherAsync({
   },
 }).then(response => response);
 
+/**
+ * Assigns unassigned item nodes to owner by ownerId
+ * @param  {number} ownerId
+ * @return {item node object}
+ */
 db.getUnassignedItems = (ownerId) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner)-[rel:CAN_EDIT]->(item:Item) WHERE ID(owner) = ${ownerId}
@@ -766,6 +978,11 @@ db.getUnassignedItems = (ownerId) => Node.cypherAsync({
 })
 .then(items => items);
 
+/**
+ * removes item relationship from menu by itemId
+ * @param  {number} itemId
+ * @return {<none>}
+ */
 db.removeItemFromMenu = (itemId) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner)-[r1:CAN_EDIT]->(menu:Menu)-[r2:CAN_EDIT]->(item:Item)
@@ -778,6 +995,12 @@ db.removeItemFromMenu = (itemId) => Node.cypherAsync({
 })
 .then(data => data);
 
+//?????????????
+/**
+ * Prepares an item for removal by itemId
+ * @param  {number} itemId
+ * @return {[type]}
+ */
 db.prepareItemForRemove = (itemId) => Node.cypherAsync({
   query: `
     MATCH (menu:Menu)-[r1:CAN_EDIT]->(item:Item) WHERE ID(item) = ${itemId}
@@ -790,6 +1013,12 @@ db.prepareItemForRemove = (itemId) => Node.cypherAsync({
 })
 .then(data => data);
 
+//??????
+/**
+ * Updates item order
+ * @param  {array} itemArray
+ * @return {[type]}
+ */
 db.updateItemOrder = (itemArray) => Node.cypherAsync({
   query: `
     WITH {itemArray} AS itemArray
@@ -809,6 +1038,30 @@ db.updateItemOrder = (itemArray) => Node.cypherAsync({
 
  **********************************************************************************************
 */
+/**
+ *Shape of package node object in database: (example: package node)
+  {
+    "pack": {
+      "_id": 3076,
+      "labels": [
+        "Package"
+      ],
+      "properties": {
+        "cost": 75,
+        "name": "On-site",
+        "description": "The whole enchilada",
+        "type": "onSite",
+        "picture": "http://placehold.it/500x500"
+      }
+    }
+  }
+ */
+
+ /**
+  * Gets all package nodes by specified owner Id in db
+  * @param  {number} ownerId
+  * @return {package node object}
+  */
 db.getAllPackages = (ownerId) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
@@ -821,6 +1074,11 @@ db.getAllPackages = (ownerId) => Node.cypherAsync({
 })
 .then(response => response);
 
+/**
+ * Creates new package node object for an owner
+ * @param  {object} pkg
+ * @return {new package node object}
+ */
 db.createPackage = (pkg) => Node.cypherAsync({
   query: `
     MERGE(pack:Package {
@@ -844,6 +1102,11 @@ db.createPackage = (pkg) => Node.cypherAsync({
 })
 .then(response => response.pack);
 
+/**
+ * Deletes package-owner relationship from db
+ * @param  {number} packId
+ * @return {<none>}
+ */
 db.deletePack = (packId) => Node.cypherAsync({
   query: `
     MATCH (owner:Owner)-[rel:CAN_EDIT]->(pack:Package)
@@ -855,6 +1118,11 @@ db.deletePack = (packId) => Node.cypherAsync({
 })
 .then(data => data);
 
+/**
+ * Updates package node object properties by package id
+ * @param  {object} packObj
+ * @return {updated package node object}
+ */
 db.updatePackage = (packObj) => Node.cypherAsync({
   query: `
     MATCH (pack:Package) WHERE ID(pack) = ${packObj.id}
@@ -879,7 +1147,28 @@ db.updatePackage = (packObj) => Node.cypherAsync({
 
  /* ****************************************************************
  */
+/**
+ * Shape of owner node object: (example: owner object node)
+ * {
+  "_id": 3124,
+  "labels": [
+    "Owner"
+  ],
+  "properties": {
+    "phone": "555-444-5555",
+    "name": "Bob",
+    "description": "I love American food",
+    "auth_key": "ya29.Ci9qAxZIA7hXRvO68DYxb45faKUCweuu2YrGawMJzrH1LZ_U8ia_8GCw52jdmgS8CQ",
+    "email": "fivesquare43@gmail.com"
+  }
+}
+ */
 
+/**
+ * Finds owner node by email 
+ * @param  {string} email
+ * @return {owner object node}
+ */
 db.findOwnerByEmail = (email) => Node.cypherAsync({
   query: `MATCH (owner:Owner) WHERE owner.email = {email}
   RETURN owner`,
