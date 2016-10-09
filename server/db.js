@@ -198,7 +198,7 @@ db.updateOwnerAuthKey = (ownerId, authKey) => Node.cypherAsync({
 
 /**
  * Creates order object node in db
- * @param  {object} 
+ * @param  {object}
  * @return {order node object}
  */
 db.createOrder = (order) => Node.cypherAsync({
@@ -282,6 +282,46 @@ db.addItemsToOrder = (orderId, items, ownerId) => Node.cypherAsync({
 .then(response => response);
 
 // Remember to add this {expires: {orderExpiry}}
+db.createOrderCustomerRelationship = (orderId, customerId, orderExpiry) => Node.cypherAsync({
+  query: `
+     MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
+     MATCH (customer:Customer) WHERE ID(customer) = ${customerId}
+     MERGE (order)<-[relA:CREATED {expires: {orderExpiry}}]-(customer)
+     MERGE (order)-[relB:VIEW]->(customer)
+     RETURN relA, relB`,
+  params: {
+    orderId,
+    orderExpiry,
+    customerId,
+  },
+})
+ .then(response => response);
+
+db.createOrderPackageRelationship = (orderId, packageId) => Node.cypherAsync({
+  query: `
+     MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
+     MATCH (pkg:Package) WHERE ID(pkg) = ${packageId}
+     MERGE (order)-[rel:REQUEST]->(pkg)
+     RETURN rel`,
+  params: {
+    orderId,
+    packageId,
+  },
+})
+ .then(response => response);
+
+db.createOrderOwnerRelationship = (ownerId, orderId) => Node.cypherAsync({
+  query: `
+     MATCH (order:CustomerOrder) WHERE ID(order) = ${orderId}
+     MATCH (owner:Owner) WHERE ID(owner) = ${ownerId}
+     MERGE (owner)<-[relB:VIEW]-(order)
+     RETURN relB`,
+  params: {
+    orderId,
+    ownerId,
+  },
+})
+ .then(response => response);
 /**
  * Creates order relationship with customer, package & owner
  * @param  {object} orderInfo
