@@ -145,7 +145,6 @@ routes.get('/', (req, res) => {
 
 /**
 
-
  * Gets all store and owner objects in database
  * Store object:
  *    {
@@ -545,52 +544,6 @@ routes.post('/api/menu/delete/empty', (req, res) => {
         res.status(404).send(JSON.stringify('Menu not deleted'));
       });
     });
-  });
-});
-
-/*
-  **********************************************************************************************
-
-  Handles endpoints for Relationship data. Methods served are GET, POST, and DELETE(POST).
-
-  Make sure you are running the Neo4j server first!
-
-  **********************************************************************************************
-*/
-
-routes.post('/api/relationship/', (req, res) => {
-  const parentLabel = req.body.parent_label;
-  const parentId = req.body.parent_id;
-  const relLabel = req.body.rel_label;
-  const nodeLabel = req.body.node_label;
-  const nodeId = [req.body.node_id];
-  db.findRelationship(parentLabel, parentId, relLabel, nodeLabel, nodeId)
-  .then(dbData => {
-    res.status(200).send(dbData[0]);
-  });
-});
-
-routes.post('/api/relationship/create', (req, res) => {
-  const parentLabel = req.body.parent_label;
-  const parentId = req.body.parent_id;
-  const relLabel = req.body.rel_label;
-  const nodeLabel = req.body.node_label;
-  const nodeId = [req.body.node_id];
-  db.createRelationship(parentLabel, parentId, relLabel, nodeLabel, nodeId)
-  .then(dbData => {
-    res.status(201).send(dbData[0]);
-  });
-});
-
-routes.post('/api/relationship/delete', (req, res) => {
-  const parentLabel = req.body.parent_label;
-  const parentId = req.body.parent_id;
-  const relLabel = req.body.rel_label;
-  const nodeLabel = req.body.node_label;
-  const nodeId = [req.body.node_id];
-  db.deleteRelationship(parentLabel, parentId, relLabel, nodeLabel, nodeId)
-  .then(dbData => {
-    res.status(202).send(dbData);
   });
 });
 
