@@ -40,15 +40,14 @@ export default class RegisterModal extends React.Component {
       address: this.state.newStoreAddress,
       slogan: this.state.newStoreSlogan,
       description: this.state.newStoreDescription,
-      type: this.state.newStoreType,
+      type: this.state.newStoreType || '',
       banner: this.state.newStoreBanner,
       colors: Colors.defaultTheme.palette,
     };
     this.setState({ dialogOpen: false });
-    OwnerAPI.createStore(newStoreInfo, this.props.ownerId).then(x =>{
+    OwnerAPI.createStore(newStoreInfo, this.props.ownerId).then(() => {
       this.props.getAllStores();
     });
-
   }
 
   handleClose() {
