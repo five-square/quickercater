@@ -85,7 +85,7 @@ export default class Navigation extends Component {
                 label="My Store"
                 secondary
                 onClick={() => this.props.goToMyStore(
-                Object.assign({}, this.props.myStore.properties, { id: this.props.myStore._id })
+                Object.assign({}, this.props.myStore, { id: this.props.myStore.id })
               )}
               />
               : <RaisedButton

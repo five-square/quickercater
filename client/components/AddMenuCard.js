@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
 import CardActions from 'material-ui/Card/CardActions';
-import Paper from 'material-ui/Paper';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import Dialog from 'material-ui/Dialog';
