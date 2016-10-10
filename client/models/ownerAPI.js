@@ -60,7 +60,8 @@ OwnerAPI.createStore = (store, ownerId) =>
  *                picture: {string},
  *                address: {string},
  *                slogan: {string},
- *                description: {string}
+ *                description: {string},
+ *                banner: {string}
  *              }
  *
  * @param  {Store Object}
@@ -83,6 +84,7 @@ OwnerAPI.updateStore = (newStore, ownerId) =>
     description: store.store.properties.description,
     slogan: store.store.properties.slogan,
     picture: store.store.properties.picture,
+    banner: store.store.properties.banner,
   }));
 
 OwnerAPI.updateStoreColors = (storeObj) =>

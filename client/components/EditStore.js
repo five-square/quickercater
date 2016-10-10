@@ -224,7 +224,8 @@ export default class EditStoreInfo extends Component {
             onChange={e => this.handleStorePictureChange(e)}
           />
           <Avatar
-            style={{ position: 'absolute', left: '50%', top: '46%', height: 60, width: 60, fontSize: 30 }}
+            style={{
+              position: 'absolute', left: '50%', top: '46%', height: 60, width: 60, fontSize: 30 }}
             children={this.props.store.name.charAt(0)}
           />
         </div>);
