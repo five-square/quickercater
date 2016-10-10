@@ -291,7 +291,10 @@ export default class App extends Component {
             masterMuiTheme={muiTheme}
           />
           : <MuiThemeProvider muiTheme={muiTheme}>
-            <Lobby stores={this.state.stores} selectStore={this.selectStore} />
+            {this.state.stores
+              ? <Lobby stores={this.state.stores} selectStore={this.selectStore} />
+              : null
+            }
           </MuiThemeProvider>
         }
         <MuiThemeProvider>

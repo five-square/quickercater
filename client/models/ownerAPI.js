@@ -143,42 +143,39 @@ OwnerAPI.getStoreAndOwnerByAuthKey = (sessionId) =>
     body: JSON.stringify({ authKey: sessionId }),
   })
   .then(data => data.json())
-  .then(storeAndOwner => {
-    console.log('in ownerAPI: storeAndOwner', storeAndOwner[0].store === null);
-
-    return storeAndOwner[0].store === null
-      ? [{ owner: { id: storeAndOwner[0].owner._id } }]
-      : [{
-        owner: {
-          id: storeAndOwner[0].owner._id,
-        },
-        store: {
-          id: storeAndOwner[0].store._id,
-          name: storeAndOwner[0].store.properties.name,
-          address: storeAndOwner[0].store.properties.address,
-          description: storeAndOwner[0].store.properties.description,
-          slogan: storeAndOwner[0].store.properties.slogan,
-          picture: storeAndOwner[0].store.properties.picture,
-          banner: storeAndOwner[0].store.properties.banner,
-          type: storeAndOwner[0].store.properties.type,
-          colors: {
-            palette: {
-              primary1Color: storeAndOwner[0].store.properties.primary1Color,
-              primary2Color: storeAndOwner[0].store.properties.primary2Color,
-              primary3Color: storeAndOwner[0].store.properties.primary3Color,
-              accent1Color: storeAndOwner[0].store.properties.accent1Color,
-              accent2Color: storeAndOwner[0].store.properties.accent2Color,
-              accent3Color: storeAndOwner[0].store.properties.accent3Color,
-              borderColor: storeAndOwner[0].store.properties.borderColor,
-              canvasColor: storeAndOwner[0].store.properties.canvasColor,
-              shadowColor: storeAndOwner[0].store.properties.shadowColor,
-              textColor: storeAndOwner[0].store.properties.textColor,
-              alternateTextColor: storeAndOwner[0].store.properties.alternateTextColor,
-              pickerHeaderColor: storeAndOwner[0].store.properties.pickerHeaderColor,
-            },
+  .then(storeAndOwner => (storeAndOwner[0].store === null
+    ? [{ owner: { id: storeAndOwner[0].owner._id } }]
+    : [{
+      owner: {
+        id: storeAndOwner[0].owner._id,
+      },
+      store: {
+        id: storeAndOwner[0].store._id,
+        name: storeAndOwner[0].store.properties.name,
+        address: storeAndOwner[0].store.properties.address,
+        description: storeAndOwner[0].store.properties.description,
+        slogan: storeAndOwner[0].store.properties.slogan,
+        picture: storeAndOwner[0].store.properties.picture,
+        banner: storeAndOwner[0].store.properties.banner,
+        type: storeAndOwner[0].store.properties.type,
+        colors: {
+          palette: {
+            primary1Color: storeAndOwner[0].store.properties.primary1Color,
+            primary2Color: storeAndOwner[0].store.properties.primary2Color,
+            primary3Color: storeAndOwner[0].store.properties.primary3Color,
+            accent1Color: storeAndOwner[0].store.properties.accent1Color,
+            accent2Color: storeAndOwner[0].store.properties.accent2Color,
+            accent3Color: storeAndOwner[0].store.properties.accent3Color,
+            borderColor: storeAndOwner[0].store.properties.borderColor,
+            canvasColor: storeAndOwner[0].store.properties.canvasColor,
+            shadowColor: storeAndOwner[0].store.properties.shadowColor,
+            textColor: storeAndOwner[0].store.properties.textColor,
+            alternateTextColor: storeAndOwner[0].store.properties.alternateTextColor,
+            pickerHeaderColor: storeAndOwner[0].store.properties.pickerHeaderColor,
           },
         },
-      }];
-  });
+      },
+    }]
+  ));
 
 export default OwnerAPI;
