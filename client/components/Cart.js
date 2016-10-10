@@ -45,10 +45,10 @@ export default class Cart extends Component {
   createCartItemsArray() {
     const style = {
       defaultPkgText: { color: 'red' },
-      titleText: { 'font-weight': 'bold',
+      titleText: { fontWeight: 'bold',
                     fontSize: '1.5em',
-                    'text-decoration': 'underline' },
-      totalPriceText: { 'font-weight': 'bold',
+                    textDecoration: 'underline' },
+      totalPriceText: { fontWeight: 'bold',
                     fontSize: '1.0em' },
     };
     if (this.props.globalOrder) {

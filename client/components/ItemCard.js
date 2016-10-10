@@ -22,7 +22,7 @@ export default class ItemCard extends Component {
       },
       ownerId: this.props.ownerId,
       quantity: 1,
-      priceToShow: (this.props.item.price).toFixed(2),
+      priceToShow: (parseFloat(this.props.item.price)).toFixed(2),
       packages: this.props.packages,
     });
   }
