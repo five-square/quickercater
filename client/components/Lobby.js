@@ -52,6 +52,7 @@ export default class Lobby extends Component {
     this.setState({
       searchBy: choice,
       searchHint: hint,
+      open: false,
     });
   }
 
