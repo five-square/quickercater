@@ -4,7 +4,6 @@ import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
 import Card from 'material-ui/Card';
 import CardTitle from 'material-ui/Card/CardTitle';
 import { Tabs, Tab } from 'material-ui/Tabs';
