@@ -11,6 +11,7 @@ export default class StoreDescription extends React.Component {
     super(props);
     this.state = {
       hover: 2,
+      banner: this.props.store.banner,
     };
   }
 

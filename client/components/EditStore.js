@@ -5,6 +5,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import TextField from 'material-ui/TextField';
 import Cropper from 'react-cropper';
+import Avatar from 'material-ui/Avatar';
 import CircularProgress from 'material-ui/CircularProgress';
 
 export default class EditStoreInfo extends Component {
@@ -180,7 +181,7 @@ export default class EditStoreInfo extends Component {
 
   renderPreview() {
     let divToRender = '';
-    const picture = this.props.store.picture;
+    const picture = this.state.picture;
     const style = {
       imgPrev: {
         position: 'absolute',
@@ -204,7 +205,7 @@ export default class EditStoreInfo extends Component {
         <div>
           <img
             role="presentation"
-            src={picture}
+            src={this.state.picture}
             style={style.imgPrev}
           />
           <input
@@ -222,10 +223,9 @@ export default class EditStoreInfo extends Component {
             style={style.imageInput}
             onChange={e => this.handleStorePictureChange(e)}
           />
-          <img
-            role="presentation"
-            src={this.state.picture}
-            style={style.imgPrev}
+          <Avatar
+            style={{ position: 'absolute', left: '50%', top: '46%', height: 60, width: 60, fontSize: 30 }}
+            children={this.props.store.name.charAt(0)}
           />
         </div>);
     }
@@ -258,7 +258,7 @@ export default class EditStoreInfo extends Component {
         <div>
           <img
             role="presentation"
-            src={banner}
+            src={this.state.banner}
             style={style.imgPrev}
           />
           <input
@@ -268,7 +268,7 @@ export default class EditStoreInfo extends Component {
             onChange={e => this.handleStoreBannerChange(e)}
           />
         </div>);
-    } else {
+    } else { // has a banner?
       divToRender = (
         <div>
           <input
@@ -278,7 +278,7 @@ export default class EditStoreInfo extends Component {
           />
           <img
             role="presentation"
-            src={this.state.banner}
+            src={this.props.store.banner}
             style={style.imgPrev}
           />
         </div>);
