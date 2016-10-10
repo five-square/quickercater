@@ -137,6 +137,7 @@ export default class StoreFront extends Component {
               ownerId={this.props.ownerId}
               editing={this.state.editing}
               store={this.state.store}
+              background={{ height: 180, backgroundImage: `url(${this.state.store.banner})` }}
               handleEditStore={e => this.handleEditStore(e)}
             /><br />
             <Paper zDepth={2} style={style.paper}>
