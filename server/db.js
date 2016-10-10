@@ -789,8 +789,8 @@ db.createStore = (store) => Node.cypherAsync({
       address: {address},
       banner: {banner},
       slogan: {slogan},
-      type: {type},
-      description: {description}
+      description: {description},
+      type: {type}
     })
     SET store += {colors}
     RETURN store`,

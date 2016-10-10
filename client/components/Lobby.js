@@ -46,7 +46,6 @@ export default class Lobby extends Component {
 
   handleSelectSearchOption(choice) {
     let hint = 'Caterer';
-    console.log('in Lobby: ', choice);
     if (choice === 'type') {
       hint = 'Category';
     }
@@ -54,7 +53,6 @@ export default class Lobby extends Component {
       searchBy: choice,
       searchHint: hint,
     });
-    console.log('This state name test: ', this.state.searchBy);
   }
 
   render() {
@@ -95,6 +93,7 @@ export default class Lobby extends Component {
         width: '100%',
       },
     };
+
     return (
       <div className="Lobby">
         <div style={style.searchBar}>
@@ -106,7 +105,7 @@ export default class Lobby extends Component {
             onChange={this.changeSearchValue}
           />
           <RaisedButton
-            style={{ width: '20%' }}
+            style={{ width: '20%', textAlign: 'center' }}
             primary
             onTouchTap={this.openMenu}
             label="Options"
