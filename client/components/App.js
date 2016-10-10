@@ -48,7 +48,6 @@ export default class App extends Component {
 
     if (sessId !== undefined && sessId !== '') {
       OwnerAPI.getStoreAndOwnerByAuthKey(sessId).then(storeAndOwner => {
-        console.log('in App: storeAndOwner', storeAndOwner);
         if (storeAndOwner && storeAndOwner.length > 0 && storeAndOwner[0].store) {
           // console.log('Owner of storeAndOwner:', storeAndOwner);
           this.setState({

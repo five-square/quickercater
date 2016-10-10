@@ -434,7 +434,7 @@ db.fetchAllCompletedOrders = (ownerId) =>
   }).then(response => response);
 
 /**
- * 
+ *
  * @param  {[type]}
  * @return {[type]}
  */
@@ -835,7 +835,7 @@ db.updateStore = (store) => Node.cypherAsync({
 .then(stores => stores[0]);
 
 /**
- * Updates colors properties in store node by storeId 
+ * Updates colors properties in store node by storeId
  * @param  {object} store
  * @return {store node object}
  */
@@ -916,10 +916,11 @@ db.findStoreAndOwnerByAuthKey = (authKey) => Node.cypherAsync({
     authKey: authKey.authKey,
   },
 });
-/*****************************************************************
-These functions will service the GET, POST, UPDATE, and DELETE
-endpoints for items
-******************************************************************/
+/*
+  ****************************************************************
+  These functions will service the GET, POST, UPDATE, and DELETE
+  endpoints for items
+  ******************************************************************/
 /**
  * Shape of item node object: (example: item node object)
  * {
@@ -1051,7 +1052,7 @@ db.removeItemFromMenu = (itemId) => Node.cypherAsync({
 })
 .then(data => data);
 
-//?????????????
+// ?????????????
 /**
  * Prepares an item for removal by itemId
  * @param  {number} itemId
@@ -1069,7 +1070,7 @@ db.prepareItemForRemove = (itemId) => Node.cypherAsync({
 })
 .then(data => data);
 
-//??????
+// ??????
 /**
  * Updates item order
  * @param  {array} itemArray
@@ -1221,7 +1222,7 @@ db.updatePackage = (packObj) => Node.cypherAsync({
  */
 
 /**
- * Finds owner node by email 
+ * Finds owner node by email
  * @param  {string} email
  * @return {owner object node}
  */
