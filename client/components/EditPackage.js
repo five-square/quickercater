@@ -9,7 +9,6 @@ export default class EditPackage extends Component {
 
   constructor(props) {
     super(props);
-    console.log('Edit Package constructor props', this.props);
     this.state = {
       open: false,
       hover: 2,
