@@ -2,14 +2,20 @@ import React from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import Chip from 'material-ui/Chip';
 
 import EditPackage from './EditPackage';
 import AddPackageCard from './AddPackageCard';
 
 const style = {
-  floatingEditButton: {
+  floatingButtons: {
     right: 5,
     bottom: 0,
+    position: 'absolute',
+  },
+  floatingDeleteButton: {
+    right: 10,
+    bottom: 90,
     position: 'absolute',
   },
   cardMedia: {
@@ -19,10 +25,24 @@ const style = {
     height: 40,
     overflowY: 'auto',
   },
+  priceChip: {
+    margin: 5,
+    padding: 2,
+    position: 'absolute',
+    right: '2%',
+    top: '2%',
+    zIndex: 190,
+  },
+  priceText: {
+    fontSize: '1.1em',
+  },
 };
 
 const PackageCard = (props) => (
   <Card style={props.style}>
+    <Chip style={style.priceChip}>
+      <span style={style.priceText}>{`$${(+props.pack.cost).toFixed(2)}`}</span>
+    </Chip>
     <CardMedia
       overlay={
         <CardTitle title={props.pack.name} />
@@ -34,7 +54,7 @@ const PackageCard = (props) => (
       {props.pack.description}
     </CardText>
     {props.editing
-      ? <div style={style.floatingEditButton}>
+      ? <div style={style.floatingButtons}>
         <EditPackage
           ownerId={props.ownerId}
           package={props.pack}
