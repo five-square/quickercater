@@ -4,6 +4,8 @@ import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import TextField from 'material-ui/TextField';
+import Cropper from 'react-cropper';
+import CircularProgress from 'material-ui/CircularProgress';
 
 export default class EditStoreInfo extends Component {
 
@@ -11,14 +13,18 @@ export default class EditStoreInfo extends Component {
     super(props);
     this.state = {
       open: false,
+      cropOpen: false,
+      loading: false,
+      cropped: false,
       hover: 2,
       name: this.props.store.name,
       description: this.props.store.description,
       slogan: this.props.store.slogan,
       picture: this.props.store.picture,
       address: this.props.store.address,
-      banner: this.props.store.banner || 'http://i.imgur.com/LWHERKH.jpg',
+      banner: this.props.store.banner,
     };
+    this.crop = e => this.handleCrop(e);
   }
 
   componentWillReceiveProps(newProps) {
@@ -27,6 +33,10 @@ export default class EditStoreInfo extends Component {
 
   handleOpen() {
     this.setState({ open: true });
+  }
+
+  handleCropOpen() {
+    this.setState({ cropOpen: true });
   }
 
   handleSubmitEdit() {
@@ -104,8 +114,73 @@ export default class EditStoreInfo extends Component {
     this.setState({ open: false });
   }
 
+  handleCancelCrop() {
+    this.setState({ cropOpen: false });
+  }
+
+  handleCrop() {
+    return new Promise(resolve => {
+      this.setState({ loading: true });
+      resolve(this.refs.cropper.getCroppedCanvas().toDataURL());
+    }).then(data => {
+      this.setState({ banner: data, cropOpen: false, loading: false });
+    });
+  }
+
+  renderCrop() {
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary
+        onTouchTap={e => this.handleCancelCrop(e)}
+      />,
+      <FlatButton
+        label="Submit"
+        primary
+        keyboardFocused
+        onTouchTap={this.crop}
+      />,
+    ];
+    const btnStyle = {
+      position: 'absolute',
+      left: '73%',
+      bottom: '27%',
+      width: '20%',
+    };
+    return (
+      <div>
+        <FlatButton
+          secondary
+          label="Edit Banner"
+          style={btnStyle}
+          onTouchTap={e => this.handleCropOpen(e)}
+        />
+        <Dialog
+          modal
+          open={this.state.cropOpen}
+          title="Image Crop"
+          actions={actions}
+          onRequestClose={(e) => this.handleCancelCrop(e)}
+        >
+          { this.state.loading ?
+            <CircularProgress />
+          : <Cropper
+            ref={'cropper'}
+            src={this.state.banner}
+            style={{ height: 400, width: '100%' }}
+            aspectRatio={16 / 9}
+            rotatable={false}
+            zoomOnWheel={false}
+          />
+        }
+        </Dialog>
+      </div>
+    );
+  }
+
   renderPreview() {
     let divToRender = '';
+    const picture = this.props.store.picture;
     const style = {
       imgPrev: {
         position: 'absolute',
@@ -124,12 +199,12 @@ export default class EditStoreInfo extends Component {
         position: 'absolute',
       },
     };
-    if (this.state.picture !== false) {
+    if (picture !== false && picture !== '') {
       divToRender = (
         <div>
           <img
             role="presentation"
-            src={this.state.picture}
+            src={picture}
             style={style.imgPrev}
           />
           <input
@@ -149,7 +224,7 @@ export default class EditStoreInfo extends Component {
           />
           <img
             role="presentation"
-            src={this.props.store.picture}
+            src={this.state.picture}
             style={style.imgPrev}
           />
         </div>);
@@ -162,20 +237,20 @@ export default class EditStoreInfo extends Component {
     const banner = this.props.store.banner;
     const style = {
       imgPrev: {
-        position: 'absolute', //
+        position: 'absolute', // ****
         height: '25%',
         width: '25%',
         left: '70%',
         top: '38%',
-      },
-      imageInput: { // // // // // ///// /// //
-        top: '5%',
+      },             //  || || || |/|\| | |/||\| ||  /|\  ||  /|| |||| ||
+      imageInput: { // || //// || //|\\ | \\||// || //|\\ || //|| //// ||
+        top: '5%', //  || \\\\ || \\|// | //||\\ ||// | \\||// || \\\\ ||
         opacity: 0,
         left: '70%',
         width: '25%',
         height: '81%',
         cursor: 'pointer',
-        position: 'absolute', //
+        position: 'absolute', // ****
       },
     };
     if (banner !== false && banner !== '') {
@@ -183,7 +258,7 @@ export default class EditStoreInfo extends Component {
         <div>
           <img
             role="presentation"
-            src={this.state.banner}
+            src={banner}
             style={style.imgPrev}
           />
           <input
@@ -203,7 +278,7 @@ export default class EditStoreInfo extends Component {
           />
           <img
             role="presentation"
-            src={this.props.store.banner}
+            src={this.state.banner}
             style={style.imgPrev}
           />
         </div>);
@@ -230,6 +305,9 @@ export default class EditStoreInfo extends Component {
         position: 'absolute',
         left: '84%',
         top: '64%',
+      },
+      editImgBtn: {
+        position: 'absolute',
       },
     };
     // action buttons for Modal
@@ -270,6 +348,7 @@ export default class EditStoreInfo extends Component {
           <div>
             { this.renderPreview() }
             { this.renderBannerPreview() }
+            { this.renderCrop() }
             <TextField
               hintText="Name"
               floatingLabelText="Enter store Name"

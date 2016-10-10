@@ -22,10 +22,6 @@ export default class StoreDescription extends React.Component {
     this.setState({ hover: 2 });
   }
 
-  handleClick() {
-    this.props.selectStore(Object.assign({}, this.props.store, { id: this.props.id }));
-  }
-
   handleAvatar() {
     let pic = (
       <Avatar
@@ -76,21 +72,17 @@ export default class StoreDescription extends React.Component {
           1px 0px 0 #000`,
       },
     };
-    let background = { backgroundColor: 'white' };
-    if (this.props.store.banner !== '') {
-      background = { height: 180, backgroundImage: `url(${this.props.store.banner})` };
-    }
+
     return (
       <div style={this.props.style}>
         <Paper
           zDepth={this.state.hover}
-          style={background}
+          style={this.props.background}
         >
           <Card
             style={{ backgroundColor: 'rgba(255, 255, 255, .01)' }}
             onMouseEnter={e => this.handleOnMouseEnter(e)}
             onMouseLeave={e => this.handleOnMouseLeave(e)}
-            onTouchTap={e => this.handleClick(e)}
           >
             <CardHeader
               style={style.header}
