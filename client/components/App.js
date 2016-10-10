@@ -48,17 +48,18 @@ export default class App extends Component {
 
     if (sessId !== undefined && sessId !== '') {
       OwnerAPI.getStoreAndOwnerByAuthKey(sessId).then(storeAndOwner => {
+        console.log('in App: storeAndOwner', storeAndOwner);
         if (storeAndOwner && storeAndOwner.length > 0 && storeAndOwner[0].store) {
           // console.log('Owner of storeAndOwner:', storeAndOwner);
           this.setState({
             myStore: storeAndOwner[0].store,
-            currentOwnerId: storeAndOwner[0].owner._id,
+            currentOwnerId: storeAndOwner[0].owner.id,
           });
         } else if (storeAndOwner.length > 0 && storeAndOwner[0].owner) {
           console.log('Logged in, no associated store', storeAndOwner);
           this.setState({
             showRegisterModal: true,
-            currentOwnerId: storeAndOwner[0].owner._id,
+            currentOwnerId: storeAndOwner[0].owner.id,
           });
         }
       });
@@ -283,7 +284,7 @@ export default class App extends Component {
             addItemToOrder={e => this.handleAddItemToOrder(e)}
             updateTotalPrice={this.updateTotalPrice}
             showDashboard={
-              this.state.myStore && (this.state.myStore._id === this.state.currentStore.id)
+              this.state.myStore && (this.state.myStore.id === this.state.currentStore.id)
             }
             ownerIdOfCurrentStore={this.state.ownerIdOfCurrentStore}
             colorTheme={Colors.defaultTheme}
