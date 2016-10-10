@@ -6,6 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Chip from 'material-ui/Chip';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
+import Avatar from 'material-ui/Avatar';
 
 import EditItem from './EditItem';
 
@@ -55,7 +56,7 @@ export default class ItemCard extends Component {
         padding: 2,
         // backgroundColor: '#26C6DA',
         position: 'absolute',
-        right: '-4%',
+        right: '-16%',
         top: '22%',
       },
       priceText: {
@@ -80,8 +81,8 @@ export default class ItemCard extends Component {
           <CardHeader
             title={this.props.item.name}
             subtitle={this.props.item.description}
-            avatar={this.props.picture}
-            style={{ width: '95%', height: 50 }}
+            avatar={<Avatar src={this.props.picture} size={60} />}
+            style={{ width: '85%', height: 50 }}
             titleStyle={{ fontSize: 20 }}
             subtitleStyle={{ marginTop: 10 }}
             children={
