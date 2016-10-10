@@ -35,6 +35,8 @@ export default class PackageSlider extends Component {
       slidesPerView: 1,
     };
 
+    console.log(this.props.packages);
+
     return (
       <Paper zDepth={2} style={this.props.style.paper}>
         <div className="center" style={this.props.style.slider}>

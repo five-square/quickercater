@@ -160,6 +160,13 @@ export default class AddPackageCard extends React.Component {
   }
 
   render() {
+    const style = {
+      floatingEditButton: {
+        right: 10,
+        bottom: 150,
+        position: 'absolute',
+      },
+    };
     // action buttons for Modal
     const actions = [
       <FlatButton
@@ -181,6 +188,7 @@ export default class AddPackageCard extends React.Component {
           mini
           onTouchTap={e => this.handleOpen(e)}
           zDepth={0}
+          style={style.floatingEditButton}
         >
           <ContentAdd />
         </FloatingActionButton>

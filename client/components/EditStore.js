@@ -289,10 +289,9 @@ export default class EditStoreInfo extends Component {
 
   render() {
     const style = {
-      floatingActionButton: {
-        top: 15,
-        right: 20,
-        bottom: 20,
+      floatingEditButton: {
+        right: 15,
+        bottom: 35,
         position: 'absolute',
       },
       cardActions: {
@@ -330,11 +329,11 @@ export default class EditStoreInfo extends Component {
     const count = (200 - this.props.store.description.length);
     // This is the actual modal
     return (
-      <div style={style.editBtn}>
+      <div>
         <FloatingActionButton
-          zDepth={0}
+          zDepth={2}
           secondary
-          mini
+          style={style.floatingEditButton}
           onTouchTap={() => this.setState({ open: true })}
         >
           <ModeEdit />

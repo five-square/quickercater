@@ -142,11 +142,11 @@ export default class EditPackage extends Component {
 
   render() {
     const style = {
-      // floatingEditButton: {
-      //   right: 170,
-      //   bottom: 20,
-      //   position: 'absolute',
-      // },
+      floatingEditButton: {
+        right: 10,
+        bottom: 210,
+        position: 'absolute',
+      },
       cardActions: {
         position: 'relative',
         height: 30,
