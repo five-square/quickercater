@@ -4,9 +4,6 @@ import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowCol
   from 'material-ui/Table';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import Card from 'material-ui/Card';
-import CardText from 'material-ui/Card/CardText';
-
 import AlertOrderReject from './AlertOrderReject';
 
 import OrderAPI from '../models/orderAPI';
@@ -247,87 +244,100 @@ export default class OrderDetails extends Component {
         <Dialog
           autoScrollBodyContent
           title={this.props.orderState === 'customerView'
-            ? 'Review Order'
-            : `Order # ${this.state.order.id}`}
+            ? 'Review Order:'
+            : `Order # ${this.state.order.id}:`}
           actions={this.buttonsToRender()}
           modal={false}
           open={this.state.open}
           onRequestClose={(e) => this.handleClose(e)}
         >
-          <Card>
-            <CardText>
-              {this.props.orderState === 'customerView'
-                ? <h3>Your Information: </h3>
-                : <h3>Customer Information: </h3>
-              }
-              <h4>Name: {this.state.customer.name}</h4>
-              <h4>Email: {this.state.customer.email} </h4>
-              <h4>Phone: {this.state.customer.phone}</h4>
-              <h4>Address: {this.state.order.address}</h4>
-              <h4>Request Date: {this.state.order.request_date}</h4>
-              <h4>Start time: {this.state.order.start_time}</h4>
-              <h4>End time: {this.state.order.end_time}</h4>
-            </CardText>
-          </Card>
+          <div className="orderDetailsCard">
+            <div className="orderDetailsContainer">
+              <div className="orderDetailsCstmInfo">
+                {this.props.orderState === 'customerView'
+                  ? <h4><b>Your Information:</b></h4>
+                  : <h4><b>Customer Information:</b></h4>
+                }
+                <div className="orderDetailsInfotext">
+                  <p>Name: {this.state.customer.name}</p>
+                  <p>Email: {this.state.customer.email} </p>
+                  <p>Phone: {this.state.customer.phone}</p>
+                  <p>Address: {this.state.order.address}</p>
+                </div>
+              </div>
+              <div className="orderDetailsEvtInfo">
+                <h4><b>Event Information:</b></h4>
+                <div className="orderDetailsInfotext">
+                  <p>Request Date: {this.state.order.request_date}</p>
+                  <p>Start time: {this.state.order.start_time}</p>
+                  <p>End time: {this.state.order.end_time}</p>
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="OrderTable">
-            <Table>
-              <TableHeader
-                adjustForCheckbox={false}
-                displaySelectAll={false}
-              >
-                <TableRow>
-                  <TableHeaderColumn>Item Id</TableHeaderColumn>
-                  <TableHeaderColumn>Name</TableHeaderColumn>
-                  <TableHeaderColumn>Quantity</TableHeaderColumn>
-                  <TableHeaderColumn>Price</TableHeaderColumn>
-                  <TableHeaderColumn>Total</TableHeaderColumn>
-                  {this.props.orderType === 'accepted'
-                    ? <TableHeaderColumn>''</TableHeaderColumn>
-                    : null
-                  }
-                </TableRow>
-              </TableHeader>
-              <TableBody displayRowCheckbox={false}>
-                {this.state.items.map(item =>
-                  <TableRow selectable={false} key={item.id}>
-                    <TableRowColumn>{item.id}</TableRowColumn>
-                    <TableRowColumn>{item.name}</TableRowColumn>
-                    <TableRowColumn>
-                      {this.props.orderState === 'accepted'
-                        ? <TextField
-                          id={item.id.toString()}
-                          type="number"
-                          style={{ width: 50 }}
-                          value={item.quantity}
-                          onChange={e => this.handleQuantityChange(e)}
-                          floatingLabelFixed
-                        />
-                      : item.quantity
-                      }
-
-                    </TableRowColumn>
-                    <TableRowColumn>${item.price}</TableRowColumn>
-                    <TableRowColumn>${item.total}</TableRowColumn>
-                    {this.props.orderState === 'accepted'
-                      ? <TableRowColumn>
-                        <FlatButton
-                          label="Remove"
-                          secondary
-                          onTouchTap={e => this.handleRemoveItem(e, item.id)}
-                        />
-                      </TableRowColumn>
+            <div className="orderDetailsTable">
+              <Table>
+                <TableHeader
+                  adjustForCheckbox={false}
+                  displaySelectAll={false}
+                >
+                  <TableRow>
+                    <TableHeaderColumn>Item Id</TableHeaderColumn>
+                    <TableHeaderColumn>Name</TableHeaderColumn>
+                    <TableHeaderColumn>Quantity</TableHeaderColumn>
+                    <TableHeaderColumn>Price</TableHeaderColumn>
+                    <TableHeaderColumn>Total</TableHeaderColumn>
+                    {this.props.orderType === 'accepted'
+                      ? <TableHeaderColumn>''</TableHeaderColumn>
                       : null
                     }
                   </TableRow>
-                  )}
-              </TableBody>
-            </Table>
-            {this.state.package && this.state.package.id > 0
-              ? <h5>{this.state.package.name}: ${this.state.package.cost}</h5>
-              : null
-            }
-            <h5>Taxes: ${this.state.order.taxes}</h5>
-            <h4>Total Price ${this.state.order.total_price}</h4>
+                </TableHeader>
+                <TableBody displayRowCheckbox={false}>
+                  {this.state.items.map(item =>
+                    <TableRow selectable={false} key={item.id}>
+                      <TableRowColumn>{item.id}</TableRowColumn>
+                      <TableRowColumn>{item.name}</TableRowColumn>
+                      <TableRowColumn>
+                        {this.props.orderState === 'accepted'
+                          ? <TextField
+                            id={item.id.toString()}
+                            type="number"
+                            style={{ width: 50 }}
+                            value={item.quantity}
+                            onChange={e => this.handleQuantityChange(e)}
+                            floatingLabelFixed
+                          />
+                        : item.quantity
+                        }
+
+                      </TableRowColumn>
+                      <TableRowColumn>${item.price}</TableRowColumn>
+                      <TableRowColumn>${item.total}</TableRowColumn>
+                      {this.props.orderState === 'accepted'
+                        ? <TableRowColumn>
+                          <FlatButton
+                            label="Remove"
+                            secondary
+                            onTouchTap={e => this.handleRemoveItem(e, item.id)}
+                          />
+                        </TableRowColumn>
+                        : null
+                      }
+                    </TableRow>
+                    )}
+                </TableBody>
+              </Table>
+            </div>
+            <div className="orderDetailsTotalCost">
+              {this.state.package && this.state.package.id > 0
+                ? <h5>{this.state.package.name}: ${this.state.package.cost}</h5>
+                : null
+              }
+              <h5>Taxes: ${this.state.order.taxes}</h5>
+              <h4>Total Price: ${this.state.order.total_price}</h4>
+            </div>
           </div>
         </Dialog>
       </div>
