@@ -8,15 +8,19 @@ Navigate to [QuickerCater](https://quickercater.herokuapp.com) and Login using y
 
 ### Prerequisities
 
-What things you need to install the software and how to install them
+QuickerCater utilitizes the power of [Neo4j](https://neo4j.com/download) to handle persistent data storage.  Navigate to the site and follow the instructions to start using it.
 
-```
-Give examples
-```
+QuickerCater also utilitizes the power of [Node.js](https://nodejs.org/en/) to run the application locally during development.  We recommend downloading version 6.7.0 to enjoy the full power of this wonderful runtime.
 
 ### Installing
 
-After forking/downloading the code, navigate in your terminal to the root folder of the project and run
+After installing Neo4j and Node, clone the source repository by typing
+
+```
+$ git clone https://github.com/rubber-duckies/the-frank-tank
+```
+
+into your terminal.  Navigate to the root folder of the project and type
 
 ```
 npm install
@@ -64,13 +68,13 @@ The database used is Neo4j.  You can download it [here](https://neo4j.com/downlo
 
 Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
-## Authors
+## Authors (all full-stack)
 
-* **Abel Costilla** - *Initial work*
-* **Francis Toto** - *Initial work*
-* **Garret Holmes** - *Initial work*
-* **Walter Ayala** - *Initial work*
-* **Vinod Thimmapuram** - *Initial work*
+* **[Abel Costilla](https://github.com/aecostilla)**
+* **[Francis Toto](https://github.com/francistoto)**
+* **[Garret Holmes](https://github.com/malignantz)**
+* **[Walter Ayala](https://github.com/walterayalae)**
+* **[Vinod Thimmapuram](https://github.com/tgvinodkumar)**
 
 ## License
 
