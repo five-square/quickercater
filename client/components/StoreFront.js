@@ -133,7 +133,7 @@ export default class StoreFront extends Component {
         <MuiThemeProvider muiTheme={getMuiTheme(this.state.colorTheme)}>
           <div>
             <StoreDescription
-              style={{ width: '80%', margin: '2% auto' }}
+              style={{ width: '80%', margin: '2% auto', position: 'relative' }}
               ownerId={this.props.ownerId}
               editing={this.state.editing}
               store={this.state.store}
