@@ -25,12 +25,10 @@ export default class Navigation extends Component {
   }
 
   signInWithGoogle() {
-    GLOBAL.stopNavigation = undefined;
     window.location.href = '/auth/google';
   }
 
   signOut() {
-    GLOBAL.stopNavigation = undefined;
     window.location.href = '/api/auth/logout';
   }
 
